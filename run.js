@@ -21,7 +21,7 @@ jQuery(function(){
 			}
 
 			if ( name ) {
-				jQuery.get("/?run=yes", { browser: browser, version: version }, function(txt){
+				jQuery.get("/?state=queue", { browser: browser, version: version }, function(txt){
 					queue = txt.split("\n");
 					start();
 				});
@@ -36,31 +36,25 @@ jQuery(function(){
 			var item = queue.shift();
 			if ( item ) {
 				var iframe = document.createElement("iframe");
-				iframe.src = item + "test/";
+				iframe.src = "tests/" + item + "/test/?core";
 				iframe.onload = function(){
-					var interval = setInterval(function(){
-						var html = iframe.contentDocument.documentElement.innerHTML;
+					iframe.contentWindow.QUnit.done = function(){
+						var html = jQuery(iframe.contentDocument)
+							.find("#nothiddendiv, #loadediframe, #dl, #main, script, div.testrunner-toolbar").remove().end()
+							.find("ol").show().end()
+							.find("link").attr("href", "/files/qunit/testsuite.css").end()
+							.find("html").html().replace(/\s+/g, " ");
 
-						if ( html.indexOf("Tests completed") > -1 ) {
-							jQuery("#nothiddendiv, #loadediframe, #dl, #main, script", iframe.contentDocument).remove();
-							jQuery("ol", iframe.contentDocument).show();
-
-							html = "<html>" + iframe.contentDocument.documentElement.innerHTML + "</html>";
-
-							jQuery.post( "", {
-								ticket: item.split("/")[2],
-								patch: item.split("/")[3],
-								browser: browser,
-								version: version,
-								results: html
-							}, function(res){
-								document.body.removeChild( iframe );
-								handle();
-							});
-
-							clearInterval( interval );
-						}
-					}, 100);
+						jQuery.post( "/", {
+							run: item,
+							browser: browser,
+							version: version,
+							results: "<html>" + html + "</html>"
+						}, function(res){
+							document.body.removeChild( iframe );
+							handle();
+						});
+					};
 				};
 				document.body.appendChild( iframe );
 			}

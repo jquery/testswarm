@@ -1,0 +1,97 @@
+8
+
+dir
+6173
+http://jqueryjs.googlecode.com/svn/trunk/jquery/test
+http://jqueryjs.googlecode.com/svn
+
+
+
+2009-01-22T00:11:11.257274Z
+6155
+jeresig
+has-props
+
+svn:special svn:externals svn:needs-lock
+svn:externals
+
+
+
+
+
+
+
+
+
+
+c715fcbe-d12f-0410-84c4-316a508785bb
+
+unit
+dir
+
+xhtml.php
+file
+
+
+
+
+2009-02-04T05:03:58.000000Z
+3e82146fd797e353be3c3a65e1871499
+2009-01-19T18:14:51.841842Z
+6128
+jeresig
+
+data
+dir
+
+offset.html
+file
+
+
+
+
+2009-02-04T05:03:58.000000Z
+9665b7abace7d970782ce9ccaea86922
+2008-08-08T17:42:52.373449Z
+5814
+joern.zaefferer
+
+index.html
+file
+
+
+
+
+2009-02-04T05:03:58.000000Z
+11e4a0d115906773eada25e8be0efdce
+2009-01-21T22:57:07.208186Z
+6150
+jeresig
+
+test.js
+file
+
+
+
+
+2009-02-04T05:03:58.000000Z
+9a4b272bcc934d55f348fa828eb314f4
+2007-09-08T12:42:32.101873Z
+3138
+jeresig
+
+otherlibs
+dir
+
+polluted.php
+file
+
+
+
+
+2009-02-04T05:03:58.000000Z
+73ebb818e04c92a99f177060f03fb52d
+2008-08-08T17:42:52.373449Z
+5814
+joern.zaefferer
+

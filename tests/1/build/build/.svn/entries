@@ -1,0 +1,52 @@
+8
+
+dir
+6173
+http://jqueryjs.googlecode.com/svn/trunk/jquery/build/build
+http://jqueryjs.googlecode.com/svn
+
+
+
+2009-01-18T13:04:32.819622Z
+6122
+joern.zaefferer
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+c715fcbe-d12f-0410-84c4-316a508785bb
+
+pack.js
+file
+
+
+
+
+2009-02-04T05:03:52.000000Z
+a4697c35e8811db002addd1214a98d85
+2008-01-14T19:13:46.488168Z
+4442
+jeresig
+
+min.js
+file
+
+
+
+
+2009-02-04T05:03:52.000000Z
+933d563886c685fa10569a1a14425184
+2007-06-14T22:06:00.129932Z
+2080
+joern.zaefferer
+

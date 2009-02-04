@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/3267/trunk/jquery/build/runtest
+END
+env.js
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2692/trunk/jquery/build/runtest/env.js
+END
+testrunner.js
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2286/trunk/jquery/build/runtest/testrunner.js
+END
+test.js
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/3267/trunk/jquery/build/runtest/test.js
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/5939/trunk/jquery/test/data/offset
+END
+body.html
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/5939/trunk/jquery/test/data/offset/body.html
+END
+absolute.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/5612/trunk/jquery/test/data/offset/absolute.html
+END
+scroll.html
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/5615/trunk/jquery/test/data/offset/scroll.html
+END
+fixed.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/5615/trunk/jquery/test/data/offset/fixed.html
+END
+static.html
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/5615/trunk/jquery/test/data/offset/static.html
+END
+table.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/5615/trunk/jquery/test/data/offset/table.html
+END
+relative.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/5612/trunk/jquery/test/data/offset/relative.html
+END
