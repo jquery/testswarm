@@ -1,34 +1,0 @@
-8
-
-dir
-6173
-http://jqueryjs.googlecode.com/svn/trunk/jquery/test/otherlibs/jquery
-http://jqueryjs.googlecode.com/svn
-
-
-
-2008-05-28T23:18:25.404012Z
-5708
-aflesler
-
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-c715fcbe-d12f-0410-84c4-316a508785bb
-
-1.2.1
-dir
-
-1.2.3
-dir
-

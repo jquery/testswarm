@@ -1,6 +1,0 @@
-K 13
-svn:externals
-V 53
-qunit http://jqueryjs.googlecode.com/svn/trunk/qunit
-
-END
