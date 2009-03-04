@@ -42,9 +42,11 @@ jQuery(function(){
 				window.done = function(data){
 					jQuery.post( "/", {
 						run: item,
-						browser: data.browser,
-						version: data.version,
-						results: data.html
+						browser: browser,
+						version: version,
+						results: data.results,
+						total: data.total,
+						fail: data.fail
 					}, function(res){
 						document.body.removeChild( iframe );
 						handle();
