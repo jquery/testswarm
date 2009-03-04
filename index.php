@@ -35,5 +35,13 @@
 		}
 	}
 ?>
-<script src="jquery.js"></script>
-<script src="run.js"></script>
+<html>
+<head>
+	<title>Run the Test Swarm</title>
+	<script src="jquery.js"></script>
+	<script src="run.js"></script>
+</head>
+<body>
+	<h1>Run the Test Swarm</h1>
+</body>
+</html>

@@ -1,6 +1,6 @@
 gecko, 1.9.0, Firefox 3.0
 gecko, 1.9.1, Firefox 3.1
-webkit, 525, Safari 3.1
+webkit, 525, Safari 3.2
 webkit, 528, Safari Nightly
 msie, 6.0, IE 6.0
 msie, 7.0, IE 7.0
