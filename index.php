@@ -14,15 +14,22 @@
 		$_REQUEST = array_map('stripslashes_deep', $_REQUEST);
 	}
 
+	$run = ereg_replace("[^0-9]", "", $_POST['run']);
+	$browser = ereg_replace("[^a-z]", "", $_REQUEST['browser']);
+	$version = ereg_replace("[^0-9.]", "", $_REQUEST['version']);
+
+	function filterDirs( $dir ) {
+		global $browser, $version;
+		return !file_exists("tests/$dir/results/$browser-$version.html");
+	}
+
 	$state = $_REQUEST['state'];
 
 	if ( $state == "queue" ) {
-		echo implode( "\n", array_diff(scandir( "tests" ), array('.', '..')) );
+		$dirs = array_filter(array_diff(scandir( "tests" ), array('.', '..')), "filterDirs");
+		echo implode( "\n", $dirs );
 		exit();
 	} else {
-		$run = ereg_replace("[^0-9]", "", $_POST['run']);
-		$browser = ereg_replace("[^a-z]", "", $_REQUEST['browser']);
-		$version = ereg_replace("[^0-9.]", "", $_REQUEST['version']);
 		$results = $_POST['results'];
 
 		if ( !empty($run) && !empty($browser) && !empty($version) && !empty($results) ) {

@@ -34,7 +34,7 @@ jQuery(function(){
 		jQuery("p.msg").text("Querying for more tests...");
 
 		jQuery.get("index.php", { state: "queue", browser: browser, version: version }, function(txt){
-			queue = txt.split("\n");
+			queue = txt ? txt.split("\n") : [];
 			start();
 		});
 	}
@@ -69,7 +69,7 @@ jQuery(function(){
 			var timeLeft = updateRate - 1;
 			setTimeout(function leftTimer(){
 				jQuery("p.msg").text("No new tests to run. Getting more in " + timeLeft + " seconds.");
-				if ( timeLeft-- > 1 ) {
+				if ( timeLeft-- > 2 ) {
 					setTimeout( leftTimer, 1000 );
 				}
 			}, 1000);
