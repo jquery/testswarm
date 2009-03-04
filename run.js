@@ -67,14 +67,15 @@ jQuery(function(){
 			jQuery("p.msg").text("No new tests to run.");
 
 			var timeLeft = updateRate - 1;
+
 			setTimeout(function leftTimer(){
 				jQuery("p.msg").text("No new tests to run. Getting more in " + timeLeft + " seconds.");
-				if ( timeLeft-- > 2 ) {
+				if ( timeLeft-- >= 1 ) {
 					setTimeout( leftTimer, 1000 );
+				} else {
+					getTests();
 				}
 			}, 1000);
-				
-			setTimeout( getTests, updateRate * 1000 );
 		}
 	}
 
