@@ -43,5 +43,6 @@
 </head>
 <body>
 	<h1>Run the Test Swarm</h1>
+	<p class="msg"></p>
 </body>
 </html>

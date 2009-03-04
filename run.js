@@ -5,6 +5,8 @@ function getBrowser(){
 		jQuery.browser.mozilla && "gecko";
 }
 
+var updateRate = 30;
+
 jQuery(function(){
 	var queue = [], browsers, browser = getBrowser(), version = jQuery.browser.version, name = "";
 
@@ -21,18 +23,26 @@ jQuery(function(){
 			}
 
 			if ( name ) {
-				jQuery.get("index.php", { state: "queue", browser: browser, version: version }, function(txt){
-					queue = txt.split("\n");
-					start();
-				});
+				getTests();
 			} else {
-				// TODO: Let them know that their help isn't needed
+				jQuery("p.msg").text("Thanks, but we don't need to run tests for your browser.");
 			}
+		});
+	}
+
+	function getTests(){
+		jQuery("p.msg").text("Querying for more tests...");
+
+		jQuery.get("index.php", { state: "queue", browser: browser, version: version }, function(txt){
+			queue = txt.split("\n");
+			start();
 		});
 	}
 
 	function handle(){
 		if ( queue.length ) {
+			jQuery("p.msg").text(queue.length + " more test(s) to run.");
+
 			var item = queue.shift();
 			if ( item ) {
 				var iframe = document.createElement("iframe");
@@ -54,7 +64,17 @@ jQuery(function(){
 				};
 			}
 		} else {
-			// TODO: All done! (Query for new tests)
+			jQuery("p.msg").text("No new tests to run.");
+
+			var timeLeft = updateRate - 1;
+			setTimeout(function leftTimer(){
+				jQuery("p.msg").text("No new tests to run. Getting more in " + timeLeft + " seconds.");
+				if ( timeLeft-- > 1 ) {
+					setTimeout( leftTimer, 1000 );
+				}
+			}, 1000);
+				
+			setTimeout( getTests, updateRate * 1000 );
 		}
 	}
 
