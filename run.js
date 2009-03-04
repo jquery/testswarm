@@ -21,7 +21,7 @@ jQuery(function(){
 			}
 
 			if ( name ) {
-				jQuery.get("/", { state: "queue", browser: browser, version: version }, function(txt){
+				jQuery.get("index.php", { state: "queue", browser: browser, version: version }, function(txt){
 					queue = txt.split("\n");
 					start();
 				});
