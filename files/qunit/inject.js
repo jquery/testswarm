@@ -10,7 +10,6 @@ QUnit.done = function(fail, total){
 	// Send the results back to the top frame
 	if ( typeof window.top.done === "function" ) {
 		window.top.done({
-			run: item,
 			fail: fail,
 			total: total,
 			results: "<html>" + html + "</html>"

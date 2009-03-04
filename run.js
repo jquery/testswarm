@@ -21,7 +21,7 @@ jQuery(function(){
 			}
 
 			if ( name ) {
-				jQuery.get("/?state=queue", { browser: browser, version: version }, function(txt){
+				jQuery.get("/", { state: "queue", browser: browser, version: version }, function(txt){
 					queue = txt.split("\n");
 					start();
 				});
@@ -36,27 +36,20 @@ jQuery(function(){
 			var item = queue.shift();
 			if ( item ) {
 				var iframe = document.createElement("iframe");
-				iframe.src = "tests/" + item + "/test/?core";
-				iframe.onload = function(){
-					iframe.contentWindow.QUnit.done = function(){
-						var html = jQuery(iframe.contentDocument)
-							.find("#nothiddendiv, #loadediframe, #dl, #main, script, div.testrunner-toolbar").remove().end()
-							.find("ol").show().end()
-							.find("link").attr("href", "/files/qunit/testsuite.css").end()
-							.find("html").html().replace(/\s+/g, " ");
-
-						jQuery.post( "/", {
-							run: item,
-							browser: browser,
-							version: version,
-							results: "<html>" + html + "</html>"
-						}, function(res){
-							document.body.removeChild( iframe );
-							handle();
-						});
-					};
-				};
+				iframe.src = "tests/" + item + "/test/";
 				document.body.appendChild( iframe );
+
+				window.done = function(data){
+					jQuery.post( "/", {
+						run: item,
+						browser: data.browser,
+						version: data.version,
+						results: data.html
+					}, function(res){
+						document.body.removeChild( iframe );
+						handle();
+					});
+				};
 			}
 		} else {
 			// TODO: All done! (Query for new tests)
