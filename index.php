@@ -18,6 +18,15 @@
 	$browser = ereg_replace("[^a-z]", "", $_REQUEST['browser']);
 	$version = ereg_replace("[^0-9.]", "", $_REQUEST['version']);
 
+	$config = parse_ini_file("config.ini", true);
+	$db = mysql_connect(
+		$config['database']['host'],
+		$config['database']['username'],
+		$config['database']['password']
+	);
+
+	mysql_select_db($config['database']['database'], $db);
+
 	function filterDirs( $dir ) {
 		global $browser, $version;
 		return !file_exists("tests/$dir/results/$browser-$version.html");
