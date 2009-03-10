@@ -1,87 +1,96 @@
-function getBrowser(){
-	return jQuery.browser.msie && "msie" ||
-		jQuery.browser.safari && "webkit" ||
-		jQuery.browser.opera && "opera" ||
-		jQuery.browser.mozilla && "gecko";
+var updateRate = 30, timeoutRate = 300;
+
+var run_id, testTimeout;
+
+if ( typeof client_id !== "undefined" ) {
+	jQuery(getTests);
 }
 
-var updateRate = 30;
+function msg(txt){
+	jQuery("p.msg").text( txt );
+}
 
-jQuery(function(){
-	var queue = [], browsers, browser = getBrowser(), version = jQuery.browser.version, name = "";
+function getTests(){
+	run_id = 0;
 
-	function load(){
-		jQuery.get("/browsers.txt", function(txt){
-			browsers = txt.split("\n");
-			for ( var i = 0; i < browsers.length; i++ ) {
-				browsers[i] = browsers[i].split(", ");
-				if ( browsers[i][0] == browser && version.indexOf( browsers[i][1] ) == 0 ) {
-					version = browsers[i][1];
-					name = browsers[i][2];
-					break;
-				}
-			}
+	msg("Querying for more tests to run...");
+	retrySend("state=getrun&client_id=" + client_id, getTests, runTests);
+}
 
-			if ( name ) {
-				getTests();
+function runTests(id){
+	run_id = id;
+
+	if ( run_id ) {
+		msg("Running tests...");
+
+		var iframe = document.createElement("iframe");
+		iframe.src = "/?state=showrun&run_id=" + run_id + "&client_id=" + client_id;
+		document.body.appendChild( iframe );
+
+		// Timeout after a period of time
+		testTimeout = setTimeout(testTimedout, timeoutRate * 1000);
+
+	} else {
+		msg("No new tests to run.");
+
+		var timeLeft = updateRate - 1;
+
+		setTimeout(function leftTimer(){
+			msg("No new tests to run. Getting more in " + timeLeft + " seconds.");
+			if ( timeLeft-- >= 1 ) {
+				setTimeout( leftTimer, 1000 );
 			} else {
-				jQuery("p.msg").text("Thanks, but we don't need to run tests for your browser.");
+				getTests();
 			}
-		});
+		}, 1000);
+	}
+}
+
+function done(data){
+	msg("Saving test results...");
+
+	cancelTest();
+
+	retrySend({
+			"state": "saverun",
+			"run_id": run_id,
+			"results": data.results,
+			"total": data.total,
+			"fail": data.fail
+		},
+		done,
+		getTests
+	);
+}
+
+function cancelTest(){
+	if ( testTimeout ) {
+		clearTimeout(testTimeout);
+		testTimeout = 0;
 	}
 
-	function getTests(){
-		jQuery("p.msg").text("Querying for more tests...");
+	jQuery("iframe").remove();
+}
 
-		jQuery.get("index.php", { state: "queue", browser: browser, version: version }, function(txt){
-			queue = txt ? txt.split("\n") : [];
-			start();
-		});
-	}
+function testTimedout(){
+	cancelTest();
+	retrySend("state=timeoutrun&run_id=" + run_id + "&client_id=" + client_id,
+		testTimedout, getTests);
+}
 
-	function handle(){
-		if ( queue.length ) {
-			jQuery("p.msg").text(queue.length + " more test(s) to run.");
+function retrySend(data, retry, success){
+	jQuery.ajax({
+		url: "/",
+		timeout: 10000,
+		data: data,
+		error: function(){
+			msg("Error connecting to server, retrying...");
+			setTimeout( retry, 15000 );
+		},
+		success: success
+	});
+}
 
-			var item = queue.shift();
-			if ( item ) {
-				var iframe = document.createElement("iframe");
-				iframe.src = "tests/" + item + "/test/";
-				document.body.appendChild( iframe );
-
-				window.done = function(data){
-					jQuery.post( "/", {
-						run: item,
-						browser: browser,
-						version: version,
-						results: data.results,
-						total: data.total,
-						fail: data.fail
-					}, function(res){
-						document.body.removeChild( iframe );
-						handle();
-					});
-				};
-			}
-		} else {
-			jQuery("p.msg").text("No new tests to run.");
-
-			var timeLeft = updateRate - 1;
-
-			setTimeout(function leftTimer(){
-				jQuery("p.msg").text("No new tests to run. Getting more in " + timeLeft + " seconds.");
-				if ( timeLeft-- >= 1 ) {
-					setTimeout( leftTimer, 1000 );
-				} else {
-					getTests();
-				}
-			}, 1000);
-		}
-	}
-
-	function start(){
-		handle();
-	}
-
-	load();
-});
+function msg(txt){
+	jQuery("p.msg").text( txt );
+}
