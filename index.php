@@ -24,8 +24,8 @@
 	<?php if ( $client_id ) {
 		echo "<script type='text/javascript'>var client_id = $client_id;</script>";
 	}?>
-	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="run.js"></script>
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/run.js"></script>
 </head>
 <body>
 	<h1>Run the Test Swarm</h1>
