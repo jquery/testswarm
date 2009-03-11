@@ -25,10 +25,13 @@
 
 			$result = mysql_queryf("SELECT id FROM runs WHERE job_id=%u AND status < 2;", $job_id);
 
-		if ( mysql_num_rows($result) == 0 ) {
-			mysql_queryf("UPDATE jobs SET status=2 WHERE job_id=%u;", $job_id);
+			if ( mysql_num_rows($result) == 0 ) {
+				mysql_queryf("UPDATE jobs SET status=2 WHERE job_id=%u;", $job_id);
+			}
 		}
 	}
+
+	echo "<script>window.top.done();</script>";
 
 	exit();
 ?>

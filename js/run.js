@@ -23,8 +23,11 @@ function runTests(id){
 	if ( run_id ) {
 		msg("Running tests...");
 
+		var params = "&run_id=" + run_id + "&client_id=" + client_id;
+
 		var iframe = document.createElement("iframe");
-		iframe.src = "/?state=showrun&run_id=" + run_id + "&client_id=" + client_id;
+		iframe.src = "/?state=showrun" + params +
+			"#http://" + window.location.host + "?state=saverun" + params;
 		document.body.appendChild( iframe );
 
 		// Timeout after a period of time
@@ -46,21 +49,9 @@ function runTests(id){
 	}
 }
 
-function done(data){
-	msg("Saving test results...");
-
+function done(){
 	cancelTest();
-
-	retrySend({
-			"state": "saverun",
-			"run_id": run_id,
-			"results": data.results,
-			"total": data.total,
-			"fail": data.fail
-		},
-		done,
-		getTests
-	);
+	getTests();
 }
 
 function cancelTest(){
