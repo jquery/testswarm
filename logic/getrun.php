@@ -16,6 +16,13 @@
 			# Mark the complete run as "in progress"
 			mysql_queryf("UPDATE runs SET status = 1 WHERE id=%u;", $run_id);
 
+			$result = mysql_queryf("SELECT job_id FROM runs WHERE id=%u;", $run_id);
+
+			if ( $row = mysql_fetch_array($result) ) {
+				# Mark the complete job as "in progress"
+				mysql_queryf("UPDATE jobs SET status = 1 WHERE id=%u;", $row[0]);
+			}
+
 			# Initialize the client run
 			mysql_queryf("INSERT INTO run_client (run_id,client_id,status,created) VALUES(%u,%u,1,NOW());", $run_id, $client_id);
 
