@@ -1,4 +1,6 @@
 <?php
+	include "inc/init.php";
+
 	mysql_query("BEGIN");
 	$result = mysql_queryf("SELECT run_id FROM run_useragent WHERE useragent_id=%u AND runs < max;", $useragent_id);
 	

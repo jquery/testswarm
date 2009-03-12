@@ -1,0 +1,5 @@
+<?php
+
+	$title = "Job Status";
+
+?>

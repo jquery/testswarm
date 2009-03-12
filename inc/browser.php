@@ -5,11 +5,11 @@
 	$useragent = $_SERVER['HTTP_USER_AGENT'];
 	$useragent_id = 0;
 
-	if ( ereg(".+(rv|it|ra|ie)[\/: ]([0-9a-z.]+)", $useragent, $match) ) {
+	$lowerUA = strtolower($useragent);
+
+	if ( ereg(".+(rv|it|ra|ie)[\/: ]([0-9a-z.]+)", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
-
-	$lowerUA = strtolower($useragent);
 
 	if ( strpos($lowerUA, "chrome") > -1 ) {
 		$browser = "chrome";

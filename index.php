@@ -3,15 +3,20 @@
 	include "inc/utilities.php";
 	include "inc/browser.php";
 	include "inc/db.php";
-	include "inc/init.php";
 
 	$state = ereg_replace("[^a-z]", "", $_REQUEST['state']);
-	$stateFile = "logic/$state.php";
+
+	if ( !$state ) {
+		$state = "run";
+	}
+
+	$logicFile = "logic/$state.php";
+	$contentFile = "content/$state.php";
 
 	if ( $state ) {
-		if ( file_exists($stateFile) ) {
-			include $stateFile;
-		} else {
+		if ( file_exists($logicFile) ) {
+			include $logicFile;
+		} else if ( !file_exists($contentFile) ) {
 			header("HTTP/1.0 404 Not Found");
 			exit();
 		}
@@ -20,15 +25,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Run the Test Swarm</title>
-	<?php if ( $client_id ) {
-		echo "<script type='text/javascript'>var client_id = $client_id;</script>";
-	}?>
-	<script type="text/javascript" src="/js/jquery.js"></script>
-	<script type="text/javascript" src="/js/run.js"></script>
+	<title><?= $title ?></title>
+	<?= $scripts ?>
 </head>
 <body>
-	<h1>Run the Test Swarm</h1>
-	<p class="msg"></p>
+	<h1><?= $title ?></h1>
+	<?php if ( $state && file_exists($contentFile) ) {
+		include $contentFile;
+	} ?>
 </body>
 </html>
