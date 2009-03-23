@@ -1,6 +1,6 @@
 var updateRate = 30, timeoutRate = 300;
 
-var run_id, testTimeout;
+var run_id, run_url, testTimeout;
 
 if ( typeof client_id !== "undefined" ) {
 	jQuery(getTests);
@@ -12,22 +12,24 @@ function msg(txt){
 
 function getTests(){
 	run_id = 0;
+	run_url = "";
 
 	msg("Querying for more tests to run...");
 	retrySend("state=getrun&client_id=" + client_id, getTests, runTests);
 }
 
-function runTests(id){
-	run_id = id;
+function runTests(txt){
+	var parts = txt.split(" ");
+	run_id = parts[0];
+	run_url = parts[1];
 
 	if ( run_id ) {
 		msg("Running tests...");
 
 		var params = "&run_id=" + run_id + "&client_id=" + client_id;
-
 		var iframe = document.createElement("iframe");
-		iframe.src = "/?state=showrun" + params +
-			"#http://" + window.location.host + "?state=saverun" + params;
+		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + "_=" + (new Date).getTime() + "&swarmURL=" +
+			encodeURIComponent("http://" + window.location.host + "?state=saverun" + params);
 		document.body.appendChild( iframe );
 
 		// Timeout after a period of time
@@ -73,6 +75,7 @@ function retrySend(data, retry, success){
 	jQuery.ajax({
 		url: "/",
 		timeout: 10000,
+		cache: false,
 		data: data,
 		error: function(){
 			msg("Error connecting to server, retrying...");

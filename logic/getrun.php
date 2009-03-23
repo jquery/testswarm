@@ -2,11 +2,12 @@
 	include "inc/init.php";
 
 	mysql_query("BEGIN");
-	$result = mysql_queryf("SELECT run_id FROM run_useragent WHERE useragent_id=%u AND runs < max;", $useragent_id);
+	$result = mysql_queryf("SELECT run_id, url FROM run_useragent, runs WHERE runs.id=run_useragent.run_id AND run_useragent.useragent_id=%u AND run_useragent.runs < run_useragent.max;", $useragent_id);
 	
 	# A run was found
 	if ( $row = mysql_fetch_array($result) ) {
 		$run_id = $row[0];
+		$url = $row[1];
 	
 		# Make sure that we don't re-run the tests in the same client
 		$result = mysql_queryf("SELECT * FROM run_client WHERE run_id=%u AND client_id=%u;", $run_id, $client_id);
@@ -28,7 +29,7 @@
 			# Initialize the client run
 			mysql_queryf("INSERT INTO run_client (run_id,client_id,status,created) VALUES(%u,%u,1,NOW());", $run_id, $client_id);
 
-			echo "$run_id";
+			echo "$run_id $url";
 		}
 
 		# TODO: There needs to be a cronjob that marks dead clients as inactive
