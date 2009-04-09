@@ -36,7 +36,7 @@
 		# If the useragent isn't needed, failover with an error message
 		# TODO: Improve error message quality.
 		} else {
-			echo "Browser is not needed for testing.";
+			echo "Browser is not needed for testing. Browser: $browser Version: $version";
 			exit();
 		}
 
