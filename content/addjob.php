@@ -35,6 +35,33 @@
 <p><b>Test Suite:</b><br/>
 <legend>Name: <input type="text" name="suites[]"/></legend><br/>
 <legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
+<p><b>Test Suite:</b><br/>
+<legend>Name: <input type="text" name="suites[]"/></legend><br/>
+<legend>URL: <input type="text" name="urls[]" value="http://" size="50"/></legend></p>
 </fieldset>
 <input type="submit" value="Create New Job"/>
 </form>

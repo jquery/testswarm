@@ -1,0 +1,78 @@
+html, body {
+	background: #FFF;
+	color: #000;
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	margin: 0;
+	padding: 8px;
+	background: #274E7D;
+	color: #FFF;
+}
+
+h2 {
+	margin: 0;
+	padding: 4px 8px;
+	background: #6899D3;
+	color: #274E7D;
+}
+
+#main {
+	padding: 8px;
+	overflow: auto;
+}
+
+div.browser {
+	width: 58px;
+	height: 70px;
+	float: left;
+	position: relative;
+	margin: 4px;
+	text-align: center;
+}
+
+div.clear {
+	clear: left;
+}
+
+div.browser img {
+	width: 48px;
+	margin-top: 4px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.browser img.msie {
+	margin-top: 0px;
+}
+
+div.browser span.browser-name {
+	display: block;
+	text-align: center;
+	background: #274E7D;
+	color: #FFF;
+	font-size: 10px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	padding: 2px;
+	width: 100%;
+}
+
+div.browser span.active {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background: red;
+	color: #FFF;
+	font-size: 12px;
+	padding: 2px 3px;
+	border: 2px solid #FFF;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}

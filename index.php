@@ -7,7 +7,7 @@
 	$state = ereg_replace("[^a-z]", "", $_REQUEST['state']);
 
 	if ( !$state ) {
-		$state = "run";
+		$state = "home";
 	}
 
 	$logicFile = "logic/$state.php";
@@ -25,13 +25,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?= $title ?></title>
+	<title>Test Swarm: <?= $title ?></title>
+	<link rel="stylesheet" href="/css/site.css"/>
 	<?= $scripts ?>
 </head>
 <body>
-	<h1><?= $title ?></h1>
+	<h1>Test Swarm</h1>
+	<h2><?= $title ?></h2>
+	<div id="main">
 	<?php if ( $state && file_exists($contentFile) ) {
 		include $contentFile;
 	} ?>
+	</div>
 </body>
 </html>

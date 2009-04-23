@@ -3,6 +3,8 @@
 	$title = "Add New Job";
 
 	if ( $_POST['state'] === "addjob" ) {
+		include "inc/init.php";
+
 		mysql_queryf("INSERT INTO jobs (user_id,name,created) VALUES(%u,%s,NOW());",
 			$user_id, $_POST['job_name']);
 
