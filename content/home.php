@@ -9,7 +9,7 @@
 <h3>Cloud Status:</h3>
 
 <?php
-  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND DATE_ADD(updated, INTERVAL 2 minute) > NOW()) as clients FROM useragents ORDER BY name;");
+  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND DATE_ADD(updated, INTERVAL 1 minute) > NOW()) as clients FROM useragents ORDER BY name;");
 
 	$engine = "";
 

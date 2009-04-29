@@ -11,7 +11,7 @@
 <legend>Browsers</legend>
 <p>Choose the browsers in which your test suites will run (each browser will be run at least as many times as specified.</p>
 <?php
-	$result = mysql_queryf("SELECT useragents.id as id, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND DATE_ADD(updated, INTERVAL 2 minute) > NOW()) as clients FROM useragents ORDER BY name;");
+	$result = mysql_queryf("SELECT useragents.id as id, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND DATE_ADD(updated, INTERVAL 1 minute) > NOW()) as clients FROM useragents ORDER BY name;");
 
 	while ( $row = mysql_fetch_array($result) ) {?>
 		<legend><input type="checkbox" name="browsers[]" value="<?=$row[0]?>" checked="checked"/> <?=$row[1]?><?php if ( intval($row[2]) > 0 ) {

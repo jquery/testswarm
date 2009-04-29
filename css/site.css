@@ -76,3 +76,29 @@ div.browser span.active {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
+
+table.results td.pass {
+	background: lightgreen;
+}
+
+table.results td.fail {
+	background: red;
+}
+
+table.results td.progress {
+	background: yellow;
+}
+
+table.results td {
+	background: gray;
+	padding: 15px 5px;
+	text-align: center;
+}
+
+table.results a {
+	color: #000;
+}
+
+table.results {
+	width: 100%;
+}

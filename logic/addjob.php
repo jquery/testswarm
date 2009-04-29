@@ -2,8 +2,10 @@
 
 	$title = "Add New Job";
 
-	if ( $_POST['state'] === "addjob" ) {
+	if ( $_POST['state'] == "addjob" ) {
 		include "inc/init.php";
+
+		mysql_queryf("BEGIN;");
 
 		mysql_queryf("INSERT INTO jobs (user_id,name,created) VALUES(%u,%s,NOW());",
 			$user_id, $_POST['job_name']);
@@ -25,7 +27,16 @@
 			}
 		}
 
-		header("Location: /?state=jobstatus&job_id=" . $job_id);
+		mysql_queryf("COMMIT;");
+
+		$url = "/?state=jobstatus&job_id=" . $job_id;
+
+		if ( $_POST['output'] == "dump" ) {
+			echo $url;
+		} else {
+			header("Location: $url");
+		}
+
 		exit();
 	}
 

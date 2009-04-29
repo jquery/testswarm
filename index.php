@@ -21,6 +21,8 @@
 			exit();
 		}
 	}
+
+if ( $title ) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,9 +35,10 @@
 	<h1>Test Swarm</h1>
 	<h2><?= $title ?></h2>
 	<div id="main">
-	<?php if ( $state && file_exists($contentFile) ) {
+	<?php } if ( $state && file_exists($contentFile) ) {
 		include $contentFile;
-	} ?>
+	} if ( $title ) { ?>
 	</div>
 </body>
 </html>
+<?php } ?>
