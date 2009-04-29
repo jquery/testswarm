@@ -15,7 +15,7 @@
 
   while ( $row = mysql_fetch_array($result) ) {?>
 		<div class="browser<?= $row[0] != $engine ? ' clear' : ''?>">
-			<img src="/icons/<?=$row[0]?>.png" class="browser-icon <?=$row[0]?>"/>
+			<img src="/images/<?=$row[0]?>.png" class="browser-icon <?=$row[0]?>"/>
 			<span class="browser-name"><?=$row[1]?></span>
 			<?php if ( intval($row[2]) > 0 ) {
 				echo "<span class='active'>" . $row[2] . "</span>";
