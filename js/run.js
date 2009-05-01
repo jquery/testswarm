@@ -1,39 +1,50 @@
-var updateRate = 30, timeoutRate = 300;
+var updateRate = 30, timeoutRate = 180;
 
 var run_id, run_url, testTimeout;
 
 if ( typeof client_id !== "undefined" ) {
-	jQuery(getTests);
+	jQuery( getTests );
 }
 
-function msg(txt){
-	jQuery("p.msg").text( txt );
-}
+var cmds = {
+	reload: function() {
+		window.location.reload();
+	},
+	rate: function( num ) {
+		updateRate = parseInt( num );
+	}
+};
 
-function getTests(){
+function getTests() {
 	run_id = 0;
 	run_url = "";
 
 	msg("Querying for more tests to run...");
-	retrySend("state=getrun&client_id=" + client_id, getTests, runTests);
+	retrySend( "state=getrun&client_id=" + client_id, getTests, runTests );
 }
 
-function runTests(txt){
+function runTests( txt ) {
 	var parts = txt.split(" ");
-	run_id = parts[0];
-	run_url = parts[1];
+	run_id = parts.shift();
+	run_url = parts.join(" ");
 
-	if ( run_id ) {
+	if ( run_id === "cmd" ) {
+		if ( typeof cmds[ parts[0] ] === "function" ) {
+			cmds[ parts[0] ].apply( cmds, parts.slice(1) );
+		}
+
+	} else if ( run_id ) {
 		msg("Running tests...");
 
 		var params = "&run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
-		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + "_=" + (new Date).getTime() + "&swarmURL=" +
+		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
+			"_=" + (new Date).getTime() + "&swarmURL=" +
 			encodeURIComponent("http://" + window.location.host + "?state=saverun" + params);
 		document.body.appendChild( iframe );
 
 		// Timeout after a period of time
-		testTimeout = setTimeout(testTimedout, timeoutRate * 1000);
+		testTimeout = setTimeout( testTimedout, timeoutRate * 1000 );
 
 	} else {
 		msg("No new tests to run.");
@@ -51,33 +62,34 @@ function runTests(txt){
 	}
 }
 
-function done(){
+function done() {
 	cancelTest();
-	getTests();
+	setTimeout( getTests, 3000 );
 }
 
-function cancelTest(){
+function cancelTest() {
 	if ( testTimeout ) {
-		clearTimeout(testTimeout);
+		clearTimeout( testTimeout );
 		testTimeout = 0;
 	}
 
 	jQuery("iframe").remove();
 }
 
-function testTimedout(){
+function testTimedout() {
 	cancelTest();
-	retrySend("state=timeoutrun&run_id=" + run_id + "&client_id=" + client_id,
-		testTimedout, getTests);
+	retrySend( "state=saverun&fail=1&total=1&results=Test%20Timed%20Out.&run_id="
+		+ run_id + "&client_id=" + client_id,
+		testTimedout, getTests );
 }
 
-function retrySend(data, retry, success){
+function retrySend( data, retry, success ) {
 	jQuery.ajax({
 		url: "/",
 		timeout: 10000,
 		cache: false,
 		data: data,
-		error: function(){
+		error: function() {
 			msg("Error connecting to server, retrying...");
 			setTimeout( retry, 15000 );
 		},
@@ -85,6 +97,6 @@ function retrySend(data, retry, success){
 	});
 }
 
-function msg(txt){
+function msg( txt ) {
 	jQuery("p.msg").text( txt );
 }

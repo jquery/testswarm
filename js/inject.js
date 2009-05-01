@@ -21,39 +21,42 @@
 				})
 				.html().replace(/\s+/g, " ");
 
-			submit( fail, total );
+			submit({
+				fail: fail,
+				total: total,
+				results: "<html>" + html + "</html>"
+			});
 		};
 	}
 
-	function submit(fail, total){
-		var results = document.documentElement.outerHTML ||
-			"<html>" + document.documentElement.innerHTML + "</html>";
-
-		results = results.replace(/\s+/g, " ").replace(/"/g, "'");
-
-		var form = document.createElement("form");
-		form.action = url;
-		form.method = "POST";
-		var innerHTML = "<input type='hidden' name='fail' value='" + fail + "'/>" + 
-			"<input type='hidden' name='total' value='" + total + "'/>" + 
-			"<input type='hidden' name='results' value=\"" + results + "\"/>";
-
-		var paramItems = (url.split("?")[1] || "").split("&"), params = {};
+	function submit(params){
+		var paramItems = (url.split("?")[1] || "").split("&");
 
 		for ( var i = 0; i < paramItems.length; i++ ) {
 			if ( paramItems[i] ) {
 				var parts = paramItems[i].split("=");
-				innerHTML = "<input type='hidden' name='" + parts[0] + "' value='" + parts[1] + "'/>" + innerHTML;
+				params[ parts[0] ] = parts[1];
 			}
 		}
 
-		form.innerHTML = innerHTML;
+		var form = document.createElement("form");
+		form.action = url;
+		form.method = "POST";
+
+		for ( var i in params ) {
+			var input = document.createElement("input");
+			input.type = "hidden";
+			input.name = i;
+			input.vaue = params[i];
+			form.appendChild( input );
+		}
 
 		if ( DEBUG ) {
-			alert( innerHTML );
+			alert( form.innerHTML );
 		} else {
 			document.body.appendChild( form );
 			form.submit();
 		}
 	}
+
 })();
