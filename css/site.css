@@ -12,6 +12,7 @@ h1 {
 	padding: 8px;
 	background: #274E7D;
 	color: #FFF;
+	font-size: 24px;
 }
 
 h2 {
@@ -19,20 +20,53 @@ h2 {
 	padding: 4px 8px;
 	background: #6899D3;
 	color: #274E7D;
+	font-size: 16px;
+}
+
+h3 {
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
 }
 
 #main {
 	padding: 8px;
-	overflow: auto;
+	width: 840px;
+	position: relative;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+div.desc {
+	width: 500px;
+}
+
+div.desc p {
+	margin: 8px;
+	padding: 0;
 }
 
 div.join {
-	width: 200px;
-	height: 150px;
+	width: 300px;
 	position: absolute;
-	top: 100px;
-	left: 300px;
+	top: -64px;
+	right: 0px;
 	border: 3px solid #274E7D;
+	background: white;
+	padding: 5px;
+}
+
+div.join p {
+	margin: 0;
+	padding: 0;
+}
+
+div.browsers {
+	float: left;
+	overflow: hidden;
 	padding: 5px;
 }
 
@@ -47,11 +81,6 @@ div.browser {
 
 div.clear {
 	clear: left;
-}
-
-div.browser.you span.browser-name {
-	background: orange;
-	color: black;
 }
 
 div.browser img {
@@ -76,6 +105,11 @@ div.browser span.browser-name {
 	left: 0px;
 	padding: 2px;
 	width: 100%;
+}
+
+div.you span.browser-name {
+	background: orange;
+	color: black;
 }
 
 div.browser span.active {

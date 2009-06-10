@@ -1,179 +1,158 @@
--- phpMyAdmin SQL Dump
--- version 2.11.9.3
--- http://www.phpmyadmin.net
---
--- Host: db.testswarm.com
--- Generation Time: Apr 29, 2009 at 10:14 AM
--- Server version: 5.0.67
--- PHP Version: 5.2.6
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Database: `testswarm`
---
-
--- --------------------------------------------------------
-
---
+-- 
 -- Table structure for table `clients`
---
+-- 
 
-CREATE TABLE IF NOT EXISTS `clients` (
+CREATE TABLE `clients` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL,
-  `useragent_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL default '0',
+  `useragent_id` int(11) NOT NULL default '0',
   `useragent` tinytext NOT NULL,
-  `ip` varchar(15) NOT NULL,
+  `ip` varchar(15) NOT NULL default '',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `clients`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `jobs`
---
+-- 
 
-CREATE TABLE IF NOT EXISTS `jobs` (
+CREATE TABLE `jobs` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
   `status` tinyint(4) NOT NULL default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `jobs`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `runs`
---
-
-CREATE TABLE IF NOT EXISTS `runs` (
-  `id` int(11) NOT NULL auto_increment,
-  `job_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `url` tinytext NOT NULL,
-  `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `runs`
---
-
-
--- --------------------------------------------------------
-
---
+-- 
 -- Table structure for table `run_client`
---
+-- 
 
-CREATE TABLE IF NOT EXISTS `run_client` (
-  `run_id` int(11) NOT NULL,
-  `client_id` int(11) NOT NULL,
+CREATE TABLE `run_client` (
+  `run_id` int(11) NOT NULL default '0',
+  `client_id` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `fail` int(11) NOT NULL default '0',
   `total` int(11) NOT NULL default '0',
   `results` text NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`client_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `run_client`
---
-
-
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `run_useragent`
---
+-- 
 
-CREATE TABLE IF NOT EXISTS `run_useragent` (
-  `run_id` int(11) NOT NULL,
-  `useragent_id` int(11) NOT NULL,
+CREATE TABLE `run_useragent` (
+  `run_id` int(11) NOT NULL default '0',
+  `useragent_id` int(11) NOT NULL default '0',
   `runs` int(11) NOT NULL default '0',
   `min` int(11) NOT NULL default '1',
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`useragent_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `run_useragent`
---
-
-
 -- --------------------------------------------------------
 
---
--- Table structure for table `useragents`
---
+-- 
+-- Table structure for table `runs`
+-- 
 
-CREATE TABLE IF NOT EXISTS `useragents` (
+CREATE TABLE `runs` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `engine` varchar(255) NOT NULL,
-  `version` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
-
---
--- Dumping data for table `useragents`
---
-
-INSERT INTO `useragents` (`id`, `name`, `engine`, `version`) VALUES
-(1, 'Firefox 3.0', 'gecko', '1.9.0'),
-(2, 'Firefox 3.5', 'gecko', '1.9.2'),
-(3, 'Safari 3.2', 'webkit', '525'),
-(4, 'Safari 4', 'webkit', '530'),
-(5, 'Internet Explorer 6', 'msie', '6'),
-(6, 'Internet Explorer 7', 'msie', '7'),
-(7, 'Internet Explorer 8', 'msie', '8'),
-(8, 'Opera 9.6', 'opera', '9.6'),
-(9, 'Chrome 1.0', 'chrome', '525'),
-(10, 'Chrome 2.0', 'chrome', '530'),
-(11, 'Firefox 2.0', 'gecko', '1.8.1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
+  `job_id` int(11) NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `url` tinytext NOT NULL,
+  `status` tinyint(4) NOT NULL default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `useragents`
+-- 
+
+CREATE TABLE `useragents` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `engine` varchar(255) NOT NULL default '',
+  `version` varchar(255) NOT NULL default '',
+  `os` varchar(10) NOT NULL default 'xp',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `useragents`
+-- 
+
+INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`) VALUES (1, 'Firefox 3.0', 'gecko', '^1.9.0', 'xp'),
+(2, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'xp'),
+(3, 'Safari 3.2', 'webkit', '^525', 'xp'),
+(4, 'Safari 4.0', 'webkit', '^530', 'xp'),
+(5, 'Internet Explorer 6', 'msie', '^6.', 'xp'),
+(6, 'Internet Explorer 7', 'msie', '^7.', 'xp'),
+(7, 'Internet Explorer 8', 'msie', '^8.', 'xp'),
+(8, 'Opera  9.6', 'presto', '^2.1', 'xp'),
+(9, 'Chrome 1.0', 'chrome', '^525', 'xp'),
+(10, 'Chrome 2.0', 'chrome', '^530', 'xp'),
+(11, 'Firefox 2.0', 'gecko', '^1.8.1', 'xp'),
+(12, 'Opera 10b1', 'presto', '^2.2.15$', 'xp'),
+(13, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.4'),
+(14, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.4'),
+(15, 'Safari 3.2', 'webkit', '^525', 'osx10.4'),
+(16, 'Safari 4.0', 'webkit', '^530', 'osx10.4'),
+(17, 'Opera  9.6', 'presto', '^2.1', 'osx'),
+(18, 'Opera 10b1', 'presto', '^2.2.15$', 'osx'),
+(19, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx'),
+(20, 'Firefox 3.0', 'gecko', '^1.9.0', 'vista'),
+(21, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'vista'),
+(22, 'Safari 3.2', 'webkit', '^525', 'vista'),
+(23, 'Safari 4.0', 'webkit', '^530', 'vista'),
+(25, 'Internet Explorer 7', 'msie', '^7.', 'vista'),
+(26, 'Internet Explorer 8', 'msie', '^8.', 'vista'),
+(27, 'Opera  9.6', 'presto', '^2.1', 'vista'),
+(28, 'Chrome 1.0', 'chrome', '^525', 'vista'),
+(29, 'Chrome 2.0', 'chrome', '^530', 'vista'),
+(30, 'Firefox 2.0', 'gecko', '^1.8.1', 'vista'),
+(31, 'Opera 10b1', 'presto', '^2.2.15$', 'vista'),
+(32, 'Firefox 3.0', 'gecko', '^3.0', 'osx10.5'),
+(33, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.5'),
+(34, 'Safari 3.2', 'webkit', '^525', 'osx10.5'),
+(35, 'Safari 4.0', 'webkit', '^530', 'osx10.5'),
+(39, 'Firefox 2.0', 'gecko', '^1.8.1', 'linux'),
+(40, 'Firefox 3.0', 'gecko', '^3.0', 'linux'),
+(41, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'linux'),
+(42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `users`
+-- 
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users`
---
-
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
