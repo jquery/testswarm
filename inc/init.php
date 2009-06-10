@@ -28,7 +28,7 @@
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf("SELECT id from useragents WHERE engine=%s AND LOCATE(version, %s) > 0;", $browser, $version);
+		$result = mysql_queryf("SELECT id from useragents WHERE engine=%s AND %s REGEXP version;", $browser, $version);
 
 		if ( $row = mysql_fetch_array($result) ) {
 			$useragent_id = $row[0];

@@ -26,6 +26,16 @@ h2 {
 	overflow: auto;
 }
 
+div.join {
+	width: 200px;
+	height: 150px;
+	position: absolute;
+	top: 100px;
+	left: 300px;
+	border: 3px solid #274E7D;
+	padding: 5px;
+}
+
 div.browser {
 	width: 58px;
 	height: 70px;
@@ -37,6 +47,11 @@ div.browser {
 
 div.clear {
 	clear: left;
+}
+
+div.browser.you span.browser-name {
+	background: orange;
+	color: black;
 }
 
 div.browser img {
