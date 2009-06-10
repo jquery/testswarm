@@ -67,7 +67,10 @@ div.join p {
 div.browsers {
 	float: left;
 	overflow: hidden;
-	padding: 5px;
+	margin: 5px;
+	padding: 3px;
+	border: 1px solid #E5E5E5;
+	background: #F5F5F5;
 }
 
 div.browser {
@@ -97,13 +100,15 @@ div.browser img.msie {
 div.browser span.browser-name {
 	display: block;
 	text-align: center;
-	background: #274E7D;
-	color: #FFF;
+	/*background: #274E7D;*/
+	background: #CCC;
+	background: rgba(39,78,125,0.2);
+	color: #000;
 	font-size: 10px;
 	position: absolute;
 	bottom: 0px;
 	left: 0px;
-	padding: 2px;
+	padding: 1px;
 	width: 100%;
 }
 
