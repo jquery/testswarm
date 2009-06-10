@@ -7,7 +7,7 @@
 
 	$lowerUA = strtolower($useragent);
 
-	if ( ereg(".+(rv|it|ra|ie)[\/: ]([0-9a-z.]+)", $lowerUA, $match) ) {
+	if ( ereg(".+(rv|it|resto|ie)[\/: ]([0-9a-z.]+)", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
 
@@ -15,8 +15,8 @@
 		$browser = "chrome";
 	} else if ( strpos($lowerUA, "webkit") > -1 ) {
 		$browser = "webkit";
-	} else if ( strpos($lowerUA, "opera") > -1 ) {
-		$browser = "opera";
+	} else if ( strpos($lowerUA, "presto") > -1 ) {
+		$browser = "presto";
 	} else if ( strpos($lowerUA, "gecko") > -1 ) {
 		$browser = "gecko";
 	} else if ( strpos($lowerUA, "msie") > -1 ) {
