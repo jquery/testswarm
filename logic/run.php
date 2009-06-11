@@ -5,7 +5,13 @@
 
 	$scripts = "";
 
-  if ( $client_id ) {
+	if ( $_REQUEST['user'] ) {
+		session_write_close();
+		header("Location: /run/");
+		exit;
+	}
+
+	if ( $client_id ) {
 		$scripts = "<script type='text/javascript'>var client_id = $client_id;</script>";
 	}
 

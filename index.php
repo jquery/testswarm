@@ -1,4 +1,6 @@
 <?php
+	session_start();
+
 	// $DEBUG_ON = true;
 	include "inc/utilities.php";
 	include "inc/browser.php";

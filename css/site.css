@@ -7,6 +7,14 @@ html, body {
 	padding: 0;
 }
 
+a {
+	color: #274E7D;
+}
+
+a:hover, a:active {
+	color: #6899D3;
+}
+
 h1 {
 	margin: 0;
 	padding: 8px;

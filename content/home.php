@@ -63,12 +63,16 @@ function loadBrowsers($name) {
 if ( $found ) { ?>
 <div class="join">
 <p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
+<?php if ( !$_SESSION['username'] ) { ?>
 <form action="/" method="get">
 	<input type="hidden" name="state" value="run"/>
 	<br/><strong>Your Name:</strong><br/>
 	<input type="text" name="user" value=""/><br/>
 	<input type="submit" value="Join the Swarm"/>
 </form>
+<?php } else { ?>
+<br/><p><strong>&raquo; <?=$_SESSION['username']?></strong> <a href="/run/">Start Running Tests</a></p>
+<?php } ?>
 <?php } else { ?>
 <div class="join">
 <p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>

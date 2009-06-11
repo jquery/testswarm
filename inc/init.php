@@ -1,5 +1,9 @@
 <?php
-	$username = ereg_replace("[^a-z0-9_ -]", "", $_REQUEST['user']);
+	$username = $_SESSION['username'];
+	if ( !$username ) {
+		$username = $_REQUEST['user'];
+	}
+	$username = ereg_replace("[^a-z0-9_ -]", "", $username);
 	$client_id = ereg_replace("[^0-9]", "", $_REQUEST['client_id']);
 
 	if ( $client_id ) {
@@ -56,4 +60,6 @@
 		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, ip, created) VALUES(%u,%u,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $ip);
 		$client_id = mysql_insert_id();
 	}
+
+	$_SESSION['username'] = $username;
 ?>

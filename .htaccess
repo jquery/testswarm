@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [S=51]
+
+RewriteRule (.*[^/])$ $1/ [R=301,QSA]
+
+RewriteRule ^run/$ /index.php?state=run [QSA,L]
