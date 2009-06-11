@@ -50,10 +50,10 @@ div.desc p {
 }
 
 div.join {
-	width: 300px;
+	width: 278px;
 	position: absolute;
 	top: -64px;
-	right: 0px;
+	right: 35px;
 	border: 3px solid #274E7D;
 	background: white;
 	padding: 5px;
@@ -75,7 +75,7 @@ div.browsers {
 
 div.browser {
 	width: 58px;
-	height: 70px;
+	height: 66px;
 	float: left;
 	position: relative;
 	margin: 4px;
