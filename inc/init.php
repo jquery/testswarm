@@ -7,11 +7,12 @@
 	$client_id = ereg_replace("[^0-9]", "", $_REQUEST['client_id']);
 
 	if ( $client_id ) {
-		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u;", $client_id);
+		$result = mysql_queryf("SELECT user_id, useragent_id, name FROM clients, useragents WHERE clients.id=%u AND useragents.id=useragent_id;", $client_id);
 
 		if ( $row = mysql_fetch_array($result) ) {
 			$user_id = $row[0];
 			$useragent_id = $row[1];
+			$useragent_name = $row[2];
 
 			# If the client ID is already provided, update its record so
 			# that we know that it's still alive
@@ -32,10 +33,11 @@
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf("SELECT id from useragents WHERE engine=%s AND %s REGEXP version AND os=%s;", $browser, $version, $os);
+		$result = mysql_queryf("SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version AND os=%s;", $browser, $version, $os);
 
 		if ( $row = mysql_fetch_array($result) ) {
 			$useragent_id = $row[0];
+			$useragent_name = $row[1];
 
 		# If the useragent isn't needed, failover with an error message
 		# TODO: Improve error message quality.

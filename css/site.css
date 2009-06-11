@@ -72,6 +72,22 @@ div.join p {
 	padding: 0;
 }
 
+div.userinfo {
+	overflow: hidden;
+	margin: 5px;
+	padding: 3px;
+	border: 1px solid #E5E5E5;
+	background: #F5F5F5;
+}
+
+div.userinfo h3 {
+	padding: 15px 0 0 0;
+}
+
+div.userinfo div.browser {
+	margin-right: 20px;
+}
+
 div.browsers {
 	float: left;
 	overflow: hidden;
@@ -163,4 +179,20 @@ table.results a {
 
 table.results {
 	width: 100%;
+}
+
+div#iframes {
+	width: 1px;
+	height: 1px;
+}
+
+ul#history {
+	margin: 0;
+	padding: 0 0 0 15px;
+	list-style: none;
+}
+
+ul#history li {
+	padding: 0;
+	margin: 5px 0;
 }

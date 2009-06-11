@@ -16,6 +16,10 @@ var cmds = {
 };
 
 function getTests() {
+	if ( typeof run_id === "undefined" ) {
+		log( "Connecting to the swarm." );
+	}
+
 	run_id = 0;
 	run_url = "";
 
@@ -34,14 +38,15 @@ function runTests( txt ) {
 		}
 
 	} else if ( run_id ) {
-		msg("Running tests...");
+		log("Running tests...");
 
 		var params = "&run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
+		iframe.className = "test";
 		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
 			"_=" + (new Date).getTime() + "&swarmURL=" +
 			encodeURIComponent("http://" + window.location.host + "?state=saverun" + params);
-		document.body.appendChild( iframe );
+		jQuery("#iframes").append( iframe );
 
 		// Timeout after a period of time
 		testTimeout = setTimeout( testTimedout, timeoutRate * 1000 );
@@ -97,6 +102,13 @@ function retrySend( data, retry, success ) {
 	});
 }
 
+function log( txt ) {
+	jQuery("#history").prepend( "<li><strong>" + 
+		(new Date).toString().replace(/^\w+ /, "").replace(/:[^:]+$/, "") +
+		":</strong> " + txt + "</li>" );
+	msg( txt );
+}
+
 function msg( txt ) {
-	jQuery("p.msg").text( txt );
+	jQuery("#msg").text( txt );
 }
