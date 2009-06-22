@@ -1,1 +1,31 @@
 Distributed continuous integration for JavaScript.
+
+http://testswarm.com/
+
+ANNOUNCEMENTS
+
+Sign up to receive the occassional announcement:
+http://lists.testswarm.com/mailman/listinfo/testswarm
+
+DISCUSSION
+
+The Google Group for general usage and development discussion:
+http://groups.google.com/group/testswarm
+
+INSTALLATION
+
+1) Create a mysql database and a user who can connect and write to it.
+
+2) Load the MySQL database.
+
+   mysql -u USER -p < testswarm.sql
+
+3) Copy the config-sample.ini to config.ini and change the options to correspond to your MySQL database information.
+
+4) Load the cronjob (changing the URL to point to your site).
+
+   crontab < cronjob.txt 
+
+LICENSE
+
+See LICENSE for more information.
