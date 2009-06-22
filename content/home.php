@@ -12,6 +12,7 @@
   loadBrowsers("osx10.5");
   loadBrowsers("osx");
   loadBrowsers("linux");
+  loadBrowsers("2000");
 
 function loadBrowsers($name) {
   global $found, $browser, $version, $os;
@@ -24,6 +25,8 @@ function loadBrowsers($name) {
     $name = "Windows XP";
   } else if ( $name == "vista" ) {
     $name = "Windows Vista";
+  } else if ( $name == "2000" ) {
+    $name = "Windows 2000";
   } else if ( $name == "osx10.4" ) {
     $name = "OS X 10.4";
   } else if ( $name == "osx10.5" ) {

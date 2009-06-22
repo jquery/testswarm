@@ -3,7 +3,7 @@
 	if ( !$username ) {
 		$username = $_REQUEST['user'];
 	}
-	$username = ereg_replace("[^a-z0-9_ -]", "", $username);
+	$username = ereg_replace("[^a-zA-Z0-9_ -]", "", $username);
 	$client_id = ereg_replace("[^0-9]", "", $_REQUEST['client_id']);
 
 	if ( $client_id ) {

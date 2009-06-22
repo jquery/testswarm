@@ -30,6 +30,8 @@
 		$os = "vista";
 	} else if ( strpos($lowerUA, "windows nt 5.1") > -1 ) {
 		$os = "xp";
+	} else if ( strpos($lowerUA, "windows nt 5.0") > -1 ) {
+		$os = "2000";
 	} else if ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_4") > -1 ) {
 		$os = "osx10.4";
 	} else if ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
