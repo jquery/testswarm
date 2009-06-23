@@ -9,7 +9,7 @@ my $SWARM_INJECT = "/js/inject.js";
 
 # Your TestSwarm username.
 
-my $USER = "jeresig";
+my $USER = "jquery";
 
 # Your authorization token.
 
@@ -50,16 +50,14 @@ my $BUILD = "make jquery";
 my $JOB_NAME = "jQuery Commit #{REV}";
 
 # The browsers you wish to run against. Options include:
-#  - "all" all availabe browsers.
+#  - "all" all available browsers.
 #  - "popular" the most popular browser (99%+ of all browsers in use)
-#  - "beta" upcoming alpha/beta of popular browsers
-#  - "popular,beta" the most popular browsers and their upcoming alpha/betas
 #  - "current" the current release of all the major browsers
-#  - "mobile" popular releases of mobile browsers
 #  - "gbs" the browsers currently supported in Yahoo's Graded Browser Support
-#  - A list of browser IDs separated by a comma (e.g. "1,3,6,9")
+#  - "beta" upcoming alpha/beta of popular browsers
+#  - "popularbeta" the most popular browser and their upcoming releases
 
-my $BROWSERS = "popular,beta";
+my $BROWSERS = "popularbeta";
 
 # All the suites that you wish to run within this job
 # (can be any number of suites)

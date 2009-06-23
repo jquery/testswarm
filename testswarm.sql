@@ -13,6 +13,11 @@ CREATE TABLE `clients` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- 
+-- Dumping data for table `clients`
+-- 
+
+
 -- --------------------------------------------------------
 
 -- 
@@ -29,6 +34,11 @@ CREATE TABLE `jobs` (
   PRIMARY KEY  (`id`),
   FULLTEXT KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `jobs`
+-- 
+
 
 -- --------------------------------------------------------
 
@@ -47,6 +57,11 @@ CREATE TABLE `run_client` (
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`client_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `run_client`
+-- 
+
 
 -- --------------------------------------------------------
 
@@ -67,6 +82,11 @@ CREATE TABLE `run_useragent` (
   PRIMARY KEY  (`run_id`,`useragent_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- 
+-- Dumping data for table `run_useragent`
+-- 
+
+
 -- --------------------------------------------------------
 
 -- 
@@ -84,6 +104,11 @@ CREATE TABLE `runs` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- 
+-- Dumping data for table `runs`
+-- 
+
+
 -- --------------------------------------------------------
 
 -- 
@@ -96,7 +121,12 @@ CREATE TABLE `useragents` (
   `engine` varchar(255) NOT NULL default '',
   `version` varchar(255) NOT NULL default '',
   `os` varchar(10) NOT NULL default 'xp',
-  `active` tinyint(4) NOT NULL default '1',
+  `active` tinyint(4) NOT NULL default '0',
+  `current` tinyint(4) NOT NULL default '0',
+  `popular` tinyint(4) NOT NULL default '0',
+  `gbs` tinyint(4) NOT NULL default '0',
+  `beta` tinyint(4) NOT NULL default '0',
+  `mobile` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -104,43 +134,48 @@ CREATE TABLE `useragents` (
 -- Dumping data for table `useragents`
 -- 
 
-INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`) VALUES (1, 'Firefox 3.0', 'gecko', '^1.9.0', 'xp', 1),
-(2, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'xp', 1),
-(3, 'Safari 3.2', 'webkit', '^525', 'xp', 1),
-(4, 'Safari 4.0', 'webkit', '^530', 'xp', 1),
-(5, 'Internet Explorer 6', 'msie', '^6.', 'xp', 1),
-(6, 'Internet Explorer 7', 'msie', '^7.', 'xp', 1),
-(7, 'Internet Explorer 8', 'msie', '^8.', 'xp', 1),
-(8, 'Opera  9.6', 'presto', '^2.1', 'xp', 1),
-(9, 'Chrome 1.0', 'chrome', '^525', 'xp', 1),
-(10, 'Chrome 2.0', 'chrome', '^530', 'xp', 1),
-(11, 'Firefox 2.0', 'gecko', '^1.8.1', 'xp', 1),
-(12, 'Opera 10b1', 'presto', '^2.2.15$', 'xp', 1),
-(13, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.4', 1),
-(14, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.4', 1),
-(15, 'Safari 3.2', 'webkit', '^525', 'osx10.4', 1),
-(16, 'Safari 4.0', 'webkit', '^530', 'osx10.4', 1),
-(17, 'Opera  9.6', 'presto', '^2.1', 'osx', 1),
-(18, 'Opera 10b1', 'presto', '^2.2.15$', 'osx', 1),
-(19, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx', 1),
-(20, 'Firefox 3.0', 'gecko', '^1.9.0', 'vista', 1),
-(21, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'vista', 1),
-(22, 'Safari 3.2', 'webkit', '^525', 'vista', 1),
-(23, 'Safari 4.0', 'webkit', '^530', 'vista', 1),
-(25, 'Internet Explorer 7', 'msie', '^7.', 'vista', 1),
-(26, 'Internet Explorer 8', 'msie', '^8.', 'vista', 1),
-(27, 'Opera  9.6', 'presto', '^2.1', 'vista', 1),
-(28, 'Chrome 1.0', 'chrome', '^525', 'vista', 1),
-(29, 'Chrome 2.0', 'chrome', '^530', 'vista', 1),
-(31, 'Opera 10b1', 'presto', '^2.2.15$', 'vista', 1),
-(32, 'Firefox 3.0', 'gecko', '^3.0', 'osx10.5', 1),
-(33, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.5', 1),
-(34, 'Safari 3.2', 'webkit', '^525', 'osx10.5', 1),
-(35, 'Safari 4.0', 'webkit', '^530', 'osx10.5', 1),
-(39, 'Firefox 2.0', 'gecko', '^1.8.1', 'linux', 1),
-(40, 'Firefox 3.0', 'gecko', '^3.0', 'linux', 1),
-(41, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'linux', 1),
-(42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux', 1);
+INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `current`, `popular`, `gbs`, `beta`, `mobile`) VALUES (1, 'Firefox 3.0', 'gecko', '^1.9.0', 'xp', 1, 1, 1, 1, 0, 0),
+(2, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'xp', 1, 0, 0, 0, 1, 0),
+(3, 'Safari 3.2', 'webkit', '^525', 'xp', 1, 0, 0, 0, 0, 0),
+(4, 'Safari 4.0', 'webkit', '^530', 'xp', 1, 1, 0, 0, 0, 0),
+(5, 'Internet Explorer 6', 'msie', '^6.', 'xp', 1, 1, 1, 1, 0, 0),
+(6, 'Internet Explorer 7', 'msie', '^7.', 'xp', 1, 0, 1, 1, 0, 0),
+(7, 'Internet Explorer 8', 'msie', '^8.', 'xp', 1, 1, 1, 1, 0, 0),
+(8, 'Opera  9.6', 'presto', '^2.1', 'xp', 1, 1, 1, 1, 0, 0),
+(9, 'Chrome 1.0', 'chrome', '^525', 'xp', 1, 0, 0, 0, 0, 0),
+(10, 'Chrome 2.0', 'chrome', '^530', 'xp', 1, 1, 1, 0, 0, 0),
+(11, 'Firefox 2.0', 'gecko', '^1.8.1', 'xp', 1, 0, 1, 1, 0, 0),
+(12, 'Opera 10b1', 'presto', '^2.2.15$', 'xp', 1, 0, 0, 0, 1, 0),
+(13, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.4', 1, 1, 1, 0, 0, 0),
+(14, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.4', 1, 0, 0, 0, 1, 0),
+(15, 'Safari 3.2', 'webkit', '^525', 'osx10.4', 1, 0, 1, 1, 0, 0),
+(16, 'Safari 4.0', 'webkit', '^530', 'osx10.4', 1, 1, 1, 0, 0, 0),
+(17, 'Opera  9.6', 'presto', '^2.1', 'osx', 1, 1, 0, 1, 0, 0),
+(18, 'Opera 10b1', 'presto', '^2.2.15$', 'osx', 1, 0, 0, 0, 1, 0),
+(19, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx', 1, 0, 0, 0, 0, 0),
+(20, 'Firefox 3.0', 'gecko', '^1.9.0', 'vista', 1, 1, 1, 1, 0, 0),
+(21, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'vista', 1, 0, 0, 0, 1, 0),
+(22, 'Safari 3.2', 'webkit', '^525', 'vista', 1, 0, 0, 0, 0, 0),
+(23, 'Safari 4.0', 'webkit', '^530', 'vista', 1, 1, 0, 0, 0, 0),
+(25, 'Internet Explorer 7', 'msie', '^7.', 'vista', 1, 0, 1, 1, 0, 0),
+(26, 'Internet Explorer 8', 'msie', '^8.', 'vista', 1, 1, 1, 1, 0, 0),
+(27, 'Opera  9.6', 'presto', '^2.1', 'vista', 1, 1, 1, 0, 0, 0),
+(28, 'Chrome 1.0', 'chrome', '^525', 'vista', 1, 0, 0, 0, 0, 0),
+(29, 'Chrome 2.0', 'chrome', '^530', 'vista', 1, 1, 1, 0, 0, 0),
+(31, 'Opera 10b1', 'presto', '^2.2.15$', 'vista', 1, 0, 0, 0, 1, 0),
+(32, 'Firefox 3.0', 'gecko', '^3.0', 'osx10.5', 1, 1, 1, 1, 0, 0),
+(33, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.5', 1, 0, 0, 0, 1, 0),
+(34, 'Safari 3.2', 'webkit', '^525', 'osx10.5', 1, 0, 1, 1, 0, 0),
+(35, 'Safari 4.0', 'webkit', '^530', 'osx10.5', 1, 1, 1, 0, 0, 0),
+(39, 'Firefox 2.0', 'gecko', '^1.8.1', 'linux', 0, 0, 0, 0, 0, 0),
+(40, 'Firefox 3.0', 'gecko', '^3.0', 'linux', 1, 1, 1, 0, 0, 0),
+(41, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'linux', 1, 0, 0, 0, 1, 0),
+(42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux', 1, 1, 0, 0, 0, 0),
+(43, 'Safari 3.1', 'webkit', '^525.19', 'osx10.4', 1, 0, 0, 0, 0, 0),
+(44, 'Safari 3.1', 'webkit', '^525.19', 'osx10.5', 1, 0, 0, 0, 0, 0),
+(45, 'Internet Explorer 6', 'msie', '^6.', '2000', 1, 0, 1, 1, 0, 0),
+(46, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx10.4', 0, 0, 0, 0, 0, 0),
+(47, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx10.5', 1, 0, 0, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -156,3 +191,7 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `users`
+-- 

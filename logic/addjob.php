@@ -20,7 +20,24 @@
 
 				$run_id = mysql_insert_id();
 
-				foreach ( $_POST['browsers'] as $browser_num ) {
+				$ua_type = "1 = 1";
+
+				if ( $_POST['browsers'] == "popular" ) {
+					$ua_type = "popular = 1";
+				} else if ( $_POST['browsers'] == "current" ) {
+					$ua_type = "current = 1";
+				} else if ( $_POST['browsers'] == "gbs" ) {
+					$ua_type = "gbs = 1";
+				} else if ( $_POST['browsers'] == "beta" ) {
+					$ua_type = "beta = 1";
+				} else if ( $_POST['browsers'] == "popularbeta" ) {
+					$ua_type = "(popular = 1 OR beta = 1)";
+				}
+
+				$result = mysql_queryf("SELECT id FROM useragents WHERE active = 1 AND $ua_type;");
+
+				while ( $row = mysql_fetch_array($result) ) {
+					$browser_num = $row[0];
 					mysql_queryf("INSERT INTO run_useragent (run_id,useragent_id,max,created) VALUES(%u,%u,%u,NOW());",
 						$run_id, $browser_num, $_POST['max']);
 				}
