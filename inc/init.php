@@ -54,7 +54,7 @@
 
 		# If the user doesn't have one, create a new user account
 		} else {
-			$result = mysql_queryf("INSERT INTO users (name,created) VALUES(%s,NOW());", $username);
+			$result = mysql_queryf("INSERT INTO users (name,created,seed,auth) VALUES(%s,NOW(),RAND(),SHA1(seed));", $username);
 			$user_id = intval(mysql_insert_id());
 		}
 

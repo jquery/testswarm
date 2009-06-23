@@ -5,6 +5,7 @@
 <legend>Job Information</legend>
 <label>Job Name: <input type="text" name="job_name"/></label><br/>
 <label>Your Username: <input type="text" name="user"/></label><br/>
+<label>Your Auth Token: <input type="text" name="auth"/></label><br/>
 <label>Number of Runs: <input type="text" name="max" value="1" size="2" maxlength="2"/></label><br/>
 </fieldset>
 <fieldset>

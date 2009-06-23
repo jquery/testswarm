@@ -153,7 +153,8 @@ if ( ! $rev ) {
 		"user" => $USER,
 		"max" => $MAX_RUNS,
 		"job_name" => $JOB_NAME,
-		"browsers" => $BROWSERS
+		"browsers" => $BROWSERS,
+		"auth" => $AUTH_TOKEN
 	);
 
 	my $query = "";
@@ -167,9 +168,9 @@ if ( ! $rev ) {
 		          "&urls[]=" . clean($SUITES{$suite});
 	}
 
-	print "curl -A \"Gecko rv:1.9.0 Windows NT 5.1\" -d \"$query\" $SWARM\n" if ( $DEBUG );
+	print "curl -d \"$query\" $SWARM\n" if ( $DEBUG );
 
-	my $results = `curl -A "Gecko rv:1.9.0 Windows NT 5.1" -d "$query" $SWARM`;
+	my $results = `curl -d "$query" $SWARM`;
 
 	print "Results: $results\n" if ( $DEBUG );
 

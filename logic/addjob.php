@@ -3,7 +3,19 @@
 	$title = "Add New Job";
 
 	if ( $_POST['state'] == "addjob" ) {
-		include "inc/init.php";
+		$username = ereg_replace("[^a-zA-Z0-9_ -]", "", $_POST['user']);
+		$auth = ereg_replace("[^a-z0-9]", "", $_POST['auth']);
+
+		$result = mysql_queryf("SELECT id FROM users WHERE name=%s AND auth=%s;", $username, $auth);
+
+		if ( $row = mysql_fetch_array($result) ) {
+			$user_id = intval($row[0]);
+
+		# TODO: Improve error message quality.
+		} else {
+			echo "Incorrect username or auth token.";
+			exit();	
+		}
 
 		mysql_queryf("BEGIN;");
 
