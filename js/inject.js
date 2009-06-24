@@ -47,7 +47,7 @@
 			var input = document.createElement("input");
 			input.type = "hidden";
 			input.name = i;
-			input.vaue = params[i];
+			input.value = params[i];
 			form.appendChild( input );
 		}
 
