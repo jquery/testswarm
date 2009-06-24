@@ -1,6 +1,6 @@
 <?php
 
-	$result = mysql_queryf("SELECT run_id, client_id, useragent_id FROM run_client, clients WHERE DATE_ADD(run_client.updated, INTERVAL 5 MINUTE) < NOW() AND clients.id = client_id;");
+	$result = mysql_queryf("SELECT run_id, client_id, useragent_id FROM run_client, clients WHERE DATE_ADD(run_client.updated, INTERVAL 5 MINUTE) < NOW() AND clients.id = client_id AND run_client.status = 1;");
 
 	while ( $row = mysql_fetch_array($result) ) {
 		$run_id = $row[0];
