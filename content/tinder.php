@@ -42,7 +42,7 @@
 		$results = array();
 		$states = array();
 
-	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents, jobs WHERE jobs.id=%u AND runs.job_id=jobs.id AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
+	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.os as os, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents, jobs WHERE jobs.id=%u AND runs.job_id=jobs.id AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
 
 	$last = "";
 
@@ -51,10 +51,16 @@
 			if ( $last ) {
 				if ( $addBrowser ) {
 					$header = "<tr><th></th>\n";
-					$last_browser = "";
+					$last_browser = array();
 					foreach ( $browsers as $browser ) {
-						if ( $last_browser != $browser ) {
-							$header .= "<th>$browser</th>\n";
+						if ( $last_browser["id"] != $browser["id"] ) {
+							$header .= '<th><div class="browser">' .
+								'<img src="/images/' . $browser["engine"] .
+								'.sm.png" class="browser-icon ' . $browser["engine"] .
+								'" alt="' . $browser["name"] . '" title="' . $browser["name"] .
+								'"/><span class="browser-name">' .
+								preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
+								$browser["os"] . '</span></div></th>';
 						}
 						$last_browser = $browser;
 					}
@@ -82,7 +88,12 @@
 		}
 
 		if ( $addBrowser ) {
-			array_push( $browsers, $row["browsername"] );
+			array_push( $browsers, array(
+				"name" => $row["browsername"],
+				"engine" => $row["browser"],
+				"os" => $row["os"],
+				"id" => $row["useragent_id"]
+			) );
 		}
 
 		#echo "<li>" . $row["browser"] . " (" . get_status(intval($row["status"])) . ")<ul>";
