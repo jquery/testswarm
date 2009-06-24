@@ -51,7 +51,7 @@ function loadBrowsers($name) {
     $num = preg_replace('/\w+ /', "", $row[1]);
     ?>
 		<div class="browser<?= $row[0] != $engine ? ' clear' : ''?><?= $row[3] ? ' you' : ''?>">
-			<img src="/images/<?=$row[0]?>.png" class="browser-icon <?=$row[0]?>" alt="<?=$row[1]?>" title="<?=$row[1]?>"/>
+			<img src="/images/<?=$row[0]?>.sm.png" class="browser-icon <?=$row[0]?>" alt="<?=$row[1]?>" title="<?=$row[1]?>"/>
 			<span class="browser-name"><?=$num?></span>
 			<?php if ( intval($row[2]) > 0 ) {
 				echo "<span class='active'>" . $row[2] . "</span>";
