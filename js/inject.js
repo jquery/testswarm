@@ -2,7 +2,11 @@
 
 	var DEBUG = false;
 
-	var doPost = !!(window.top && window.top.postMessage);
+	var doPost = false;
+
+	try {
+		doPost = !!window.top.postMessage;
+	} catch(e){}
 
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
@@ -40,6 +44,7 @@
 				params[ parts[0] ] = parts[1];
 			}
 		}
+if ( DEBUG ) alert( doPost );
 
 		if ( doPost ) {
 			// Build Query String
