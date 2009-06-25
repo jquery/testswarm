@@ -18,7 +18,7 @@
 				.find("ol").show().end()
 				.find("link").each(function(){
 					jQuery(this).attr("href", this.href);
-				})
+				}).end()
 				.html().replace(/\s+/g, " ");
 
 			submit({
