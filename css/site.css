@@ -167,6 +167,15 @@ table.results td.progress {
 	background: yellow;
 }
 
+table.results td.timeout {
+	background: black;
+	color: white;
+}
+
+table.results td.timeout a {
+	color: white;
+}
+
 table.results td {
 	background: gray;
 	padding: 15px 5px;

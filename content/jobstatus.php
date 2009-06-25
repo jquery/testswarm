@@ -15,6 +15,8 @@
 			return "notstarted notdone";
 		} else if ( $num == 1 ) {
 			return "progress notdone";
+		} else if ( $num == 2 && $fail == -1 ) {
+			return "timeout";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
 		}
@@ -101,7 +103,7 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]));
 				if ( $last_browser != $ua["browser"] ) {
-					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["fail"] > 0 ? $ua["fail"] . " test(s) failed." : "Pass" : "&nbsp;") . "</a></td>\n";
+					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["total"] < 0 ? "Timeout" : ($ua["fail"] > 0 ? $ua["fail"] : $ua["total"]) : "Running") . "</a></td>\n";
 				}
 				$last_browser = $ua["browser"];
 			}

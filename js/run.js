@@ -89,7 +89,7 @@ function cancelTest() {
 
 function testTimedout() {
 	cancelTest();
-	retrySend( "state=saverun&fail=1&total=1&results=Test%20Timed%20Out.&run_id="
+	retrySend( "state=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
 		+ run_id + "&client_id=" + client_id,
 		testTimedout, getTests );
 }
