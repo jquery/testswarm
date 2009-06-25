@@ -90,6 +90,7 @@ function testTimedout() {
 
 function retrySend( data, retry, success ) {
 	jQuery.ajax({
+		type: "POST",
 		url: "/",
 		timeout: 10000,
 		cache: false,
