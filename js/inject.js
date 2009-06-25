@@ -2,6 +2,8 @@
 
 	var DEBUG = false;
 
+	var doPost = !!(window.top && window.top.postMessage);
+
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
 
@@ -39,23 +41,40 @@
 			}
 		}
 
-		var form = document.createElement("form");
-		form.action = url;
-		form.method = "POST";
+		if ( doPost ) {
+			// Build Query String
+			var query = "";
 
-		for ( var i in params ) {
-			var input = document.createElement("input");
-			input.type = "hidden";
-			input.name = i;
-			input.value = params[i];
-			form.appendChild( input );
-		}
+			for ( var i in params ) {
+				query += ( query ? "&" : "" ) + i + "=" +
+					encodeURIComponent(params[i]);
+			}
 
-		if ( DEBUG ) {
-			alert( form.innerHTML );
+			if ( DEBUG ) {
+				alert( query );
+			} else {
+				window.top.postMessage( query, "*" );
+			}
+
 		} else {
-			document.body.appendChild( form );
-			form.submit();
+			var form = document.createElement("form");
+			form.action = url;
+			form.method = "POST";
+
+			for ( var i in params ) {
+				var input = document.createElement("input");
+				input.type = "hidden";
+				input.name = i;
+				input.value = params[i];
+				form.appendChild( input );
+			}
+
+			if ( DEBUG ) {
+				alert( form.innerHTML );
+			} else {
+				document.body.appendChild( form );
+				form.submit();
+			}
 		}
 	}
 

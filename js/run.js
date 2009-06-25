@@ -6,6 +6,12 @@ if ( typeof client_id !== "undefined" ) {
 	jQuery( getTests );
 }
 
+if ( window.addEventListener ) {
+	window.addEventListener( "message", handleMessage, false );
+} else if ( window.attachEvent ) {
+	window.attachEvent( "onmessage", handleMessage );
+}
+
 var cmds = {
 	reload: function() {
 		window.location.reload();
@@ -86,6 +92,13 @@ function testTimedout() {
 	retrySend( "state=saverun&fail=1&total=1&results=Test%20Timed%20Out.&run_id="
 		+ run_id + "&client_id=" + client_id,
 		testTimedout, getTests );
+}
+
+function handleMessage(e){
+	cancelTest();
+	retrySend( e.data, function(){
+		handleMessage(e);
+	}, getTests );
 }
 
 function retrySend( data, retry, success ) {
