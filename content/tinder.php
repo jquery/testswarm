@@ -57,7 +57,8 @@
 							$header .= '<th><div class="browser">' .
 								'<img src="/images/' . $browser["engine"] .
 								'.sm.png" class="browser-icon ' . $browser["engine"] .
-								'" alt="' . $browser["name"] . '" title="' . $browser["name"] .
+								'" alt="' . $browser["name"] . ', ' . $browser["os"] .
+								'" title="' . $browser["name"] . ', ' . $browser["os"] .
 								'"/><span class="browser-name">' .
 								preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
 								$browser["os"] . '</span></div></th>';
@@ -134,7 +135,9 @@
 	}
 
 	foreach ( $results as $key => $fail ) {
-		$output .= "<td class='" . $states[$key] . "'>" . ($states[$key] == "pass" || $states[$key] == "fail" ? $fail > 0 ? $fail . " test(s) failed." : "Pass" : "") . "</td>";
+		$output .= "<td class='" . $states[$key] . "'>" .
+			# ($states[$key] == "pass" || $states[$key] == "fail" ? $fail > 0 ? $fail . " test(s) failed." : "Pass" : "") .
+			"</td>";
 	}
 
 	$output .= "</tr>\n";

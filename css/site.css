@@ -155,6 +155,19 @@ div.browser span.active {
 	border-radius: 10px;
 }
 
+table.results div.browser {
+	width: 20px;
+	height: 20px;
+}
+
+table.results div.browser img {
+	width: 20px;
+}
+
+table.results div.browser span {
+	display: none;
+}
+
 table.results td.pass {
 	background: lightgreen;
 }
@@ -178,8 +191,9 @@ table.results td.timeout a {
 
 table.results td {
 	background: gray;
-	padding: 15px 5px;
-	text-align: center;
+	/* padding: 15px 5px; */
+	padding: 4px 3px;
+	text-align: right;
 }
 
 table.results a {

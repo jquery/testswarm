@@ -56,7 +56,8 @@
 							$header .= '<th><div class="browser">' .
 								'<img src="/images/' . $browser["engine"] .
 								'.sm.png" class="browser-icon ' . $browser["engine"] .
-								'" alt="' . $browser["name"] . '" title="' . $browser["name"] .
+								'" alt="' . $browser["name"] . ', ' . $browser["os"] .
+								'" title="' . $browser["name"] . ', ' . $browser["os"] .
 								'"/><span class="browser-name">' .
 								preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
 								$browser["os"] . '</span></div></th>';
@@ -103,7 +104,7 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]));
 				if ( $last_browser != $ua["browser"] ) {
-					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["total"] < 0 ? "Timeout" : ($ua["fail"] > 0 ? $ua["fail"] : $ua["total"]) : "Running") . "</a></td>\n";
+					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["total"] < 0 ? "Err" : ($ua["fail"] > 0 ? $ua["fail"] : $ua["total"]) : "Running") . "</a></td>\n";
 				}
 				$last_browser = $ua["browser"];
 			}
@@ -122,7 +123,7 @@
 setTimeout(function(){
 	if ( jQuery("td.notdone").length ) {
 		jQuery("table.results").load("/?state=jobstatus&job_id=<?= $job_id ?> tbody");
-		setTimeout(arguments.callee, 3000);
+		setTimeout(arguments.callee, 5000);
 	}
-}, 3000);
+}, 5000);
 </script>
