@@ -23,9 +23,9 @@
 	$job_search = ereg_replace("[^a-zA-Z ]", "", $_REQUEST['job']);
 	$job_search .= "%";
 
-	$search_result = mysql_queryf("SELECT name, status, id FROM jobs WHERE name LIKE %s ORDER BY name DESC;", $job_search);
+	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY name DESC;", $job_search, $search_user);
 
-	echo "<table class='results'><tbody>";
+	echo "<h3>Recent Jobs:</h3><table class='results'><tbody>";
 
 	$output = "";
 	$browsers = array();
