@@ -219,3 +219,26 @@ ul#history li {
 	padding: 0;
 	margin: 5px 0;
 }
+
+ul.clients {
+	list-style: none;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+ul.clients li {
+	float: left;
+	overflow: hidden;
+	margin: 5px;
+	padding: 3px;
+	border: 1px solid #E5E5E5;
+	background: #F5F5F5;
+	height: 55px;
+	width: 200px;
+}
+
+ul.clients li img {
+	float: left;
+	margin-right: 10px;
+}

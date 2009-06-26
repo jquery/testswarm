@@ -20,12 +20,43 @@
 		}
 	}
 
+	$result = mysql_query("SELECT useragents.engine as engine, useragents.name as name, useragents.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name='$search_user' ORDER BY useragents.engine, useragents.name;");
+
+	echo "<h3>Connected Clients:</h3><br/><ul class='clients'>";
+
+	while ( $row = mysql_fetch_array($result) ) {
+		$engine = $row[0];
+		$browser_name = $row[1];
+		$name = $row[2];
+		$since = $row[3];
+
+		if ( $name == "xp" ) {
+			$name = "Windows XP";
+		} else if ( $name == "vista" ) {
+			$name = "Windows Vista";
+		} else if ( $name == "2000" ) {
+			$name = "Windows 2000";
+		} else if ( $name == "osx10.4" ) {
+			$name = "OS X 10.4";
+		} else if ( $name == "osx10.5" ) {
+			$name = "OS X 10.5";
+		} else if ( $name == "osx" ) {
+			$name = "OS X";
+		} else if ( $name == "linux" ) {
+			$name = "Linux";
+		}
+
+		echo "<li><img src='/images/$engine.sm.png'/> <strong class='name'>$browser_name $name</strong><br>Online Since: <strong title='$since' class='pretty'>$since</strong></li>";
+	}
+
+	echo "</ul>";
+
 	$job_search = ereg_replace("[^a-zA-Z ]", "", $_REQUEST['job']);
 	$job_search .= "%";
 
 	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY name DESC;", $job_search, $search_user);
 
-	echo "<h3>Recent Jobs:</h3><table class='results'><tbody>";
+	echo "<br/><h3>Recent Jobs:</h3><table class='results'><tbody>";
 
 	$output = "";
 	$browsers = array();
