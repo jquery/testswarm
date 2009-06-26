@@ -234,11 +234,17 @@ ul.clients li {
 	padding: 3px;
 	border: 1px solid #E5E5E5;
 	background: #F5F5F5;
-	height: 55px;
-	width: 200px;
+	height: 24px;
+	width: 180px;
+	font-size: 10px;
 }
 
 ul.clients li img {
 	float: left;
-	margin-right: 10px;
+	margin-right: 5px;
+	width: 24px;
+}
+
+ul.clients li img.msie {
+	margin-top: -2px;
 }

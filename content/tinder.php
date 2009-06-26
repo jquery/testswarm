@@ -22,7 +22,7 @@
 
 	$result = mysql_query("SELECT useragents.engine as engine, useragents.name as name, useragents.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name='$search_user' ORDER BY useragents.engine, useragents.name;");
 
-	echo "<h3>Connected Clients:</h3><br/><ul class='clients'>";
+	echo "<h3>Active Clients:</h3><br/><ul class='clients'>";
 
 	while ( $row = mysql_fetch_array($result) ) {
 		$engine = $row[0];
@@ -46,7 +46,7 @@
 			$name = "Linux";
 		}
 
-		echo "<li><img src='/images/$engine.sm.png'/> <strong class='name'>$browser_name $name</strong><br>Online Since: <strong title='$since' class='pretty'>$since</strong></li>";
+		echo "<li><img src='/images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
 	}
 
 	echo "</ul>";
