@@ -9,3 +9,4 @@ RewriteRule (.*[^/])$ $1/ [R=301,QSA]
 
 RewriteRule ^run/$ /index.php?state=run [QSA,L]
 RewriteRule ^user/(.*)/?$ /index.php?state=tinder&user=$1 [QSA,L]
+RewriteRule ^job/(.*)/?$ /index.php?state=jobstatus&job_id=$1 [QSA,L]

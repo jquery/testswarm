@@ -58,7 +58,7 @@
 
 		mysql_queryf("COMMIT;");
 
-		$url = "/?state=jobstatus&job_id=" . $job_id;
+		$url = "/job/" . $job_id . "/";
 
 		if ( $_POST['output'] == "dump" ) {
 			echo $url;

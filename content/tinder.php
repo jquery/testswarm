@@ -68,7 +68,7 @@
 		$job_id = $row[2];
 
 		#echo "<h3>$job_name</h3><table class='results'><tbody>";
-		$output .= '<tr><th><a href="/?state=jobstatus&job_id=' . $job_id . '">' . $job_name . "</a></th>\n";
+		$output .= '<tr><th><a href="/job/' . $job_id . '/">' . $job_name . "</a></th>\n";
 
 		$results = array();
 		$states = array();
@@ -116,7 +116,7 @@
 				array_push( $useragents[ $ua_row['useragent_id'] ], $ua_row );
 			}
 
-			#$output .= '<tr><th><a href="/?state=jobstatus&job_id=' . $job_id . '">' . $job_name . "</a></th>\n";
+			#$output .= '<tr><th><a href="/job/' . $job_id . '/">' . $job_name . "</a></th>\n";
 		}
 
 		if ( $addBrowser ) {

@@ -122,7 +122,7 @@
 <script>
 setTimeout(function(){
 	if ( jQuery("td.notdone").length ) {
-		jQuery("table.results").load("/?state=jobstatus&job_id=<?= $job_id ?> tbody");
+		jQuery("table.results").load("/job/<?= $job_id ?>/ tbody");
 		setTimeout(arguments.callee, 5000);
 	}
 }, 5000);
