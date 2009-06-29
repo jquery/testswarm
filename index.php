@@ -29,6 +29,7 @@ if ( $title ) {
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<title>Test Swarm: <?= $title ?></title>
 	<link rel="stylesheet" href="/css/site.css"/>
 	<?= $scripts ?>
