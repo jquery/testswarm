@@ -189,8 +189,10 @@ CREATE TABLE `users` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `seed` double NOT NULL default '0',
-  `password` varchar(32) NOT NULL default '',
-  `auth` varchar(32) NOT NULL default '',
+  `password` varchar(40) NOT NULL default '',
+  `auth` varchar(40) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `request` tinytext NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

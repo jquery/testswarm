@@ -34,7 +34,17 @@ if ( $title ) {
 	<?= $scripts ?>
 </head>
 <body>
-	<h1>Test Swarm</h1>
+	<ul class="nav">
+		<?php if ( $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) { ?>
+		<li><strong><a href="/user/<?=$_SESSION['username']?>/"><?=$_SESSION['username']?></a></strong></li>
+		<li><a href="/run/">Join the Swarm</a></li>
+		<li><a href="/logout/">Logout</a></li>
+		<?php } else { ?>
+		<li><a href="/login/">Login</a></li>
+		<li><a href="/signup/">Signup</a></li>
+		<?php } ?>
+	</ul>
+	<h1><a href="/">Test Swarm</a></h1>
 	<h2><?= $title ?></h2>
 	<div id="main">
 	<?php } if ( $state && file_exists($contentFile) ) {

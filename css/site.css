@@ -23,6 +23,11 @@ h1 {
 	font-size: 24px;
 }
 
+h1 a {
+	text-decoration: none;
+	color: #FFF;
+}
+
 h2 {
 	margin: 0;
 	padding: 4px 8px;
@@ -35,6 +40,17 @@ h3 {
 	font-size: 16px;
 	margin: 0;
 	padding: 0;
+}
+
+ul.nav {
+	list-style: none;
+	padding: 4px 0 4px 8px;
+	margin: 0;
+}
+
+ul.nav li {
+	display: inline;
+	padding-right: 8px;
 }
 
 #main {
