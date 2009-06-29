@@ -62,20 +62,13 @@ my $BROWSERS = "popularbeta";
 # All the suites that you wish to run within this job
 # (can be any number of suites)
 
-my $SUITE = "http://dev.jquery.com/~john/changeset/{REV}/test/";
-my %SUITES = (
-	"Core" => "$SUITE?core module",
-	"Data" => "$SUITE?data module",
-	"Attributes" => "$SUITE?attributes module",
-	"CSS" => "$SUITE?css module",
-	"Traversing" => "$SUITE?traversing module",
-	"Manipulation" => "$SUITE?manipulation module",
-	"Dimensions" => "$SUITE?dimensions module",
-	"Selector" => "$SUITE?selector module",
-	"Event" => "$SUITE?event module",
-	"Ajax" => "$SUITE?ajax module",
-	"Fx" => "$SUITE?fx module"
-);
+my %SUITES = ();
+
+# Comment these out if you wish to define a custom set of SUITES above
+my $SUITE = "http://dev.jquery.com/~john/changeset/{REV}";
+sub BUILD_SUITES {
+	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/?$1%20module"; } glob("test/unit/*.js");
+}
 
 ########### NO NEED TO CONFIGURE BELOW HERE ############
 
@@ -110,9 +103,9 @@ if ( $RCS_TYPE eq "svn" ) {
 	$rev = `svn info | grep Revision`;
 	$rev =~ s/Revision: //;
 } elsif ( $RCS_TYPE eq "git" ) {
-	print "git log --abbrev-commit | head 1\n" if ( $DEBUG );
-	$rev = `git log --abbrev-commit | head 1`;
-	$rev =~ s/commit: (\w+).*$/$1/;
+	print "git log --abbrev-commit | head -1\n" if ( $DEBUG );
+	$rev = `git log --abbrev-commit | head -1`;
+	$rev =~ s/commit.*?(\w+).*$/$1/;
 }
 
 $rev =~ s/\s*//g;
@@ -138,14 +131,20 @@ if ( ! $rev ) {
 		`$BUILD`;
 	}
 
-	my $inject_file = `cat $INJECT_FILE`;
+	if ( exists &BUILD_SUITES ) {
+		&BUILD_SUITES();
+	}
 
-	# Inject the TestSwarm injection script into the test suite
-	$inject_file =~ s/<\/head>/<script>document.write("<scr" + "ipt src='$SWARM$SWARM_INJECT?" + (new Date).getTime() + "'><\/scr" + "ipt>");<\/script><\/head>/;
+	foreach my $file ( glob($INJECT_FILE) ) {
+		my $inject_file = `cat $file`;
 
-	open( F, ">$INJECT_FILE" );
-	print F $inject_file;
-	close( F );
+		# Inject the TestSwarm injection script into the test suite
+		$inject_file =~ s/<\/head>/<script>document.write("<scr" + "ipt src='$SWARM$SWARM_INJECT?" + (new Date).getTime() + "'><\/scr" + "ipt>");<\/script><\/head>/;
+
+		open( F, ">$file" );
+		print F $inject_file;
+		close( F );
+	}
 
 	my %props = (
 		"state" => "addjob",
@@ -163,7 +162,7 @@ if ( ! $rev ) {
 		$query .= ($query ? "&" : "") . $prop . "=" . clean($props{$prop});
 	}
 
-	foreach my $suite ( keys %SUITES ) {
+	foreach my $suite ( sort keys %SUITES ) {
 		$query .= "&suites[]=" . clean($suite) .
 		          "&urls[]=" . clean($SUITES{$suite});
 	}

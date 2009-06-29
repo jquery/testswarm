@@ -15,24 +15,78 @@
 		return;
 	}
 
+	// QUnit (jQuery)
+	// http://docs.jquery.com/QUnit
 	if ( typeof QUnit !== "undefined" ) {
 		QUnit.done = function(fail, total){
-			// Clean up the HTML (remove any un-needed scripts and test markup
-			// Make sure that a styleshet is still being referenced
-			var html = jQuery("html")
-				.find("#nothiddendiv, #loadediframe, #dl, #main, script, div.testrunner-toolbar").remove().end()
-				.find("ol").show().end()
-				.find("link").each(function(){
-					jQuery(this).attr("href", this.href);
-				}).end()
-				.html().replace(/\s+/g, " ");
+			// Clean up the HTML (remove any un-needed test markup)
+			remove("nothiddendiv");
+			remove("loadediframe");
+			remove("dl");
+			remove("main");
+			
+			// Show any collapsed results
+			var ol = document.getElementsByTagName("ol");
+			for ( var i = 0; i < ol.length; i++ ) {
+				ol[i].style.display = "block";
+			}
 
 			submit({
 				fail: fail,
 				total: total,
-				results: "<html>" + html + "</html>"
+				results: trimSerialize( document )
 			});
 		};
+
+	// UnitTestJS (Prototype, Scriptaculous)
+	// http://github.com/tobie/unittest_js/tree/master
+	} else if ( typeof Test !== "undefined" && Test && Test.Unit && Test.Unit.runners ) {
+		var total_runners = Test.Unit.runners.length, cur_runners = 0;
+		var total = 0, fail = 0;
+
+		for (var i = 0; i < Test.Unit.runners.length; i++) (function(i){
+			var finish = Test.Unit.runners[i].finish;
+			Test.Unit.runners[i].finish = function(){
+				finish.call( this );
+
+				var results = this.getResult();
+				total += results.assertions;
+				fail += results.failures + results.errors;
+
+				if ( ++cur_runners === total_runners ) {
+					submit({
+						fail: fail,
+						total: total,
+						results: trimSerialize( document )
+					});
+				}
+			};
+		})(i);
+	}
+
+	function trimSerialize(doc) {
+		var scripts = doc.getElementsByTagName("script");
+		while ( scripts.length ) {
+			remove( scripts[0] );
+		}
+
+		var links = doc.getElementsByTagName("link");
+		for ( var i = 0; i < links.length; i++ ) {
+			links[i].setAttribute("href", links[i].href);
+		}
+
+		return ("<html>" + doc.documentElement.innerHTML + "</html>")
+			.replace(/\s+/g, " ");
+	}
+
+	function remove(elem){
+		if ( typeof elem === "string" ) {
+			elem = document.getElementById( elem );
+		}
+
+		if ( elem ) {
+			elem.parentNode.removeChild( elem );
+		}
 	}
 
 	function submit(params){
@@ -44,7 +98,6 @@
 				params[ parts[0] ] = parts[1];
 			}
 		}
-if ( DEBUG ) alert( doPost );
 
 		if ( doPost ) {
 			// Build Query String
