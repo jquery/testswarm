@@ -24,16 +24,26 @@
 
 	$job_id = ereg_replace("[^0-9]", "", $_REQUEST['job_id']);
 
-	$result = mysql_queryf("SELECT name, status FROM jobs WHERE id=%u;", $job_id);
+	$result = mysql_queryf("SELECT jobs.name, jobs.status, users.name FROM jobs, users WHERE jobs.id=%u AND users.id=jobs.user_id;", $job_id);
 
 	if ( $row = mysql_fetch_array($result) ) {
 		$job_name = $row[0];
 		$job_status = get_status(intval($row[1]));
+		$owner = ($row[2] == $_SESSION['username']);
 	}
 
 ?>
 
 <h3><?=$job_name?></h3>
+
+<?php if ( $owner && $_SESSION['auth'] == 'yes' ) { ?>
+<form action="/" method="POST">
+	<input type="hidden" name="state" value="wipejob"/>
+	<input type="hidden" name="job_id" value="<?=$job_id?>"/>
+	<input type="submit" name="type" value="delete"/>
+	<input type="submit" name="type" value="reset"/>
+</form>
+<?php } ?>
 
 <table class="results"><tbody>
 <?php
@@ -104,7 +114,7 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]));
 				if ( $last_browser != $ua["browser"] ) {
-					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["total"] < 0 ? "Err" : ($ua["fail"] > 0 ? $ua["fail"] : $ua["total"]) : "Running") . "</a></td>\n";
+					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["total"] < 0 ? "Err" : ($ua["fail"] > 0 ? $ua["fail"] : $ua["total"]) : "") . "</a></td>\n";
 				}
 				$last_browser = $ua["browser"];
 			}
