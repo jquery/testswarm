@@ -2,8 +2,8 @@
 	include "inc/init.php";
 
 	$run_id = ereg_replace("[^0-9]", "", $_POST['run_id']);
-	$fail = ereg_replace("[^0-9]", "", $_POST['fail']);
-	$total = ereg_replace("[^0-9]", "", $_POST['total']);
+	$fail = ereg_replace("[^0-9-]", "", $_POST['fail']);
+	$total = ereg_replace("[^0-9-]", "", $_POST['total']);
 	$results = $_POST['results'];
 
 	# Make sure we've received some results from the client
