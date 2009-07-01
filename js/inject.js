@@ -85,9 +85,11 @@
 
 	// JSUnit
 	// http://www.jsunit.net/
-	} else if (  typeof JsUnitTestMananger !== "undefined" ) {
-		var _done = JsUnitTestMananger.prototype._done;
-		JsUnitTestMananger.prototype._done = function(){
+	// Note: Injection file must be included before the frames
+	//       are document.write()d into the page.
+	} else if ( typeof JsUnitTestManager !== "undefined" ) {
+		var _done = JsUnitTestManager.prototype._done;
+		JsUnitTestManager.prototype._done = function(){
 			_done.call(this);
 
 			submit({
