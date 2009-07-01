@@ -83,6 +83,20 @@
 			});
 		};
 
+	// JSUnit
+	// http://www.jsunit.net/
+	} else if (  typeof JsUnitTestMananger !== "undefined" ) {
+		var _done = JsUnitTestMananger.prototype._done;
+		JsUnitTestMananger.prototype._done = function(){
+			_done.call(this);
+
+			submit({
+				fail: this.failureCount + this.errorCount,
+				total: this.totalCount,
+				results: "<pre>" + this.log.join("\n") + "</pre>"
+			});
+		};
+		
 	}
 
 	function trimSerialize(doc) {
