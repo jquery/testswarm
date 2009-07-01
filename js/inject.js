@@ -62,6 +62,27 @@
 				}
 			};
 		})(i);
+
+	// JSSpec (MooTools)
+	// http://jania.pe.kr/aw/moin.cgi/JSSpec
+	} else if ( typeof JSSpec !== "undefined" && JSSpec && JSSpec.Logger ) {
+		var onRunnerEnd = JSSpec.Logger.prototype.onRunnerEnd;
+		JSSpec.Logger.prototype.onRunnerEnd = function(){
+			onRunnerEnd.call(this);
+
+			// Show any collapsed results
+			var ul = document.getElementsByTagName("ul");
+			for ( var i = 0; i < ul.length; i++ ) {
+				ul[i].style.display = "block";
+			}
+
+			submit({
+				fail: JSSpec.runner.getTotalFailures() + JSSpec.runner.getTotalErrors(),
+				total: JSSpec.runner.totalExamples,
+				results: trimSerialize( document )
+			});
+		};
+
 	}
 
 	function trimSerialize(doc) {
