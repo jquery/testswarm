@@ -97,6 +97,24 @@
 			});
 		};
 		
+	// Selenium Core
+	// http://seleniumhq.org/projects/core/
+	} else if ( typeof SeleniumTestResult !== "undefined" && typeof LOG !== "undefined" ) {
+		// Completely overwrite the postback
+		SeleniumTestResult.prototype.post = function(){
+			var results = [];
+			while ( LOG.pendingMessages.length ) {
+				var msg = LOG.pendingMessages.shift();
+				results.push( msg.type + ": " + msg.msg );
+			}
+
+			submit({
+				fail: this.metrics.numCommandFailures + this.metrics.numCommandErrors,
+				total: this.metrics.numCommandPasses + this.metrics.numCommandFailures + this.metrics.numCommandErrors,
+				results: "<pre>" + results.join("\n") + "</pre>"
+			});
+		};
+
 	}
 
 	function trimSerialize(doc) {
