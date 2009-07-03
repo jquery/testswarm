@@ -15,6 +15,11 @@
 		return;
 	}
 
+	// Expose the TestSwarm API
+	window.TestSwarm = {
+		submit: submit
+	};
+
 	// QUnit (jQuery)
 	// http://docs.jquery.com/QUnit
 	if ( typeof QUnit !== "undefined" ) {
