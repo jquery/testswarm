@@ -51,6 +51,7 @@ CREATE TABLE `run_client` (
   `client_id` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   `fail` int(11) NOT NULL default '0',
+  `error` int(11) NOT NULL default '0',
   `total` int(11) NOT NULL default '0',
   `results` text NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,

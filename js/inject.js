@@ -33,6 +33,7 @@
 
 			submit({
 				fail: fail,
+				error: 0,
 				total: total,
 				results: trimSerialize( document )
 			});
@@ -42,7 +43,7 @@
 	// http://github.com/tobie/unittest_js/tree/master
 	} else if ( typeof Test !== "undefined" && Test && Test.Unit && Test.Unit.runners ) {
 		var total_runners = Test.Unit.runners.length, cur_runners = 0;
-		var total = 0, fail = 0;
+		var total = 0, fail = 0, error = 0;
 
 		for (var i = 0; i < Test.Unit.runners.length; i++) (function(i){
 			var finish = Test.Unit.runners[i].finish;
@@ -51,11 +52,13 @@
 
 				var results = this.getResult();
 				total += results.assertions;
-				fail += results.failures + results.errors;
+				fail += results.failures;
+				error += results.errors;
 
 				if ( ++cur_runners === total_runners ) {
 					submit({
 						fail: fail,
+						error: error,
 						total: total,
 						results: trimSerialize( document )
 					});
@@ -77,7 +80,8 @@
 			}
 
 			submit({
-				fail: JSSpec.runner.getTotalFailures() + JSSpec.runner.getTotalErrors(),
+				fail: JSSpec.runner.getTotalFailures(),
+				error: JSSpec.runner.getTotalErrors(),
 				total: JSSpec.runner.totalExamples,
 				results: trimSerialize( document )
 			});
@@ -93,7 +97,8 @@
 			_done.call(this);
 
 			submit({
-				fail: this.failureCount + this.errorCount,
+				fail: this.failureCount,
+				error: this.errorCount,
 				total: this.totalCount,
 				results: "<pre>" + this.log.join("\n") + "</pre>"
 			});
@@ -111,7 +116,8 @@
 			}
 
 			submit({
-				fail: this.metrics.numCommandFailures + this.metrics.numCommandErrors,
+				fail: this.metrics.numCommandFailures,
+				error: this.metrics.numCommandErrors,
 				total: this.metrics.numCommandPasses + this.metrics.numCommandFailures + this.metrics.numCommandErrors,
 				results: "<pre>" + results.join("\n") + "</pre>"
 			});
