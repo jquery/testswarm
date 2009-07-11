@@ -139,9 +139,18 @@
 			remove( scripts[0] );
 		}
 
+		var root = window.location.href.replace(/(https?:\/\/.*?)\/.*/, "$1");
+		var cur = window.location.href.replace(/[^\/]*$/, "");
+
 		var links = doc.getElementsByTagName("link");
 		for ( var i = 0; i < links.length; i++ ) {
-			links[i].setAttribute("href", links[i].href);
+			var href = links[i].href;
+			if ( href.indexOf("/") === 0 ) {
+				href = root + href;
+			} else if ( !/^https?:\/\//.test( href ) ) {
+				href = cur + href;
+			}
+			links[i].href = href;
 		}
 
 		return ("<html>" + doc.documentElement.innerHTML + "</html>")
