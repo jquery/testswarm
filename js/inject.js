@@ -20,6 +20,9 @@
 		submit: submit
 	};
 
+	// Prevent careless things from executing
+	window.print = window.confirm = window.alert = window.open = function(){};
+
 	// QUnit (jQuery)
 	// http://docs.jquery.com/QUnit
 	if ( typeof QUnit !== "undefined" ) {
