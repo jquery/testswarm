@@ -131,6 +131,20 @@
 			});
 		};
 
+	// Dojo Objective Harness
+	// http://docs.dojocampus.org/quickstart/doh
+	} else if ( typeof doh !== "undefined" && doh._report ) {
+		var _report = doh._report;
+		doh._report = function(){
+			_report.apply(this, arguments);
+
+			submit({
+				fail: doh._failureCount,
+				error: doh._errorCount,
+				total: doh._testCount,
+				results: "<pre>" + document.getElementById("logBody").innerHTML + "</pre>"
+			});
+		};
 	}
 
 	function trimSerialize(doc) {
