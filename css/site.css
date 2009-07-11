@@ -196,7 +196,7 @@ table.results td.progress {
 	background: yellow;
 }
 
-table.results td.timeout {
+table.results td.timeout, table.results td.error {
 	background: black;
 	color: white;
 }
