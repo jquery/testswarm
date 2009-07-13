@@ -15,6 +15,8 @@
 			return "notstarted notdone";
 		} else if ( $num == 1 ) {
 			return "progress notdone";
+		} else if ( $num == 2 && $fail == -1 ) {
+      return "timeout";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
 		}
@@ -67,7 +69,6 @@
 		$job_status = get_status(intval($row[1]));
 		$job_id = $row[2];
 
-		#echo "<h3>$job_name</h3><table class='results'><tbody>";
 		$output .= '<tr><th><a href="/job/' . $job_id . '/">' . $job_name . "</a></th>\n";
 
 		$results = array();
@@ -100,7 +101,6 @@
 					$output = $header . $output;
 				}
 
-				#$output .= "</tr>\n";
 				$addBrowser = false;
 			}
 
@@ -115,8 +115,6 @@
 
 				array_push( $useragents[ $ua_row['useragent_id'] ], $ua_row );
 			}
-
-			#$output .= '<tr><th><a href="/job/' . $job_id . '/">' . $job_name . "</a></th>\n";
 		}
 
 		if ( $addBrowser ) {
@@ -128,16 +126,12 @@
 			) );
 		}
 
-		#echo "<li>" . $row["browser"] . " (" . get_status(intval($row["status"])) . ")<ul>";
-
 		$last_browser = "";
 
 		if ( $useragents[ $row["useragent_id"] ] ) {
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]));
 				if ( $last_browser != $ua["browser"] ) {
-					# $output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" . ($ua["status"] == 2 ? $ua["fail"] > 0 ? $ua["fail"] . " test(s) failed." : "Pass" : "") . "</a></td>\n";
-
 					$cur = $results[ $ua['useragent_id'] ];
 					$results[ $ua['useragent_id'] ] = $cur + intval($ua["fail"]);
 
@@ -157,18 +151,13 @@
 				$cur = $results[ $row['useragent_id'] ];
 				$results[ $row['useragent_id'] ] = $cur + 0;
 				$states[ $row['useragent_id'] ] = "notstarted notdone";
-			# $output .= "<td class='notstarted notdone'></td>";
 		}
-
-		#echo "</ul></li>";
 
 		$last = $row["run_id"];
 	}
 
 	foreach ( $results as $key => $fail ) {
-		$output .= "<td class='" . $states[$key] . "'>" .
-			# ($states[$key] == "pass" || $states[$key] == "fail" ? $fail > 0 ? $fail . " test(s) failed." : "Pass" : "") .
-			"</td>";
+		$output .= "<td class='" . $states[$key] . "'></td>";
 	}
 
 	$output .= "</tr>\n";
