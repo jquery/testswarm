@@ -129,11 +129,3 @@
 
 	echo "$output</tr>\n</tbody>\n</table>";
 ?>
-<script>
-setTimeout(function(){
-	if ( jQuery("td.notdone").length ) {
-		jQuery("table.results").load("/job/<?= $job_id ?>/ tbody");
-		setTimeout(arguments.callee, 5000);
-	}
-}, 5000);
-</script>
