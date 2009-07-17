@@ -10,13 +10,15 @@
 		}
 	}
 
-	function get_status2($num, $fail){
+	function get_status2($num, $fail, $error){
 		if ( $num == 0 ) {
 			return "notstarted notdone";
 		} else if ( $num == 1 ) {
 			return "progress notdone";
 		} else if ( $num == 2 && $fail == -1 ) {
       return "timeout";
+		} else if ( $num == 2 && $error > 0 ) {
+			return "error";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
 		}
@@ -106,7 +108,7 @@
 
 			$useragents = array();
 
-			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.total as total, clients.useragent_id as useragent_id, users.name as name, useragents.name as browser FROM useragents, run_client, clients, users WHERE run_client.run_id=%u AND run_client.client_id=clients.id AND clients.user_id=users.id AND useragents.id=useragent_id ORDER BY browser;", $row["run_id"]);
+			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id, users.name as name, useragents.name as browser FROM useragents, run_client, clients, users WHERE run_client.run_id=%u AND run_client.client_id=clients.id AND clients.user_id=users.id AND useragents.id=useragent_id ORDER BY browser;", $row["run_id"]);
 
 			while ( $ua_row = mysql_fetch_assoc($runResult) ) {
 				if ( !$useragents[ $ua_row['useragent_id'] ] ) {
@@ -130,20 +132,26 @@
 
 		if ( $useragents[ $row["useragent_id"] ] ) {
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
-				$status = get_status2(intval($ua["status"]), intval($ua["fail"]));
+				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]));
 				if ( $last_browser != $ua["browser"] ) {
 					$cur = $results[ $ua['useragent_id'] ];
 					$results[ $ua['useragent_id'] ] = $cur + intval($ua["fail"]);
 
 					$cur = $states[ $ua['useragent_id'] ];
 
-					if ( !$cur ) {
-						$states[ $ua['useragent_id'] ] = "pass";
+					if ( strstr($status, "notdone") || strstr($cur, "notdone") ) {
+						$status = "notstarted notdone";
+					} else if ( $status == "error" || $cur == "error" ) {
+						$status = "error";
+					} else if ( $status == "timeout" || $cur == "timeout" ) {
+						$status = "timeout";
+					} else if ( $status == "fail" || $cur == "fail" ) {
+						$status = "fail";
+					} else {
+						$status = "pass";
 					}
 
-					if ( $status != "pass" ) {
-						$states[ $ua['useragent_id'] ] = $status;
-					}
+					$states[ $ua['useragent_id'] ] = $status;
 				}
 				$last_browser = $ua["browser"];
 			}

@@ -201,7 +201,7 @@ table.results td.timeout, table.results td.error {
 	color: white;
 }
 
-table.results td.timeout a {
+table.results td.timeout a, table.results td.error a {
 	color: white;
 }
 
