@@ -13,7 +13,7 @@ jQuery(function(){
 	
 	jQuery("td:has(a)").live("dblclick", function(){
 		var params = /&.*$/.exec( jQuery(this).find("a").attr("href") );
-		jQuery.ajax(
+		jQuery.ajax({
 			url: "/",
 			type: "POST",
 			data: "state=wiperun" + params
