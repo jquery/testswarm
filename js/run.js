@@ -46,7 +46,7 @@ function runTests( txt ) {
 	} else if ( run_id ) {
 		log("Running tests...");
 
-		var params = "&run_id=" + run_id + "&client_id=" + client_id;
+		var params = "run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
 		iframe.className = "test";
 		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
@@ -58,12 +58,14 @@ function runTests( txt ) {
 		testTimeout = setTimeout( testTimedout, timeoutRate * 1000 );
 
 	} else {
-		msg("No new tests to run.");
+		var run_msg = run_url || "No new tests to run.";
 
-		var timeLeft = updateRate - 1;
+		msg(run_msg);
+
+		var timeLeft = (updateRate * (run_url ? 0.5 : 1)) - 1;
 
 		setTimeout(function leftTimer(){
-			msg("No new tests to run. Getting more in " + timeLeft + " seconds.");
+			msg(run_msg + " Getting more in " + timeLeft + " seconds.");
 			if ( timeLeft-- >= 1 ) {
 				setTimeout( leftTimer, 1000 );
 			} else {
@@ -75,7 +77,7 @@ function runTests( txt ) {
 
 function done() {
 	cancelTest();
-	setTimeout( getTests, 3000 );
+	runTests(" Cooling down.");
 }
 
 function cancelTest() {
