@@ -1,7 +1,6 @@
 <?php
 	include "inc/init.php";
 
-	mysql_query("BEGIN");
 	$result = mysql_queryf("SELECT run_id, url FROM run_useragent, runs WHERE runs.id=run_useragent.run_id AND run_useragent.useragent_id=%u AND run_useragent.runs < run_useragent.max ORDER BY run_id;", $useragent_id);
 	
 	# A run was found
@@ -35,8 +34,6 @@
 		# TODO: There needs to be a cronjob that marks dead clients as inactive
 		#       and decrements the run_useragent run count.
 	}
-
-	mysql_query("COMMIT");
 
 	exit();
 ?>
