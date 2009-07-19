@@ -15,9 +15,21 @@
 		return;
 	}
 
+	var curHeartbeat;
+	var beatRate = 20;
+
 	// Expose the TestSwarm API
 	window.TestSwarm = {
 		submit: submit,
+		heartbeat: function(){
+			if ( curHeartbeat ) {
+				clearTimeout( curHeartbeat );
+			}
+
+			curHeartbeat = setTimeout(function(){
+				submit({ fail: -1, total: -1 });
+			}, beatRate * 1000);
+		},
 		serialize: function(){
 			return trimSerialize();
 		}
@@ -41,6 +53,9 @@
 				total: total
 			});
 		};
+
+		QUnit.log = window.TestSwarm.heartbeat;
+		window.TestSwarm.heartbeat();
 
 		window.TestSwarm.serialize = function(){
 			// Clean up the HTML (remove any un-needed test markup)
