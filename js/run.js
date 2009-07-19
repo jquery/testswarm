@@ -51,7 +51,7 @@ function runTests( txt ) {
 		iframe.className = "test";
 		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
 			"_=" + (new Date).getTime() + "&swarmURL=" +
-			encodeURIComponent("http://" + window.location.host + "?state=saverun" + params);
+			encodeURIComponent("http://" + window.location.host + "?" + params + "&state=");
 		jQuery("#iframes").append( iframe );
 
 		// Timeout after a period of time

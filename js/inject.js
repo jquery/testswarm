@@ -187,8 +187,14 @@
 		for ( var i = 0; i < paramItems.length; i++ ) {
 			if ( paramItems[i] ) {
 				var parts = paramItems[i].split("=");
-				params[ parts[0] ] = parts[1];
+				if ( !params[ parts[0] ] ) {
+					params[ parts[0] ] = parts[1];
+				}
 			}
+		}
+
+		if ( !params.state ) {
+			params.state = "saverun";
 		}
 
 		if ( doPost ) {
