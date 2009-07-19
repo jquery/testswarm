@@ -17,16 +17,32 @@
 
 	// Expose the TestSwarm API
 	window.TestSwarm = {
-		submit: submit
+		submit: submit,
+		serialize: function(){
+			return trimSerialize();
+		}
 	};
 
 	// Prevent careless things from executing
 	window.print = window.confirm = window.alert = window.open = function(){};
 
+	window.onerror = function(){
+		submit({ fail: 0, error: 1, total: 1 });
+		return false;
+	};
+
 	// QUnit (jQuery)
 	// http://docs.jquery.com/QUnit
 	if ( typeof QUnit !== "undefined" ) {
 		QUnit.done = function(fail, total){
+			submit({
+				fail: fail,
+				error: 0,
+				total: total
+			});
+		};
+
+		window.TestSwarm.serialize = function(){
 			// Clean up the HTML (remove any un-needed test markup)
 			remove("nothiddendiv");
 			remove("loadediframe");
@@ -39,12 +55,7 @@
 				ol[i].style.display = "block";
 			}
 
-			submit({
-				fail: fail,
-				error: 0,
-				total: total,
-				results: trimSerialize( document )
-			});
+			return trimSerialize();
 		};
 
 	// UnitTestJS (Prototype, Scriptaculous)
@@ -67,8 +78,7 @@
 					submit({
 						fail: fail,
 						error: error,
-						total: total,
-						results: trimSerialize( document )
+						total: total
 					});
 				}
 			};
@@ -90,9 +100,18 @@
 			submit({
 				fail: JSSpec.runner.getTotalFailures(),
 				error: JSSpec.runner.getTotalErrors(),
-				total: JSSpec.runner.totalExamples,
-				results: trimSerialize( document )
+				total: JSSpec.runner.totalExamples
 			});
+		};
+
+		window.TestSwarm.serialize = function(){
+			// Show any collapsed results
+			var ul = document.getElementsByTagName("ul");
+			for ( var i = 0; i < ul.length; i++ ) {
+				ul[i].style.display = "block";
+			}
+
+			return trimSerialize();
 		};
 
 	// JSUnit
@@ -107,9 +126,12 @@
 			submit({
 				fail: this.failureCount,
 				error: this.errorCount,
-				total: this.totalCount,
-				results: "<pre>" + this.log.join("\n") + "</pre>"
+				total: this.totalCount
 			});
+		};
+
+		window.TestSwarm.serialize = function(){
+			return "<pre>" + this.log.join("\n") + "</pre>";
 		};
 		
 	// Selenium Core
@@ -117,18 +139,21 @@
 	} else if ( typeof SeleniumTestResult !== "undefined" && typeof LOG !== "undefined" ) {
 		// Completely overwrite the postback
 		SeleniumTestResult.prototype.post = function(){
+			submit({
+				fail: this.metrics.numCommandFailures,
+				error: this.metrics.numCommandErrors,
+				total: this.metrics.numCommandPasses + this.metrics.numCommandFailures + this.metrics.numCommandErrors
+			});
+		};
+
+		window.TestSwarm.serialize = function(){
 			var results = [];
 			while ( LOG.pendingMessages.length ) {
 				var msg = LOG.pendingMessages.shift();
 				results.push( msg.type + ": " + msg.msg );
 			}
 
-			submit({
-				fail: this.metrics.numCommandFailures,
-				error: this.metrics.numCommandErrors,
-				total: this.metrics.numCommandPasses + this.metrics.numCommandFailures + this.metrics.numCommandErrors,
-				results: "<pre>" + results.join("\n") + "</pre>"
-			});
+			return "<pre>" + results.join("\n") + "</pre>";
 		};
 
 	// Dojo Objective Harness
@@ -141,13 +166,18 @@
 			submit({
 				fail: doh._failureCount,
 				error: doh._errorCount,
-				total: doh._testCount,
-				results: "<pre>" + document.getElementById("logBody").innerHTML + "</pre>"
+				total: doh._testCount
 			});
+		};
+
+		window.TestSwarm.serialize = function(){
+			return "<pre>" + document.getElementById("logBody").innerHTML + "</pre>";
 		};
 	}
 
 	function trimSerialize(doc) {
+		doc = doc || document;
+
 		var scripts = doc.getElementsByTagName("script");
 		while ( scripts.length ) {
 			remove( scripts[0] );
@@ -195,6 +225,10 @@
 
 		if ( !params.state ) {
 			params.state = "saverun";
+		}
+
+		if ( !params.results ) {
+			params.results = window.TestSwarm.serialize();
 		}
 
 		if ( doPost ) {
