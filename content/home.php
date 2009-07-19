@@ -69,7 +69,7 @@ if ( $found ) { ?>
 <?php if ( !$_SESSION['username'] ) { ?>
 <form action="/" method="get">
 	<input type="hidden" name="state" value="run"/>
-	<br/><strong>Your Name:</strong><br/>
+	<br/><strong>Username:</strong><br/>
 	<input type="text" name="user" value=""/><br/>
 	<input type="submit" value="Join the Swarm"/>
 </form>
