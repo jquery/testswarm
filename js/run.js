@@ -103,6 +103,8 @@ function handleMessage(e){
 	}, getTests );
 }
 
+var errorOut = 0;
+
 function retrySend( data, retry, success ) {
 	jQuery.ajax({
 		type: "POST",
@@ -111,10 +113,17 @@ function retrySend( data, retry, success ) {
 		cache: false,
 		data: data,
 		error: function() {
-			msg("Error connecting to server, retrying...");
-			setTimeout( retry, 15000 );
+			if ( errorOut++ > 4 ) {
+				cmds.reload();
+			} else {
+				msg("Error connecting to server, retrying...");
+				setTimeout( retry, 15000 );
+			}
 		},
-		success: success
+		success: function(){
+			errorOut = 0;
+			success.apply( this, arguments );
+		}
 	});
 }
 
