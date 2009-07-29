@@ -11,12 +11,7 @@ CREATE TABLE `clients` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `clients`
--- 
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -31,14 +26,8 @@ CREATE TABLE `jobs` (
   `status` tinyint(4) NOT NULL default '0',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`),
-  FULLTEXT KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `jobs`
--- 
-
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -57,12 +46,7 @@ CREATE TABLE `run_client` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`client_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `run_client`
--- 
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -81,12 +65,7 @@ CREATE TABLE `run_useragent` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`useragent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `run_useragent`
--- 
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -103,12 +82,7 @@ CREATE TABLE `runs` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `runs`
--- 
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -129,14 +103,14 @@ CREATE TABLE `useragents` (
   `beta` tinyint(4) NOT NULL default '0',
   `mobile` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
 
 -- 
 -- Dumping data for table `useragents`
 -- 
 
-INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `current`, `popular`, `gbs`, `beta`, `mobile`) VALUES (1, 'Firefox 3.0', 'gecko', '^1.9.0', 'xp', 1, 1, 1, 1, 0, 0),
-(2, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'xp', 1, 0, 0, 0, 1, 0),
+INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `current`, `popular`, `gbs`, `beta`, `mobile`) VALUES (1, 'Firefox 3.0', 'gecko', '^1.9.0', 'xp', 1, 0, 1, 1, 0, 0),
+(2, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'xp', 1, 1, 1, 0, 0, 0),
 (3, 'Safari 3.2', 'webkit', '^525', 'xp', 1, 0, 0, 0, 0, 0),
 (4, 'Safari 4.0', 'webkit', '^530', 'xp', 1, 1, 0, 0, 0, 0),
 (5, 'Internet Explorer 6', 'msie', '^6.', 'xp', 1, 1, 1, 1, 0, 0),
@@ -147,15 +121,15 @@ INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `cu
 (10, 'Chrome 2.0', 'chrome', '^530', 'xp', 1, 1, 1, 0, 0, 0),
 (11, 'Firefox 2.0', 'gecko', '^1.8.1', 'xp', 1, 0, 1, 1, 0, 0),
 (12, 'Opera 10b1', 'presto', '^2.2.15$', 'xp', 1, 0, 0, 0, 1, 0),
-(13, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.4', 1, 1, 1, 0, 0, 0),
-(14, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.4', 1, 0, 0, 0, 1, 0),
+(13, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.4', 1, 0, 1, 0, 0, 0),
+(14, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'osx10.4', 1, 1, 1, 0, 0, 0),
 (15, 'Safari 3.2', 'webkit', '^525', 'osx10.4', 1, 0, 1, 1, 0, 0),
 (16, 'Safari 4.0', 'webkit', '^530', 'osx10.4', 1, 1, 1, 0, 0, 0),
-(17, 'Opera  9.6', 'presto', '^2.1', 'osx', 1, 1, 0, 1, 0, 0),
+(17, 'Opera  9.6', 'presto', '^2.1', 'osx', 1, 1, 1, 1, 0, 0),
 (18, 'Opera 10b1', 'presto', '^2.2.15$', 'osx', 1, 0, 0, 0, 1, 0),
 (19, 'Firefox 2.0', 'gecko', '^1.8.1', 'osx', 1, 0, 0, 0, 0, 0),
-(20, 'Firefox 3.0', 'gecko', '^1.9.0', 'vista', 1, 1, 1, 1, 0, 0),
-(21, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'vista', 1, 0, 0, 0, 1, 0),
+(20, 'Firefox 3.0', 'gecko', '^1.9.0', 'vista', 1, 0, 1, 1, 0, 0),
+(21, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'vista', 1, 1, 1, 0, 0, 0),
 (22, 'Safari 3.2', 'webkit', '^525', 'vista', 1, 0, 0, 0, 0, 0),
 (23, 'Safari 4.0', 'webkit', '^530', 'vista', 1, 1, 0, 0, 0, 0),
 (25, 'Internet Explorer 7', 'msie', '^7.', 'vista', 1, 0, 1, 1, 0, 0),
@@ -164,13 +138,13 @@ INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `cu
 (28, 'Chrome 1.0', 'chrome', '^525', 'vista', 1, 0, 0, 0, 0, 0),
 (29, 'Chrome 2.0', 'chrome', '^530', 'vista', 1, 1, 1, 0, 0, 0),
 (31, 'Opera 10b1', 'presto', '^2.2.15$', 'vista', 1, 0, 0, 0, 1, 0),
-(32, 'Firefox 3.0', 'gecko', '^3.0', 'osx10.5', 1, 1, 1, 1, 0, 0),
-(33, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'osx10.5', 1, 0, 0, 0, 1, 0),
+(32, 'Firefox 3.0', 'gecko', '^1.9.0', 'osx10.5', 1, 0, 1, 1, 0, 0),
+(33, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'osx10.5', 1, 1, 1, 0, 0, 0),
 (34, 'Safari 3.2', 'webkit', '^525', 'osx10.5', 1, 0, 1, 1, 0, 0),
 (35, 'Safari 4.0', 'webkit', '^530', 'osx10.5', 1, 1, 1, 0, 0, 0),
 (39, 'Firefox 2.0', 'gecko', '^1.8.1', 'linux', 0, 0, 0, 0, 0, 0),
-(40, 'Firefox 3.0', 'gecko', '^3.0', 'linux', 1, 1, 1, 0, 0, 0),
-(41, 'Firefox 3.5b99', 'gecko', '^1.9.1b99$', 'linux', 1, 0, 0, 0, 1, 0),
+(40, 'Firefox 3.0', 'gecko', '^1.9.0', 'linux', 1, 0, 1, 0, 0, 0),
+(41, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'linux', 1, 1, 1, 0, 0, 0),
 (42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux', 1, 1, 0, 0, 0, 0),
 (43, 'Safari 3.1', 'webkit', '^525.19', 'osx10.4', 1, 0, 0, 0, 0, 0),
 (44, 'Safari 3.1', 'webkit', '^525.19', 'osx10.5', 1, 0, 0, 0, 0, 0),
@@ -193,11 +167,8 @@ CREATE TABLE `users` (
   `password` varchar(40) NOT NULL default '',
   `auth` varchar(40) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
-  `request` tinytext NOT NULL,
+  `request` mediumtext NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
--- Dumping data for table `users`
--- 
