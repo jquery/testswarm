@@ -1,1 +1,1 @@
-* * * * * curl -s http://testswarm.com/?state=wipe > /dev/null
+* * * * * curl -s http://localhost/?state=wipe > /dev/null
