@@ -18,9 +18,9 @@ INSTALLATION
 
 2) Load the MySQL database.
 
-   mysql -u USER -p < testswarm.sql
+   mysql DBNAME -u USER -p < testswarm.sql
 
-3) Copy the config/config-sample.ini to config.ini and change the options to correspond to your MySQL database information.
+3) Copy the ./config/config-sample.ini to ./config.ini and change the options to correspond to your MySQL database information.
 
 4) Load the cronjob (changing the URL to point to your site).
 
