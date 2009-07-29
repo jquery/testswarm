@@ -1,7 +1,7 @@
 <?php
 	include "inc/init.php";
 
-	$result = mysql_queryf("SELECT run_id FROM run_useragent WHERE useragent_id=%u AND runs < max ORDER BY run_id LIMIT 1;", $useragent_id);
+	$result = mysql_queryf("SELECT run_id FROM run_useragent WHERE useragent_id=%u AND runs < max ORDER BY run_id DESC LIMIT 1;", $useragent_id);
 	
 	# A run was found
 	if ( $row = mysql_fetch_array($result) ) {
