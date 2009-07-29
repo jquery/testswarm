@@ -15,6 +15,8 @@
 		return;
 	}
 
+	var submitTimeout = 5;
+
 	var curHeartbeat;
 	var beatRate = 20;
 
@@ -227,6 +229,10 @@
 	}
 
 	function submit(params){
+		if ( curHeartbeat ) {
+			clearTimeout( curHeartbeat );
+		}
+
 		var paramItems = (url.split("?")[1] || "").split("&");
 
 		for ( var i = 0; i < paramItems.length; i++ ) {
@@ -277,6 +283,12 @@
 			if ( DEBUG ) {
 				alert( form.innerHTML );
 			} else {
+
+				// Watch for the result submission timing out
+				setTimeout(function(){
+					submit( params );
+				}, submitTimeout * 1000);
+
 				document.body.appendChild( form );
 				form.submit();
 			}
