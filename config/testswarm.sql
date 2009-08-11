@@ -58,7 +58,6 @@ CREATE TABLE `run_useragent` (
   `run_id` int(11) NOT NULL default '0',
   `useragent_id` int(11) NOT NULL default '0',
   `runs` int(11) NOT NULL default '0',
-  `min` int(11) NOT NULL default '1',
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
