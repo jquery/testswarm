@@ -97,10 +97,9 @@ function testTimedout() {
 }
 
 function handleMessage(e){
-	cancelTest();
 	retrySend( e.data, function(){
 		handleMessage(e);
-	}, getTests );
+	}, done );
 }
 
 var errorOut = 0;
