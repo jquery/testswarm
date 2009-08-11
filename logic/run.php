@@ -1,8 +1,10 @@
 <?php
-	if ( $_REQUEST['user'] ) {
-		$_SESSION['username'] = ereg_replace("[^a-zA-Z0-9_ -]", "", $_REQUEST['user']);
-		session_write_close();
-		header("Location: /run/");
+	$user = $_REQUEST['username'] ?
+		$_REQUEST['username'] :
+		$_SESSION['username'];
+
+	if ( !$_REQUEST['user'] && $user ) {
+		header("Location: /run/$user/");
 		exit;
 	}
 

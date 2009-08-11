@@ -8,6 +8,7 @@ RewriteRule ^.*$ - [S=51]
 RewriteRule (.*[^/])$ $1/ [R=301,QSA]
 
 RewriteRule ^run/$ /index.php?state=run [QSA,L]
+RewriteRule ^run/(.*)/?$ /index.php?state=run&user=$1 [QSA,L]
 RewriteRule ^login/$ /index.php?state=login [QSA,L]
 RewriteRule ^logout/$ /index.php?state=logout [QSA,L]
 RewriteRule ^signup/$ /index.php?state=signup [QSA,L]

@@ -70,11 +70,11 @@ if ( $found ) { ?>
 <form action="/" method="get">
 	<input type="hidden" name="state" value="run"/>
 	<br/><strong>Username:</strong><br/>
-	<input type="text" name="user" value=""/><br/>
+	<input type="text" name="username" value=""/><br/>
 	<input type="submit" value="Join the Swarm"/>
 </form>
 <?php } else { ?>
-<br/><p><strong>&raquo; <?=$_SESSION['username']?></strong> <a href="/run/">Start Running Tests</a></p>
+<br/><p><strong>&raquo; <?=$_SESSION['username']?></strong> <a href="/run/<?=$_SESSION['username']?>/">Start Running Tests</a></p>
 <?php } ?>
 <?php } else { ?>
 <div class="join">

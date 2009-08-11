@@ -61,6 +61,4 @@
 		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, ip, created) VALUES(%u,%u,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $ip);
 		$client_id = mysql_insert_id();
 	}
-
-	$_SESSION['username'] = $username;
 ?>
