@@ -14,7 +14,7 @@
 		# If we're 100% passing we don't need any more runs
 		if ( $fail == 0 && $error == 0 ) {
 			# Clear out old runs that were bad, since we now have a good one
-			mysql_queryf("DELETE FROM run_client WHERE run_id=%u AND client_id!=%u;", $run_id, $client_id);
+			mysql_queryf("DELETE FROM run_client WHERE run_id=%u AND client_id!=%u AND EXISTS (SELECT useragent_id FROM clients WHERE id=client_id AND useragent_id=%u);", $run_id, $client_id, $useragent_id);
 			mysql_queryf("UPDATE run_useragent SET runs = max, completed = completed + 1, status = 2 WHERE useragent_id=%u AND run_id=%u LIMIT 1;", $useragent_id, $run_id);
 		} else {
 			mysql_queryf("UPDATE run_useragent SET completed = completed + 1, status = IF(completed+1<max, 1, 2) WHERE useragent_id=%u AND run_id=%u LIMIT 1;", $useragent_id, $run_id);
