@@ -12,6 +12,10 @@
 		$version = $match[2];
 	}
 
+	if ( ereg("ms-rtc lm 8", $lowerUA) ) {
+		$version = "8.0as7.0";
+	}
+
 	if ( strpos($lowerUA, "chrome") > -1 ) {
 		$browser = "chrome";
 	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
