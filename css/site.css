@@ -85,11 +85,11 @@ div.desc p {
 div.join {
 	width: 278px;
 	position: absolute;
-	top: -164px;
+	top: -168px;
 	right: 35px;
 	border: 3px solid #274E7D;
 	background: white;
-	padding: 5px;
+	padding: 8px;
 }
 
 div.join p {
