@@ -68,6 +68,13 @@ ul.nav li a {
 	position: relative;
 }
 
+blockquote {
+	padding: 4px;
+	margin: 4px 66px 4px 16px;
+	font-size: 14px;
+	line-height: 16px;
+}
+
 div.scores {
 	position: absolute;
 	top: 0px;
