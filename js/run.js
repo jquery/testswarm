@@ -23,7 +23,7 @@ var cmds = {
 
 function getTests() {
 	if ( typeof run_id === "undefined" ) {
-		log( "Connecting to the swarm." );
+		log( "Connected to the swarm." );
 	}
 
 	run_id = 0;
@@ -36,7 +36,7 @@ function getTests() {
 function runTests( txt ) {
 	var parts = txt.split(" ");
 	run_id = parts.shift();
-	run_url = parts.join(" ");
+	run_url = parts[0];
 
 	if ( run_id === "cmd" ) {
 		if ( typeof cmds[ parts[0] ] === "function" ) {
@@ -44,7 +44,7 @@ function runTests( txt ) {
 		}
 
 	} else if ( run_id ) {
-		log("Running tests...");
+		log("Running " + (parts.slice(1).join(" ") || "tests") + "...");
 
 		var params = "run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
