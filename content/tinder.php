@@ -26,6 +26,8 @@
 
 	$result = mysql_query("SELECT useragents.engine as engine, useragents.name as name, useragents.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name='$search_user' ORDER BY useragents.engine, useragents.name;");
 
+	if ( mysql_num_rows($result) > 0 ) {
+
 	echo "<h3>Active Clients:</h3><br/><ul class='clients'>";
 
 	while ( $row = mysql_fetch_array($result) ) {
@@ -55,10 +57,14 @@
 
 	echo "</ul>";
 
+	}
+
 	$job_search = ereg_replace("[^a-zA-Z ]", "", $_REQUEST['job']);
 	$job_search .= "%";
 
 	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY name DESC LIMIT 15;", $job_search, $search_user);
+
+	if ( mysql_num_rows($search_result) > 0 ) {
 
 	echo "<br/><h3>Recent Jobs:</h3><table class='results'><tbody>";
 
@@ -173,4 +179,6 @@
 	}
 
 	echo "$output</tr>\n</tbody>\n</table>";
+
+	}
 ?>
