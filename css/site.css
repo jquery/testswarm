@@ -68,6 +68,24 @@ ul.nav li a {
 	position: relative;
 }
 
+div.scores {
+	position: absolute;
+	top: 0px;
+	right: -100px;
+}
+
+table.scores {
+	margin: 5px;
+}
+
+table.scores td {
+	padding: 2px;
+}
+
+table.scores td.num {
+	text-align: right;
+}
+
 form {
 	margin: 0;
 	padding: 0;

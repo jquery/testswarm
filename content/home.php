@@ -9,6 +9,36 @@
   loadBrowsers("linux");
   loadBrowsers("2000");
 
+echo "<br style='clear:both;'><div class='scores'><h3>High Score Board</h3><table class='scores'>";
+
+$result = mysql_queryf("SELECT users.name, SUM(total) as alltotal FROM clients, run_client, users WHERE clients.id=run_client.client_id AND clients.user_id=users.id  GROUP BY user_id ORDER by alltotal DESC LIMIT 20;");
+
+$num = 1;
+
+while ( $row = mysql_fetch_array($result) ) {
+	$user = $row[0];
+	$total = $row[1];
+
+	echo "<tr><td class='num'>$num</td><td><a href='/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
+	$num++;
+}
+
+echo "</table><h3>Rarest Browsers</h3><table class='scores'>";
+
+$result = mysql_queryf("SELECT name, SUM(runs) as allruns FROM run_useragent, useragents WHERE run_useragent.useragent_id=useragents.id GROUP BY name ORDER BY allruns LIMIT 10;");
+
+$num = 1;
+
+while ( $row = mysql_fetch_array($result) ) {
+	$name = $row[0];
+	$os = $row[1];
+
+	echo "<tr><td class='num'>$num</td><td>$name</td></tr>";
+	$num++;
+}
+
+echo "</table></div>";
+
 function loadBrowsers($name) {
   global $found, $browser, $version, $os;
 
