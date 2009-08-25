@@ -47,8 +47,11 @@ if ( $title ) {
 		<li><a href="/login/">Login</a></li>
 		<li><a href="/signup/">Signup</a></li>
 		<?php } ?>
+		<li><a href="http://github.com/jeresig/testswarm">Source Code</a></li>
+		<li><a href="http://github.com/jeresig/testswarm/issues">Bug Tracker</a></li>
+		<li><a href="http://groups.google.com/group/testswarm">Discuss</a></li>
 	</ul>
-	<h1><a href="/">Test Swarm</a></h1>
+	<h1><a href="/"><img src="/images/testswarm_logo_wordmark.png" alt="TestSwarm" title="TestSwarm"/></a></h1>
 	<h2><?= $title ?></h2>
 	<div id="main">
 	<?php } if ( $state && file_exists($contentFile) ) {

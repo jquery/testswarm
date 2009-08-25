@@ -18,7 +18,7 @@ a:hover, a:active {
 h1 {
 	margin: 0;
 	padding: 8px;
-	background: #274E7D;
+	background: #F5F5F5;
 	color: #FFF;
 	font-size: 24px;
 }
@@ -28,12 +28,16 @@ h1 a {
 	color: #FFF;
 }
 
+h1 a img {
+	border: 0;
+}
+
 h2 {
 	margin: 0;
-	padding: 4px 8px;
-	background: #6899D3;
+	padding: 8px 16px;
+	border-top: 4px solid #6899D3;
 	color: #274E7D;
-	font-size: 16px;
+	font-size: 24px;
 }
 
 h3 {
@@ -44,13 +48,18 @@ h3 {
 
 ul.nav {
 	list-style: none;
-	padding: 4px 0 4px 8px;
+	padding: 8px 0 8px 16px;
 	margin: 0;
+	background: #274E7D;
 }
 
 ul.nav li {
 	display: inline;
 	padding-right: 8px;
+}
+
+ul.nav li a {
+	color: #FFF;
 }
 
 #main {
@@ -76,7 +85,7 @@ div.desc p {
 div.join {
 	width: 278px;
 	position: absolute;
-	top: -64px;
+	top: -164px;
 	right: 35px;
 	border: 3px solid #274E7D;
 	background: white;
@@ -84,7 +93,7 @@ div.join {
 }
 
 div.join p {
-	margin: 0;
+	margin: 0 0 4px 0;
 	padding: 0;
 }
 
