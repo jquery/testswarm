@@ -50,6 +50,7 @@ if ( $title ) {
 		<li><a href="http://github.com/jeresig/testswarm">Source Code</a></li>
 		<li><a href="http://github.com/jeresig/testswarm/issues">Bug Tracker</a></li>
 		<li><a href="http://groups.google.com/group/testswarm">Discuss</a></li>
+		<li><a href="http://wiki.github.com/jeresig/testswarm">About</a></li>
 	</ul>
 	<h1><a href="/"><img src="/images/testswarm_logo_wordmark.png" alt="TestSwarm" title="TestSwarm"/></a></h1>
 	<h2><?= $title ?></h2>
