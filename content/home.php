@@ -79,5 +79,6 @@ if ( $found ) { ?>
 <?php } else { ?>
 <div class="join">
 <p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>
+<p>If you feel that this may be a mistake, copy the following information (<?=$browser?> <?=$version?> <?=$os?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="http://groups.google.com/group/testswarm">discussion group</a>.</a>
 </div>
 <?php } ?>
