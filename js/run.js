@@ -34,17 +34,18 @@ function getTests() {
 }
 
 function runTests( txt ) {
-	var parts = txt.split(" ");
-	run_id = parts.shift();
-	run_url = parts[0];
+	var data = txt && typeof txt === "string" ? eval("(" + txt + ")") : txt;
 
-	if ( run_id === "cmd" ) {
-		if ( typeof cmds[ parts[0] ] === "function" ) {
-			cmds[ parts[0] ].apply( cmds, parts.slice(1) );
+	if ( data.cmd ) {
+		if ( typeof cmds[ data.cmd ] === "function" ) {
+			cmds[ data.cmd ].apply( cmds, data.args.split(" ") );
 		}
 
-	} else if ( run_id ) {
-		log("Running " + (parts.slice(1).join(" ") || "tests") + "...");
+	} else if ( data.id ) {
+		run_id = data.id;
+		run_url = data.url;
+
+		log("Running " + (data.desc || "") + " tests...");
 
 		var params = "run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
@@ -60,7 +61,7 @@ function runTests( txt ) {
 	} else {
 		clearTimeout( pauseTimer );
 
-		var run_msg = run_url || "No new tests to run.";
+		var run_msg = data.desc || "No new tests to run.";
 
 		msg(run_msg);
 
@@ -79,7 +80,7 @@ function runTests( txt ) {
 
 function done() {
 	cancelTest();
-	runTests(" Cooling down.");
+	runTests({ desc: "Cooling down." });
 }
 
 function cancelTest() {

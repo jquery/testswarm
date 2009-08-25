@@ -7,11 +7,11 @@
 	if ( $row = mysql_fetch_array($result) ) {
 		$run_id = $row[0];
 
-		$result = mysql_queryf("SELECT url FROM runs WHERE id=%u LIMIT 1;", $run_id);
+		$result = mysql_queryf("SELECT url, jobs.name, runs.name FROM runs, jobs WHERE runs.id=%u AND jobs.id=runs.job_id LIMIT 1;", $run_id);
 
-		# TODO: Return more run info to the client (Name, etc.)
 		if ( $row = mysql_fetch_array($result) ) {
 			$url = $row[0];
+			$text = $row[1] . " " . ucfirst($row[2]);
 		}
 	
 		# Mark the run as "in progress" on the useragent
@@ -20,7 +20,7 @@
 		# Initialize the client run
 		mysql_queryf("INSERT INTO run_client (run_id,client_id,status,created) VALUES(%u,%u,1,NOW());", $run_id, $client_id);
 
-		echo "$run_id $url";
+		echo "{id:$run_id,url:'$url',desc:'$text'}";
 	}
 
 	exit();
