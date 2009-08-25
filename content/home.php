@@ -1,8 +1,3 @@
-<div class="desc">
-	<p>TestSwarm provides distributed continuous integration testing for JavaScript in over 35 browsers on 5 platforms. Donate your browsers to help run tests and improve the stability of your favorite Open Source projects.</p>
-<!-- Your browser: <?=$browser?> <?=$version?> <?=$os?> -->
-</div>
-
 <?php
   $found = 0;
 
