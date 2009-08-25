@@ -1,6 +1,6 @@
 var updateRate = 30, timeoutRate = 180;
 
-var run_id, run_url, testTimeout;
+var run_id, run_url, testTimeout, pauseTimer;
 
 if ( typeof client_id !== "undefined" ) {
 	jQuery( getTests );
@@ -58,16 +58,18 @@ function runTests( txt ) {
 		testTimeout = setTimeout( testTimedout, timeoutRate * 1000 );
 
 	} else {
+		clearTimeout( pauseTimer );
+
 		var run_msg = run_url || "No new tests to run.";
 
 		msg(run_msg);
 
 		var timeLeft = (updateRate * (run_url ? 0.5 : 1)) - 1;
 
-		setTimeout(function leftTimer(){
+		pauseTimer = setTimeout(function leftTimer(){
 			msg(run_msg + " Getting more in " + timeLeft + " seconds.");
 			if ( timeLeft-- >= 1 ) {
-				setTimeout( leftTimer, 1000 );
+				pauseTimer = setTimeout( leftTimer, 1000 );
 			} else {
 				getTests();
 			}
