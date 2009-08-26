@@ -40,7 +40,8 @@
 	// Prevent careless things from executing
 	window.print = window.confirm = window.alert = window.open = function(){};
 
-	window.onerror = function(){
+	window.onerror = function(e){
+		document.body.appendChild( document.createTextNode( "ERROR: " + e ));
 		submit({ fail: 0, error: 1, total: 1 });
 		return false;
 	};
