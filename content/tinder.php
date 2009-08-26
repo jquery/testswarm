@@ -40,6 +40,8 @@
 			$name = "Windows XP";
 		} else if ( $name == "vista" ) {
 			$name = "Windows Vista";
+		} else if ( $name == "win7" ) {
+			$name = "Windows 7";
 		} else if ( $name == "2000" ) {
 			$name = "Windows 2000";
 		} else if ( $name == "osx10.4" ) {

@@ -4,8 +4,10 @@
 
   loadBrowsers("xp");
   loadBrowsers("vista");
+  loadBrowsers("win7");
   loadBrowsers("osx10.4");
   loadBrowsers("osx10.5");
+  echo "<br style='clear:both;'/>";
   loadBrowsers("osx");
   loadBrowsers("linux");
   loadBrowsers("2000");
@@ -51,6 +53,8 @@ function loadBrowsers($name) {
     $name = "Windows XP";
   } else if ( $name == "vista" ) {
     $name = "Windows Vista";
+  } else if ( $name == "win7" ) {
+    $name = "Windows 7";
   } else if ( $name == "2000" ) {
     $name = "Windows 2000";
   } else if ( $name == "osx10.4" ) {

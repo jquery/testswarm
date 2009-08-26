@@ -30,7 +30,9 @@
 		$browser = "msie";
 	}
 
-	if ( strpos($lowerUA, "windows nt 6.0") > -1 ) {
+	if ( strpos($lowerUA, "windows nt 6.1") > -1 ) {
+		$os = "win7";
+	} else if ( strpos($lowerUA, "windows nt 6.0") > -1 ) {
 		$os = "vista";
 	} else if ( strpos($lowerUA, "windows nt 5.1") > -1 ) {
 		$os = "xp";
