@@ -41,6 +41,8 @@ function runTests( txt ) {
 			cmds[ data.cmd ].apply( cmds, data.args.split(" ") );
 		}
 
+		runTests({ desc: "Cooling down." });
+
 	} else if ( data.id ) {
 		run_id = data.id;
 		run_url = data.url;
