@@ -12,7 +12,7 @@
 
 echo "<br style='clear:both;'><div class='scores'><h3>High Score Board</h3><table class='scores'>";
 
-$result = mysql_queryf("SELECT users.name, SUM(total) as alltotal FROM clients, run_client, users WHERE clients.id=run_client.client_id AND clients.user_id=users.id  GROUP BY user_id ORDER by alltotal DESC LIMIT 20;");
+$result = mysql_queryf("SELECT users.name, SUM(total) as alltotal FROM clients, run_client, users WHERE clients.id=run_client.client_id AND clients.user_id=users.id  GROUP BY user_id ORDER by alltotal DESC LIMIT 10;");
 
 $num = 1;
 
