@@ -26,7 +26,7 @@ while ( $row = mysql_fetch_array($result) ) {
 	$num++;
 }
 
-echo "</table><h3>Rarest Browsers</h3><table class='scores'>";
+echo "</table><p class='right'><a href='/scores/'>All Scores...</a></p><h3>Rarest Browsers</h3><table class='scores'>";
 
 $result = mysql_queryf("SELECT name, SUM(runs) as allruns FROM run_useragent, useragents WHERE run_useragent.useragent_id=useragents.id GROUP BY name ORDER BY allruns LIMIT 10;");
 
