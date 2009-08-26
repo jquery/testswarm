@@ -42,6 +42,8 @@
 		$os = "osx10.4";
 	} else if ( strpos($lowerUA, "os x 10.5") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
 		$os = "osx10.5";
+	} else if ( strpos($lowerUA, "os x 10.6") > -1 || strpos($lowerUA, "os x 10_6") > -1 ) {
+		$os = "osx10.6";
 	} else if ( strpos($lowerUA, "os x") > -1 ) {
 		$os = "osx";
 	} else if ( strpos($lowerUA, "linux") > -1 ) {

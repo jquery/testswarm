@@ -8,6 +8,7 @@
   loadBrowsers("osx10.4");
   loadBrowsers("osx10.5");
   echo "<br style='clear:both;'/>";
+  loadBrowsers("osx10.6");
   loadBrowsers("osx");
   loadBrowsers("linux");
   loadBrowsers("2000");
@@ -61,6 +62,8 @@ function loadBrowsers($name) {
     $name = "OS X 10.4";
   } else if ( $name == "osx10.5" ) {
     $name = "OS X 10.5";
+  } else if ( $name == "osx10.6" ) {
+    $name = "OS X 10.6";
   } else if ( $name == "osx" ) {
     $name = "OS X";
   } else if ( $name == "linux" ) {
