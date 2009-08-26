@@ -35,7 +35,6 @@ $num = 1;
 
 while ( $row = mysql_fetch_array($result) ) {
 	$name = $row[0];
-	$os = $row[1];
 
 	echo "<tr><td class='num'>$num</td><td>$name</td></tr>";
 	$num++;
