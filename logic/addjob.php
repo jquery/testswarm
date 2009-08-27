@@ -3,8 +3,8 @@
 	$title = "Add New Job";
 
 	if ( $_POST['state'] == "addjob" ) {
-		$username = ereg_replace("[^a-zA-Z0-9_ -]", "", $_POST['user']);
-		$auth = ereg_replace("[^a-z0-9]", "", $_POST['auth']);
+		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST['user']);
+		$auth = preg_replace("/[^a-z0-9]/", "", $_POST['auth']);
 
 		$result = mysql_queryf("SELECT id FROM users WHERE name=%s AND auth=%s;", $username, $auth);
 

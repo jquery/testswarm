@@ -1,5 +1,5 @@
 <?php
-	$job_id = ereg_replace("[^0-9]", "", $_POST['job_id']);
+	$job_id = preg_replace("/[^0-9]/", "", $_POST['job_id']);
 	$type = $_POST['type'];
 
 	if ( $job_id && $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) {

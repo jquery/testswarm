@@ -1,7 +1,7 @@
 <?php
 	$title = "Signup";
 
-	$username = ereg_replace("[^a-zA-Z0-9_ -]", "", $_POST['username']);
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST['username']);
 	$password = $_POST['password'];
 	$email = $_POST['email'];
 	$request = $_POST['request'];

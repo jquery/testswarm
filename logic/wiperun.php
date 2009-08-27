@@ -1,6 +1,6 @@
 <?php
-	$run_id = ereg_replace("[^0-9]", "", $_POST['run_id']);
-	$client_id = ereg_replace("[^0-9]", "", $_POST['client_id']);
+	$run_id = preg_replace("/[^0-9]/", "", $_POST['run_id']);
+	$client_id = preg_replace("/[^0-9]/", "", $_POST['client_id']);
 
 	if ( $run_id && $client_id && $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) {
 

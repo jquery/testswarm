@@ -24,7 +24,7 @@
 		}
 	}
 
-	$job_id = ereg_replace("[^0-9]", "", $_REQUEST['job_id']);
+	$job_id = preg_replace("/[^0-9]/", "", $_REQUEST['job_id']);
 
 	$result = mysql_queryf("SELECT jobs.name, jobs.status, users.name FROM jobs, users WHERE jobs.id=%u AND users.id=jobs.user_id;", $job_id);
 

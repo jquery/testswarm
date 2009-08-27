@@ -8,11 +8,11 @@
 
 	$lowerUA = strtolower($useragent);
 
-	if ( ereg(".+(rv|applewebkit|presto|msie|konqueror)[\/: ]([0-9a-z.]+)", $lowerUA, $match) ) {
+	if ( preg_match("/.+(rv|applewebkit|presto|msie|konqueror)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
 
-	if ( ereg("ms-rtc lm 8", $lowerUA) ) {
+	if ( preg_match("/ms-rtc lm 8/", $lowerUA) ) {
 		$version = "8.0as7.0";
 	}
 

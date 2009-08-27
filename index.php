@@ -9,7 +9,7 @@
 	// Increase the session timeout to two weeks
 	ini_set("session.gc_maxlifetime", "1209600"); 
 
-	$state = ereg_replace("[^a-z]", "", $_REQUEST['state']);
+	$state = preg_replace("/[^a-z]/", "", $_REQUEST['state']);
 
 	if ( !$state ) {
 		$state = "home";

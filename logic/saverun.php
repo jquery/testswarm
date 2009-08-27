@@ -1,10 +1,10 @@
 <?php
 	include "inc/init.php";
 
-	$run_id = ereg_replace("[^0-9]", "", $_POST['run_id']);
-	$fail = ereg_replace("[^0-9-]", "", $_POST['fail']);
-	$error = ereg_replace("[^0-9-]", "", $_POST['error']);
-	$total = ereg_replace("[^0-9-]", "", $_POST['total']);
+	$run_id = preg_replace("/[^0-9]/", "", $_POST['run_id']);
+	$fail = preg_replace("/[^0-9-]/", "", $_POST['fail']);
+	$error = preg_replace("/[^0-9-]/", "", $_POST['error']);
+	$total = preg_replace("/[^0-9-]/", "", $_POST['total']);
 	$results = $_POST['results'];
 
 	# Make sure we've received some results from the client
