@@ -10,14 +10,14 @@
 		}
 	}
 
-	function get_status2($num, $fail,$error){
+	function get_status2($num, $fail, $error, $total){
 		if ( $num == 0 ) {
 			return "notstarted notdone";
 		} else if ( $num == 1 ) {
 			return "progress notdone";
 		} else if ( $num == 2 && $fail == -1 ) {
 			return "timeout";
-		} else if ( $num == 2 && $error > 0 ) {
+		} else if ( $num == 2 && ($error > 0 || $total == 0) ) {
 			return "error";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
@@ -114,7 +114,7 @@
 
 		if ( $useragents[ $row["useragent_id"] ] ) {
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
-				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]));
+				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 				if ( $last_browser != $ua["browser"] ) {
 					$output .= "<td class='$status " . $row["browser"] . "'><a href='/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
 						($ua["status"] == 2 ?

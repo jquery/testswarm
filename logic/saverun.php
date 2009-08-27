@@ -13,7 +13,7 @@
 
 		if ( mysql_affected_rows() > 0 ) {
 			# If we're 100% passing we don't need any more runs
-			if ( $fail == 0 && $error == 0 ) {
+			if ( $total > 0 && $fail == 0 && $error == 0 ) {
 				# Clear out old runs that were bad, since we now have a good one
 				$result = mysql_queryf("SELECT client_id FROM run_client, clients WHERE run_id=%u AND client_id!=%u AND clients.id=client_id AND clients.useragent_id=%u;", $run_id, $client_id, $useragent_id);
 
@@ -25,7 +25,7 @@
 			} else {
 				if ( $total > 0 ) {
 					# Clear out old runs that timed out.
-					$result = mysql_queryf("SELECT client_id FROM run_client, clients WHERE run_id=%u AND client_id!=%u AND total < 0 AND clients.id=client_id AND clients.useragent_id=%u;", $run_id, $client_id, $useragent_id);
+					$result = mysql_queryf("SELECT client_id FROM run_client, clients WHERE run_id=%u AND client_id!=%u AND total <= 0 AND clients.id=client_id AND clients.useragent_id=%u;", $run_id, $client_id, $useragent_id);
 	
 					while ( $row = mysql_fetch_array($result) ) {
 						mysql_queryf("DELETE FROM run_client WHERE run_id=%u AND client_id=%u;", $run_id, $row[0]);
