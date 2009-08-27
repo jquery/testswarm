@@ -12,6 +12,7 @@
   loadBrowsers("osx");
   loadBrowsers("linux");
   loadBrowsers("2000");
+  loadBrowsers("2003");
 
 echo "<br style='clear:both;'><div class='scores'><h3>High Score Board</h3><table class='scores'>";
 
@@ -57,6 +58,8 @@ function loadBrowsers($name) {
     $name = "Windows 7";
   } else if ( $name == "2000" ) {
     $name = "Windows 2000";
+  } else if ( $name == "2003" ) {
+    $name = "Windows 2003";
   } else if ( $name == "osx10.4" ) {
     $name = "OS X 10.4";
   } else if ( $name == "osx10.5" ) {

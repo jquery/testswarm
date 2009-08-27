@@ -34,6 +34,8 @@
 		$os = "win7";
 	} else if ( strpos($lowerUA, "windows nt 6.0") > -1 ) {
 		$os = "vista";
+	} else if ( strpos($lowerUA, "windows nt 5.2") > -1 ) {
+		$os = "2003";
 	} else if ( strpos($lowerUA, "windows nt 5.1") > -1 ) {
 		$os = "xp";
 	} else if ( strpos($lowerUA, "windows nt 5.0") > -1 ) {

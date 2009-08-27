@@ -44,6 +44,8 @@
 			$name = "Windows 7";
 		} else if ( $name == "2000" ) {
 			$name = "Windows 2000";
+		} else if ( $name == "2003" ) {
+			$name = "Windows 2003";
 		} else if ( $name == "osx10.4" ) {
 			$name = "OS X 10.4";
 		} else if ( $name == "osx10.5" ) {
