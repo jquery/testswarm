@@ -145,7 +145,7 @@ INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `cu
 (39, 'Firefox 2.0', 'gecko', '^1.8.1', 'linux', 0, 0, 0, 0, 0, 0),
 (40, 'Firefox 3.0', 'gecko', '^1.9.0', 'linux', 1, 0, 1, 0, 0, 0),
 (41, 'Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 'linux', 1, 1, 1, 0, 0, 0),
-(42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux', 1, 1, 0, 0, 0, 0),
+(42, 'Konqueror 4.2', 'konqueror', '^4.2', 'linux', 1, 0, 0, 0, 0, 0),
 (43, 'Safari 3.1', 'webkit', '^525.19', 'osx10.4', 0, 0, 0, 0, 0, 0),
 (44, 'Safari 3.1', 'webkit', '^525.19', 'osx10.5', 0, 0, 0, 0, 0, 0),
 (45, 'Internet Explorer 6', 'msie', '^6.', '2000', 1, 0, 1, 1, 0, 0),
@@ -171,7 +171,8 @@ INSERT INTO `useragents` (`id`, `name`, `engine`, `version`, `os`, `active`, `cu
 (65, 'Internet Explorer 7', 'msie', '^7.', '2003', 1, 0, 1, 1, 0, 0),
 (66, 'Internet Explorer 8', 'msie', '^8.', '2003', 1, 1, 1, 1, 0, 0),
 (67, 'Opera  9.6', 'presto', '^2.1', '2003', 1, 0, 1, 0, 0, 0),
-(68, 'Chrome 2.0', 'chrome', '^530', '2003', 1, 1, 1, 0, 0, 0);
+(68, 'Chrome 2.0', 'chrome', '^530', '2003', 1, 1, 1, 0, 0, 0),
+(69, 'Konqueror 4.3', 'konqueror', '^4.3', 'linux', 1, 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
