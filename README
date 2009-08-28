@@ -21,6 +21,8 @@ INSTALLATION
 
    crontab < config/cronjob.txt 
 
+5) Currently the server must be run in Apache (it uses a .htaccess file) and be within a VirtualHost (on its own domain or sub-domain).
+
 LICENSE
 
 See LICENSE for more information.
