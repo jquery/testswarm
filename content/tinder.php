@@ -28,7 +28,7 @@
 
 	if ( mysql_num_rows($result) > 0 ) {
 
-	echo "<h3>Active Clients:</h3><br/><ul class='clients'>";
+	echo "<h3>Active Clients:</h3><ul class='clients'>";
 
 	while ( $row = mysql_fetch_array($result) ) {
 		$engine = $row[0];
