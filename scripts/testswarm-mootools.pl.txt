@@ -1,4 +1,7 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
 
 # CONFIGURE
 
@@ -111,9 +114,9 @@ if ( $RCS_TYPE eq "svn" ) {
 	$rev = `svn info | grep Revision`;
 	$rev =~ s/Revision: //;
 } elsif ( $RCS_TYPE eq "git" ) {
-	print "git log --abbrev-commit | head -1\n" if ( $DEBUG );
-	$rev = `git log --abbrev-commit | head -1`;
-	$rev =~ s/commit.*?(\w+).*$/$1/;
+    my $cmd = "git rev-parse --short HEAD";
+    print "$cmd\n" if ( $DEBUG );
+    $rev = `$cmd`;
 }
 
 $rev =~ s/\s*//g;
@@ -149,9 +152,9 @@ if ( ! $rev ) {
 		# Inject the TestSwarm injection script into the test suite
 		$inject_file =~ s/<\/head>/<script>document.write("<scr" + "ipt src='$SWARM$SWARM_INJECT?" + (new Date).getTime() + "'><\/scr" + "ipt>");<\/script><\/head>/;
 
-		open( F, ">$file" );
-		print F $inject_file;
-		close( F );
+		open( my $fh, '>', $file ) or die "$file : $!";
+		print $fh $inject_file;
+		close( $fh );
 	}
 
 	my %props = (
@@ -182,9 +185,9 @@ if ( ! $rev ) {
 	print "Results: $results\n" if ( $DEBUG );
 
 	if ( $results ) {
-		open( F, ">$rev/results.txt" );
-		print F "$SWARM$results";
-		close( F );
+		open( my $fh, '>', "$rev/results.txt" ) or die "$rev/results.txt : $!";
+		print $fh "$SWARM$results";
+		close( $fh );
 
 	} else {
 		die "Job not submitted properly.";
