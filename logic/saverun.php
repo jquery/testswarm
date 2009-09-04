@@ -1,11 +1,11 @@
 <?php
 	require "inc/init.php";
 
-	$run_id = preg_replace("/[^0-9]/", "", $_POST['run_id']);
-	$fail = preg_replace("/[^0-9-]/", "", $_POST['fail']);
-	$error = preg_replace("/[^0-9-]/", "", $_POST['error']);
-	$total = preg_replace("/[^0-9-]/", "", $_POST['total']);
-	$results = $_POST['results'];
+	$run_id = preg_replace("/[^0-9]/", "", getItem('run_id', $_POST, ''));
+	$fail = preg_replace("/[^0-9-]/", "", getItem('fail', $_POST, ''));
+	$error = preg_replace("/[^0-9-]/", "", getItem('error', $_POST, ''));
+	$total = preg_replace("/[^0-9-]/", "",getItem('total', $_POST, ''));
+	$results = getItem('results', $_POST, '');
 
 	# Make sure we've received some results from the client
 	if ( $results ) {
@@ -36,8 +36,5 @@
 			}
 		}
 	}
-
 	echo "<script>window.top.done();</script>";
-
 	exit();
-?>

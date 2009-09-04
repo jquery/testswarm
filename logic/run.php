@@ -1,9 +1,7 @@
 <?php
-	$user = $_REQUEST['username'] ?
-		$_REQUEST['username'] :
-		$_SESSION['username'];
+	$user = getItem('username', $_REQUEST, getItem('username', $_SESSION, ''));
 
-	if ( !$_REQUEST['user'] && $user ) {
+	if ( !getItem('user', $_REQUEST, false) && $user ) {
 		header("Location: /run/$user/");
 		exit;
 	}
@@ -25,5 +23,3 @@
 
 	$scripts .= '<script type="text/javascript" src="/js/jquery.js"></script>' .
 						  '<script type="text/javascript" src="/js/run.js?' . time() . '"></script>';
-
-?>
