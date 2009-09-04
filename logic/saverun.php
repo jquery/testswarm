@@ -1,5 +1,5 @@
 <?php
-	include "inc/init.php";
+	require "inc/init.php";
 
 	$run_id = preg_replace("/[^0-9]/", "", $_POST['run_id']);
 	$fail = preg_replace("/[^0-9-]/", "", $_POST['fail']);

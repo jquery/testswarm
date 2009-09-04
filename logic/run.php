@@ -8,7 +8,7 @@
 		exit;
 	}
 
-	include "inc/init.php";
+	require "inc/init.php";
 
 	$result = mysql_queryf("SELECT name FROM clients, useragents WHERE clients.id=%u AND useragents.id=useragent_id LIMIT 1;", $client_id);
 

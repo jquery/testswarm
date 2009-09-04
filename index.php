@@ -2,9 +2,9 @@
 	session_start();
 
 	// $DEBUG_ON = true;
-	include "inc/utilities.php";
-	include "inc/browser.php";
-	include "inc/db.php";
+	require "inc/utilities.php";
+	require "inc/browser.php";
+	require "inc/db.php";
 
 	// Increase the session timeout to two weeks
 	ini_set("session.gc_maxlifetime", "1209600"); 
@@ -20,7 +20,7 @@
 
 	if ( $state ) {
 		if ( file_exists($logicFile) ) {
-			include $logicFile;
+			require $logicFile;
 		} else if ( !file_exists($contentFile) ) {
 			header("HTTP/1.0 404 Not Found");
 			exit();
@@ -35,7 +35,7 @@ if ( $title ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<title>Test Swarm: <?php echo $title; ?></title>
 	<link rel="stylesheet" href="/css/site.css"/>
-	<?php echo $scripts; ?>
+	<?php echo isset($scripts) ? $scripts : ''; ?>
 </head>
 <body>
 	<ul class="nav">
@@ -54,10 +54,10 @@ if ( $title ) {
 		<li><a href="http://wiki.github.com/jeresig/testswarm">About</a></li>
 	</ul>
 	<h1><a href="/"><img src="/images/testswarm_logo_wordmark.png" alt="TestSwarm" title="TestSwarm"/></a></h1>
-	<h2><?php echo $title; ?></h2>
+	<h2><?php echo  $title; ?></h2>
 	<div id="main">
 	<?php } if ( $state && file_exists($contentFile) ) {
-		include $contentFile;
+		require $contentFile;
 	} if ( $title ) { ?>
 	</div>
 </body>
