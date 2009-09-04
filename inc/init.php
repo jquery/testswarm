@@ -1,10 +1,27 @@
 <?php
-	$username = $_SESSION['username'];
-	if ( !$username ) {
-		$username = $_REQUEST['user'];
+	/**
+	 * Get item out of array, falling back on a default if need be.
+	 * Complains loudly on failing.
+	 */
+	function getItem($key, $array, $default=null) {
+		if (array_key_exists($key, $array)) {
+			return $array[$key];
+		} else {
+			if (func_num_args() === 3) {
+				return $default;
+			} else {
+				throw Exception('Unable to find key '.$key.' in the array '.var_dump($array, true));
+			}
+		}
 	}
+	$username = getItem('username', $_SESSION, getItem('user', $_REQUEST, ''));
 	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
-	$client_id = preg_replace("/[^0-9]/", "", $_REQUEST['client_id']);
+	# We need a username to set up an account
+	if ( !$username ) {
+		# TODO: Improve error message quality.
+		exit("Username required. ?user=USERNAME.");
+	}
+	$client_id = preg_replace("/[^0-9]/", "", getItem('client_id', $_REQUEST, ''));
 
 	if ( $client_id ) {
 		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u LIMIT 1;", $client_id);
@@ -22,13 +39,6 @@
 			echo "Client doesn't exist.";
 			exit();
 		}
-
-	# We need a username to set up an account
-	# TODO: Improve error message quality.
-	} else if ( !$username ) {
-		echo "Username required. ?user=USERNAME.";
-		exit();
-
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
@@ -61,4 +71,3 @@
 		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, ip, created) VALUES(%u,%u,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $ip);
 		$client_id = mysql_insert_id();
 	}
-?>
