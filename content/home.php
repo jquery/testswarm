@@ -82,14 +82,14 @@ function loadBrowsers($name) {
     if ( $row[0] != $engine ) {
       echo "<br style='clear:both;'/>";
     }
-    # <?= $row[0] != $engine ? ' clear' : ''?
+    # <?php echo $row[0] != $engine ? ' clear' : ''?
     $num = preg_replace('/\w+ /', "", $row[1]);
     ?>
-		<div class="browser<?= $row[0] != $engine ? ' clear' : ''?><?= $row[3] ? ' you' : ''?>">
-			<img src="/images/<?=$row[0]?>.sm.png" class="browser-icon <?=$row[0]?>" alt="<?=$row[1]?>" title="<?=$row[1]?>"/>
-			<span class="browser-name"><?=$num?></span>
+		<div class="browser<?php echo $row[0] != $engine ? ' clear' : '';?><?php echo $row[3] ? ' you' : '';?>">
+			<img src="/images/<?php echo $row[0]; ?>.sm.png" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<php echo $row[1]; ?>"/>
+			<span class="browser-name"><?php echo $num; ?></span>
 			<?php if ( intval($row[2]) > 0 ) {
-				echo "<span class='active'>" . $row[2] . "</span>";
+				echo "<span class='active'>", $row[2], "</span>";
 			}?>
 		</div>
   <?php $engine = $row[0];
@@ -109,11 +109,11 @@ if ( $found ) { ?>
 	<input type="submit" value="Join the Swarm"/>
 </form>
 <?php } else { ?>
-<br/><p><strong>&raquo; <?=$_SESSION['username']?></strong> <a href="/run/<?=$_SESSION['username']?>/">Start Running Tests</a></p>
+<br/><p><strong>&raquo; <?php echo $_SESSION['username']; ?></strong> <a href="/run/<?php echo $_SESSION['username']; ?>/">Start Running Tests</a></p>
 <?php } ?>
 <?php } else { ?>
 <div class="join">
 <p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>
-<p>If you feel that this may be a mistake, copy the following information (<?=$browser?> <?=$version?> <?=$os?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="http://groups.google.com/group/testswarm">discussion group</a>.</a>
+<p>If you feel that this may be a mistake, copy the following information (<?php echo $browser; ?> <?php echo $version; ?> <?php echo $os; ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="http://groups.google.com/group/testswarm">discussion group</a>.</a>
 </div>
 <?php } ?>

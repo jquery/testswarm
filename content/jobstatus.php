@@ -36,12 +36,12 @@
 
 ?>
 
-<h3><?=$job_name?></h3>
+<h3><?php echo $job_name; ?></h3>
 
 <?php if ( $owner && $_SESSION['auth'] == 'yes' ) { ?>
 <form action="/" method="POST">
 	<input type="hidden" name="state" value="wipejob"/>
-	<input type="hidden" name="job_id" value="<?=$job_id?>"/>
+	<input type="hidden" name="job_id" value="<?php echo $job_id; ?>"/>
 	<input type="submit" name="type" value="delete"/>
 	<input type="submit" name="type" value="reset"/>
 </form>

@@ -1,10 +1,10 @@
 <div class="userinfo">
 <div class="browser you">
-	<img src="/images/<?=$browser?>.sm.png" class="browser-icon <?=$browser?>" alt="<?=$useragent_name?>" title="<?=$useragent_name?>"/>
-	<span class="browser-name"><?=preg_replace('/\w+ /', "", $useragent_name)?></span>
+	<img src="/images/<?php echo $browser; ?>.sm.png" class="browser-icon <?php echo $browser; ?>" alt="<?php echo $useragent_name; ?>" title="<?php echo $useragent_name; ?>"/>
+	<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $useragent_name); ?></span>
 </div> 
 
-<h3><?=$username?></h3>
+<h3><?php echo $username; ?></h3>
 <p><strong>Status:</strong> <span id="msg">Loading...</span></p>
 </div>
 

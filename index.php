@@ -33,15 +33,15 @@ if ( $title ) {
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=8" />
-	<title>Test Swarm: <?= $title ?></title>
+	<title>Test Swarm: <?php echo $title; ?></title>
 	<link rel="stylesheet" href="/css/site.css"/>
-	<?= $scripts ?>
+	<?php echo $scripts; ?>
 </head>
 <body>
 	<ul class="nav">
 		<?php if ( $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) { ?>
-		<li><strong><a href="/user/<?=$_SESSION['username']?>/"><?=$_SESSION['username']?></a></strong></li>
-		<li><a href="/run/<?=$_SESSION['username']?>/">Join the Swarm</a></li>
+		<li><strong><a href="/user/<?php echo $_SESSION['username'];?>/"><?php echo $_SESSION['username'];?></a></strong></li>
+		<li><a href="/run/<?php echo $_SESSION['username'];?>/">Join the Swarm</a></li>
 		<li><a href="/logout/">Logout</a></li>
 		<?php } else { ?>
 		<li><a href="/login/">Login</a></li>
@@ -54,7 +54,7 @@ if ( $title ) {
 		<li><a href="http://wiki.github.com/jeresig/testswarm">About</a></li>
 	</ul>
 	<h1><a href="/"><img src="/images/testswarm_logo_wordmark.png" alt="TestSwarm" title="TestSwarm"/></a></h1>
-	<h2><?= $title ?></h2>
+	<h2><?php echo $title; ?></h2>
 	<div id="main">
 	<?php } if ( $state && file_exists($contentFile) ) {
 		include $contentFile;

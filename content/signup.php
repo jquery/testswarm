@@ -1,7 +1,7 @@
 <form action="" method="POST">
 <fieldset>
 <legend>Signup</legend>
-<?=$error?>
+<?php echo $error; ?>
 <p>Signup to use TestSwarm. If you already have an account you may <a href="/login/">Login Here</a>.</p>
 <label>Username: <input type="text" name="username"/></label><br/>
 <label>Password: <input type="password" name="password"/></label><br/>
