@@ -139,5 +139,5 @@ function log( txt ) {
 }
 
 function msg( txt ) {
-	jQuery("#msg").text( txt );
+	jQuery("#msg").html( txt );
 }
