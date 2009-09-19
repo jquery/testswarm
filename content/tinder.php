@@ -83,7 +83,7 @@
 		$job_status = get_status(intval($row[1]));
 		$job_id = $row[2];
 
-		$output .= '<tr><th><a href="/job/' . $job_id . '/">' . $job_name . "</a></th>\n";
+		$output .= '<tr><th><a href="/job/' . $job_id . '/">' . strip_tags($job_name) . "</a></th>\n";
 
 		$results = array();
 		$states = array();
