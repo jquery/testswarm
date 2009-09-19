@@ -33,8 +33,16 @@ function getTests() {
 	retrySend( "state=getrun&client_id=" + client_id, getTests, runTests );
 }
 
-function runTests( txt ) {
-	var data = txt && typeof txt === "string" ? eval("(" + txt + ")") : txt;
+function runTests( data ) {
+	if (data && typeof data === "string") {
+		try {
+			data = eval("(" + data + ")")
+		} catch(e) {
+			data = {
+				desc: "Failed to retrieve new tests: " + e + ", data was: " + data + "." 
+			}
+		}
+	}
 
 	if ( data.cmd ) {
 		if ( typeof cmds[ data.cmd ] === "function" ) {
