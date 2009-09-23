@@ -16,8 +16,8 @@
 		$version = "8.0as7.0";
 	}
 
-	if ( strpos($lowerUA, "chrome") > -1 ) {
-		$browser = "chrome";
+	if ( strpos($lowerUA, "msie") > -1 ) {
+  	$browser = "msie";
 	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
 		$browser = "konqueror";
 	} else if ( strpos($lowerUA, "webkit") > -1 ) {
@@ -26,8 +26,8 @@
 		$browser = "presto";
 	} else if ( strpos($lowerUA, "gecko") > -1 ) {
 		$browser = "gecko";
-	} else if ( strpos($lowerUA, "msie") > -1 ) {
-		$browser = "msie";
+	} else if ( strpos($lowerUA, "chrome") > -1 ) {
+		$browser = "chrome";
 	}
 
 	if ( strpos($lowerUA, "windows nt 6.1") > -1 ) {
