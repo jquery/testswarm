@@ -60,7 +60,7 @@
 		};
 
 		QUnit.log = window.TestSwarm.heartbeat;
-			window.TestSwarm.heartbeat();
+		window.TestSwarm.heartbeat();
 
 		window.TestSwarm.serialize = function(){
 			// Clean up the HTML (remove any un-needed test markup)
@@ -171,7 +171,7 @@
 			while ( LOG.pendingMessages.length ) {
 				var msg = LOG.pendingMessages.shift();
 				results.push( msg.type + ": " + msg.msg );
-	}
+			}
 
 			return "<pre>" + results.join("\n") + "</pre>";
 		};
