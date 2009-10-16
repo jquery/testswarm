@@ -8,8 +8,10 @@
 		doPost = !!window.top.postMessage;
 	} catch(e){}
 
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
+	var search = window.location.search,
+		url, index;
+	if( ( index = search.indexOf( "swarmURL=" ) ) != -1 )
+		url = decodeURIComponent( search.slice( index + 9 ) );
 
 	if ( !DEBUG && (!url || url.indexOf("http") !== 0) ) {
 		return;
@@ -58,7 +60,7 @@
 		};
 
 		QUnit.log = window.TestSwarm.heartbeat;
-		window.TestSwarm.heartbeat();
+			window.TestSwarm.heartbeat();
 
 		window.TestSwarm.serialize = function(){
 			// Clean up the HTML (remove any un-needed test markup)
@@ -66,7 +68,7 @@
 			remove("loadediframe");
 			remove("dl");
 			remove("main");
-			
+
 			// Show any collapsed results
 			var ol = document.getElementsByTagName("ol");
 			for ( var i = 0; i < ol.length; i++ ) {
@@ -151,7 +153,7 @@
 		window.TestSwarm.serialize = function(){
 			return "<pre>" + this.log.join("\n") + "</pre>";
 		};
-		
+
 	// Selenium Core
 	// http://seleniumhq.org/projects/core/
 	} else if ( typeof SeleniumTestResult !== "undefined" && typeof LOG !== "undefined" ) {
@@ -169,7 +171,7 @@
 			while ( LOG.pendingMessages.length ) {
 				var msg = LOG.pendingMessages.shift();
 				results.push( msg.type + ": " + msg.msg );
-			}
+	}
 
 			return "<pre>" + results.join("\n") + "</pre>";
 		};
