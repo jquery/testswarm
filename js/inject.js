@@ -193,7 +193,30 @@
 		window.TestSwarm.serialize = function(){
 			return "<pre>" + document.getElementById("logBody").innerHTML + "</pre>";
 		};
-	}
+  // Screw.Unit
+  // git://github.com/nathansobo/screw-unit.git
+	} else if ( typeof Screw !== "undefined" && typeof jQuery !== 'undefined' && Screw && Screw.Unit ) {
+    $(Screw).bind("after", function() {
+     var passed = $('.passed').length;
+     var failed = $('.failed').length;
+     submit({
+        fail: failed,
+        error: 0,
+        total: failed + passed
+      });
+    });
+
+    $(Screw).bind("loaded", function() {
+      $('.it')
+        .bind("passed", window.TestSwarm.heartbeat)
+        .bind("failed", window.TestSwarm.heartbeat);
+      window.TestSwarm.heartbeat();
+    });
+
+    window.TestSwarm.serialize = function(){
+    	return trimSerialize();
+    };
+  }
 
 	function trimSerialize(doc) {
 		doc = doc || document;
