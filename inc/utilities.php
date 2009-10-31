@@ -54,6 +54,10 @@
 		if ( $DEBUG_ON ) {
 			echo "$sql_query<br>\n";
 		}
-		return mysql_query($sql_query);
+		$result = mysql_query($sql_query);
+		if (!$result) {
+		    die('Invalid query: ' . mysql_error());
+		}
+		return $result;
 	}
 ?>
