@@ -105,7 +105,7 @@ if ( $found ) { ?>
 <form action="/" method="get">
 	<input type="hidden" name="state" value="run"/>
 	<br/><strong>Username:</strong><br/>
-	<input type="text" name="username" value=""/>
+	<input type="text" name="user" value=""/>
 	<input type="submit" value="Join the Swarm"/>
 </form>
 <?php } else { ?>
