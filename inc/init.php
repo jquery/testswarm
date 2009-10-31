@@ -15,7 +15,13 @@
 		}
 	}
 	$username = getItem('username', $_SESSION, getItem('user', $_REQUEST, ''));
+	if ( !$username ) {
+		$username = $_REQUEST['user'];
+	}
 	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
+	if ( $username ) {
+		$_SESSION['username'] = $username;
+	}
 	# We need a username to set up an account
 	if ( !$username ) {
 		# TODO: Improve error message quality.
