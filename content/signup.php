@@ -2,7 +2,7 @@
 <fieldset>
 <legend>Signup</legend>
 <?php echo $error; ?>
-<p>Signup to use TestSwarm. If you already have an account you may <a href="/login/">Login Here</a>.</p>
+<p>Signup to use TestSwarm. If you already have an account you may <a href="<?php echo $GLOBALS['contextpath']; ?>/login/">Login Here</a>.</p>
 <label>Username: <input type="text" name="username"/></label><br/>
 <label>Password: <input type="password" name="password"/></label><br/>
 <label>Email: <input type="text" name="email"/></label><br/>

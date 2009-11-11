@@ -20,7 +20,7 @@
 			$_SESSION['auth'] = "yes";
 
 			session_write_close();
-			header("Location: /user/$username/");
+			header("Location: " . $GLOBALS['contextpath'] . "/user/$username/");
 			exit();
 		} else {
 			$error = "<p>Error: Incorrect username or password.</p>";

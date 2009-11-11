@@ -58,7 +58,7 @@
 			$name = "Linux";
 		}
 
-		echo "<li><img src='/images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
+		echo "<li><img src='" . $GLOBALS['contextpath'] . "/images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
 	}
 
 	echo "</ul>";
@@ -83,7 +83,7 @@
 		$job_status = get_status(intval($row[1]));
 		$job_id = $row[2];
 
-		$output .= '<tr><th><a href="/job/' . $job_id . '/">' . strip_tags($job_name) . "</a></th>\n";
+		$output .= '<tr><th><a href="' . $GLOBALS['contextpath'] . '/job/' . $job_id . '/">' . strip_tags($job_name) . "</a></th>\n";
 
 		$results = array();
 		$states = array();
@@ -101,7 +101,7 @@
 					foreach ( $browsers as $browser ) {
 						if ( $last_browser["id"] != $browser["id"] ) {
 							$header .= '<th><div class="browser">' .
-								'<img src="/images/' . $browser["engine"] .
+								'<img src="' . $GLOBALS['contextpath'] . '/images/' . $browser["engine"] .
 								'.sm.png" class="browser-icon ' . $browser["engine"] .
 								'" alt="' . $browser["name"] . ', ' . $browser["os"] .
 								'" title="' . $browser["name"] . ', ' . $browser["os"] .

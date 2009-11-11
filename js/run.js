@@ -120,7 +120,7 @@ var errorOut = 0;
 function retrySend( data, retry, success ) {
 	jQuery.ajax({
 		type: "POST",
-		url: "/",
+		url: ".",
 		timeout: 10000,
 		cache: false,
 		data: data,

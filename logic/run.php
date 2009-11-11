@@ -21,5 +21,5 @@
 		$scripts = "<script type='text/javascript'>var client_id = $client_id;</script>";
 	}
 
-	$scripts .= '<script type="text/javascript" src="/js/jquery.js"></script>' .
-						  '<script type="text/javascript" src="/js/run.js?' . time() . '"></script>';
+	$scripts .= '<script type="text/javascript" src="' . $GLOBALS['contextpath'] . '/js/jquery.js"></script>' .
+						  '<script type="text/javascript" src="' . $GLOBALS['contextpath'] . '/js/run.js?' . time() . '"></script>';
