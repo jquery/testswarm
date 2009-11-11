@@ -24,8 +24,9 @@
 		# Initialize the client run
 		mysql_queryf("INSERT INTO run_client (run_id,client_id,status,created) VALUES(%u,%u,1,NOW());", $run_id, $client_id);
 
-		echo "{id:$run_id,url:'$url',desc:'$text'}";
+		echo json_encode(array('id' => $run_id, 'url' => $url, 'desc' => $text));
 	}
+	
 
 	exit();
 
