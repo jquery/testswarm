@@ -14,6 +14,8 @@
   loadBrowsers("2000");
   loadBrowsers("2003");
 
+if ( false ) {
+
 echo "<br style='clear:both;'><div class='scores'><h3>High Score Board</h3><table class='scores'>";
 
 $result = mysql_queryf("SELECT users.name, SUM(total) as alltotal FROM clients, run_client, users WHERE clients.id=run_client.client_id AND clients.user_id=users.id  GROUP BY user_id ORDER by alltotal DESC LIMIT 10;");
@@ -42,6 +44,8 @@ while ( $row = mysql_fetch_array($result) ) {
 }
 
 echo "</table></div>";
+
+}
 
 function loadBrowsers($name) {
   global $found, $browser, $version, $os;
