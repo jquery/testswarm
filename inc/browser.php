@@ -20,14 +20,14 @@
   	$browser = "msie";
 	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
 		$browser = "konqueror";
+	} else if ( strpos($lowerUA, "chrome") > -1 ) {
+		$browser = "chrome";
 	} else if ( strpos($lowerUA, "webkit") > -1 ) {
 		$browser = "webkit";
 	} else if ( strpos($lowerUA, "presto") > -1 ) {
 		$browser = "presto";
 	} else if ( strpos($lowerUA, "gecko") > -1 ) {
 		$browser = "gecko";
-	} else if ( strpos($lowerUA, "chrome") > -1 ) {
-		$browser = "chrome";
 	}
 
 	if ( strpos($lowerUA, "windows nt 6.1") > -1 ) {
