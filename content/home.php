@@ -46,7 +46,7 @@ echo "</table></div>";
 function loadBrowsers($name) {
   global $found, $browser, $version, $os;
 
-  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND DATE_ADD(updated, INTERVAL 1 minute) > NOW()) as clients, (engine=%s AND %s REGEXP version AND os=%s) as found FROM useragents WHERE os=%s AND active=1 ORDER BY engine, name;", $browser, $version, $os, $name);
+  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version AND os=%s) as found FROM useragents WHERE os=%s AND active=1 ORDER BY engine, name;", $browser, $version, $os, $name);
 
   $engine = "";
 
