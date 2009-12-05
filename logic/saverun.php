@@ -5,7 +5,7 @@
 	$fail = preg_replace("/[^0-9-]/", "", getItem('fail', $_POST, ''));
 	$error = preg_replace("/[^0-9-]/", "", getItem('error', $_POST, ''));
 	$total = preg_replace("/[^0-9-]/", "",getItem('total', $_POST, ''));
-	$results = getItem('results', $_POST, '');
+	$results = gzcompress(getItem('results', $_POST, ''));
 
 	# Make sure we've received some results from the client
 	if ( $results ) {

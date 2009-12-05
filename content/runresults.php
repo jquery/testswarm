@@ -6,6 +6,6 @@
 		$run_id, $client_id);
 	
 	if ( $row = mysql_fetch_array($result) ) {
-		echo $row[0];
+		echo gzuncompress($row[0]);
 	}
 ?>
