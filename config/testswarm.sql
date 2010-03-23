@@ -121,7 +121,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Opera 9.6', 'presto', '^2.1', 1, 0, 1, 0, 0, 0),
 ('Opera 10.20', 'presto', '^2.2.15$', 1, 0, 1, 0, 0, 0),
 ('Opera 10.50', 'presto', '^2.5.22$', 1, 1, 1, 0, 0, 0),
-('Chrome 4.0', 'chrome', '^532', 1, 1, 1, 1, 0, 0)
+('Chrome 4.0', 'chrome', '^532', 1, 1, 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -143,3 +143,28 @@ CREATE TABLE `users` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Indexes and Foreign Keys
+alter table clients
+	add index idx_clients_user_id (user_id),
+	add constraint fk_clients_user_id foreign key (user_id) references users (id);
+alter table clients
+	add index idx_clients_useragent_id (useragent_id),
+	add constraint fk_clients_useragent_id foreign key (useragent_id) references useragents (id);
+alter table jobs
+	add index idx_jobs_user_id (user_id),
+	add constraint fk_jobs_user_id foreign key (user_id) references users (id);
+alter table run_client
+	add index idx_run_client_run_id (run_id),
+	add constraint fk_run_client_run_id foreign key (run_id) references runs (id);
+alter table run_client
+	add index idx_run_client_client_id (client_id),
+	add constraint fk_run_client_client_id foreign key (client_id) references clients (id);
+alter table run_useragent
+	add index idx_run_useragent_run_id (run_id),
+	add constraint fk_run_useragent_run_id foreign key (run_id) references runs (id);
+alter table run_useragent
+	add index idx_run_useragent_useragent_id (useragent_id),
+	add constraint fk_run_useragent_useragent_id foreign key (useragent_id) references useragents (id);
+alter table runs
+	add index idx_runs_job_id (job_id),
+	add constraint fk_runs_job_id foreign key (job_id) references jobs (id);
