@@ -50,7 +50,7 @@
 <table class="results"><tbody>
 <?php
 
-	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents, jobs WHERE jobs.id=%u AND runs.job_id=jobs.id AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
+	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents, jobs WHERE runs.job_id=%u AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
 
 	$last = "";
 	$output = "";
