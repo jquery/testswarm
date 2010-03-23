@@ -2,17 +2,7 @@
 <?php
   $found = 0;
 
-  loadBrowsers("xp");
-  loadBrowsers("vista");
-  loadBrowsers("win7");
-  loadBrowsers("osx10.4");
-  loadBrowsers("osx10.5");
-  echo "<br style='clear:both;'/>";
-  loadBrowsers("osx10.6");
-  loadBrowsers("osx");
-  loadBrowsers("linux");
-  loadBrowsers("2000");
-  loadBrowsers("2003");
+  loadBrowsers();
 
 if ( false ) {
 
@@ -47,36 +37,14 @@ echo "</table></div>";
 
 }
 
-function loadBrowsers($name) {
+function loadBrowsers() {
   global $found, $browser, $version, $os;
 
-  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version AND os=%s) as found FROM useragents WHERE os=%s AND active=1 ORDER BY engine, name;", $browser, $version, $os, $name);
+  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version) as found FROM useragents WHERE active=1 ORDER BY engine, name;", $browser, $version);
 
   $engine = "";
 
-  if ( $name == "xp" ) {
-    $name = "Windows XP";
-  } else if ( $name == "vista" ) {
-    $name = "Windows Vista";
-  } else if ( $name == "win7" ) {
-    $name = "Windows 7";
-  } else if ( $name == "2000" ) {
-    $name = "Windows 2000";
-  } else if ( $name == "2003" ) {
-    $name = "Windows 2003";
-  } else if ( $name == "osx10.4" ) {
-    $name = "OS X 10.4";
-  } else if ( $name == "osx10.5" ) {
-    $name = "OS X 10.5";
-  } else if ( $name == "osx10.6" ) {
-    $name = "OS X 10.6";
-  } else if ( $name == "osx" ) {
-    $name = "OS X";
-  } else if ( $name == "linux" ) {
-    $name = "Linux";
-  }
-
-  echo "<div class='browsers'><h3>$name</h3>";
+  echo "<div class='browsers'><h3>Browsers</h3>";
 
   while ( $row = mysql_fetch_array($result) ) {
     if ( $row[3] ) {

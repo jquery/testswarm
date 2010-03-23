@@ -48,7 +48,7 @@
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf("SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version AND os=%s;", $browser, $version, $os);
+		$result = mysql_queryf("SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version;", $browser, $version);
 
 		if ( $row = mysql_fetch_array($result) ) {
 			$useragent_id = $row[0];
@@ -74,6 +74,6 @@
 		}
 
 		# Insert in a new record for the client and get its ID
-		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, ip, created) VALUES(%u,%u,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $ip);
+		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created) VALUES(%u,%u,%s,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $os, $ip);
 		$client_id = mysql_insert_id();
 	}
