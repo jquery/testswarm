@@ -88,7 +88,7 @@
 		$results = array();
 		$states = array();
 
-	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents, jobs WHERE jobs.id=%u AND runs.job_id=jobs.id AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
+	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents WHERE runs.job_id=%u AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
 
 	$last = "";
 
@@ -120,7 +120,7 @@
 
 			$useragents = array();
 
-			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id, users.name as name, useragents.name as browser FROM useragents, run_client, clients, users WHERE run_client.run_id=%u AND run_client.client_id=clients.id AND clients.user_id=users.id AND useragents.id=useragent_id ORDER BY browser;", $row["run_id"]);
+			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id FROM run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id ORDER BY useragent_id;", $row["run_id"]);
 
 			while ( $ua_row = mysql_fetch_assoc($runResult) ) {
 				if ( !$useragents[ $ua_row['useragent_id'] ] ) {
@@ -139,12 +139,12 @@
 			) );
 		}
 
-		$last_browser = "";
+		$last_browser = 0;
 
 		if ( $useragents[ $row["useragent_id"] ] ) {
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
-				if ( $last_browser != $ua["browser"] ) {
+				if ( $last_browser != $ua["useragents_id"] ) {
 					$cur = $results[ $ua['useragent_id'] ];
 					$results[ $ua['useragent_id'] ] = $cur + intval($ua["fail"]);
 
@@ -164,7 +164,7 @@
 
 					$states[ $ua['useragent_id'] ] = $status;
 				}
-				$last_browser = $ua["browser"];
+				$last_browser = $ua["useragents_id"];
 			}
 		} else {
 				$cur = $results[ $row['useragent_id'] ];
