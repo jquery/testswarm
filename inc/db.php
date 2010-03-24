@@ -1,5 +1,5 @@
 <?php
-	$db = mysql_connect(
+	$db = mysql_pconnect(
 		$config['database']['host'],
 		$config['database']['username'],
 		$config['database']['password']
