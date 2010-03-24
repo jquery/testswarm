@@ -1,4 +1,4 @@
-<?php
+ <?php
 	$job_id = preg_replace("/[^0-9]/", "", $_POST['job_id']);
 	$type = $_POST['type'];
 
@@ -8,8 +8,10 @@
 
 		if ( mysql_num_rows($results) > 0 ) {
 			if ( $type == "delete" ) {
-				mysql_queryf("DELETE FROM jobs WHERE id=%u;", $job_id);
+				mysql_queryf("DELETE FROM run_client WHERE run_id in (select id from runs where job_id=%u);", $job_id);
+				mysql_queryf("DELETE FROM run_useragent WHERE run_id in (select id from runs where job_id=%u);", $job_id);
 				mysql_queryf("DELETE FROM runs WHERE job_id=%u;", $job_id);
+				mysql_queryf("DELETE FROM jobs WHERE id=%u;", $job_id);
 			} else {
 				mysql_queryf("UPDATE jobs SET status=0, updated=NOW() WHERE id=%u;", $job_id);
 				mysql_queryf("UPDATE runs SET status=0, updated=NOW() WHERE job_id=%u;", $job_id);
