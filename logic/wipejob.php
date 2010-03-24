@@ -1,4 +1,4 @@
- <?php
+<?php
 	$job_id = preg_replace("/[^0-9]/", "", $_POST['job_id']);
 	$type = $_POST['type'];
 
