@@ -115,7 +115,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Safari 3.1', 'webkit', '^525.19', 1, 0, 1, 0, 0, 0),
 ('Safari 3.2', 'webkit', '^525.2', 1, 0, 1, 0, 0, 0),
 ('Safari 4.0', 'webkit', '^53', 1, 1, 1, 1, 0, 0),
-('Mobile Safari 4.0', 'mobilewebkit', '^528', 1, 1, 1, 0, 0, 1),
+('Mobile Safari 4.0', 'mobilewebkit', '^528', 1, 1, 0, 0, 0, 1),
 ('Internet Explorer 6', 'msie', '^6.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 8', 'msie', '^8.', 1, 1, 1, 1, 0, 0),
