@@ -6,6 +6,7 @@
 		$run_id, $client_id);
 	
 	if ( $row = mysql_fetch_array($result) ) {
-		echo gzuncompress($row[0]);
+		header("Content-Encoding: gzip");
+		echo $row[0];
 	}
 ?>
