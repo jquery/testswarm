@@ -22,11 +22,6 @@ my $RCS_URL = "http://jquery-ui.googlecode.com/svn/trunk";
 # The directory in which the checkouts will occur.
 my $BASE_DIR = "[REPLACE THIS PATH]/tmp-checkout";
 
-# A script tag loading in the TestSwarm injection script will
-# be added at the bottom of the <head> in the following file.
-
-my $INJECT_FILE = "tests/unit/*/*.html";
-
 # Any build commands that need to happen.
 
 my $BUILD = "";
@@ -55,9 +50,7 @@ my %SUITES = ();
 
 
 # Comment these out if you wish to define a custom set of SUITES above
-## REPLACE local
 my $SUITE = "http://jquery-ui.googlecode.com/svn-history/r{REV}/trunk";
-#my $SUITE = "http://localhost/checkout";
 sub BUILD_SUITES {
 	%SUITES = map { /(\w+).html$/; $1 => "$SUITE/$_?$1"; } glob("tests/unit/*/*.html");
     

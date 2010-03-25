@@ -22,12 +22,8 @@ my $MAX_RUNS = 5;
 # The directory in which the checkouts will occur.
 my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery";
 
-# A script tag loading in the TestSwarm injection script will
-# be added at the bottom of the <head> in the following file.
-
 # The name of the job that will be submitted
 # (pick a descriptive, but short, name to make it easy to search)
-
 # Note: The string {REV} will be replaced with the current
 #       commit number/hash.
 my $JOB_NAME = "jQuery Commit <a href=\"http://github.com/jquery/jquery/commit/{FREV}\">#{REV}</a>";
