@@ -12,7 +12,7 @@
 		$version = $match[2];
 	}
 
-	if ( preg_match("/.+(webos)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
+	if ( preg_match("/.+(webos|android)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
 
@@ -28,6 +28,8 @@
 		$browser = "chrome";
 	} else if ( strpos($lowerUA, "webos") > -1 ) {
 		$browser = "webos";
+	} else if ( strpos($lowerUA, "android") > -1 ) {
+		$browser = "android";
 	} else if ( strpos($lowerUA, "webkit") > -1 && strpos($lowerUA, "mobile") > -1 ) {
 		$browser = "mobilewebkit";
 	} else if ( strpos($lowerUA, "webkit") > -1 ) {
@@ -56,6 +58,8 @@
 		$os = "ipad";
 	} else if ( strpos($lowerUA, "webos") > -1 ) {
 		$os = "webos";
+	} else if ( strpos($lowerUA, "android") > -1 ) {
+		$os = "android";
 	} else if ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_4") > -1 ) {
 		$os = "osx10.4";
 	} else if ( strpos($lowerUA, "os x 10.5") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
