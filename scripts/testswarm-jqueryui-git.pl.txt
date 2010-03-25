@@ -7,7 +7,7 @@
 my $SWARM = "http://swarm.jquery.org";
 
 # Your TestSwarm username.
-my $USER = "jquery";
+my $USER = "jqueryui";
 
 ## replace this
 # Your authorization token.
@@ -20,13 +20,17 @@ my $NUM = 3;
 my $MAX_RUNS = 5;
 
 # The directory in which the checkouts will occur.
-my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery";
+my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery-ui";
+
+# A script tag loading in the TestSwarm injection script will
+# be added at the bottom of the <head> in the following file.
 
 # The name of the job that will be submitted
 # (pick a descriptive, but short, name to make it easy to search)
+
 # Note: The string {REV} will be replaced with the current
 #       commit number/hash.
-my $JOB_NAME = "jQuery Commit <a href=\"http://github.com/jquery/jquery/commit/{FREV}\">#{REV}</a>";
+my $JOB_NAME = "jQuery UI Commit <a href=\"http://github.com/jquery/jquery-ui/commit/{FREV}\">#{REV}</a>";
 
 # The browsers you wish to run against. Options include:
 #  - "all" all available browsers.
@@ -37,7 +41,7 @@ my $JOB_NAME = "jQuery Commit <a href=\"http://github.com/jquery/jquery/commit/{
 #  - "mobile" the current releases of mobile browsers
 #  - "popularbeta" the most popular browser and their upcoming releases
 #  - "popularbetamobile" the most popular browser and their upcoming releases and mobile browsers
-my $BROWSERS = "popularbetamobile";
+my $BROWSERS = "popularbeta";
 
 # All the suites that you wish to run within this job
 # (can be any number of suites)
@@ -47,11 +51,13 @@ my %SUITES = ();
 
 # Comment these out if you wish to define a custom set of SUITES above
 ## REPLACE local
-my $SUITE = "http://swarm.jquery.org/git/jquery/{REV}";
+my $SUITE = "http://swarm.jquery.org/git/jquery-ui/{REV}";
 
 sub BUILD_SUITES {
-	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/index.html?$1"; }
-		grep { $_ !~ /ajax/; } glob("test/unit/*.js");
+	%SUITES = map { /(\w+).html$/; $1 => "$SUITE/$_?$1"; } glob("tests/unit/*/*.html");
+    
+    print "suites: $SUITES";
+    print %SUITES;
 }
 
 ########### NO NEED TO CONFIGURE BELOW HERE ############
