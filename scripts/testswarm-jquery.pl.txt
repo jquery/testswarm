@@ -25,8 +25,6 @@ my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery";
 # A script tag loading in the TestSwarm injection script will
 # be added at the bottom of the <head> in the following file.
 
-my $INJECT_FILE = "test/index.html";
-
 # The name of the job that will be submitted
 # (pick a descriptive, but short, name to make it easy to search)
 
