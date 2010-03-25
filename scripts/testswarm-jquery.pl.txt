@@ -1,56 +1,38 @@
-#!/usr/bin/env perl
-
-use strict;
-use warnings;
+#!/usr/bin/perl
 
 # CONFIGURE
 
 # The location of the TestSwarm that you're going to run against.
 
-my $SWARM = "http://testswarm.com";
-my $SWARM_INJECT = "/js/inject.js";
+my $SWARM = "http://swarm.jquery.org";
 
 # Your TestSwarm username.
-
 my $USER = "jquery";
 
+## replace this
 # Your authorization token.
-
 my $AUTH_TOKEN = "";
 
+# The number of commits to search back through
+my $NUM = 3;
+
 # The maximum number of times you want the tests to be run.
-
-my $MAX_RUNS = 1;
-
-# The type of revision control system being used.
-# Currently "svn" or "git" are supported.
-
-my $RCS_TYPE = "svn";
-
-# The URL from which a copy will be checked out.
-
-my $RCS_URL = "http://jqueryjs.googlecode.com/svn/trunk/jquery";
+my $MAX_RUNS = 5;
 
 # The directory in which the checkouts will occur.
-
-my $BASE_DIR = "/home/john/public_html/changeset";
+my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery";
 
 # A script tag loading in the TestSwarm injection script will
 # be added at the bottom of the <head> in the following file.
 
 my $INJECT_FILE = "test/index.html";
 
-# Any build commands that need to happen.
-
-my $BUILD = "make jquery";
-
 # The name of the job that will be submitted
 # (pick a descriptive, but short, name to make it easy to search)
 
 # Note: The string {REV} will be replaced with the current
 #       commit number/hash.
-
-my $JOB_NAME = "jQuery Commit #{REV}";
+my $JOB_NAME = "jQuery Commit <a href=\"http://github.com/jquery/jquery/commit/{FREV}\">#{REV}</a>";
 
 # The browsers you wish to run against. Options include:
 #  - "all" all available browsers.
@@ -58,146 +40,106 @@ my $JOB_NAME = "jQuery Commit #{REV}";
 #  - "current" the current release of all the major browsers
 #  - "gbs" the browsers currently supported in Yahoo's Graded Browser Support
 #  - "beta" upcoming alpha/beta of popular browsers
+#  - "mobile" the current releases of mobile browsers
 #  - "popularbeta" the most popular browser and their upcoming releases
-
-my $BROWSERS = "popularbeta";
+#  - "popularbetamobile" the most popular browser and their upcoming releases and mobile browsers
+my $BROWSERS = "popularbetamobile";
 
 # All the suites that you wish to run within this job
 # (can be any number of suites)
 
+## insert static suite list here
 my %SUITES = ();
 
 # Comment these out if you wish to define a custom set of SUITES above
-my $SUITE = "http://dev.jquery.com/~john/changeset/{REV}";
+## REPLACE local
+my $SUITE = "http://swarm.jquery.org/git/jquery/{REV}";
+
 sub BUILD_SUITES {
-	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/?$1%20module"; } glob("test/unit/*.js");
+	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/index.html?$1"; }
+		grep { $_ !~ /ajax/; } glob("test/unit/*.js");
 }
 
 ########### NO NEED TO CONFIGURE BELOW HERE ############
 
-my $DEBUG = 1;
-my $curdate = time;
-my $co_dir = "tmp-$curdate";
+my $DEBUG = 0;
+
+if ( ! -e $BASE_DIR ) {
+    die "Problem locating source.";
+}
 
 print "chdir $BASE_DIR\n" if ( $DEBUG );
 chdir( $BASE_DIR );
 
-# Check out a specific revision
-if ( $RCS_TYPE eq "svn" ) {
-	print "svn co $RCS_URL $co_dir\n" if ( $DEBUG );
-	`svn co $RCS_URL $co_dir`;
-} elsif ( $RCS_TYPE eq "git" ) {
-	print "git clone $RCS_URL $co_dir\n" if ( $DEBUG );
-	`git clone $RCS_URL $co_dir`;
-}
+print "git log -$NUM --reverse --pretty='format:%H'\n" if ( $DEBUG );
+my @revs = split(/\n/, `git log -$NUM --reverse --pretty='format:%H'`);
+my %done = map { $_ => 1 } split(/\n/, `cat $BASE_DIR/done.txt`);
 
-if ( ! -e $co_dir ) {
-	die "Problem checking out source.";
-}
+foreach my $frev ( @revs ) {
+	my $rev = $frev;
+	$rev =~ s/^(.{7}).*/$1/;
 
-print "chdir $co_dir\n" if ( $DEBUG );
-chdir( $co_dir );
+	if ( !exists $done{ $rev } ) {
+		print "New revision: $rev\n" if ( $DEBUG );
 
-my $rev;
+		if ( exists &BUILD_SUITES ) {
+			&BUILD_SUITES();
+		}
 
-# Figure out the revision of the checkout
-if ( $RCS_TYPE eq "svn" ) {
-	print "svn info | grep Revision\n" if ( $DEBUG );
-	$rev = `svn info | grep Revision`;
-	$rev =~ s/Revision: //;
-} elsif ( $RCS_TYPE eq "git" ) {
-    my $cmd = "git rev-parse --short HEAD";
-    print "$cmd\n" if ( $DEBUG );
-    $rev = `$cmd`;
-}
+		my %props = (
+			"state" => "addjob",
+			"output" => "dump",
+			"user" => $USER,
+			"max" => $MAX_RUNS,
+			"job_name" => $JOB_NAME,
+			"browsers" => $BROWSERS,
+			"auth" => $AUTH_TOKEN
+		);
 
-$rev =~ s/\s*//g;
+		my $query = "";
 
-print "Revision: $rev\n" if ( $DEBUG );
+		foreach my $prop ( keys %props ) {
+			$query .= ($query ? "&" : "") . $prop . "=" . clean($props{$prop}, $rev, $frev);
+		}
 
-if ( ! $rev ) {
-	remove_tmp();
-	die "Revision information not found.";
+		foreach my $suite ( sort keys %SUITES ) {
+			$query .= "&suites[]=" . clean($suite, $rev, $frev) .
+		          	"&urls[]=" . clean($SUITES{$suite}, $rev, $frev);
+		}
 
-} elsif ( ! -e "../$rev" ) {
-	print "chdir $BASE_DIR\n" if ( $DEBUG );
-	chdir( $BASE_DIR );
+		print "curl -d \"$query\" $SWARM\n" if ( $DEBUG );
 
-	print "rename $co_dir $rev\n" if ( $DEBUG );
-	rename( $co_dir, $rev );
+		my $results = `curl -d "$query" $SWARM`;
 
-	print "chdir $rev\n" if ( $DEBUG );
-	chdir ( $rev );
+		print "Results: $results\n" if ( $DEBUG );
 
-	if ( $BUILD ) {
-		print "$BUILD\n" if ( $DEBUG );
-		`$BUILD`;
-	}
+		if ( $results ) {
+			$done{ $rev } = 1;
 
-	if ( exists &BUILD_SUITES ) {
-		&BUILD_SUITES();
-	}
-
-	foreach my $file ( glob($INJECT_FILE) ) {
-		my $inject_file = `cat $file`;
-
-		# Inject the TestSwarm injection script into the test suite
-		$inject_file =~ s/<\/head>/<script>document.write("<scr" + "ipt src='$SWARM$SWARM_INJECT?" + (new Date).getTime() + "'><\/scr" + "ipt>");<\/script><\/head>/;
-
-		open( my $fh, '>', $file ) or die "$file : $!";
-		print $fh $inject_file;
-		close( $fh );
-	}
-
-	my %props = (
-		"state" => "addjob",
-		"output" => "dump",
-		"user" => $USER,
-		"max" => $MAX_RUNS,
-		"job_name" => $JOB_NAME,
-		"browsers" => $BROWSERS,
-		"auth" => $AUTH_TOKEN
-	);
-
-	my $query = "";
-
-	foreach my $prop ( keys %props ) {
-		$query .= ($query ? "&" : "") . $prop . "=" . clean($props{$prop});
-	}
-
-	foreach my $suite ( sort keys %SUITES ) {
-		$query .= "&suites[]=" . clean($suite) .
-		          "&urls[]=" . clean($SUITES{$suite});
-	}
-
-	print "curl -d \"$query\" $SWARM\n" if ( $DEBUG );
-
-	my $results = `curl -d "$query" $SWARM`;
-
-	print "Results: $results\n" if ( $DEBUG );
-
-	if ( $results ) {
-		open( my $fh, '>', "$rev/results.txt" ) or die "$rev/results.txt : $!";
-		print $fh "$SWARM$results";
-		close( $fh );
+		} else {
+			print "Job not submitted properly.\n";
+		}
 
 	} else {
-		die "Job not submitted properly.";
+		print "Old revision: $rev\n" if ( $DEBUG );
 	}
-
-# Otherwise, give up and clean up
-} else {
-	remove_tmp();
 }
 
-sub remove_tmp {
-	chdir( $BASE_DIR );
-	`rm -rf $co_dir`;
+print "Saving completed revisions.\n" if ( $DEBUG );
+
+open( DONE, ">$BASE_DIR/done.txt");
+foreach my $key ( keys %done ) {
+	print DONE "$key\n";
 }
+close( DONE );
 
 sub clean {
-  my $str = shift;
+	my $str = shift;
+	my $rev = shift;
+	my $frev = shift;
+
 	$str =~ s/{REV}/$rev/g;
+	$str =~ s/{FREV}/$frev/g;
 	$str =~ s/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg;
 	$str;
 }
