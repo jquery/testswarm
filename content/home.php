@@ -2,7 +2,8 @@
 <?php
   $found = 0;
 
-  loadBrowsers();
+  loadBrowsers("Desktop Browsers", 0);
+  loadBrowsers("Mobile Browsers", 1);
 
 if ( false ) {
 
@@ -37,14 +38,14 @@ echo "</table></div>";
 
 }
 
-function loadBrowsers() {
+function loadBrowsers($name, $mobile) {
   global $found, $browser, $version, $os;
 
-  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version) as found FROM useragents WHERE active=1 ORDER BY engine, name;", $browser, $version);
+  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version) as found FROM useragents WHERE active=1 AND mobile=%s ORDER BY engine, name;", $browser, $version, $mobile);
 
   $engine = "";
 
-  echo "<div class='browsers'><h3>Browsers</h3>";
+  echo "<div class='browsers'><h3>$name</h3>";
 
   while ( $row = mysql_fetch_array($result) ) {
     if ( $row[3] ) {
