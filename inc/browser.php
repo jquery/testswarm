@@ -20,10 +20,10 @@
 		$version = "8.0as7.0";
 	}
 
-	if ( strpos($lowerUA, "msie") > -1 ) {
-		$browser = "msie";
-	} else if ( strpos($lowerUA, "msie") > -1 && strpos($lowerUA, "windows phone") > -1 ) {
+	if ( strpos($lowerUA, "msie") > -1 && strpos($lowerUA, "windows phone") > -1 ) {
 		$browser = "winmo";
+	} else if ( strpos($lowerUA, "msie") > -1 ) {
+		$browser = "msie";
 	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
 		$browser = "konqueror";
 	} else if ( strpos($lowerUA, "chrome") > -1 ) {
@@ -70,6 +70,8 @@
 		$os = "webos";
 	} else if ( strpos($lowerUA, "android") > -1 ) {
 		$os = "android";
+	} else if ( strpos($lowerUA, "windows phone") > -1 ) {
+		$os = "winmo";
 	} else if ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_4") > -1 ) {
 		$os = "osx10.4";
 	} else if ( strpos($lowerUA, "os x 10.5") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
