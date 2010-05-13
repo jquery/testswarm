@@ -12,7 +12,7 @@
 		$version = $match[2];
 	}
 
-	if ( preg_match("/.+(webos|android|fennec|series60)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
+	if ( preg_match("/.+(webos|fennec|series60)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
 
@@ -28,7 +28,7 @@
 		$browser = "chrome";
 	} else if ( strpos($lowerUA, "webos") > -1 ) {
 		$browser = "webos";
-	} else if ( strpos($lowerUA, "android") > -1 ) {
+	} else if ( strpos($lowerUA, "android") > -1 && strpos($lowerUA, "mobile safari") > -1 ) {
 		$browser = "android";
 	} else if ( strpos($lowerUA, "series60") > -1 ) {
 		$browser = "s60";
