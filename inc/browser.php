@@ -22,6 +22,8 @@
 
 	if ( strpos($lowerUA, "msie") > -1 ) {
 		$browser = "msie";
+	} else if ( strpos($lowerUA, "msie") > -1 && strpos($lowerUA, "windows phone") > -1 ) {
+		$browser = "winmo";
 	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
 		$browser = "konqueror";
 	} else if ( strpos($lowerUA, "chrome") > -1 ) {

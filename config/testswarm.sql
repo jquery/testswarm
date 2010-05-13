@@ -125,6 +125,8 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('S60 5.0', 's60', '^5.0$', 1, 1, 0, 0, 0, 1),
 ('Opera Mobile 10.0', 'operamobile', '^2.4.18$', 1, 1, 0, 0, 0, 1),
 ('Fennec 1.1b1', 'fennec', '^1.1b1', 1, 0, 0, 0, 1, 1),
+('Windows Mobile 6.5', 'winmo', '^6.', 1, 0, 0, 0, 0, 1),
+('Windows Mobile 7', 'winmo', '^7.', 1, 1, 0, 0, 0, 1),
 ('Internet Explorer 6', 'msie', '^6.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 8', 'msie', '^8.', 1, 1, 1, 1, 0, 0),
