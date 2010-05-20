@@ -35,6 +35,11 @@ function getTests() {
 
 function runTests( data ) {
 	if (data && typeof data === "string") {
+		// handle session timeout, where server sends back 'Username required. ?user=USERNAME.'
+		if ( /^Username required/.test(data) ) {
+			cmds.reload();
+			return;
+		}
 		try {
 			data = eval("(" + data + ")")
 		} catch(e) {
