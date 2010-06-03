@@ -12,7 +12,7 @@
 		$version = $match[2];
 	}
 
-	if ( preg_match("/.*(webos|fennec|series60|blackberry[0-9]*)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
+	if ( preg_match("/.*(webos|fennec|series60|blackberry[0-9]*[a-z]*)[\/: ]([0-9a-z.]+)/", $lowerUA, $match) ) {
 		$version = $match[2];
 	}
 
