@@ -14,6 +14,7 @@ INSTALLATION
 2) Load the MySQL database.
 
    mysql DBNAME -u USER -p < testswarm.sql
+   mysql DBNAME -u USER -p < useragents.sql
 
 3) Copy the ./config/config-sample.ini to ./config.ini and change the options to correspond to your MySQL database information.
 
