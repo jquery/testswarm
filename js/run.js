@@ -36,7 +36,8 @@ function getTests() {
 function runTests( data ) {
 	if (data && typeof data === "string") {
 		// handle session timeout, where server sends back 'Username required. ?user=USERNAME.'
-		if ( /^Username required/.test(data) ) {
+		// handle TestSwarm reset, where server sends back 'Client doesn't exist.'
+		if ( /^Username required|^Client doesn/.test(data) ) {
 			cmds.reload();
 			return;
 		}
