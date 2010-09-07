@@ -65,6 +65,8 @@ function runTests( data ) {
 
 		var params = "run_id=" + run_id + "&client_id=" + client_id;
 		var iframe = document.createElement("iframe");
+		iframe.width = 1000;
+		iframe.height = 600;
 		iframe.className = "test";
 		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
 			"_=" + (new Date).getTime() + "&swarmURL=" +
