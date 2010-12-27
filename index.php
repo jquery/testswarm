@@ -43,7 +43,7 @@ if ( $title ) {
 <body>
 	<ul class="nav">
 		<?php if ( $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) { ?>
-		<li><strong><a href="/user/<?php echo $_SESSION['username'];?>/"><?php echo $_SESSION['username'];?></a></strong></li>
+		<li><strong><a href="<?php echo $contextpath; ?>/user/<?php echo $_SESSION['username'];?>/"><?php echo $_SESSION['username'];?></a></strong></li>
 		<li><a href="<?php echo $contextpath; ?>/run/<?php echo $_SESSION['username'];?>/">Join the Swarm</a></li>
 		<li><a href="<?php echo $contextpath; ?>/logout/">Logout</a></li>
 		<?php } else { ?>

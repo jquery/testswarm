@@ -58,7 +58,7 @@
 			}
 		}
 
-		$url = "/job/" . $job_id . "/";
+		$url = "$contextpath/job/$job_id/";
 
 		if ( $_REQUEST['output'] == "dump" ) {
 			echo $url;

@@ -4,7 +4,7 @@
 	$user = getItem('username', $_REQUEST, getItem('username', $_SESSION, ''));
 
 	if ( !getItem('user', $_REQUEST, false) && $user ) {
-		header("Location: /run/$user/");
+		header("Location: $contextpath/run/$user/");
 		exit;
 	}
 

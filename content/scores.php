@@ -9,7 +9,7 @@ while ( $row = mysql_fetch_array($result) ) {
         $user = $row[0];
         $total = $row[1];
 
-        echo "<tr><td class='num'>$num</td><td><a href='/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
+        echo "<tr><td class='num'>$num</td><td><a href='$contextpath/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
         $num++;
 }
 ?>
