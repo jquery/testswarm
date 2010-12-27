@@ -8,10 +8,10 @@
 		exit;
 	}
 
-    $sth = $pdo->prepare('SELECT name FROM clients, useragents WHERE clients.id=? AND useragents.id=useragent_id LIMIT 1;');
-    $sth->execute(array($client_id));
+	$sth = $pdo->prepare('SELECT name FROM clients, useragents WHERE clients.id=? AND useragents.id=useragent_id LIMIT 1;');
+	$sth->execute(array($client_id));
 
-    if ($row = $sth->fetch()) {
+	if ($row = $sth->fetch()) {
 		$useragent_name = $row[0];
 	}
 

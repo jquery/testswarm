@@ -13,8 +13,8 @@
 
 	if ( $username && $password ) {
 
-        $sth = $pdo->prepare('SELECT id FROM users WHERE name=? AND password=SHA1(CONCAT(seed, ?)) LIMIT 1;');
-        $sth->execute(array($username, $password));
+		$sth = $pdo->prepare('SELECT id FROM users WHERE name=? AND password=SHA1(CONCAT(seed, ?)) LIMIT 1;');
+		$sth->execute(array($username, $password));
 
 		if ($row = $sth->fetch()) {
 			$_SESSION['username'] = $username;

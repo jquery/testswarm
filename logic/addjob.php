@@ -6,8 +6,8 @@
 		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_REQUEST['user']);
 		$auth = preg_replace("/[^a-z0-9]/", "", $_REQUEST['auth']);
 
-        $sth = $pdo->prepare('SELECT id FROM users WHERE name=? AND auth=?;');
-        $sth->execute(array($username, $auth));
+		$sth = $pdo->prepare('SELECT id FROM users WHERE name=? AND auth=?;');
+		$sth->execute(array($username, $auth));
 
 		if ($row = $sth->fetch()) {
 			$user_id = intval($row[0]);
@@ -18,18 +18,18 @@
 			exit();
 		}
 
-        $job_sth = $pdo->prepare('INSERT INTO jobs (user_id,name,created) VALUES(?,?,NOW());');
-        $job_sth->execute(array($user_id, $_REQUEST['job_name']));
+		$job_sth = $pdo->prepare('INSERT INTO jobs (user_id,name,created) VALUES(?,?,NOW());');
+		$job_sth->execute(array($user_id, $_REQUEST['job_name']));
 
-        $job_id = $pdo->lastInsertId();
+		$job_id = $pdo->lastInsertId();
 
 		foreach ( $_REQUEST['suites'] as $suite_num => $suite_name ) {
 			if ( $suite_name ) {
 				#echo "$suite_num " . $_REQUEST['suites'][$suite_num] . " " . $_REQUEST['urls'][$suite_num] . "<br>";
 
-                $pdo->prepare('INSERT INTO runs (job_id,name,url,created) VALUES(?,?,?,NOW());')
-                    ->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num]));
-                $run_id = $pdo->lastInsertId();
+				$pdo->prepare('INSERT INTO runs (job_id,name,url,created) VALUES(?,?,?,NOW());')
+					->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num]));
+				$run_id = $pdo->lastInsertId();
 
 				$ua_type = "1 = 1";
 
@@ -49,18 +49,18 @@
 					$ua_type = "(popular = 1 OR beta = 1 OR mobile = 1)";
 				}
 
-                $sth = $pdo->query("SELECT id FROM useragents WHERE active = 1 AND $ua_type;");
+				$sth = $pdo->query("SELECT id FROM useragents WHERE active = 1 AND $ua_type;");
 
-                $pdo->beginTransaction();
+				$pdo->beginTransaction();
 
-                $insert_sth = $pdo->prepare('INSERT INTO run_useragent (run_id,useragent_id,max,created) VALUES(?,?,?,NOW());');
+				$insert_sth = $pdo->prepare('INSERT INTO run_useragent (run_id,useragent_id,max,created) VALUES(?,?,?,NOW());');
 
 				while ($row = $sth->fetch()) {
 					$browser_num = $row[0];
-                    $insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max']));
+					$insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max']));
 				}
 
-                $pdo->commit();
+				$pdo->commit();
 			}
 		}
 

@@ -7,11 +7,11 @@ $sth = $pdo->query('SELECT users.name, SUM(total) as alltotal FROM clients, run_
 $num = 1;
 
 while ($row = $sth->fetch()) {
-        $user = $row[0];
-        $total = $row[1];
+	$user = $row[0];
+	$total = $row[1];
 
-        echo "<tr><td class='num'>$num</td><td><a href='$contextpath/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
-        $num++;
+	echo "<tr><td class='num'>$num</td><td><a href='$contextpath/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
+	$num++;
 }
 ?>
 </table>
