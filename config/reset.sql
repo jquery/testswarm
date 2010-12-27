@@ -1,9 +1,9 @@
 -- Resets the entire database
-TRUNCATE clients;
-TRUNCATE jobs;
 TRUNCATE run_client;
+TRUNCATE clients;
 TRUNCATE run_useragent;
 TRUNCATE runs;
+TRUNCATE jobs;
 TRUNCATE users; -- Optional
 
 -- Resets just the results from clients
