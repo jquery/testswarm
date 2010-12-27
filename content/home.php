@@ -1,9 +1,9 @@
 <blockquote>Welcome to the TestSwarm Alpha! Please be aware that TestSwarm is still under heavy testing and during this alpha period data may be lost or corrupted and clients may be unexpectedly disconnected. More information about TestSwarm can be found <a href="http://wiki.github.com/jeresig/testswarm">on the TestSwarm wiki</a>.</blockquote>
 <?php
-  $found = 0;
+    $found = 0;
 
-  loadBrowsers("Desktop Browsers", 0);
-  loadBrowsers("Mobile Browsers", 1);
+    loadBrowsers("Desktop Browsers", 0);
+    loadBrowsers("Mobile Browsers", 1);
 
 if ( false ) {
 
@@ -39,36 +39,37 @@ echo "</table></div>";
 }
 
 function loadBrowsers($name, $mobile) {
-  global $found, $browser, $version, $os;
+    global $found, $browser, $version, $os, $pdo;
 
-  $result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=%s AND %s REGEXP version) as found FROM useragents WHERE active=1 AND mobile=%s ORDER BY engine, name;", $browser, $version, $mobile);
+    $sth = $pdo->prepare('SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > DATE_SUB(NOW(), INTERVAL 1 minute)) as clients, (engine=? AND ? REGEXP version) as found FROM useragents WHERE active=1 AND mobile=? ORDER BY engine, name');
+    $sth->execute(array($browser, $version, $mobile));
 
-  $engine = "";
+    $engine = "";
 
-  echo "<div class='browsers'><h3>$name</h3>";
+    echo "<div class='browsers'><h3>$name</h3>";
 
-  while ( $row = mysql_fetch_array($result) ) {
-    if ( $row[3] ) {
-      $found = 1;
-    }
+    while ($row = $sth->fetch()) {
+        if ( $row[3] ) {
+            $found = 1;
+        }
 
-    if ( $row[0] != $engine ) {
-      echo "<br style='clear:both;'/>";
-    }
-    # <?php echo $row[0] != $engine ? ' clear' : ''?
-    $num = preg_replace('/\w+ /', "", $row[1]);
-    ?>
-		<div class="browser<?php echo $row[0] != $engine ? ' clear' : '';?><?php echo $row[3] ? ' you' : '';?>">
-			<img src="<?php echo $GLOBALS['contextpath']; ?>/images/<?php echo $row[0]; ?>.sm.png" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
-			<span class="browser-name"><?php echo $num; ?></span>
-			<?php if ( intval($row[2]) > 0 ) {
-				echo "<span class='active'>", $row[2], "</span>";
-			}?>
-		</div>
-  <?php $engine = $row[0];
+        if ( $row[0] != $engine ) {
+            echo "<br style='clear:both;'/>";
+        }
+        # <?php echo $row[0] != $engine ? ' clear' : ''?
+        $num = preg_replace('/\w+ /', "", $row[1]);
+        ?>
+            <div class="browser<?php echo $row[0] != $engine ? ' clear' : '';?><?php echo $row[3] ? ' you' : '';?>">
+                 <img src="<?php echo $GLOBALS['contextpath']; ?>/images/<?php echo $row[0]; ?>.sm.png" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
+                 <span class="browser-name"><?php echo $num; ?></span>
+                                                                     <?php if ( intval($row[2]) > 0 ) {
+            echo "<span class='active'>", $row[2], "</span>";
+        }?>
+                                                                     </div>
+                                                                           <?php $engine = $row[0];
 	}
 
-  echo "</div>";
+    echo "</div>";
 }
 
 if ( $found ) { ?>

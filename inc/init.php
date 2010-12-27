@@ -30,15 +30,18 @@
 	$client_id = preg_replace("/[^0-9]/", "", getItem('client_id', $_REQUEST, ''));
 
 	if ( $client_id ) {
-		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u LIMIT 1;", $client_id);
+        $sth = $pdo->prepare('SELECT user_id, useragent_id FROM clients WHERE id=? LIMIT 1;');
+        $sth->execute(array($client_id));
+        $row = $sth->fetch();
 
-		if ( $row = mysql_fetch_array($result) ) {
+		if ($row) {
 			$user_id = $row[0];
 			$useragent_id = $row[1];
 
 			# If the client ID is already provided, update its record so
 			# that we know that it's still alive
-			mysql_queryf("UPDATE clients SET updated=NOW() WHERE id=%u LIMIT 1;", $client_id);
+            $sth = $pdo->prepare('UPDATE clients SET updated=NOW() WHERE id=? LIMIT 1;');
+            $sth->execute(array($client_id));
 
 		# TODO: Improve error message quality.
 		} else {
@@ -48,9 +51,10 @@
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf("SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version;", $browser, $version);
+        $sth = $pdo->prepare('SELECT id, name from useragents WHERE engine=? AND ? REGEXP version;');
+        $sth->execute(array($browser, $version));
 
-		if ( $row = mysql_fetch_array($result) ) {
+		if ($row = $sth->fetch()) {
 			$useragent_id = $row[0];
 			$useragent_name = $row[1];
 
@@ -62,18 +66,21 @@
 		}
 
 		# Figure out what the user's ID number is
-		$result = mysql_queryf("SELECT id FROM users WHERE name=%s;", $username);
+        $sth = $pdo->prepare('SELECT id FROM users WHERE name=?;');
+        $sth->execute(array($username));
 
-		if ( $row = mysql_fetch_array($result) ) {
+		if ($row = $sth->fetch()) {
 			$user_id = intval($row[0]);
 
 		# If the user doesn't have one, create a new user account
 		} else {
-			$result = mysql_queryf("INSERT INTO users (name,created,seed) VALUES(%s,NOW(),RAND());", $username);
-			$user_id = intval(mysql_insert_id());
+            $sth = $pdo->prepare('INSERT INTO users (name,created,seed) VALUES(?,NOW(),RAND());');
+            $sth->execute(array($username));
+			$user_id = intval($pdo->lastInsertId());
 		}
 
 		# Insert in a new record for the client and get its ID
-		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created) VALUES(%u,%u,%s,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $os, $ip);
-		$client_id = mysql_insert_id();
+        $sth = $pdo->prepare('INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created) VALUES(?,?,?,?,?,NOW());');
+        $sth->execute(array($user_id, $useragent_id, $useragent, $os, $ip));
+		$client_id = $pdo->lastInsertId();
 	}

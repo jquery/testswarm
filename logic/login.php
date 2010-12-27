@@ -13,9 +13,10 @@
 
 	if ( $username && $password ) {
 
-		$result = mysql_queryf("SELECT id FROM users WHERE name=%s AND password=SHA1(CONCAT(seed, %s)) LIMIT 1;", $username, $password);
+        $sth = $pdo->prepare('SELECT id FROM users WHERE name=? AND password=SHA1(CONCAT(seed, ?)) LIMIT 1;');
+        $sth->execute(array($username, $password));
 
-		if ( mysql_num_rows( $result ) > 0 ) {
+		if ($row = $sth->fetch()) {
 			$_SESSION['username'] = $username;
 			$_SESSION['auth'] = "yes";
 
