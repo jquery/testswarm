@@ -23,12 +23,12 @@
 		$pdo->beginTransaction();
 
 		# Mark the run as "in progress" on the useragent
-		$update_progress_sth = $pdo->prepare('UPDATE run_useragent SET runs = runs + 1, status = 1 WHERE run_id=? AND useragent_id=? LIMIT 1;');
-		$update_progress_sth->execute(array($run_id, $useragent_id));
+		$update_progress_sth = $pdo->prepare('UPDATE run_useragent SET runs=runs + 1, status=1, updated=? WHERE run_id=? AND useragent_id=?');
+		$update_progress_sth->execute(array(time(), $run_id, $useragent_id));
 
 		# Initialize the client run
-		$client_run_sth = $pdo->prepare('INSERT INTO run_client (run_id,client_id,status,created) VALUES(?,?,1,NOW());');
-		$client_run_sth->execute(array($run_id, $client_id));
+		$client_run_sth = $pdo->prepare('INSERT INTO run_client (run_id, client_id, status, created, updated) VALUES(?,?,1,?,?);');
+		$client_run_sth->execute(array($run_id, $client_id, sql_datetime_now(), time()));
 
 		$pdo->commit();
 

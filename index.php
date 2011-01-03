@@ -1,4 +1,6 @@
 <?php
+	date_default_timezone_set('UTC');
+
 	session_start();
 
 	$config = parse_ini_file("config.ini", true);

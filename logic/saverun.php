@@ -10,8 +10,8 @@
 	# Make sure we've received some results from the client
 	if ( $results ) {
 
-		$sth = $pdo->prepare('UPDATE run_client SET status=2, fail=?, error=?, total=?, results=? WHERE client_id=? AND run_id=? LIMIT 1;');
-		$sth->execute(array($fail, $error, $total, $results, $client_id, $run_id));
+		$sth = $pdo->prepare('UPDATE run_client SET status=2, fail=?, error=?, total=?, results=?, updated=? WHERE client_id=? AND run_id=?;');
+		$sth->execute(array($fail, $error, $total, $results, time(), $client_id, $run_id));
 
 		if ($sth->rowCount() > 0) {
 			# If we're 100% passing we don't need any more runs
@@ -28,8 +28,8 @@
 					$clearout_sth->execute(array($run_id, $row[0]));
 				}
 
-				$sth = $pdo->prepare('UPDATE run_useragent SET runs = max, completed = completed + 1, status = 2 WHERE useragent_id=? AND run_id=? LIMIT 1;');
-				$sth->execute(array($useragent_id, $run_id));
+				$sth = $pdo->prepare('UPDATE run_useragent SET runs=max, completed=completed + 1, status=2, updated=? WHERE useragent_id=? AND run_id=?;');
+				$sth->execute(array(time(), $useragent_id, $run_id));
 
 				$pdo->commit();
 			} else {
@@ -49,8 +49,8 @@
 					$pdo->commit();
 				}
 
-				$sth = $pdo->prepare('UPDATE run_useragent SET completed = completed + 1, status = IF(completed+1<max, 1, 2) WHERE useragent_id=? AND run_id=? LIMIT 1;');
-				$sth->execute(array($useragent_id, $run_id));
+				$sth = $pdo->prepare('UPDATE run_useragent SET completed=completed + 1, status=IF(completed+1<max, 1, 2), updated=? WHERE useragent_id=? AND run_id=?;');
+				$sth->execute(array(time(), $useragent_id, $run_id));
 			}
 		}
 	}

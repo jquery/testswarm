@@ -23,11 +23,11 @@
 				$delete_sth = $pdo->prepare('DELETE FROM jobs WHERE id=?;');
 				$delete_sth->execute(array($job_id));
 			} else {
-				$update_sth = $pdo->prepare('UPDATE jobs SET status=0, updated=NOW() WHERE id=?;');
-				$update_sth->execute(array($job_id));
+				$update_sth = $pdo->prepare('UPDATE jobs SET status=0, updated=? WHERE id=?;');
+				$update_sth->execute(array(time(), $job_id));
 
-				$update_sth = $pdo->prepare('UPDATE runs SET status=0, updated=NOW() WHERE job_id=?;');
-				$update_sth->execute(array($job_id));
+				$update_sth = $pdo->prepare('UPDATE runs SET status=0, updated=? WHERE job_id=?;');
+				$update_sth->execute(array(time(), $job_id));
 			}
 
 
@@ -41,8 +41,8 @@
 					$delete_sth = $pdo->prepare('DELETE FROM run_useragent WHERE run_id=?;');
 					$delete_sth->execute(array($run_id));
 				} else {
-					$update_sth = $pdo->prepare('UPDATE run_useragent SET runs=0, completed=0, status=0, updated=NOW() WHERE run_id=?;');
-					$update_sth->execute(array($run_id));
+					$update_sth = $pdo->prepare('UPDATE run_useragent SET runs=0, completed=0, status=0, updated=? WHERE run_id=?;');
+					$update_sth->execute(array(time(), $run_id));
 				}
 			}
 

@@ -19,16 +19,16 @@
 
 		# If the user doesn't have one, create a new user account
 		} else {
-			$sth = $pdo->prepare('INSERT INTO users (name,created,seed) VALUES(?,NOW(),RAND());');
-			$sth->execute(array($username));
+			$sth = $pdo->prepare('INSERT INTO users (name, created, updated, seed) VALUES(?,?,?,?);');
+			$sth->execute(array($username, sql_datetime_now(), time(), mt_rand()));
 			$user_id = $pdo->lastInsertId();
 		}
 
 		if ( $has_pass ) {
-			$error = "<p>Error: Account is already created. Please <a href='/login/'>login</a> instead.</p>";
+			$error = "<p>Error: Account is already created. Please <a href='$contextpath/login/'>login</a> instead.</p>";
 		} else {
-			$sth = $pdo->prepare('UPDATE users SET updated=NOW(), password=SHA1(CONCAT(seed, ?)), email=?, request=?, auth=SHA1(RAND()) WHERE id=? LIMIT 1;');
-			$sth->execute(array($password, $email, $request, $user_id));
+			$sth = $pdo->prepare('UPDATE users SET updated=?, password=SHA1(CONCAT(seed, ?)), email=?, request=?, auth=SHA1(?), updated=? WHERE id=?');
+			$sth->execute(array(time(), $password, $email, $request, mt_rand(), time(), $user_id));
 
 			$_SESSION['username'] = $username;
 			$_SESSION['auth'] = "yes";

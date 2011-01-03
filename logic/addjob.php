@@ -18,8 +18,8 @@
 			exit();
 		}
 
-		$job_sth = $pdo->prepare('INSERT INTO jobs (user_id,name,created) VALUES(?,?,NOW());');
-		$job_sth->execute(array($user_id, $_REQUEST['job_name']));
+		$job_sth = $pdo->prepare('INSERT INTO jobs (user_id, name, created, updated) VALUES(?,?,?,?);');
+		$job_sth->execute(array($user_id, $_REQUEST['job_name'], sql_datetime_now(), time()));
 
 		$job_id = $pdo->lastInsertId();
 
@@ -27,8 +27,8 @@
 			if ( $suite_name ) {
 				#echo "$suite_num " . $_REQUEST['suites'][$suite_num] . " " . $_REQUEST['urls'][$suite_num] . "<br>";
 
-				$pdo->prepare('INSERT INTO runs (job_id,name,url,created) VALUES(?,?,?,NOW());')
-					->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num]));
+				$pdo->prepare('INSERT INTO runs (job_id, name, url, created, updated) VALUES(?,?,?,?,?);')
+					->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num], sql_datetime_now(), time()));
 				$run_id = $pdo->lastInsertId();
 
 				$ua_type = "1 = 1";
@@ -53,11 +53,11 @@
 
 				$pdo->beginTransaction();
 
-				$insert_sth = $pdo->prepare('INSERT INTO run_useragent (run_id,useragent_id,max,created) VALUES(?,?,?,NOW());');
+				$insert_sth = $pdo->prepare('INSERT INTO run_useragent (run_id, useragent_id, max, created, updated) VALUES(?,?,?,?,?);');
 
 				while ($row = $sth->fetch()) {
 					$browser_num = $row[0];
-					$insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max']));
+					$insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max'], sql_datetime_now(), time()));
 				}
 
 				$pdo->commit();

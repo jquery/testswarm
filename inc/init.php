@@ -40,8 +40,8 @@
 
 			# If the client ID is already provided, update its record so
 			# that we know that it's still alive
-			$sth = $pdo->prepare('UPDATE clients SET updated=NOW() WHERE id=? LIMIT 1;');
-			$sth->execute(array($client_id));
+			$sth = $pdo->prepare('UPDATE clients SET updated=? WHERE id=?');
+			$sth->execute(array(time(), $client_id));
 
 		# TODO: Improve error message quality.
 		} else {
@@ -74,13 +74,13 @@
 
 		# If the user doesn't have one, create a new user account
 		} else {
-			$sth = $pdo->prepare('INSERT INTO users (name,created,seed) VALUES(?,NOW(),RAND());');
-			$sth->execute(array($username));
+			$sth = $pdo->prepare('INSERT INTO users (name, created, updated, seed) VALUES(?,?,?,?);');
+			$sth->execute(array($username, sql_datetime_now(), time(), mt_rand()));
 			$user_id = intval($pdo->lastInsertId());
 		}
 
 		# Insert in a new record for the client and get its ID
-		$sth = $pdo->prepare('INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created) VALUES(?,?,?,?,?,NOW());');
-		$sth->execute(array($user_id, $useragent_id, $useragent, $os, $ip));
+		$sth = $pdo->prepare('INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created, updated) VALUES(?,?,?,?,?,?,?);');
+		$sth->execute(array($user_id, $useragent_id, $useragent, $os, $ip, sql_datetime_now(), time()));
 		$client_id = $pdo->lastInsertId();
 	}

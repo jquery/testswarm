@@ -24,8 +24,15 @@
 		}
 	}
 
-	$sth = $pdo->prepare("SELECT useragents.engine as engine, useragents.name as name, clients.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name=? ORDER BY useragents.engine, useragents.name;");
-	$sth->execute(array($search_user));
+	$updated_interval_sql;
+	if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
+	    $updated_interval_sql = "STRFTIME('%s', DATETIME(clients.updated, 'unixepoch', '+1 minutes'))";
+	} else {
+	    $updated_interval_sql = 'AND DATE_ADD(clients.updated, INTERVAL 1 minute)';
+	}
+
+	$sth = $pdo->prepare("SELECT useragents.engine as engine, useragents.name as name, clients.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND $updated_interval_sql > ? AND clients.user_id=users.id AND users.name=? ORDER BY useragents.engine, useragents.name;");
+	$sth->execute(array(time(), $search_user));
 	$result = $sth->fetchAll();
 
 	if (count($result) > 0) {
