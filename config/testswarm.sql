@@ -1,6 +1,6 @@
--- 
+--
 -- Table structure for table `clients`
--- 
+--
 
 CREATE TABLE `clients` (
   `id` int(11) NOT NULL auto_increment,
@@ -9,32 +9,32 @@ CREATE TABLE `clients` (
   `os` varchar(10) NOT NULL default 'xp',
   `useragent` tinytext NOT NULL,
   `ip` varchar(15) NOT NULL default '',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `jobs`
--- 
+--
 
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `run_client`
--- 
+--
 
 CREATE TABLE `run_client` (
   `run_id` int(11) NOT NULL default '0',
@@ -44,16 +44,16 @@ CREATE TABLE `run_client` (
   `error` int(11) NOT NULL default '0',
   `total` int(11) NOT NULL default '0',
   `results` text NOT NULL,
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `run_useragent`
--- 
+--
 
 CREATE TABLE `run_useragent` (
   `run_id` int(11) NOT NULL default '0',
@@ -62,16 +62,16 @@ CREATE TABLE `run_useragent` (
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`run_id`,`useragent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `runs`
--- 
+--
 
 CREATE TABLE `runs` (
   `id` int(11) NOT NULL auto_increment,
@@ -79,16 +79,16 @@ CREATE TABLE `runs` (
   `name` varchar(255) NOT NULL default '',
   `url` tinytext NOT NULL,
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `useragents`
--- 
+--
 
 CREATE TABLE `useragents` (
   `id` int(11) NOT NULL auto_increment,
@@ -106,14 +106,14 @@ CREATE TABLE `useragents` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `users`
--- 
+--
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `seed` double NOT NULL default '0',
   `password` varchar(40) NOT NULL default '',

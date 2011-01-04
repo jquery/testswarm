@@ -11,6 +11,10 @@
 		return implode('', func_get_args());
 	}
 
+	/**
+	 * Not the greatest in MySQL Backwards compatibility, but it gets the job
+	 * done because it's never used to extremes
+	 */
 	function sqlite_date_format($dt, $fmt) {
 		return $dt;
 	}

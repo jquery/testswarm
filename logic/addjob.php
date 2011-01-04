@@ -19,7 +19,8 @@
 		}
 
 		$job_sth = $pdo->prepare('INSERT INTO jobs (user_id, name, created, updated) VALUES(?,?,?,?);');
-		$job_sth->execute(array($user_id, $_REQUEST['job_name'], sql_datetime_now(), time()));
+		$now = sql_datetime_now();
+		$job_sth->execute(array($user_id, $_REQUEST['job_name'], $now, $now));
 
 		$job_id = $pdo->lastInsertId();
 
@@ -27,8 +28,9 @@
 			if ( $suite_name ) {
 				#echo "$suite_num " . $_REQUEST['suites'][$suite_num] . " " . $_REQUEST['urls'][$suite_num] . "<br>";
 
+				$now = sql_datetime_now();
 				$pdo->prepare('INSERT INTO runs (job_id, name, url, created, updated) VALUES(?,?,?,?,?);')
-					->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num], sql_datetime_now(), time()));
+					->execute(array($job_id, $suite_name, $_REQUEST['urls'][$suite_num], $now, $now));
 				$run_id = $pdo->lastInsertId();
 
 				$ua_type = "1 = 1";
@@ -57,7 +59,8 @@
 
 				while ($row = $sth->fetch()) {
 					$browser_num = $row[0];
-					$insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max'], sql_datetime_now(), time()));
+					$now = sql_datetime_now();
+					$insert_sth->execute(array($run_id, $browser_num, $_REQUEST['max'], $now, $now));
 				}
 
 				$pdo->commit();

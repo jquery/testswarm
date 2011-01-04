@@ -44,7 +44,7 @@ function loadBrowsers($name, $mobile) {
 	$updated_interval = new DateTime('now');
 	$updated_interval->sub(new DateInterval('PT1M'));
 
-	$sth = $pdo->prepare("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > ?) as clients, (engine=? AND ? REGEXP version) as found FROM useragents WHERE active=1 AND mobile=? ORDER BY engine, name");
+	$sth = $pdo->prepare("SELECT useragents.engine as engine, useragents.name as name, (SELECT COUNT(*) FROM clients WHERE useragent_id=useragents.id AND updated > ?) as clients, (engine=? AND ? REGEXP version) as found FROM useragents WHERE active=1 AND mobile=? ORDER BY engine, name;");
 	$sth->execute(array($updated_interval->format('Y-m-d H:i:s'), $browser, $version, $mobile));
 
 	$engine = "";

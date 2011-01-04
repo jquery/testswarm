@@ -22,10 +22,10 @@
 				$sth->execute(array($run_id, $useragent_id));
 
 				$sth = $pdo->prepare('UPDATE run_useragent SET status=0, runs=0, completed=0, updated=? WHERE run_id=? AND useragent_id=?;');
-				$sth->execute(array(time(), $run_id, $useragent_id));
+				$sth->execute(array(sql_datetime_now(), $run_id, $useragent_id));
 
 				$sth = $pdo->prepare('UPDATE runs SET status=1, updated=? WHERE run_id=?;');
-				$sth->execute(array(time(), $run_id));
+				$sth->execute(array(sql_datetime_now(), $run_id));
 
 				$pdo->commit();
 			}

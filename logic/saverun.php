@@ -11,7 +11,7 @@
 	if ( $results ) {
 
 		$sth = $pdo->prepare('UPDATE run_client SET status=2, fail=?, error=?, total=?, results=?, updated=? WHERE client_id=? AND run_id=?;');
-		$sth->execute(array($fail, $error, $total, $results, time(), $client_id, $run_id));
+		$sth->execute(array($fail, $error, $total, $results, sql_datetime_now(), $client_id, $run_id));
 
 		if ($sth->rowCount() > 0) {
 			# If we're 100% passing we don't need any more runs
@@ -29,7 +29,7 @@
 				}
 
 				$sth = $pdo->prepare('UPDATE run_useragent SET runs=max, completed=completed + 1, status=2, updated=? WHERE useragent_id=? AND run_id=?;');
-				$sth->execute(array(time(), $useragent_id, $run_id));
+				$sth->execute(array(sql_datetime_now(), $useragent_id, $run_id));
 
 				$pdo->commit();
 			} else {
@@ -50,7 +50,7 @@
 				}
 
 				$sth = $pdo->prepare('UPDATE run_useragent SET completed=completed + 1, status=IF(completed+1<max, 1, 2), updated=? WHERE useragent_id=? AND run_id=?;');
-				$sth->execute(array(time(), $useragent_id, $run_id));
+				$sth->execute(array(sql_datetime_now(), $useragent_id, $run_id));
 			}
 		}
 	}
