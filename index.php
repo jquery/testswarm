@@ -35,7 +35,7 @@ if ( $title ) {
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Test Swarm: <?php echo $title; ?></title>
 	<link rel="stylesheet" href="<?php echo $contextpath; ?>/css/site.css"/>
 	<?php echo isset($scripts) ? $scripts : ''; ?>
