@@ -38,4 +38,3 @@
 	}
 	echo "<script>window.top.done();</script>";
 	exit();
-?>

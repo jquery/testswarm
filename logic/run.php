@@ -23,4 +23,3 @@
 
 	$scripts .= '<script type="text/javascript" src="' . $GLOBALS['contextpath'] . '/js/jquery.js"></script>' .
 						  '<script type="text/javascript" src="' . $GLOBALS['contextpath'] . '/js/run.js?' . time() . '"></script>';
-?>
