@@ -50,7 +50,7 @@ my %SUITES = ();
 my $SUITE = "http://swarm.jquery.org/git/jquery/{REV}";
 
 sub BUILD_SUITES {
-	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/index.html?$1"; }
+	%SUITES = map { /(\w+).js$/; $1 => "$SUITE/test/index.html?filter=$1"; }
 		grep { $_ !~ /ajax/; } glob("test/unit/*.js");
 }
 
