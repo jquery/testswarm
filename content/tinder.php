@@ -24,7 +24,7 @@
 		}
 	}
 
-	$result = mysql_query("SELECT useragents.engine as engine, useragents.name as name, clients.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name='$search_user' ORDER BY useragents.engine, useragents.name;");
+	$result = mysql_queryf("SELECT useragents.engine as engine, useragents.name as name, clients.os as os, DATE_FORMAT(clients.created, '%Y-%m-%dT%H:%i:%sZ') as since FROM users, clients, useragents WHERE clients.useragent_id=useragents.id AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW() AND clients.user_id=users.id AND users.name=%s ORDER BY useragents.engine, useragents.name;", $search_user);
 
 	if ( mysql_num_rows($result) > 0 ) {
 
@@ -77,6 +77,7 @@
 	$output = "";
 	$browsers = array();
 	$addBrowser = true;
+	$last = "";
 
 	while ( $row = mysql_fetch_array($search_result) ) {
 		$job_name = $row[0];
@@ -89,8 +90,6 @@
 		$states = array();
 
 	$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents WHERE runs.job_id=%u AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
-
-	$last = "";
 
 	while ( $row = mysql_fetch_assoc($result) ) {
 		if ( $row["run_id"] != $last ) {
@@ -174,6 +173,7 @@
 
 		$last = $row["run_id"];
 	}
+	
 
 	foreach ( $results as $key => $fail ) {
 		$output .= "<td class='" . $states[$key] . "'></td>";
@@ -184,6 +184,7 @@
 	}
 
 	echo "$output</tr>\n</tbody>\n</table>";
+	echo $browsers;
 
 	}
 ?>

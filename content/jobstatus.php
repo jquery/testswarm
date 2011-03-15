@@ -59,31 +59,6 @@
 
 	while ( $row = mysql_fetch_assoc($result) ) {
 		if ( $row["run_id"] != $last ) {
-			if ( $last ) {
-				if ( $addBrowser ) {
-					$header = "<tr><th></th>\n";
-					$last_browser = array();
-					foreach ( $browsers as $browser ) {
-						if ( $last_browser["id"] != $browser["id"] ) {
-							$header .= '<th><div class="browser">' .
-								'<img src="' . $GLOBALS['contextpath'] . '/images/' . $browser["engine"] .
-								'.sm.png" class="browser-icon ' . $browser["engine"] .
-								'" alt="' . $browser["name"] .
-								'" title="' . $browser["name"] .
-								'"/><span class="browser-name">' .
-								preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
-								'</span></div></th>';
-						}
-						$last_browser = $browser;
-					}
-					$header .= "</tr>\n";
-					$output = $header . $output;
-				}
-
-				$output .= "</tr>\n";
-				$addBrowser = false;
-			}
-
 			$useragents = array();
 
 			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id FROM run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id ORDER BY useragent_id;", $row["run_id"]);
@@ -135,6 +110,31 @@
 		#echo "</ul></li>";
 
 		$last = $row["run_id"];
+	}
+
+	if ( $last ) {
+		if ( $addBrowser ) {
+			$header = "<tr><th></th>\n";
+			$last_browser = array();
+			foreach ( $browsers as $browser ) {
+				if ( $last_browser["id"] != $browser["id"] ) {
+					$header .= '<th><div class="browser">' .
+						'<img src="' . $GLOBALS['contextpath'] . '/images/' . $browser["engine"] .
+						'.sm.png" class="browser-icon ' . $browser["engine"] .
+						'" alt="' . $browser["name"] .
+						'" title="' . $browser["name"] .
+						'"/><span class="browser-name">' .
+						preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
+						'</span></div></th>';
+				}
+				$last_browser = $browser;
+			}
+			$header .= "</tr>\n";
+			$output = $header . $output;
+		}
+
+		$output .= "</tr>\n";
+		$addBrowser = false;
 	}
 
 	echo "$output</tr>\n</tbody>\n</table>";
