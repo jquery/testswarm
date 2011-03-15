@@ -6,7 +6,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 
 ('Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 1, 0, 0, 1, 0, 0),
 ('Firefox 3.6', 'gecko', '^1.9.2[0-9.]*$', 1, 0, 1, 1, 0, 0),
-('Firefox 4.0', 'gecko', '^2.0.', 1, 1, 1, 1, 0, 0),
+('Firefox 4.0', 'gecko', '^2.0.?', 1, 1, 1, 1, 0, 0),
 
 ('Internet Explorer 6', 'msie', '^6.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
