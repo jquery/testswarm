@@ -1,4 +1,4 @@
-<blockquote>Welcome to the TestSwarm Alpha! Please be aware that TestSwarm is still under heavy testing and during this alpha period data may be lost or corrupted and clients may be unexpectedly disconnected. More information about TestSwarm can be found <a href="http://wiki.github.com/jeresig/testswarm">on the TestSwarm wiki</a>.</blockquote>
+<blockquote>Welcome to the TestSwarm Alpha! Please be aware that TestSwarm is still under heavy testing and during this alpha period data may be lost or corrupted and clients may be unexpectedly disconnected. More information about TestSwarm can be found <a href="http://wiki.github.com/jquery/testswarm">on the TestSwarm wiki</a>.</blockquote>
 <?php
   $found = 0;
 

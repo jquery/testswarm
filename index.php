@@ -50,11 +50,11 @@ if ( $title ) {
 		<li><a href="<?php echo $contextpath; ?>/login/">Login</a></li>
 		<li><a href="<?php echo $contextpath; ?>/signup/">Signup</a></li>
 		<?php } ?>
-		<li><a href="http://github.com/jeresig/testswarm">Source Code</a></li>
-		<li><a href="http://github.com/jeresig/testswarm/issues">Bug Tracker</a></li>
+		<li><a href="http://github.com/jquery/testswarm">Source Code</a></li>
+		<li><a href="http://github.com/jquery/testswarm/issues">Bug Tracker</a></li>
 		<li><a href="http://groups.google.com/group/testswarm">Discuss</a></li>
 		<li><a href="http://twitter.com/testswarm">Updates</a></li>
-		<li><a href="http://wiki.github.com/jeresig/testswarm">About</a></li>
+		<li><a href="http://wiki.github.com/jquery/testswarm">About</a></li>
 	</ul>
 	<h1><a href="<?php echo $contextpath; ?>/"><img src="<?php echo $contextpath; ?>/images/testswarm_logo_wordmark.png" alt="TestSwarm" title="TestSwarm"/></a></h1>
 	<h2><?php echo  $title; ?></h2>
