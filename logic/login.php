@@ -20,7 +20,7 @@
 			$_SESSION['auth'] = "yes";
 
 			session_write_close();
-			header("Location: " . $GLOBALS['contextpath'] . "/user/$username/");
+			header("Location: " . swarmpath( "user/$username/" ) );
 			exit();
 		} else {
 			$error = "<p>Error: Incorrect username or password.</p>";
