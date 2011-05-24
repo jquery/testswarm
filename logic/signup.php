@@ -23,7 +23,7 @@
 		}
 
 		if ( $has_pass ) {
-			$error = "<p>Error: Account is already created. Please <a href='/login/'>login</a> instead.</p>";
+			$error = "<p>Error: Account is already created. Please <a href='" . swarmpath( "login/" ) . "'>login</a> instead.</p>";
 		} else {
 			mysql_queryf("UPDATE users SET updated=NOW(), password=SHA1(CONCAT(seed, %s)), email=%s, request=%s, auth=SHA1(RAND()) WHERE id=%u LIMIT 1;", $password, $email, $request, $user_id);
 
