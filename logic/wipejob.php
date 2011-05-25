@@ -31,9 +31,9 @@
 		}
 
 		if ( $type == "delete" ) {
-			header("Location: /user/" . $_SESSION['username'] . "/");
+			header("Location: " . swarmpath( "user/{$_SESSION['username']}/" ) );
 		} else {
-			header("Location: /job/$job_id/");
+		header("Location: " . swarmpath( "job/{$job_id}/" ) );
 		}
 	}
 

@@ -1,19 +1,4 @@
 <?php
-	/**
-	 * Get item out of array, falling back on a default if need be.
-	 * Complains loudly on failing.
-	 */
-	function getItem($key, $array, $default=null) {
-		if (array_key_exists($key, $array)) {
-			return $array[$key];
-		} else {
-			if (func_num_args() === 3) {
-				return $default;
-			} else {
-				throw Exception('Unable to find key '.$key.' in the array '.var_dump($array, true));
-			}
-		}
-	}
 	$username = getItem('username', $_SESSION, getItem('user', $_REQUEST, ''));
 	if ( !$username ) {
 		$username = $_REQUEST['user'];

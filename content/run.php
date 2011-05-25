@@ -1,6 +1,6 @@
 <div class="userinfo">
 <div class="browser you">
-	<img src="<?php echo $GLOBALS['contextpath']; ?>/images/<?php echo $browser; ?>.sm.png" class="browser-icon <?php echo $browser; ?>" alt="<?php echo $useragent_name; ?>" title="<?php echo $useragent_name; ?>"/>
+	<img src="<?php echo swarmpath( "images/{$browser}.sm.png" ); ?>" class="browser-icon <?php echo $browser; ?>" alt="<?php echo $useragent_name; ?>" title="<?php echo $useragent_name; ?>"/>
 	<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $useragent_name); ?></span>
 </div> 
 

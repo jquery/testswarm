@@ -60,4 +60,34 @@
 		}
 		return $result;
 	}
+
+	/**
+	 * Get item out of array, falling back on a default if need be.
+	 * Complains loudly on failing.
+	 */
+	function getItem($key, $array, $default=null) {
+		if (array_key_exists($key, $array)) {
+			return $array[$key];
+		} else {
+			if (func_num_args() === 3) {
+				return $default;
+			} else {
+				die('<b>getItem Error:</b> Unable to find key <b>'.$key.'</b> in the array '.print_r($array, true));
+			}
+		}
+	}
+
+	/*
+	 * Central function to get paths to files and directories
+	 * config "contextpath" should have trailing slash!
+	 * @param $rel string Relative path from the root, without prefixed slash
+	 * @return string Relative path from the domain root to the specified file or directory
+	 */
+	function swarmpath( $rel ) {
+		global $config;
+		if ( $rel[0] == '/' ) {
+			$rel = substr($rel, 1);
+		}
+		return $config['web']['contextpath'] . $rel;
+	}
 ?>

@@ -1,4 +1,4 @@
-<form action="/" method="POST">
+<form action="" method="POST">
 <input type="hidden" name="client_id" value="<?php echo $client_id; ?>"/>
 <input type="hidden" name="state" value="addjob"/>
 <fieldset>

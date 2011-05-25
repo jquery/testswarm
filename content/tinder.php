@@ -58,14 +58,14 @@
 			$name = "Linux";
 		}
 
-		echo "<li><img src='" . $GLOBALS['contextpath'] . "/images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
+		echo "<li><img src='" . swarmpath( '/' ) . "images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
 	}
 
 	echo "</ul>";
 
 	}
 
-	$job_search = preg_replace("/[^a-zA-Z ]/", "", $_REQUEST['job']);
+	$job_search = preg_replace("/[^a-zA-Z ]/", "", getItem( 'job', $_REQUEST, '' ) );
 	$job_search .= "%";
 
 	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY jobs.created DESC LIMIT 15;", $job_search, $search_user);
@@ -83,7 +83,7 @@
 		$job_status = get_status(intval($row[1]));
 		$job_id = $row[2];
 
-		$output .= '<tr><th><a href="' . $GLOBALS['contextpath'] . '/job/' . $job_id . '/">' . strip_tags($job_name) . "</a></th>\n";
+		$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}/" ) . '">' . strip_tags($job_name) . "</a></th>\n";
 
 		$results = array();
 		$states = array();
@@ -101,7 +101,7 @@
 					foreach ( $browsers as $browser ) {
 						if ( $last_browser["id"] != $browser["id"] ) {
 							$header .= '<th><div class="browser">' .
-								'<img src="' . $GLOBALS['contextpath'] . '/images/' . $browser["engine"] .
+								'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
 								'.sm.png" class="browser-icon ' . $browser["engine"] .
 								'" alt="' . $browser["name"] .
 								'" title="' . $browser["name"] .

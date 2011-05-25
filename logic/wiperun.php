@@ -20,7 +20,7 @@
 			}
 		}
 
-		header("Location: /job/$job_id/");
+		header("Location: " . swarmpath( "job/{$job_id}/" ) );
 	}
 
 	exit();

@@ -3,8 +3,8 @@
 
 	if ( $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) {
 		$username = $_SESSION['username'];
-		header("Location: /user/$username/");
-		exit(); 
+		header("Location: " . swarmpath( "user/$username/" ) );
+		exit();
 	}
 
 	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST['username']);
@@ -20,7 +20,7 @@
 			$_SESSION['auth'] = "yes";
 
 			session_write_close();
-			header("Location: " . $GLOBALS['contextpath'] . "/user/$username/");
+			header("Location: " . swarmpath( "user/$username/" ) );
 			exit();
 		} else {
 			$error = "<p>Error: Incorrect username or password.</p>";

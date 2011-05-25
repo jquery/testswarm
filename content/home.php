@@ -17,11 +17,11 @@ while ( $row = mysql_fetch_array($result) ) {
 	$user = $row[0];
 	$total = $row[1];
 
-	echo "<tr><td class='num'>$num</td><td><a href='" . $GLOBALS['contextpath'] . "/user/$user/'>$user</a></td><td class='num'>$total</td></tr>";
+	echo "<tr><td class='num'>$num</td><td><a href='" . swarmpath( "user/$user/" ) . "'>$user</a></td><td class='num'>$total</td></tr>";
 	$num++;
 }
 
-echo "</table><p class='right'><a href='" . $GLOBALS['contextpath'] . "/scores/'>All Scores...</a></p><h3>Rarest Browsers</h3><table class='scores'>";
+echo "</table><p class='right'><a href='" . swarmpath( 'scores/' ) . "'>All Scores...</a></p><h3>Rarest Browsers</h3><table class='scores'>";
 
 $result = mysql_queryf("SELECT name, SUM(runs) as allruns FROM run_useragent, useragents WHERE run_useragent.useragent_id=useragents.id GROUP BY name ORDER BY allruns LIMIT 10;");
 
@@ -59,7 +59,7 @@ function loadBrowsers($name, $mobile) {
     $num = preg_replace('/\w+ /', "", $row[1]);
     ?>
 		<div class="browser<?php echo $row[0] != $engine ? ' clear' : '';?><?php echo $row[3] ? ' you' : '';?>">
-			<img src="<?php echo $GLOBALS['contextpath']; ?>/images/<?php echo $row[0]; ?>.sm.png" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
+			<img src="<?php echo swarmpath( "images/{$row[0]}.sm.png" ); ?>" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
 			<span class="browser-name"><?php echo $num; ?></span>
 			<?php if ( intval($row[2]) > 0 ) {
 				echo "<span class='active'>", $row[2], "</span>";
@@ -82,7 +82,7 @@ if ( $found ) { ?>
 	<input type="submit" value="Join the Swarm"/>
 </form>
 <?php } else { ?>
-<br/><p><strong>&raquo; <?php echo $_SESSION['username']; ?></strong> <a href="<?php echo $GLOBALS['contextpath']; ?>/run/<?php echo $_SESSION['username']; ?>/">Start Running Tests</a></p>
+<br/><p><strong>&raquo; <?php echo $_SESSION['username']; ?></strong> <a href="<?php echo swarmpath("run/{$_SESSION['username']}/" ); ?>">Start Running Tests</a></p>
 <?php } ?>
 <?php } else { ?>
 <div class="join">

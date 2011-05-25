@@ -39,7 +39,7 @@
 <h3><?php echo $job_name; ?></h3>
 
 <?php if ( $owner && $_SESSION['auth'] == 'yes' ) { ?>
-<form action="/" method="POST">
+<form action="" method="POST">
 	<input type="hidden" name="state" value="wipejob"/>
 	<input type="hidden" name="job_id" value="<?php echo $job_id; ?>"/>
 	<input type="submit" name="type" value="delete"/>
@@ -66,7 +66,7 @@
 					foreach ( $browsers as $browser ) {
 						if ( $last_browser["id"] != $browser["id"] ) {
 							$header .= '<th><div class="browser">' .
-								'<img src="' . $GLOBALS['contextpath'] . '/images/' . $browser["engine"] .
+								'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
 								'.sm.png" class="browser-icon ' . $browser["engine"] .
 								'" alt="' . $browser["name"] .
 								'" title="' . $browser["name"] .
@@ -115,7 +115,7 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 				if ( $last_browser != $ua["useragent_id"] ) {
-					$output .= "<td class='$status " . $row["browser"] . "'><a href='" . $GLOBALS['contextpath'] . "/?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
+					$output .= "<td class='$status " . $row["browser"] . "'><a href='" . swarmpath ( '/' ) . "?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
 						($ua["status"] == 2 ?
 							($ua["total"] < 0 ?
 								"Err" :
