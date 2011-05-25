@@ -20,7 +20,7 @@ INSTALLATION
 
 4) Load the cronjob (changing the URL to point to your site).
 
-   crontab < config/cronjob.txt 
+   crontab << config/cronjob.txt 
 
 5) Currently the server must be run in Apache (it uses a .htaccess file).
 
