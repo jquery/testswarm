@@ -33,3 +33,5 @@ Test if /testswarm/login loads, if not, put some jibberish into the .htaccess fi
 LICENSE
 
 See LICENSE for more information.
+
+Planning for TestSwarm and other testing tools related work now happens on the jQuery Testing Team planning wiki: http://jquerytesting.pbworks.com/w/page/41556026/FrontPage
