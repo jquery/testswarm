@@ -7,6 +7,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Firefox 3.5', 'gecko', '^1.9.1[0-9.]*$', 1, 0, 0, 1, 0, 0),
 ('Firefox 3.6', 'gecko', '^1.9.2[0-9.]*$', 1, 0, 1, 1, 0, 0),
 ('Firefox 4.0', 'gecko', '^2.0.', 1, 1, 1, 1, 0, 0),
+('Firefox 5.0', 'gecko', '^5.0', 1, 1, 1, 1, 0, 0),
 
 ('Internet Explorer 6', 'msie', '^6.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
@@ -15,6 +16,8 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 
 ('Opera 10.6x', 'presto', '^2.6.', 1, 0, 1, 0, 0, 0),
 ('Opera 11.0x', 'presto', '^2.7.', 1, 1, 1, 1, 0, 0),
+('Opera 11.1x', 'presto', '^2.8.', 1, 1, 1, 1, 0, 0),
+('Opera 11.5x', 'presto', '^2.9.', 1, 1, 1, 1, 0, 0),
 
 ('Safari 4.0', 'webkit', '^531.', 1, 0, 1, 1, 0, 0),
 ('Safari 5.0', 'webkit', '^533.', 1, 1, 1, 1, 0, 0),
