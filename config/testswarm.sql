@@ -124,6 +124,20 @@ CREATE TABLE `users` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `scores`
+-- 
+
+CREATE TABLE `scores` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `score` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Indexes and Foreign Keys
 alter table clients
 	add index idx_clients_user_id (user_id),
