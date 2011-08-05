@@ -39,6 +39,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('S60 5.0', 's60', '^5.0$', 1, 1, 0, 0, 0, 1),
 
 ('webOS Browser 1.4', 'webos', '^1.4', 1, 1, 0, 0, 0, 1),
-('webOS Browser 3.0', 'hpwos', ^3.0', 1, 1, 0, 0, 0, 1),
+('webOS Browser 3.0', 'hpwos', '^3.0', 1, 1, 0, 0, 0, 1),
 
 ('Windows Mobile 7', 'winmo', '^7.', 1, 1, 0, 0, 0, 1);
+
