@@ -2,15 +2,14 @@
 
 <?php
 
-	$result = mysql_queryf("SELECT name, score FROM scores ORDER by score DESC LIMIT " . $CLEAN["offset"] . ", " . $names_per_page . ";");
+	$result = mysql_queryf("SELECT name, score FROM scores ORDER by score DESC LIMIT " . $CLEAN["offset"] . ", " . ($CLEAN['end'] - $CLEAN["offset"]) . ";");
 	
-	function drawPages() {
+	function drawPages($per_page) {
 		global $CLEAN;
-		global $default_per_page;
 		
-		$pagi = windowed_offset($CLEAN['offset'], $default_per_page);
+		$pagi = windowed_offset($CLEAN['offset'], $CLEAN['per_page']);
 
-		$pages = pagination($CLEAN['start'], $CLEAN['end'], $pagi["offset"], $pagi["limit"], $default_per_page);
+		$pages = pagination($CLEAN['start'], $CLEAN['end'], $pagi["offset"], $pagi["limit"], $CLEAN['per_page']);
 		echo "<div class='pagination'><ul>";
 		foreach($pages as $page) {
 			echo "<li class='" . $page['class'] . "'><a href='" . $page['href'] . "'>" . $page['textContent'] . "</a></li>";

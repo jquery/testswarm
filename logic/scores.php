@@ -25,14 +25,10 @@
 		SELECT count(*) FROM scores
 	");
 	
-	$web_config = getItem('web', $config, Array());
-	$names_per_page = $default_per_page = intval( getItem('scores.names_per_page', $web_config, 50) );
-	
+	$CLEAN['per_page'] = intval( getItem('scores.names_per_page', $config['web'], 50) );
 	$CLEAN["start"] = intval( getItem('start', $_REQUEST, 1) );
 	$CLEAN["offset"] = $CLEAN['start'] - 1; // the names are numbered starting at one
-	$CLEAN["end"] = intval( getItem('end', $_REQUEST, $CLEAN["offset"] + $default_per_page ) );
-	
-	$names_per_page = $CLEAN['end'] - $CLEAN["offset"];
+	$CLEAN["end"] = intval( getItem('end', $_REQUEST, $CLEAN["offset"] + $CLEAN['per_page'] ) );
 	
 	switch($_REQUEST["cmd"]) {
 		case "rebuild":
