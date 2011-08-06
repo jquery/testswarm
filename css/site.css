@@ -133,7 +133,7 @@ div.scores {
 }
 
 .pagination .current a {
-	color: #fff;
+	color: #F5F5F5;
 }
 
 .pagination .next,
@@ -151,11 +151,26 @@ div.scores {
 }
 
 table.scores {
-	margin: 5px;
+	width: 100%;
+	border-collapse:collapse;
+	color: #222;
 }
 
 table.scores td {
-	padding: 2px;
+	padding: 5px;
+}
+
+table.scores tr.even {
+	background: #F2F9FF;
+	border: 1px solid #EBF0F5;
+}
+
+table.scores .rank {
+	width: 5em;
+}
+
+table.scores .total {
+	font-weight: bold;
 }
 
 table.scores td.num {

@@ -31,7 +31,7 @@
 		    $user = $row[0];
 		    $total = $row[1];
 
-		echo "<tr><td class='num'>$num</td><td><a href='" . swarmpath("user/$user/") . "'>$user</a></td><td class='num'>$total</td></tr>";
+		echo "<tr class='" . (($CLEAN["offset"] - $num) % 2 ? 'odd' : 'even') . "'><td class='rank num'>$num</td><td class='name'><a href='" . swarmpath("user/$user/") . "'>$user</a></td><td class='num total'>$total</td></tr>";
 		$num++;
 	}
 
