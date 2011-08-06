@@ -35,6 +35,12 @@
 				mysql_queryf("UPDATE run_useragent SET completed = completed + 1, status = IF(completed+1<max, 1, 2) WHERE useragent_id=%u AND run_id=%u LIMIT 1;", $useragent_id, $run_id);
 			}
 		}
+		
+		mysql_queryf("UPDATE scores SET score = score + %u WHERE name = %s LIMIT 1", $total, $username);
+		
+		if(mysql_affected_rows() <= 0) {
+			mysql_queryf("INSERT INTO scores (name, score) SELECT users.name, sum(total) FROM clients, run_client, users WHERE clients.id = run_client.client_id and users.id = clients.user_id and users.id = %u;", $user_id);
+		}
 	}
 	echo "<script>window.top.done();</script>";
 	exit();

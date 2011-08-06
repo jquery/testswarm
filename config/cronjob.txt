@@ -1,1 +1,3 @@
 * * * * * curl -s http://localhost/?state=wipe > /dev/null
+@daily curl -s http://localhost/scores/rebuild/ > /dev/null
+
