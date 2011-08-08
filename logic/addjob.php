@@ -2,7 +2,7 @@
 
 	$title = "Add New Job";
 
-	if ( $_REQUEST['state'] == "addjob" ) {
+	if ( $_POST['state'] == "addjob" ) {
 		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_REQUEST['user']);
 		$auth = preg_replace("/[^a-z0-9]/", "", $_REQUEST['auth']);
 
