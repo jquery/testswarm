@@ -1,4 +1,4 @@
-<pre><?php
+<?php
 	session_start();
 
 	require "inc/utilities.php";
@@ -6,11 +6,12 @@
 	$swarmConfig = parse_ini_file("config.ini", true);
 	// Extend default options
 	$swarmConfig = array_extend(array(
-		"database" =>
+		"database" => array(
 			"host" => "localhost",
 			"username" => "root",
 			"password" => "root",
 			"database" => "testswarm",
+		),
 		"web" => array(
 			"title" => "Test Swarm",
 			"contextpath" => "",
