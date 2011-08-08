@@ -1,10 +1,23 @@
-<?php
+<pre><?php
 	session_start();
 
-	$config = parse_ini_file("config.ini", true);
-
-	// $DEBUG_ON = true;
 	require "inc/utilities.php";
+
+	$swarmConfig = parse_ini_file("config.ini", true);
+	// Extend default options
+	$swarmConfig = array_extend(array(
+		"database" =>
+			"host" => "localhost",
+			"username" => "root",
+			"password" => "root",
+			"database" => "testswarm",
+		"web" => array(
+			"title" => "Test Swarm",
+			"contextpath" => "",
+		),
+	), $swarmConfig);
+
+	// $swarmDebug = true;
 	require "inc/browser.php";
 	require "inc/db.php";
 

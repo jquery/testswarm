@@ -16,10 +16,23 @@
 		$_REQUEST = array_map('stripslashes_deep', $_REQUEST);
 	}
 
+	# Utility function to overwrite keys and support multiple levels.
+	# (array_merge overwrites keys, but isn't recursive. array_merge_recursive
+	# is recurive but doesn't overwrite deper level's keys..)
+	function array_extend($arr1, $arr2) {
+		foreach($arr2 as $key => $val) {
+			if(array_key_exists($key, $arr1) && is_array($value)) {
+				$arr1[$key] = array_extend($arr1[$key], $arr2[$key]);
+			} else 
+			$arr1[$key] = $val;
+		}
+		return $arr1;
+	}
+
 	# Handy function from:
 	# http://us.php.net/manual/en/function.mysql-query.php#86447
 	function mysql_queryf($string) {
-		global $DEBUG_ON;
+		global $swarmDebug;
 
 		$args = func_get_args();
 		array_shift($args);
@@ -51,7 +64,7 @@
 				$sql_query .= $string[$i];
 			}
 		}
-		if ( $DEBUG_ON ) {
+		if ( $swarmDebug ) {
 			echo "$sql_query<br>\n";
 		}
 		$result = mysql_query($sql_query);
@@ -84,10 +97,9 @@
 	 * @return string Relative path from the domain root to the specified file or directory
 	 */
 	function swarmpath( $rel ) {
-		global $config;
+		global $swarmConfig;
 		if ( $rel[0] == '/' ) {
 			$rel = substr($rel, 1);
 		}
-		return $config['web']['contextpath'] . $rel;
+		return $swarmConfig['web']['contextpath'] . $rel;
 	}
-?>
