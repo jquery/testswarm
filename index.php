@@ -49,6 +49,7 @@ if ( $title ) {
 		<li><a href="<?php echo swarmpath( 'login/' ); ?>">Login</a></li>
 		<li><a href="<?php echo swarmpath( 'signup/' ); ?>">Signup</a></li>
 		<?php } ?>
+		<li><a href="<?php echo swarmpath( 'scores/' ); ?>">Scores</a></li>
 		<li><a href="http://github.com/jquery/testswarm">Source Code</a></li>
 		<li><a href="http://github.com/jquery/testswarm/issues">Bug Tracker</a></li>
 		<li><a href="http://groups.google.com/group/testswarm">Discuss</a></li>

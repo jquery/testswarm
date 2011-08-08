@@ -4,6 +4,7 @@ TRUNCATE clients;
 TRUNCATE run_useragent;
 TRUNCATE runs;
 TRUNCATE jobs;
+TRUNCATE scores;
 TRUNCATE users; -- Optional
 
 -- Resets just the results from clients

@@ -89,12 +89,88 @@ div.scores {
 	right: -100px;
 }
 
+.pagination {
+	background: #F5F5F5;
+	border: 1px solid #E5E5E5;
+	padding: 5px;
+}
+
+.pagination ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	float: right;
+}
+
+.pagination:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.pagination li {
+	display: inline;
+	padding: 0 2px;
+}
+
+.pagination a {
+	text-decoration: none;
+}
+
+.pagination .disabled a {
+	color: #c5c5c5;
+}
+
+.pagination .current {
+	font-weight: bold;
+	background: #274E7D;
+	margin: 0 3px;
+	padding: 5px 4px 5px;
+	border: solid #6899D3;
+	border-width: 1px 0;
+}
+
+.pagination .current a {
+	color: #F5F5F5;
+}
+
+.pagination .next,
+.pagination .previous {
+	font-size: 15px;
+	line-height: 12px;
+}
+
+.pagination .next {
+	margin-left: 4px;
+}
+
+.pagination .previous {
+	margin-right: 1px;
+}
+
 table.scores {
-	margin: 5px;
+	width: 100%;
+	border-collapse:collapse;
+	color: #222;
 }
 
 table.scores td {
-	padding: 2px;
+	padding: 5px;
+}
+
+table.scores tr.even {
+	background: #F2F9FF;
+	border: 1px solid #EBF0F5;
+}
+
+table.scores .rank {
+	width: 5em;
+}
+
+table.scores .total {
+	font-weight: bold;
 }
 
 table.scores td.num {
