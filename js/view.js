@@ -3,5 +3,4 @@ jQuery(function(){
 		jQuery(".pretty").prettyDate();
 	}
 
-
 });

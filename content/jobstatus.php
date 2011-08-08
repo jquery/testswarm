@@ -24,21 +24,21 @@
 		}
 	}
 
-	$job_id = preg_replace("/[^0-9]/", "", $_REQUEST['job_id']);
+	$job_id = preg_replace("/[^0-9]/", "", $_REQUEST["job_id"]);
 
 	$result = mysql_queryf("SELECT jobs.name, jobs.status, users.name FROM jobs, users WHERE jobs.id=%u AND users.id=jobs.user_id;", $job_id);
 
 	if ( $row = mysql_fetch_array($result) ) {
 		$job_name = $row[0];
 		$job_status = get_status(intval($row[1]));
-		$owner = ($row[2] == $_SESSION['username']);
+		$owner = ($row[2] == $_SESSION["username"]);
 	}
 
 ?>
 
 <h3><?php echo $job_name; ?></h3>
 
-<?php if ( $owner && $_SESSION['auth'] == 'yes' ) { ?>
+<?php if ( $owner && $_SESSION["auth"] == "yes" ) { ?>
 <form action="" method="POST">
 	<input type="hidden" name="state" value="wipejob"/>
 	<input type="hidden" name="job_id" value="<?php echo $job_id; ?>"/>
@@ -138,4 +138,3 @@
 	}
 
 	echo "$output</tr>\n</tbody>\n</table>";
-?>

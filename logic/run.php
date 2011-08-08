@@ -1,9 +1,9 @@
 <?php
 	require "inc/init.php";
 
-	$user = getItem('username', $_REQUEST, getItem('username', $_SESSION, ''));
+	$user = getItem("username", $_REQUEST, getItem("username", $_SESSION, ""));
 
-	if ( !getItem('user', $_REQUEST, false) && $user ) {
+	if ( !getItem("user", $_REQUEST, false) && $user ) {
 		header("Location: " . swarmpath( "run/$user/" ) );
 		exit;
 	}

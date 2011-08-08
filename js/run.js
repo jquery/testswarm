@@ -1,6 +1,6 @@
-var updateRate = 30, timeoutRate = 180;
-
-var run_id, run_url, testTimeout, pauseTimer;
+var	updateRate = 30,
+	timeoutRate = 180,
+	run_id, run_url, testTimeout, pauseTimer;
 
 if ( typeof client_id !== "undefined" ) {
 	jQuery( getTests );
@@ -45,7 +45,7 @@ function runTests( data ) {
 			data = eval("(" + data + ")")
 		} catch(e) {
 			data = {
-				desc: "Failed to retrieve new tests: " + e + ", data was: " + data + "." 
+				desc: "Failed to retrieve new tests: " + e + ", data was: " + data + "."
 			}
 		}
 	}
@@ -68,7 +68,7 @@ function runTests( data ) {
 		iframe.width = 1000;
 		iframe.height = 600;
 		iframe.className = "test";
-		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") + 
+		iframe.src = run_url + (run_url.indexOf("?") > -1 ? "&" : "?") +
 			"_=" + (new Date).getTime() + "&swarmURL=" +
 			encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&state=");
 		jQuery("#iframes").append( iframe );
@@ -148,7 +148,7 @@ function retrySend( data, retry, success ) {
 }
 
 function log( txt ) {
-	jQuery("#history").prepend( "<li><strong>" + 
+	jQuery("#history").prepend( "<li><strong>" +
 		(new Date).toString().replace(/^\w+ /, "").replace(/:[^:]+$/, "") +
 		":</strong> " + txt + "</li>" );
 	msg( txt );

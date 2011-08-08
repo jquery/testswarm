@@ -1,10 +1,10 @@
 <?php
 	$title = "Signup";
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST['username']);
-	$password = $_POST['password'];
-	$email = $_POST['email'];
-	$request = $_POST['request'];
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST["username"]);
+	$password = $_POST["password"];
+	$email = $_POST["email"];
+	$request = $_POST["request"];
 	$error = "";
 
 	if ( $username && $password ) {
@@ -23,12 +23,12 @@
 		}
 
 		if ( $has_pass ) {
-			$error = "<p>Error: Account is already created. Please <a href='" . swarmpath( "login/" ) . "'>login</a> instead.</p>";
+			$error = '<p>Error: Account is already created. Please <a href="' . swarmpath( "login/" ) . '">login</a> instead.</p>';
 		} else {
 			mysql_queryf("UPDATE users SET updated=NOW(), password=SHA1(CONCAT(seed, %s)), email=%s, request=%s, auth=SHA1(RAND()) WHERE id=%u LIMIT 1;", $password, $email, $request, $user_id);
 
-			$_SESSION['username'] = $username;
-			$_SESSION['auth'] = "yes";
+			$_SESSION["username"] = $username;
+			$_SESSION["auth"] = "yes";
 
 			session_write_close();
 			header("Location: " . swarmpath( "user/$username/" ) );
@@ -36,4 +36,3 @@
 		}
 
 	}
-?>

@@ -58,21 +58,21 @@
 			$name = "Linux";
 		}
 
-		echo "<li><img src='" . swarmpath( '/' ) . "images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
+		echo "<li><img src='" . swarmpath( "/" ) . "images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
 	}
 
 	echo "</ul>";
 
 	}
 
-	$job_search = preg_replace("/[^a-zA-Z ]/", "", getItem( 'job', $_REQUEST, '' ) );
+	$job_search = preg_replace("/[^a-zA-Z ]/", "", getItem( "job", $_REQUEST, "" ) );
 	$job_search .= "%";
 
 	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY jobs.created DESC LIMIT 15;", $job_search, $search_user);
 
 	if ( mysql_num_rows($search_result) > 0 ) {
 
-	echo "<br/><h3>Recent Jobs:</h3><table class='results'><tbody>";
+	echo '<br/><h3>Recent Jobs:</h3><table class="results"><tbody>';
 
 	$output = "";
 	$browsers = array();
@@ -123,11 +123,11 @@
 			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id, useragents.name as browser FROM useragents, run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id AND useragents.id=useragent_id ORDER BY browser;", $row["run_id"]);
 
 			while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-				if ( !$useragents[ $ua_row['useragent_id'] ] ) {
-					$useragents[ $ua_row['useragent_id'] ] = array();
+				if ( !$useragents[ $ua_row["useragent_id"] ] ) {
+					$useragents[ $ua_row["useragent_id"] ] = array();
 				}
 
-				array_push( $useragents[ $ua_row['useragent_id'] ], $ua_row );
+				array_push( $useragents[ $ua_row["useragent_id"] ], $ua_row );
 			}
 		}
 
@@ -145,10 +145,10 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 				if ( $last_browser != $ua["browser"] ) {
-					$cur = $results[ $ua['useragent_id'] ];
-					$results[ $ua['useragent_id'] ] = $cur + intval($ua["fail"]);
+					$cur = $results[ $ua["useragent_id"] ];
+					$results[ $ua["useragent_id"] ] = $cur + intval($ua["fail"]);
 
-					$cur = $states[ $ua['useragent_id'] ];
+					$cur = $states[ $ua["useragent_id"] ];
 
 					if ( strstr($status, "notdone") || strstr($cur, "notdone") ) {
 						$status = "notstarted notdone";
@@ -162,21 +162,21 @@
 						$status = "pass";
 					}
 
-					$states[ $ua['useragent_id'] ] = $status;
+					$states[ $ua["useragent_id"] ] = $status;
 				}
 				$last_browser = $ua["browser"];
 			}
 		} else {
-				$cur = $results[ $row['useragent_id'] ];
-				$results[ $row['useragent_id'] ] = $cur + 0;
-				$states[ $row['useragent_id'] ] = "notstarted notdone";
+				$cur = $results[ $row["useragent_id"] ];
+				$results[ $row["useragent_id"] ] = $cur + 0;
+				$states[ $row["useragent_id"] ] = "notstarted notdone";
 		}
 
 		$last = $row["run_id"];
 	}
 
 	foreach ( $results as $key => $fail ) {
-		$output .= "<td class='" . $states[$key] . "'></td>";
+		$output .= '<td class="' . $states[$key] . '"></td>';
 	}
 
 	$output .= "</tr>\n";
@@ -186,4 +186,3 @@
 	echo "$output</tr>\n</tbody>\n</table>";
 
 	}
-?>

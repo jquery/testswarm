@@ -17,4 +17,3 @@
 
 	echo "done";
 	exit;
-?>
