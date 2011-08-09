@@ -18,11 +18,13 @@ INSTALLATION
 
 3) Copy the ./config/config-sample.ini to ./config.ini and change the options to correspond to your MySQL database information.
 
-4) Load the cronjob (changing the URL to point to your site).
+4) Copy the ./config/.htaccess-sample to ./htaccess. If needed change the RewriteBase to match the contextpath configuration.
+
+5) Load the cronjob (changing the URL to point to your site).
 
    crontab << config/cronjob.txt
 
-5) Currently the server must be run in Apache (it uses a .htaccess file).
+6) Currently the server must be run in Apache (it uses a .htaccess file).
 
 To run it from non-root, set contextpath = "/testswarm" (or whatever path you use).
 

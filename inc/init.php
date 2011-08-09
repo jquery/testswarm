@@ -1,18 +1,18 @@
 <?php
-	$username = getItem('username', $_SESSION, getItem('user', $_REQUEST, ''));
+	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
 	if ( !$username ) {
-		$username = $_REQUEST['user'];
+		$username = $_REQUEST["user"];
 	}
 	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
 	if ( $username ) {
-		$_SESSION['username'] = $username;
+		$_SESSION["username"] = $username;
 	}
 	# We need a username to set up an account
 	if ( !$username ) {
 		# TODO: Improve error message quality.
 		exit("Username required. ?user=USERNAME.");
 	}
-	$client_id = preg_replace("/[^0-9]/", "", getItem('client_id', $_REQUEST, ''));
+	$client_id = preg_replace("/[^0-9]/", "", getItem("client_id", $_REQUEST, ""));
 
 	if ( $client_id ) {
 		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u LIMIT 1;", $client_id);

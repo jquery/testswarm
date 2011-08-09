@@ -1,10 +1,10 @@
 <?php
-	$run_id = preg_replace("/[^0-9]/", "", $_POST['run_id']);
-	$client_id = preg_replace("/[^0-9]/", "", $_POST['client_id']);
+	$run_id = preg_replace("/[^0-9]/", "", $_POST["run_id"]);
+	$client_id = preg_replace("/[^0-9]/", "", $_POST["client_id"]);
 
-	if ( $run_id && $client_id && $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) {
+	if ( $run_id && $client_id && $_SESSION["username"] && $_SESSION["auth"] == "yes" ) {
 
-		$results = mysql_queryf("SELECT jobs.id FROM users, jobs, runs WHERE users.name=%s AND jobs.user_id=users.id AND runs.id=%u AND runs.job_id=jobs.id;", $_SESSION['username'], $run_id);
+		$results = mysql_queryf("SELECT jobs.id FROM users, jobs, runs WHERE users.name=%s AND jobs.user_id=users.id AND runs.id=%u AND runs.job_id=jobs.id;", $_SESSION["username"], $run_id);
 
 		if ( $row = mysql_fetch_row($results) ) {
 			$job_id = $row[0];
@@ -24,4 +24,3 @@
 	}
 
 	exit();
-?>

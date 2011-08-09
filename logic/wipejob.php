@@ -1,10 +1,10 @@
 <?php
-	$job_id = preg_replace("/[^0-9]/", "", $_POST['job_id']);
-	$type = $_POST['type'];
+	$job_id = preg_replace("/[^0-9]/", "", $_POST["job_id"]);
+	$type = $_POST["type"];
 
-	if ( $job_id && $_SESSION['username'] && $_SESSION['auth'] == 'yes' ) {
+	if ( $job_id && $_SESSION["username"] && $_SESSION["auth"] == "yes" ) {
 
-		$results = mysql_queryf("SELECT runs.id as id FROM users, jobs, runs WHERE users.name=%s AND jobs.user_id=users.id AND jobs.id=%u AND runs.job_id=jobs.id;", $_SESSION['username'], $job_id);
+		$results = mysql_queryf("SELECT runs.id as id FROM users, jobs, runs WHERE users.name=%s AND jobs.user_id=users.id AND jobs.id=%u AND runs.job_id=jobs.id;", $_SESSION["username"], $job_id);
 
 		if ( mysql_num_rows($results) > 0 ) {
 			if ( $type == "delete" ) {
@@ -20,7 +20,7 @@
 
 		while ( $row = mysql_fetch_row($results) ) {
 			$run_id = $row[0];
-			
+
 			mysql_queryf("DELETE FROM run_client WHERE run_id=%u;", $run_id);
 
 			if ( $type == "delete" ) {
@@ -31,11 +31,10 @@
 		}
 
 		if ( $type == "delete" ) {
-			header("Location: " . swarmpath( "user/{$_SESSION['username']}/" ) );
+			header("Location: " . swarmpath( "user/{$_SESSION["username"]}/" ) );
 		} else {
 		header("Location: " . swarmpath( "job/{$job_id}/" ) );
 		}
 	}
 
 	exit();
-?>

@@ -3,7 +3,7 @@
 	$version = "";
 	$os = "";
 	$ip = getRealIpAddr();
-	$useragent = $_SERVER['HTTP_USER_AGENT'];
+	$useragent = $_SERVER["HTTP_USER_AGENT"];
 	$useragent_id = 0;
 
 	$lowerUA = strtolower($useragent);
@@ -90,13 +90,12 @@
 
 	// From: http://roshanbh.com.np/2007/12/getting-real-ip-address-in-php.html
 	function getRealIpAddr() {
-    		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-      			$ip=$_SERVER['HTTP_CLIENT_IP'];
-    		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      			$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    		if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+      			$ip=$_SERVER["HTTP_CLIENT_IP"];
+    		} elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+      			$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
     		} else {
-      			$ip=$_SERVER['REMOTE_ADDR'];
+      			$ip=$_SERVER["REMOTE_ADDR"];
     		}
     		return $ip;
 	}
-?>

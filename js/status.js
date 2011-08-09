@@ -10,7 +10,7 @@ jQuery(function(){
 			setTimeout(arguments.callee, 5000);
 		}
 	}, 5000);
-	
+
 	jQuery("td:has(a)").live("dblclick", function(){
 		var params = /&.*$/.exec( jQuery(this).find("a").attr("href") );
 		jQuery.ajax({
