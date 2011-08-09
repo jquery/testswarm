@@ -21,10 +21,11 @@
 	# is recurive but doesn't overwrite deper level's keys..)
 	function array_extend($arr1, $arr2) {
 		foreach($arr2 as $key => $val) {
-			if(array_key_exists($key, $arr1) && is_array($value)) {
+			if(array_key_exists($key, $arr1) && is_array($val)) {
 				$arr1[$key] = array_extend($arr1[$key], $arr2[$key]);
-			} else
-			$arr1[$key] = $val;
+			} else {
+				$arr1[$key] = $val;
+			}
 		}
 		return $arr1;
 	}
