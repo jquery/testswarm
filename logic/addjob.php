@@ -2,7 +2,7 @@
 
 	$title = "Add New Job";
 
-	if ( $_POST["state"] == "addjob" ) {
+	if ( $_REQUEST["state"] == "addjob" ) {
 		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_REQUEST["user"]);
 		$auth = preg_replace("/[^a-z0-9]/", "", $_REQUEST["auth"]);
 
@@ -58,7 +58,7 @@
 			}
 		}
 
-		$url = swarmpath("job/$job_id/");
+		$url = "job/$job_id/";
 
 		if ( $_REQUEST["output"] == "dump" ) {
 			echo $url;
