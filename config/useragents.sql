@@ -18,8 +18,9 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Opera 11.1x', 'presto', '^2.8.', 1, 1, 1, 1, 0, 0),
 ('Opera 11.5x', 'presto', '^2.9.', 1, 1, 1, 1, 0, 0),
 
-('Safari 4.0', 'webkit', '^531.', 1, 0, 1, 1, 0, 0),
-('Safari 5.0', 'webkit', '^533.', 1, 1, 1, 1, 0, 0),
+('Safari 4.0', 'webkit', '^531.', 1, 0, 0, 1, 0, 0),
+('Safari 5.0', 'webkit', '^533.', 1, 0, 0, 1, 0, 0),
+('Safari 5.1', 'webkit', '^534.', 1, 1, 1, 1, 0, 0),
 
 # Mobile Browsers
 
