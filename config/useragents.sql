@@ -14,6 +14,7 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 8', 'msie', '^8.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 9', 'msie','^9.', 1, 1, 1, 1, 0, 0),
+('Internet Explorer 10', 'msie','^10.', 1, 0, 0, 0, 1, 0),
 
 ('Opera 11.1x', 'presto', '^2.8.', 1, 1, 1, 1, 0, 0),
 ('Opera 11.5x', 'presto', '^2.9.', 1, 1, 1, 1, 0, 0),
