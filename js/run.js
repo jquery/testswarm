@@ -118,6 +118,7 @@ function testTimedout() {
 }
 
 function handleMessage(e){
+	e = e || window.event;
 	retrySend( e.data, function(){
 		handleMessage(e);
 	}, done );
