@@ -8,7 +8,8 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 ('Firefox 3.6', 'gecko', '^1.9.2[0-9.]*$', 1, 0, 1, 1, 0, 0),
 ('Firefox 4', 'gecko', '^2.0.', 0, 0, 0, 0, 0, 0),
 ('Firefox 5', 'gecko', '^5.', 0, 0, 0, 0, 0, 0),
-('Firefox 6', 'gecko', '^6.', 1, 1, 1, 1, 0, 0),
+('Firefox 6', 'gecko', '^6.', 0, 0, 0, 0, 0, 0),
+('Firefox 7', 'gecko', '^7.', 1, 1, 1, 1, 0, 0),
 
 ('Internet Explorer 6', 'msie', '^6.', 1, 0, 1, 1, 0, 0),
 ('Internet Explorer 7', 'msie', '^7.', 1, 0, 1, 1, 0, 0),
