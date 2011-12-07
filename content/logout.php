@@ -1,1 +1,1 @@
-Thanks for running TestSwarm. You're now signed out.
+Thanks for running TestSwarm. You are now signed out.

@@ -6,8 +6,8 @@ $result = mysql_queryf("SELECT users.name, SUM(total) as alltotal FROM clients, 
 $num = 1;
 
 while ( $row = mysql_fetch_array($result) ) {
-        $user = $row[0];
-        $total = $row[1];
+	$user  = $row[0];
+	$total = $row[1];
 
 	echo '<tr><td class="num">' . $num. '</td><td><a href="' . swarmpath("user/$user/") . '">' . $user. '</a></td><td class="num">' .$total . '</td></tr>';
 	$num++;
