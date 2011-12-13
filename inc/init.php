@@ -12,8 +12,10 @@
 		# TODO: Improve error message quality.
 		exit("Username required. ?user=USERNAME.");
 	}
+
 	$client_id = preg_replace("/[^0-9]/", "", getItem("client_id", $_REQUEST, ""));
 
+	# Existing client
 	if ( $client_id ) {
 		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u LIMIT 1;", $client_id);
 
@@ -30,6 +32,7 @@
 			echo "Client doesn't exist.";
 			exit();
 		}
+
 	# The user is setting up a new client session
 	} else {
 		# Figure out the exact useragent that the user is using
