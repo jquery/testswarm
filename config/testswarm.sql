@@ -1,6 +1,6 @@
--- 
+--
 -- Table structure for table `clients`
--- 
+--
 
 CREATE TABLE `clients` (
   `id` int(11) NOT NULL auto_increment,
@@ -16,9 +16,9 @@ CREATE TABLE `clients` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `jobs`
--- 
+--
 
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL auto_increment,
@@ -32,9 +32,9 @@ CREATE TABLE `jobs` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `run_client`
--- 
+--
 
 CREATE TABLE `run_client` (
   `run_id` int(11) NOT NULL default '0',
@@ -51,9 +51,9 @@ CREATE TABLE `run_client` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `run_useragent`
--- 
+--
 
 CREATE TABLE `run_useragent` (
   `run_id` int(11) NOT NULL default '0',
@@ -69,9 +69,9 @@ CREATE TABLE `run_useragent` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `runs`
--- 
+--
 
 CREATE TABLE `runs` (
   `id` int(11) NOT NULL auto_increment,
@@ -86,9 +86,9 @@ CREATE TABLE `runs` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `useragents`
--- 
+--
 
 CREATE TABLE `useragents` (
   `id` int(11) NOT NULL auto_increment,
@@ -106,9 +106,9 @@ CREATE TABLE `useragents` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `users`
--- 
+--
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
