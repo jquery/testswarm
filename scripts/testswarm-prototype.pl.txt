@@ -4,7 +4,7 @@
 
 # The location of the TestSwarm that you're going to run against.
 
-my $SWARM = "http://testswarm.com";
+my $SWARM = "http://swarm.jquery.org";
 my $SWARM_INJECT = "/js/inject.js";
 
 # Your TestSwarm username.
