@@ -30,7 +30,7 @@ To run it from non-root, set contextpath = "/testswarm" (or whatever path you us
 
 And update the .htaccess file, use RewriteBase /testswarm/
 
-Test if /testswarm/login loads, if not, put some jibberish into the .htaccess file to see if its getting loaded. If not, make sure AllowOverride is set to All (at least not to None) in your main Apache config.
+Test if /testswarm/login loads, if not, put some jibberish into the .htaccess file to see if it's getting loaded. If not, make sure AllowOverride is set to All (at least not to None) in your main Apache config.
 
 LICENSE
 
