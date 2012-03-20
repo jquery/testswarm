@@ -24,6 +24,9 @@ if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
 }
 
 $swarmConfig = array(
+	"general" => array(
+		"timezone" => "UTC",
+	),
 	"database" => array(
 		"host" => "localhost",
 		"database" => "testswarm",
@@ -43,6 +46,9 @@ $swarmConfig = array(
 // Read configuration options and let the INI file
 // override default settings.
 $swarmConfig = array_extend( $swarmConfig, parse_ini_file( "$swarmInstallDir/testswarm.ini", true ) );
+
+// Timezone
+date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 
 /**@}*/
 
