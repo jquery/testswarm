@@ -4,7 +4,7 @@
 
 	$title = "$search_user";
 	$scripts =
-		'<script type="text/javascript" src="' . swarmpath( 'js/jquery.js' ) . '"></script>'
-		. '<script type="text/javascript" src="' . swarmpath( 'js/pretty.js' ) . '"></script>'
-		. '<script type="text/javascript" src="' . swarmpath( 'js/view.js' ) . '"></script>';
+		'<script src="' . swarmpath( 'js/jquery.js' ) . '"></script>'
+		. '<script src="' . swarmpath( 'js/pretty.js' ) . '"></script>'
+		. '<script src="' . swarmpath( 'js/view.js' ) . '"></script>';
 

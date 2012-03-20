@@ -26,8 +26,8 @@
 	$scripts = "";
 
 	if ( $client_id ) {
-		$scripts = "<script type='text/javascript'>var client_id = $client_id;</script>";
+		$scripts = "<script>var client_id = $client_id;</script>";
 	}
 
-	$scripts .= '<script type="text/javascript" src="' . swarmpath( 'js/jquery.js' ) .'"></script>' .
-						  '<script type="text/javascript" src="' . swarmpath( 'js/run.js' ) . '?' . time() . '"></script>';
+	$scripts .= '<script src="' . swarmpath( 'js/jquery.js' ) .'"></script>' .
+						  '<script src="' . swarmpath( 'js/run.js' ) . '?' . time() . '"></script>';
