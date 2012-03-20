@@ -7,7 +7,7 @@
 // Takes an ISO time and returns a string representing how
 // long ago the date represents.
 function prettyDate(time) {
-	var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+	var date = new Date((time || "")),
 		diff = (((new Date()).getTime() - date.getTime()) / 1000),
 		day_diff = Math.floor(diff / 86400);
 
