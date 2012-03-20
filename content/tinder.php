@@ -1,4 +1,5 @@
 <?php
+	/* global $search_user */
 
 	function get_status($num){
 		if ( $num == 0 ) {
@@ -24,6 +25,15 @@
 		}
 	}
 
+	// Get the user's ID
+	$result = mysql_queryf( "SELECT id FROM users WHERE name=%s;", $search_user );
+	if ( $row = mysql_fetch_array( $result ) ) {
+		$user_id = intval($row[0]);
+	} else {
+		echo '<h3>User does not exist</h3>';
+		return;
+	}
+
 	$result = mysql_queryf(
 "SELECT
 	useragents.engine as engine,
@@ -31,16 +41,15 @@
 	clients.os as os,
 	clients.created as since
 FROM
-	users, clients, useragents
+	clients, useragents
 WHERE
 	clients.useragent_id=useragents.id
 	AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW()
-	AND clients.user_id=1
-	AND users.name=%s
+	AND clients.user_id=%u
 ORDER BY
 	useragents.engine,
 	useragents.name;
-", $search_user );
+", $user_id );
 
 	if ( mysql_num_rows( $result ) > 0 ) {
 
