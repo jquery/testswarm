@@ -7,6 +7,7 @@
 	if ( $username ) {
 		$_SESSION["username"] = $username;
 	}
+
 	# We need a username to set up an account
 	if ( !$username ) {
 		# TODO: Improve error message quality.
