@@ -8,20 +8,6 @@
 	}
 
 	/**
-	 * Recursively strip slashes if magic quotes is enabled.
-	 * @source php.net/stripslashes#79976
-	 *
-	 * @param $value mixed
-	 */
-	function stripslashes_deep( $value ) {
-		$value = is_array( $value )
-			? array_map( "stripslashes_deep", $value )
-			: stripslashes( $value );
-
-		return $value;
-	}
-
-	/**
 	 * Utility function to overwrite keys and support multiple levels.
 	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
 	 * is recurive but doesn't overwrite deper level's keys..)

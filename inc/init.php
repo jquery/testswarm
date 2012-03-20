@@ -5,6 +5,7 @@
  */
 
 // Global requirements
+require "inc/request.php";
 require "inc/utilities.php";
 
 
@@ -12,6 +13,8 @@ require "inc/utilities.php";
  * Default settings
  * @{
  */
+$swarmRequest = new WebRequest();
+
 $swarmInstallDir = dirname( __DIR__ );
 
 // Verify that the config.ini file exists
@@ -74,7 +77,6 @@ function swarmExceptionHandler( Exception $e ) {
 
 set_exception_handler( 'swarmExceptionHandler' );
 
-
 if ( $swarmConfig['debug']['php_error_reporting'] === '1' ) {
 	error_reporting( E_ALL );
 	ini_set( 'display_errors', 1 );
@@ -95,16 +97,3 @@ ini_set( 'session.gc_maxlifetime', '1209600' );
 
 /**@}*/
 
-/**
- * Fix magic quotes
- * @{
- */
-
-if ( get_magic_quotes_gpc() ) {
-	$_POST = array_map( "stripslashes_deep", $_POST );
-	$_GET = array_map( "stripslashes_deep", $_GET );
-	$_COOKIE = array_map( "stripslashes_deep", $_COOKIE );
-	$_REQUEST = array_map( "stripslashes_deep", $_REQUEST );
-}
-
-/**@}*/
