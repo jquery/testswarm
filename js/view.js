@@ -1,6 +1,5 @@
-jQuery(function(){
-	if ( jQuery.fn.prettyDate ) {
-		jQuery(".pretty").prettyDate();
+jQuery(function ($) {
+	if ( $.fn.prettyDate ) {
+		$(".pretty").prettyDate();
 	}
-
 });

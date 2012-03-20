@@ -1,5 +1,5 @@
 <?php
-	$result = mysql_queryf("select distinct useragent_id from run_useragent where runs<1 and status=0;");
+	$result = mysql_queryf("SELECT DISTINCT useragent_id FROM run_useragent WHERE runs < 1 AND status = 0;");
 	$useragent_ids = array();
 
 	while($row = mysql_fetch_array($result)){

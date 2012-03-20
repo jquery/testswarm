@@ -9,8 +9,8 @@ CREATE TABLE `clients` (
   `os` varchar(10) NOT NULL default 'xp',
   `useragent` tinytext NOT NULL,
   `ip` varchar(15) NOT NULL default '',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -25,8 +25,8 @@ CREATE TABLE `jobs` (
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -44,8 +44,8 @@ CREATE TABLE `run_client` (
   `error` int(11) NOT NULL default '0',
   `total` int(11) NOT NULL default '0',
   `results` text NOT NULL,
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`run_id`,`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,8 +62,8 @@ CREATE TABLE `run_useragent` (
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`run_id`,`useragent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -79,8 +79,8 @@ CREATE TABLE `runs` (
   `name` varchar(255) NOT NULL default '',
   `url` tinytext NOT NULL,
   `status` tinyint(4) NOT NULL default '0',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -113,8 +113,8 @@ CREATE TABLE `useragents` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
-  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL default '19700101000000',
   `seed` double NOT NULL default '0',
   `password` varchar(40) NOT NULL default '',
   `auth` varchar(40) NOT NULL default '',

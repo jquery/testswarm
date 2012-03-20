@@ -3,7 +3,7 @@
 	function get_status($num){
 		if ( $num == 0 ) {
 			return "Not started yet.";
-		} else if ( $num == 1 ) {
+		} elseif ( $num == 1 ) {
 			return "In progress.";
 		} else {
 			return "Completed.";
@@ -13,11 +13,11 @@
 	function get_status2($num, $fail, $error, $total){
 		if ( $num == 0 ) {
 			return "notstarted notdone";
-		} else if ( $num == 1 ) {
+		} elseif ( $num == 1 ) {
 			return "progress notdone";
-		} else if ( $num == 2 && $fail == -1 ) {
+		} elseif ( $num == 2 && $fail == -1 ) {
 			return "timeout";
-		} else if ( $num == 2 && ($error > 0 || $total == 0) ) {
+		} elseif ( $num == 2 && ($error > 0 || $total == 0) ) {
 			return "error";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
