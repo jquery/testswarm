@@ -1,5 +1,5 @@
 <?php
-	require "inc/init.php";
+	require "inc/init-usersession.php";
 
 	$user = getItem("username", $_REQUEST, getItem("username", $_SESSION, ""));
 

@@ -1,4 +1,19 @@
 <?php
+/**
+ * Parsed the current users user agent and puts
+ * the result of it's detection into the following global variables:
+ * - $browser
+ * - $version
+ * - $os
+ * - $ip
+ * - $useragent
+ * - $useragent_id
+ * @todo FIXME: These shouldn't all be dangling into the global namespace!
+ * Create a class instead (caching stuff in a static array keyed by user agent or something)
+ *
+ * @package TestSwarm
+ */
+
 	$browser = "";
 	$version = "";
 	$os = "";
@@ -22,69 +37,69 @@
 
 	if ( strpos($lowerUA, "msie") > -1 && strpos($lowerUA, "windows phone") > -1 ) {
 		$browser = "winmo";
-	} else if ( strpos($lowerUA, "msie") > -1 ) {
+	} elseif ( strpos($lowerUA, "msie") > -1 ) {
 		$browser = "msie";
-	} else if ( strpos($lowerUA, "konqueror") > -1 ) {
+	} elseif ( strpos($lowerUA, "konqueror") > -1 ) {
 		$browser = "konqueror";
-	} else if ( strpos($lowerUA, "chrome") > -1 ) {
+	} elseif ( strpos($lowerUA, "chrome") > -1 ) {
 		$browser = "chrome";
-	} else if ( strpos($lowerUA, "webos") > -1 ) {
+	} elseif ( strpos($lowerUA, "webos") > -1 ) {
 		$browser = "webos";
-	} else if ( strpos($lowerUA, "android") > -1 && strpos($lowerUA, "mobile safari") > -1 ) {
+	} elseif ( strpos($lowerUA, "android") > -1 && strpos($lowerUA, "mobile safari") > -1 ) {
 		$browser = "android";
-	} else if ( strpos($lowerUA, "series60") > -1 ) {
+	} elseif ( strpos($lowerUA, "series60") > -1 ) {
 		$browser = "s60";
-	} else if ( strpos($lowerUA, "blackberry") > -1 ) {
+	} elseif ( strpos($lowerUA, "blackberry") > -1 ) {
 		$browser = "blackberry";
-	} else if ( strpos($lowerUA, "opera mobi") > -1 ) {
+	} elseif ( strpos($lowerUA, "opera mobi") > -1 ) {
 		$browser = "operamobile";
-	} else if ( strpos($lowerUA, "fennec") > -1 ) {
+	} elseif ( strpos($lowerUA, "fennec") > -1 ) {
 		$browser = "fennec";
-	} else if ( strpos($lowerUA, "webkit") > -1 && strpos($lowerUA, "mobile") > -1 ) {
+	} elseif ( strpos($lowerUA, "webkit") > -1 && strpos($lowerUA, "mobile") > -1 ) {
 		$browser = "mobilewebkit";
-	} else if ( strpos($lowerUA, "webkit") > -1 ) {
+	} elseif ( strpos($lowerUA, "webkit") > -1 ) {
 		$browser = "webkit";
-	} else if ( strpos($lowerUA, "presto") > -1 ) {
+	} elseif ( strpos($lowerUA, "presto") > -1 ) {
 		$browser = "presto";
-	} else if ( strpos($lowerUA, "gecko") > -1 ) {
+	} elseif ( strpos($lowerUA, "gecko") > -1 ) {
 		$browser = "gecko";
 	}
 
 	if ( strpos($lowerUA, "windows nt 6.1") > -1 ) {
 		$os = "win7";
-	} else if ( strpos($lowerUA, "windows nt 6.0") > -1 ) {
+	} elseif ( strpos($lowerUA, "windows nt 6.0") > -1 ) {
 		$os = "vista";
-	} else if ( strpos($lowerUA, "windows nt 5.2") > -1 ) {
+	} elseif ( strpos($lowerUA, "windows nt 5.2") > -1 ) {
 		$os = "2003";
-	} else if ( strpos($lowerUA, "windows nt 5.1") > -1 ) {
+	} elseif ( strpos($lowerUA, "windows nt 5.1") > -1 ) {
 		$os = "xp";
-	} else if ( strpos($lowerUA, "windows nt 5.0") > -1 ) {
+	} elseif ( strpos($lowerUA, "windows nt 5.0") > -1 ) {
 		$os = "2000";
-	} else if ( strpos($lowerUA, "blackberry") > -1 ) {
+	} elseif ( strpos($lowerUA, "blackberry") > -1 ) {
 		$os = "blackberry";
-	} else if ( strpos($lowerUA, "iphone") > -1 ) {
+	} elseif ( strpos($lowerUA, "iphone") > -1 ) {
 		$os = "iphone";
-	} else if ( strpos($lowerUA, "ipod") > -1 ) {
+	} elseif ( strpos($lowerUA, "ipod") > -1 ) {
 		$os = "ipod";
-	} else if ( strpos($lowerUA, "ipad") > -1 ) {
+	} elseif ( strpos($lowerUA, "ipad") > -1 ) {
 		$os = "ipad";
-	} else if ( strpos($lowerUA, "symbian") > -1 ) {
+	} elseif ( strpos($lowerUA, "symbian") > -1 ) {
 		$os = "symbian";
-	} else if ( strpos($lowerUA, "webos") > -1 ) {
+	} elseif ( strpos($lowerUA, "webos") > -1 ) {
 		$os = "webos";
-	} else if ( strpos($lowerUA, "android") > -1 ) {
+	} elseif ( strpos($lowerUA, "android") > -1 ) {
 		$os = "android";
-	} else if ( strpos($lowerUA, "windows phone") > -1 ) {
+	} elseif ( strpos($lowerUA, "windows phone") > -1 ) {
 		$os = "winmo";
-	} else if ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_4") > -1 ) {
+	} elseif ( strpos($lowerUA, "os x 10.4") > -1 || strpos($lowerUA, "os x 10_4") > -1 ) {
 		$os = "osx10.4";
-	} else if ( strpos($lowerUA, "os x 10.5") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
+	} elseif ( strpos($lowerUA, "os x 10.5") > -1 || strpos($lowerUA, "os x 10_5") > -1 ) {
 		$os = "osx10.5";
-	} else if ( strpos($lowerUA, "os x 10.6") > -1 || strpos($lowerUA, "os x 10_6") > -1 ) {
+	} elseif ( strpos($lowerUA, "os x 10.6") > -1 || strpos($lowerUA, "os x 10_6") > -1 ) {
 		$os = "osx10.6";
-	} else if ( strpos($lowerUA, "os x") > -1 ) {
+	} elseif ( strpos($lowerUA, "os x") > -1 ) {
 		$os = "osx";
-	} else if ( strpos($lowerUA, "linux") > -1 ) {
+	} elseif ( strpos($lowerUA, "linux") > -1 ) {
 		$os = "linux";
 	}
 

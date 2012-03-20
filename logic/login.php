@@ -1,14 +1,14 @@
 <?php
 	$title = "Login";
 
-	if ( $_SESSION["username"] && $_SESSION["auth"] == "yes" ) {
+	if ( isset( $_SESSION["username"] ) && isset( $_SESSION["auth"] ) && $_SESSION["auth"] == "yes" ) {
 		$username = $_SESSION["username"];
 		header("Location: " . swarmpath( "user/$username/" ) );
-		exit();
+		exit;
 	}
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST["username"]);
-	$password = $_POST["password"];
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", getItem( "username", $_POST, false ) );
+	$password = getItem( "password", $_POST, false );
 	$error = "";
 
 	if ( $username && $password ) {

@@ -73,7 +73,7 @@ function loadBrowsers($name, $mobile) {
 if ( $found ) { ?>
 <div class="join">
 	<p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
-	<?php if ( !$_SESSION["username"] ) { ?>
+	<?php if ( !isset( $_SESSION["username"] ) ) { ?>
 	<form action="" method="get">
 		<input type="hidden" name="state" value="run"/>
 		<br/><strong>Username:</strong><br/>

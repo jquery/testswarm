@@ -1,5 +1,5 @@
 <?php
-	require "inc/init.php";
+	require "inc/init-usersession.php";
 
 	$run_id  = preg_replace("/[^0-9]/",  "", getItem("run_id", $_POST, ""));
 	$fail    = preg_replace("/[^0-9-]/", "", getItem("fail"  , $_POST, ""));

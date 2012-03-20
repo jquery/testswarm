@@ -3,7 +3,7 @@
 	function get_status($num){
 		if ( $num == 0 ) {
 			return "Not started yet.";
-		} else if ( $num == 1 ) {
+		} elseif ( $num == 1 ) {
 			return "In progress.";
 		} else {
 			return "Completed.";
@@ -13,11 +13,11 @@
 	function get_status2($num, $fail, $error, $total){
 		if ( $num == 0 ) {
 			return "notstarted notdone";
-		} else if ( $num == 1 ) {
+		} elseif ( $num == 1 ) {
 			return "progress notdone";
-		} else if ( $num == 2 && $fail == -1 ) {
+		} elseif ( $num == 2 && $fail == -1 ) {
 			return "timeout";
-		} else if ( $num == 2 && ($error > 0 || $total == 0) ) {
+		} elseif ( $num == 2 && ($error > 0 || $total == 0) ) {
 			return "error";
 		} else {
 			return $fail > 0 ? "fail" : "pass";
@@ -38,23 +38,23 @@
 
 		if ( $name == "xp" ) {
 			$name = "Windows XP";
-		} else if ( $name == "vista" ) {
+		} elseif ( $name == "vista" ) {
 			$name = "Windows Vista";
-		} else if ( $name == "win7" ) {
+		} elseif ( $name == "win7" ) {
 			$name = "Windows 7";
-		} else if ( $name == "2000" ) {
+		} elseif ( $name == "2000" ) {
 			$name = "Windows 2000";
-		} else if ( $name == "2003" ) {
+		} elseif ( $name == "2003" ) {
 			$name = "Windows 2003";
-		} else if ( $name == "osx10.4" ) {
+		} elseif ( $name == "osx10.4" ) {
 			$name = "OS X 10.4";
-		} else if ( $name == "osx10.5" ) {
+		} elseif ( $name == "osx10.5" ) {
 			$name = "OS X 10.5";
-		} else if ( $name == "osx10.6" ) {
+		} elseif ( $name == "osx10.6" ) {
 			$name = "OS X 10.6";
-		} else if ( $name == "osx" ) {
+		} elseif ( $name == "osx" ) {
 			$name = "OS X";
-		} else if ( $name == "linux" ) {
+		} elseif ( $name == "linux" ) {
 			$name = "Linux";
 		}
 
@@ -131,11 +131,11 @@
 
 					if ( strstr($status, "notdone") || strstr($cur, "notdone") ) {
 						$status = "notstarted notdone";
-					} else if ( $status == "error" || $cur == "error" ) {
+					} elseif ( $status == "error" || $cur == "error" ) {
 						$status = "error";
-					} else if ( $status == "timeout" || $cur == "timeout" ) {
+					} elseif ( $status == "timeout" || $cur == "timeout" ) {
 						$status = "timeout";
-					} else if ( $status == "fail" || $cur == "fail" ) {
+					} elseif ( $status == "fail" || $cur == "fail" ) {
 						$status = "fail";
 					} else {
 						$status = "pass";
@@ -162,7 +162,7 @@
 	$output .= "</tr>\n";
 
 	}
-	
+
 	if ( $last ) {
 		$header = "<tr><th></th>\n";
 		$last_browser = array();

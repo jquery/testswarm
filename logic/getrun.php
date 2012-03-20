@@ -3,7 +3,7 @@
 	#echo "{cmd:'reload',args:''}";
 	#exit();
 
-	require "inc/init.php";
+	require "inc/init-usersession.php";
 
 	$result = mysql_queryf("SELECT run_id FROM run_useragent WHERE useragent_id=%u AND runs < max AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id=run_id AND client_id=%u) ORDER BY run_id DESC LIMIT 1;", $useragent_id, $client_id);
 

@@ -1,61 +1,54 @@
 <?php
-	session_start();
+/**
+ * This is the main front-end entry point for TestSwarm.
+ *
+ * All HTML-based views served to web browsers start here.
+ * The recommended configuration will have web requests
+ * rewritten from a path to a query string calling index.php
+ *
+ * @package TestSwarm
+ */
 
-	require "inc/utilities.php";
+require "inc/init.php";
 
-	$swarmConfig = parse_ini_file("config.ini", true);
-	// Extend default options
-	$swarmConfig = array_extend(array(
-		"database" => array(
-			"host" => "localhost",
-			"username" => "root",
-			"password" => "root",
-			"database" => "testswarm",
-		),
-		"web" => array(
-			"title" => "Test Swarm",
-			"contextpath" => "",
-		),
-	), $swarmConfig);
+require "inc/browser.php";
+require "inc/db.php";
 
-	// $swarmDebug = true;
-	require "inc/browser.php";
-	require "inc/db.php";
+$state = preg_replace("/[^a-z]/", "", getItem( "state", $_REQUEST, "" ) );
 
-	// Increase the session timeout to two weeks
-	ini_set("session.gc_maxlifetime", "1209600");
+if ( !$state ) {
+	$state = "home";
+}
 
-	$state = preg_replace("/[^a-z]/", "", getItem( "state", $_REQUEST, "" ) );
+$logicFile = "logic/$state.php";
+$contentFile = "content/$state.php";
 
-	if ( !$state ) {
-		$state = "home";
+if ( $state ) {
+	if ( file_exists( $logicFile ) ) {
+		require $logicFile;
+	} elseif ( !file_exists($contentFile) ) {
+		header( $_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404 );
+		echo '<h2>TestSwarm: Invalid state</h2>';
+		exit;
 	}
-
-	$logicFile = "logic/$state.php";
-	$contentFile = "content/$state.php";
-
-	if ( $state ) {
-		if ( file_exists($logicFile) ) {
-			require $logicFile;
-		} else if ( !file_exists($contentFile) ) {
-			header("HTTP/1.0 404 Not Found");
-			exit();
-		}
-	}
+}
 
 if ( $title ) {
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<title><?php echo htmlentities( $swarmConfig['web']['title'] . ': ' . $title ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>"/>
-	<?php echo isset($scripts) ? $scripts : ""; ?>
+<?php
+		echo isset( $scripts ) ? "\t" . $scripts . "\n" : "";
+?>
 </head>
 <body>
 	<ul class="nav">
-		<?php if ( $_SESSION["username"] && $_SESSION["auth"] == "yes" ) { ?>
+		<?php if ( isset( $_SESSION["username"] ) && isset( $_SESSION["auth"] ) && $_SESSION["auth"] == "yes" ) { ?>
 		<li><strong><a href="<?php echo swarmpath( "user/{$_SESSION["username"]}/" ); ?>"><?php echo $_SESSION["username"];?></a></strong></li>
 		<li><a href="<?php echo swarmpath( "run/{$_SESSION["username"]}" );?>">Join the Swarm</a></li>
 		<li><a href="<?php echo swarmpath( "logout/" ); ?>">Logout</a></li>

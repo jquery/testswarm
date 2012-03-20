@@ -1,13 +1,14 @@
 <?php
 	$title = "Signup";
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_POST["username"]);
-	$password = $_POST["password"];
-	$email    = $_POST["email"];
-	$request  = $_POST["request"];
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", getItem( "username", $_POST, false ) );
+	$password = getItem( "password", $_POST, false );
+
+	$email    = getItem( "email", $_POST, null );
+	$request  = getItem( "request", $_POST, null );
 	$error    = "";
 
-	if ( !($username && $password) ) {
+	if ( !$username || !$password ) {
 		return;
 	}
 

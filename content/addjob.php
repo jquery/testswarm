@@ -15,13 +15,13 @@
 		<legend>Browsers</legend>
 
 		<p>Choose the browsers in which your test suites will run (each browser will be run at least as many times as specified.</p>
-		<legend><input type="radio" name="browsers" value="all" /> <strong>All</strong> available browsers</legend><br/>
+		<legend><input type="radio" name="browsers" value="all"/> <strong>All</strong> available browsers</legend><br/>
 		<legend><input type="radio" name="browsers" value="popular" checked="checked"/> The most <strong>popular</strong> browser (<a href="http://marketshare.hitslink.com/browser-market-share.aspx?qprid=2">99%+ of all browsers in use</a>)</legend><br/>
-		<legend><input type="radio" name="browsers" value="current" /> The <strong>current release</strong> of all the major browsers</legend><br/>
-		<legend><input type="radio" name="browsers" value="gbs" /> The browsers currently supported in <strong>Yahoo's <a href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support</a></strong></legend><br/>
-		<legend><input type="radio" name="browsers" value="beta" /> Upcoming <strong>alphas/betas</strong> of popular browsers</legend><br/>
-		<legend><input type="radio" name="browsers" value="popularbeta" /> <strong>Popular</strong> browsers and their upcoming <strong>alphas/betas</strong></legend><br/>
-		<!--<legend><input type="radio" name="browsers" value="mobile" /> Popular releases of <strong>mobile</strong> browsers</legend>-->
+		<legend><input type="radio" name="browsers" value="current"/> The <strong>current release</strong> of all the major browsers</legend><br/>
+		<legend><input type="radio" name="browsers" value="gbs"/> The browsers currently supported in <strong>Yahoo's <a href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support</a></strong></legend><br/>
+		<legend><input type="radio" name="browsers" value="beta"/> Upcoming <strong>alphas/betas</strong> of popular browsers</legend><br/>
+		<legend><input type="radio" name="browsers" value="popularbeta"/> <strong>Popular</strong> browsers and their upcoming <strong>alphas/betas</strong></legend><br/>
+		<!--<legend><input type="radio" name="browsers" value="mobile"/> Popular releases of <strong>mobile</strong> browsers</legend>-->
 	</fieldset>
 
 	<fieldset>

@@ -1,67 +1,110 @@
 <?php
-	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
-	if ( !$username ) {
-		$username = $_REQUEST["user"];
-	}
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
-	if ( $username ) {
-		$_SESSION["username"] = $username;
-	}
-	# We need a username to set up an account
-	if ( !$username ) {
-		# TODO: Improve error message quality.
-		exit("Username required. ?user=USERNAME.");
-	}
+/**
+ * This the main initialization file for TestSwarm.
+ * All web requests should go through here as early as possible.
+ */
 
-	$client_id = preg_replace("/[^0-9]/", "", getItem("client_id", $_REQUEST, ""));
+// Global requirements
+require "inc/utilities.php";
 
-	# Existing client
-	if ( $client_id ) {
-		$result = mysql_queryf("SELECT user_id, useragent_id FROM clients WHERE id=%u LIMIT 1;", $client_id);
 
-		if ( $row = mysql_fetch_array($result) ) {
-			$user_id = $row[0];
-			$useragent_id = $row[1];
+/**
+ * Default settings
+ * @{
+ */
+$swarmInstallDir = dirname( __DIR__ );
 
-			# If the client ID is already provided, update its record so
-			# that we know that it's still alive
-			mysql_queryf("UPDATE clients SET updated=NOW() WHERE id=%u LIMIT 1;", $client_id);
+// Verify that the config.ini file exists
+if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
+	echo "testswarm.ini missing!\n";
+	exit;
+}
 
-		# TODO: Improve error message quality.
-		} else {
-			echo "Client doesn't exist.";
-			exit();
-		}
+$swarmConfig = array(
+	"database" => array(
+		"host" => "localhost",
+		"database" => "testswarm",
+		"username" => "root",
+		"password" => "root",
+	),
+	"web" => array(
+		"contextpath" => "",
+		"title" => "Test Swarm",
+	),
+	"debug" => array(
+		"show_exception_details" => "0",
+		"php_error_reporting" => "1",
+	),
+);
 
-	# The user is setting up a new client session
+// Read configuration options and let the INI file
+// override default settings.
+$swarmConfig = array_extend( $swarmConfig, parse_ini_file( "$swarmInstallDir/testswarm.ini", true ) );
+
+/**@}*/
+
+
+/**
+ * Debugging
+ * @{
+ */
+function swarmExceptionHandler( Exception $e ) {
+	global $swarmConfig;
+
+	$msg = "<h2>TestSwarm internal error</h2>\n\n";
+
+	if ( $swarmConfig['debug']['show_exception_details'] === '1' ) {
+		$msg .=
+			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
+			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
+			"</p>\n";
 	} else {
-		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf("SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version;", $browser, $version);
-
-		if ( $row = mysql_fetch_array($result) ) {
-			$useragent_id = $row[0];
-			$useragent_name = $row[1];
-
-		# If the useragent isn't needed, failover with an error message
-		# TODO: Improve error message quality.
-		} else {
-			echo "Browser is not needed for testing. Browser: $browser Version: $version";
-			exit();
-		}
-
-		# Figure out what the user's ID number is
-		$result = mysql_queryf("SELECT id FROM users WHERE name=%s;", $username);
-
-		if ( $row = mysql_fetch_array($result) ) {
-			$user_id = intval($row[0]);
-
-		# If the user doesn't have one, create a new user account
-		} else {
-			$result = mysql_queryf("INSERT INTO users (name,created,seed) VALUES(%s,NOW(),RAND());", $username);
-			$user_id = intval(mysql_insert_id());
-		}
-
-		# Insert in a new record for the client and get its ID
-		mysql_queryf("INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created) VALUES(%u,%u,%s,%s,%s,NOW());", $user_id, $useragent_id, $useragent, $os, $ip);
-		$client_id = mysql_insert_id();
+		$msg .=
+			'<p>Set <b><tt>debug[show_exception_details] = 1;</tt></b> ' .
+			'at the bottom of testswarm.ini to show detailed debugging information.</p>';
 	}
+
+	if ( !headers_sent() ) {
+		header( $_SERVER["SERVER_PROTOCOL"] . " 500 TestSwarm Internal Error", true, 500 );
+	}
+
+	echo $msg;
+	exit;
+}
+
+set_exception_handler( 'swarmExceptionHandler' );
+
+
+if ( $swarmConfig['debug']['php_error_reporting'] === '1' ) {
+	error_reporting( E_ALL );
+	ini_set( 'display_errors', 1 );
+}
+
+/**@}*/
+
+
+/**
+ * Session
+ * @{
+ */
+
+session_start();
+
+// Increase the session timeout to two weeks (3600 * 24 * 14)
+ini_set( 'session.gc_maxlifetime', '1209600' );
+
+/**@}*/
+
+/**
+ * Fix magic quotes
+ * @{
+ */
+
+if ( get_magic_quotes_gpc() ) {
+	$_POST = array_map( "stripslashes_deep", $_POST );
+	$_GET = array_map( "stripslashes_deep", $_GET );
+	$_COOKIE = array_map( "stripslashes_deep", $_COOKIE );
+	$_REQUEST = array_map( "stripslashes_deep", $_REQUEST );
+}
+
+/**@}*/
