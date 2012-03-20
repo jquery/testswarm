@@ -292,7 +292,8 @@ ul.clients li {
 	padding: 3px;
 	border: 1px solid #E5E5E5;
 	background: #F5F5F5;
-	width: 180px;
+	height: 24px;
+	min-width: 180px;
 	font-size: 10px;
 }
 
