@@ -87,6 +87,45 @@
 		}
 	}
 
+	/**
+	 * Convert a date string into a Unix timestamp.
+	 * Interpreteting the date string in GMT context (instead of the time zone currently 
+	 * set with date_default_timezone_set in ./inc/init.php)
+	 *
+	 * Be careful not to use this function when working with non-dates
+	 * such as "1 minute ago". Those must be passed to strtotime() directly, otherwise offset
+	 * will be incorrectly offset applied. gmstrototime() is only to be used on actual dates
+	 * such as "2012-01-01 15:45:01".
+	 *
+	 * @source php.net/strtotime#107773
+	 *
+	 * @param $time string
+	 * @param $now int
+	 * @return int Timestamp
+	 */
+	function gmstrtotime( $time, $now = null ) {
+		static $utc_offset = null;
+		if ( $utc_offset === null ) {
+			$utc_offset = date_offset_get( new DateTime );
+		}
+		if ( $now === null ) {
+			$loctime = strtotime( $time );
+		} else {
+			$loctime = strtotime( $time, $now );
+		}
+		return $loctime + $utc_offset;
+	}
+
+	/**
+	 * Convert Unix timestamp into a 14-digit timestamp (YYYYMMDDHHIISS).
+	 * For usage in the TestSwarm database.
+	 * @param $timestamp int Unix timestamp, if 0 is given, "now" will be assumed.
+	 */
+	function swarmdb_dateformat( $timestamp = 0 ) {
+		$timestamp = $timestamp === 0 ? time() : $timestamp;
+		return gmdate( "YmdHis", $timestamp );
+	}
+
 	/*
 	 * Central function to get paths to files and directories
 	 * @param $rel string Relative path from the testswarm root, without leading slash

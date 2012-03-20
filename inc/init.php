@@ -8,6 +8,9 @@
 require "inc/request.php";
 require "inc/utilities.php";
 
+// Defines
+define( 'SWARM_NOW', 0 );
+
 
 /**
  * Default settings

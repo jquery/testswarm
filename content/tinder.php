@@ -35,21 +35,23 @@
 	}
 
 	$result = mysql_queryf(
-"SELECT
-	useragents.engine as engine,
-	useragents.name as name,
-	clients.os as os,
-	clients.created as since
-FROM
-	clients, useragents
-WHERE
-	clients.useragent_id=useragents.id
-	AND DATE_ADD(clients.updated, INTERVAL 1 minute) > NOW()
-	AND clients.user_id=%u
-ORDER BY
-	useragents.engine,
-	useragents.name;
-", $user_id );
+		"SELECT
+			useragents.engine as engine,
+			useragents.name as name,
+			clients.os as os,
+			clients.created as since
+		FROM
+			clients, useragents
+		WHERE
+			clients.useragent_id=useragents.id
+			AND clients.updated > %s
+			AND clients.user_id=%u
+		ORDER BY
+			useragents.engine,
+			useragents.name;",
+		swarmdb_dateformat( strtotime( '1 minutes ago' ) ),
+		$user_id
+	);
 
 	if ( mysql_num_rows( $result ) > 0 ) {
 
@@ -60,6 +62,12 @@ ORDER BY
 			$browser_name = $row[1];
 			$name = $row[2];
 			$since = $row[3];
+
+			$since_local = date( 'r', gmstrtotime( $since ) );
+			// PHP's "c" claims to be ISO compatible but prettyDate JS disagrees
+			// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z")
+			// Constructing format manually instead
+			$since_zulu_iso = gmdate( 'Y-m-d\TH:i:s\Z', gmstrtotime( $since ) );
 
 			if ( $name == "xp" ) {
 				$name = "Windows XP";
@@ -83,7 +91,7 @@ ORDER BY
 				$name = "Linux";
 			}
 
-			echo "<li><img src='" . swarmpath( "/" ) . "images/$engine.sm.png' class='$engine'/> <strong class='name'>$browser_name $name</strong><br>Connected <span title='$since' class='pretty'>$since</span></li>";
+			echo "<li><img src=\"" . swarmpath( "/" ) . "images/$engine.sm.png\" class=\"$engine\"/> <strong class=\"name\">$browser_name $name</strong><br/>Connected <span title=\"" . htmlspecialchars( $since_zulu_iso ) . "\" class=\"pretty\">" . htmlspecialchars( $since_local ) . "</span></li>";
 		}
 
 		echo "</ul>";
@@ -93,9 +101,24 @@ ORDER BY
 	$job_search = preg_replace("/[^a-zA-Z ]/", "", getItem( "job", $_REQUEST, "" ) );
 	$job_search .= "%";
 
-	$search_result = mysql_queryf("SELECT jobs.name, jobs.status, jobs.id FROM jobs, users WHERE jobs.name LIKE %s AND users.name=%s AND jobs.user_id=users.id ORDER BY jobs.created DESC LIMIT 15;", $job_search, $search_user);
+	$search_result = mysql_queryf(
+		"SELECT
+			jobs.name,
+			jobs.status,
+			jobs.id
+		FROM
+			jobs, users
+		WHERE
+			jobs.name LIKE %s
+			AND users.name=%s
+			AND jobs.user_id=users.id
+		ORDER BY jobs.created DESC
+		LIMIT 15;",
+		$job_search,
+		$search_user
+	);
 
-	if ( mysql_num_rows($search_result) > 0 ) {
+	if ( mysql_num_rows( $search_result ) > 0 ) {
 
 		echo '<br/><h3>Recent Jobs:</h3><table class="results"><tbody>';
 
@@ -104,7 +127,7 @@ ORDER BY
 		$addBrowser = true;
 		$last = "";
 
-		while ( $row = mysql_fetch_array($search_result) ) {
+		while ( $row = mysql_fetch_array( $search_result ) ) {
 			$job_name = $row[0];
 			$job_status = get_status(intval($row[1]));
 			$job_id = $row[2];
@@ -114,7 +137,24 @@ ORDER BY
 			$results = array();
 			$states = array();
 
-			$result = mysql_queryf("SELECT runs.id as run_id, runs.url as run_url, runs.name as run_name, useragents.engine as browser, useragents.name as browsername, useragents.id as useragent_id, run_useragent.status as status FROM run_useragent, runs, useragents WHERE runs.job_id=%u AND run_useragent.run_id=runs.id AND run_useragent.useragent_id=useragents.id ORDER BY run_id, browsername;", $job_id);
+			$result = mysql_queryf(
+				"SELECT
+					runs.id as run_id,
+					runs.url as run_url,
+					runs.name as run_name,
+					useragents.engine as browser,
+					useragents.name as browsername,
+					useragents.id as useragent_id,
+					run_useragent.status as status
+				FROM
+					run_useragent, runs, useragents
+				WHERE
+					runs.job_id=%u
+					AND run_useragent.run_id=runs.id
+					AND run_useragent.useragent_id=useragents.id
+				ORDER BY run_id, browsername;",
+				$job_id
+			);
 
 			while ( $row = mysql_fetch_assoc($result) ) {
 				if ( $row["run_id"] != $last ) {
@@ -124,7 +164,24 @@ ORDER BY
 
 					$useragents = array();
 
-					$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id, useragents.name as browser FROM useragents, run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id AND useragents.id=useragent_id ORDER BY browser;", $row["run_id"]);
+					$runResult = mysql_queryf(
+						"SELECT
+							run_client.client_id as client_id,
+							run_client.status as status,
+							run_client.fail as fail,
+							run_client.error as error,
+							run_client.total as total,
+							clients.useragent_id as useragent_id,
+							useragents.name as browser
+						FROM
+							useragents, run_client, clients
+						WHERE
+							run_client.run_id=%u
+							AND run_client.client_id=clients.id
+							AND useragents.id=useragent_id
+						ORDER BY browser;",
+						$row["run_id"]
+					);
 
 					while ( $ua_row = mysql_fetch_assoc($runResult) ) {
 						if ( !$useragents[ $ua_row["useragent_id"] ] ) {
