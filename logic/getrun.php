@@ -1,7 +1,10 @@
 <?php
+
 	# Uncomment to reload all connected clients.
-	#echo "{cmd:'reload',args:''}";
-	#exit();
+	#echo '{ "cmd": "reload", "args": "" }'; exit;
+
+	# Uncomment to set a different updateRate in the client memory.
+	#echo '{ "cmd": "rate", "args": "10" }'; exit;
 
 	require "inc/init-usersession.php";
 
