@@ -42,7 +42,7 @@ $swarmConfig = array(
 	),
 	"debug" => array(
 		"show_exception_details" => "0",
-		"php_error_reporting" => "1",
+		"php_error_reporting" => "0",
 	),
 );
 
@@ -52,6 +52,11 @@ $swarmConfig = array_extend( $swarmConfig, parse_ini_file( "$swarmInstallDir/tes
 
 // Timezone
 date_default_timezone_set( $swarmConfig["general"]["timezone"] );
+
+// Type conversion
+// (parse_ini_file reads everything as strings)
+$swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
+$swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
 
 /**@}*/
 
@@ -65,7 +70,7 @@ function swarmExceptionHandler( Exception $e ) {
 
 	$msg = "<h2>TestSwarm internal error</h2>\n\n";
 
-	if ( $swarmConfig['debug']['show_exception_details'] === '1' ) {
+	if ( $swarmConfig["debug"]["show_exception_details"] === true ) {
 		$msg .=
 			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
 			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
@@ -84,11 +89,11 @@ function swarmExceptionHandler( Exception $e ) {
 	exit;
 }
 
-set_exception_handler( 'swarmExceptionHandler' );
+set_exception_handler( "swarmExceptionHandler" );
 
-if ( $swarmConfig['debug']['php_error_reporting'] === '1' ) {
+if ( $swarmConfig["debug"]["php_error_reporting"] === true ) {
 	error_reporting( E_ALL );
-	ini_set( 'display_errors', 1 );
+	ini_set( "display_errors", 1 );
 }
 
 /**@}*/
