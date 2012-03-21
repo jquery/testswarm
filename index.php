@@ -6,6 +6,7 @@
  * The recommended configuration will have web requests
  * rewritten from a path to a query string calling index.php
  *
+ * @since 0.1.0
  * @package TestSwarm
  */
 

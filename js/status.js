@@ -1,3 +1,9 @@
+/**
+ * JavaScript file for the "jobstatus" page in the browser.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
 jQuery(function(){
 	setTimeout(function(){
 		if ( jQuery("td.notdone").length ) {

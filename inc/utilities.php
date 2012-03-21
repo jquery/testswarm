@@ -1,7 +1,16 @@
 <?php
+/**
+ * Various utility classes and global functions.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
+
 	/**
 	 * TestSwarm exception
 	 * Just a placeholder for now, can be expanded further in the future.
+	 *
+	 * @since 0.3.0
 	 */
 	class SwarmException extends Exception {
 
@@ -11,6 +20,8 @@
 	 * Utility function to overwrite keys and support multiple levels.
 	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
 	 * is recurive but doesn't overwrite deper level's keys..)
+	 *
+	 * @since 0.1.0
 	 */
 	function array_extend( $arr1, $arr2 ) {
 		foreach ( $arr2 as $key => $val ) {
@@ -25,6 +36,7 @@
 
 	/**
 	 * MySQL query utility function
+	 * @since 0.1.0
 	 * @source php.net/mysql-query#86447
 	 */
 	function mysql_queryf($string) {
@@ -72,6 +84,7 @@
 	/**
 	 * Get item out of array, falling back on a default if need be.
 	 * Complains loudly on failing.
+	 * @since 0.1.0
 	 */
 	function getItem( $key, Array $array, $default = null ) {
 		if ( array_key_exists( $key, $array ) ) {
@@ -97,6 +110,7 @@
 	 * will be incorrectly offset applied. gmstrototime() is only to be used on actual dates
 	 * such as "2012-01-01 15:45:01".
 	 *
+	 * @since 0.3.0
 	 * @source php.net/strtotime#107773
 	 *
 	 * @param $time string
@@ -119,6 +133,8 @@
 	/**
 	 * Convert Unix timestamp into a 14-digit timestamp (YYYYMMDDHHIISS).
 	 * For usage in the TestSwarm database.
+	 * @since 0.3.0
+	 *
 	 * @param $timestamp int Unix timestamp, if 0 is given, "now" will be assumed.
 	 */
 	function swarmdb_dateformat( $timestamp = 0 ) {
@@ -128,6 +144,8 @@
 
 	/*
 	 * Central function to get paths to files and directories
+	 * @since 0.1.0
+	 *
 	 * @param $rel string Relative path from the testswarm root, without leading slash
 	 * @return string Relative path from the domain root to the specified file or directory
 	 */

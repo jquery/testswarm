@@ -1,7 +1,11 @@
 <?php
 /**
  * This the main initialization file for TestSwarm.
- * All web requests should go through here as early as possible.
+ * All web requests have to go through here,
+ * and do so as early as possible.
+ *
+ * @since 0.3.0
+ * @package TestSwarm
  */
 
 // Global requirements

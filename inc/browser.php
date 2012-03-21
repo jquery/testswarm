@@ -11,6 +11,7 @@
  * @todo FIXME: These shouldn't all be dangling into the global namespace!
  * Create a class instead (caching stuff in a static array keyed by user agent or something)
  *
+ * @since 0.1.0
  * @package TestSwarm
  */
 

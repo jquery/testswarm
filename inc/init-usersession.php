@@ -1,4 +1,12 @@
 <?php
+/**
+ * Initialize global variables related to a user,
+ * for requests that require a username.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
+
 	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
 	if ( !$username ) {
 		$username = $_REQUEST["user"];

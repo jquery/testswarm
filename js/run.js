@@ -1,3 +1,9 @@
+/**
+ * JavaScript file for the "run" page in the browser.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
 (function ( $, SWARM, undefined ) {
 	var currRunId, currRunUrl, testTimeout, pauseTimer, cmds, errorOut;
 

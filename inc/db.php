@@ -1,4 +1,11 @@
 <?php
+/**
+ * Initialize database connection.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
+
 	$db = mysql_pconnect(
 		$swarmConfig["database"]["host"],
 		$swarmConfig["database"]["username"],
