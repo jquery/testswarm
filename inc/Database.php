@@ -11,13 +11,23 @@ class Database {
 	protected $conn;
 	protected $isOpen = false;
 
-	public function __construct( $host, $username, $password, $dbname = false ) {
+	/**
+	 * Creates a Database object, opens the connection and returns the instance.
+	 *
+	 * @param $host string
+	 * @param $username string
+	 * @param $password string
+	 * @param $connType int: [optional]
+	 * @param $dbname string: [optiona]
+	 */
+	public function __construct( $host, $username, $password, $connType = DBCON_DEFAULT, $dbname = false ) {
 		$this->checkEnvironment();
-
 		$this->host = $host;
 		$this->username = $username;
 		$this->password = $password;
 		$this->dbname = $dbname;
+
+		$this->open( $connType );
 		return $this;
 	}
 
@@ -25,6 +35,8 @@ class Database {
 	 * @param $connType int: DBCON_DEFAULT or DBCON_PERSISTENT.
 	 */
 	public function open( $connType = DBCON_DEFAULT ) {
+		$this->close();
+
 		switch ( $connType ) {
 		case DBCON_DEFAULT:
 			$this->conn = mysql_connect( $this->host, $this->username, $this->password, /*force_new=*/true );
@@ -35,9 +47,11 @@ class Database {
 		default:
 			throw new SwarmException( "Invalid connection type." );
 		}
+
 		if ( !$this->conn ) {
 			throw new SwarmException( "Connection to {$this->host} failed.\nMySQL Error " . $this->lastErrNo() . ": " . $this->lastErrMsg() );
 		}
+
 		if ( $this->dbname ) {
 			$isOK = mysql_select_db( $this->dbname, $this->conn );
 			if ( !$isOK ) {
@@ -46,6 +60,7 @@ class Database {
 		} else {
 			$isOK = (bool)$this->conn;
 		}
+
 		$this->isOpen = $isOK;
 		return $this;
 	}

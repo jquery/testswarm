@@ -132,9 +132,9 @@ $swarmDB = new Database(
 	$swarmConfig["database"]["host"],
 	$swarmConfig["database"]["username"],
 	$swarmConfig["database"]["password"],
+	DBCON_PERSISTENT,
 	$swarmConfig["database"]["database"]
 );
-$swarmDB->open( DBCON_PERSISTENT );
 
 /**@}*/
 
