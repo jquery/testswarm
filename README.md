@@ -2,6 +2,15 @@ TestSwarm v0.3.0pre - Distributed continuous integration for JavaScript.
 
 http://swarm.jquery.org/
 
+## REQUIREMENTS
+
+To use TestSwarm you need a web server, database server and PHP.
+Right now TestSwarm only supports Apache and MySQL as servers.
+
+* Apache 2.0+
+* PHP 5.2.3+
+* MySQL 4.0+
+
 ## DISCUSSION
 
 The Google Group for general usage and development discussion:
@@ -15,7 +24,7 @@ http://groups.google.com/group/testswarm
    `mysql DBNAME -u USER -p < testswarm.sql`
    `mysql DBNAME -u USER -p < useragents.sql`
 
-3. Copy the ./config/config-sample.ini to ./config.ini and change the options
+3. Copy the ./config/config-sample.ini to ./testswarm.ini and change the options
    to correspond to your MySQL database information.
 
 4. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
@@ -26,7 +35,7 @@ http://groups.google.com/group/testswarm
 
 6. Currently the server must be run in Apache (it uses a .htaccess file).
 
-   To run it from non-root, set contextpath = "/testswarm" (or whatever path
+   To run it from non-root, set contextpath = "/testswarm/" (or whatever path
    you use).
 
    And update the `.htaccess` file, use `RewriteBase /testswarm/`
@@ -39,4 +48,5 @@ http://groups.google.com/group/testswarm
 
 See LICENSE for more information.
 
-Planning for TestSwarm and other testing tools related work now happens on the jQuery Testing Team planning wiki: http://jquerytesting.pbworks.com/w/page/41556026/FrontPage
+Planning for TestSwarm and other testing tools related work now happens on the
+jQuery Testing Team planning wiki: http://jquerytesting.pbworks.com/w/page/41556026/FrontPage

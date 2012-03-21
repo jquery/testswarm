@@ -8,6 +8,12 @@
  * @package TestSwarm
  */
 
+// Minimum PHP version
+if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
+	echo "TestSwarm requires at least PHP 5.2.3\n";
+	exit;
+}
+
 // Global requirements
 require "inc/request.php";
 require "inc/utilities.php";
