@@ -95,7 +95,7 @@ function swarmExceptionHandler( Exception $e ) {
 
 	$msg = "<h2>TestSwarm internal error</h2>\n\n";
 
-	if ( $swarmConfig["debug"]["show_exception_details"] === true ) {
+	if ( $swarmConfig["debug"]["show_exception_details"] ) {
 		$msg .=
 			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
 			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
@@ -116,7 +116,7 @@ function swarmExceptionHandler( Exception $e ) {
 
 set_exception_handler( "swarmExceptionHandler" );
 
-if ( $swarmConfig["debug"]["php_error_reporting"] === true ) {
+if ( $swarmConfig["debug"]["php_error_reporting"] ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }
