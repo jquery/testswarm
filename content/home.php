@@ -1,9 +1,9 @@
 <blockquote>Welcome to the TestSwarm Alpha! Please be aware that TestSwarm is still under heavy testing and during this alpha period data may be lost or corrupted and clients may be unexpectedly disconnected. More information about TestSwarm can be found <a href="//github.com/jquery/testswarm/wiki">on the TestSwarm wiki</a>.</blockquote>
 <?php
-	$found = 0;
+	$foundDesktop = loadBrowsers( "Desktop Browsers", /*mobile=*/0 );
+	$foundMobile = loadBrowsers( "Mobile Browsers", /*mobile=*/1 );
 
-	loadBrowsers("Desktop Browsers", 0);
-	loadBrowsers("Mobile Browsers", 1);
+	$found = $foundDesktop || $foundMobile;
 
 if ( false ) {
 
@@ -59,8 +59,11 @@ if ( false ) {
 
 }
 
+/** @return bool: Whether the current user was found in the swarm */
 function loadBrowsers($headingTitle, $mobile) {
-	global $found, $swarmBrowser, $swarmDB;
+	global $swarmBrowser, $swarmDB;
+
+	$foundSelf = false;
 
 	$rows = $swarmDB->getRows(str_queryf(
 		"SELECT
@@ -90,7 +93,7 @@ function loadBrowsers($headingTitle, $mobile) {
 
 	foreach ( $rows as $row ) {
 		if ( $row->found ) {
-			$found = true;
+			$foundSelf = true;
 		}
 
 		if ( $row->engine != $engine ) {
@@ -109,6 +112,8 @@ function loadBrowsers($headingTitle, $mobile) {
 	}
 
 	echo '</div>';
+
+	return $foundSelf;
 }
 
 if ( $found ) { ?>
