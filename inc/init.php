@@ -14,21 +14,23 @@ if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.
 	exit;
 }
 
-// Global requirements
-require_once "inc/BrowserInfo.php";
-require_once "inc/WebRequest.php";
-require_once "inc/utilities.php";
-
 // Defines
 define( 'SWARM_NOW', 0 );
+
+define( 'DBCON_DEFAULT', 10 );
+define( 'DBCON_PERSISTENT', 11 );
+
+// Global requirements
+require_once "inc/BrowserInfo.php";
+require_once "inc/Database.php";
+require_once "inc/WebRequest.php";
+require_once "inc/utilities.php";
 
 
 /**
  * Default settings
  * @{
  */
-$swarmRequest = new WebRequest();
-
 $swarmInstallDir = dirname( __DIR__ );
 
 // Verify that the config.ini file exists
@@ -123,6 +125,21 @@ if ( $swarmConfig["debug"]["php_error_reporting"] === true ) {
 
 
 /**
+ * Database
+ * @{
+ */
+$swarmDB = new Database(
+	$swarmConfig["database"]["host"],
+	$swarmConfig["database"]["username"],
+	$swarmConfig["database"]["password"],
+	$swarmConfig["database"]["database"]
+);
+$swarmDB->open( DBCON_PERSISTENT );
+
+/**@}*/
+
+
+/**
  * Session
  * @{
  */
@@ -131,6 +148,8 @@ session_start();
 
 // Increase the session timeout to two weeks (3600 * 24 * 14)
 ini_set( 'session.gc_maxlifetime', '1209600' );
+
+$swarmRequest = new WebRequest();
 
 /**@}*/
 

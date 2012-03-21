@@ -2,6 +2,7 @@
 /**
  * Class to extract information from a user agent string.
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
@@ -34,10 +35,12 @@ class BrowserInfo {
 	/**
 	 * Get information from the TestSwarm useragents table.
 	 * @param $bi BrowserInfo
-	 * @return array|null Database row or null if no matches.
+	 * @return array|false Database row or false if no matches.
 	 */
 	public static function findSwarmUAFromBI( BrowserInfo $bi ) {
-		$result = mysql_queryf(
+		global $swarmDB;
+
+		return $swarmDB->getRow(str_queryf(
 			"SELECT
 				id,
 				name
@@ -47,13 +50,7 @@ class BrowserInfo {
 			AND	%s REGEXP version;",
 			$bi->getBrowserCodename(),
 			$bi->getBrowserVersion()
-		);
-
-		if ( $row = mysql_fetch_array( $result ) ) {
-			return $row;
-		}
-
-		return null;
+		));
 	}
 
 	/** @return string */
@@ -99,8 +96,8 @@ class BrowserInfo {
 	public function loadSwarmUserAgentData() {
 		$uaRow = self::findSwarmUAFromBI( $this );
 		if ( $uaRow ) {
-			$this->swarmUserAgentID = $uaRow["id"] ? intval( $uaRow["id"] ) : null;
-			$this->swarmUserAgentName = $uaRow["name"] ? (string)$uaRow["name"] : null;
+			$this->swarmUserAgentID = $uaRow->id ? intval( $uaRow->id ) : null;
+			$this->swarmUserAgentName = $uaRow->name ? (string)$uaRow->name : null;
 		}
 	}
 

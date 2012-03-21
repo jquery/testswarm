@@ -60,52 +60,52 @@ if ( false ) {
 }
 
 function loadBrowsers($headingTitle, $mobile) {
-	global $found, $swarmBrowser;
+	global $found, $swarmBrowser, $swarmDB;
 
-	$result = mysql_queryf(
-	"SELECT
-		useragents.engine as engine,
-		useragents.name as name,
-		(
-			SELECT COUNT(*)
-			FROM clients
-			WHERE	clients.useragent_id = useragents.id
-			AND clients.updated > %u
-		) as clients,
-		(engine=%s AND %s REGEXP version) as found
-	FROM
-		useragents
-	WHERE	active = 1
-	AND	mobile = %s
-	ORDER BY engine, name;",
-	swarmdb_dateformat( strtotime( '1 minute ago' ) ),
-	$swarmBrowser->getBrowserCodename(),
-	$swarmBrowser->getBrowserVersion(),
-	$mobile
-	);
+	$rows = $swarmDB->getRows(str_queryf(
+		"SELECT
+			useragents.engine as engine,
+			useragents.name as name,
+			(
+				SELECT COUNT(*)
+				FROM clients
+				WHERE	clients.useragent_id = useragents.id
+				AND clients.updated > %u
+			) as clients,
+			(engine=%s AND %s REGEXP version) as found
+		FROM
+			useragents
+		WHERE	active = 1
+		AND	mobile = %s
+		ORDER BY engine, name;",
+		swarmdb_dateformat( strtotime( '1 minute ago' ) ),
+		$swarmBrowser->getBrowserCodename(),
+		$swarmBrowser->getBrowserVersion(),
+		$mobile
+	));
 
 	$engine = "";
 
 	echo "<div class=\"browsers\"><h3>$headingTitle</h3>";
 
-	while ( $row = mysql_fetch_array( $result ) ) {
-		if ( $row[3] ) {
-			$found = 1;
+	foreach ( $rows as $row ) {
+		if ( $row->found ) {
+			$found = true;
 		}
 
-		if ( $row[0] != $engine ) {
+		if ( $row->engine != $engine ) {
 			echo '<br style="clear: both;"/>';
 		}
-		$num = preg_replace("/\w+ /", "", $row[1]);
+		$namePart = preg_replace( "/\w+ /", "", $row->name );
 		?>
-		<div class="browser<?php echo $row[0] != $engine ? " clear" : "";?><?php echo $row[3] ? " you" : "";?>">
-			<img src="<?php echo swarmpath( "images/{$row[0]}.sm.png" ); ?>" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
-			<span class="browser-name"><?php echo $num; ?></span>
-			<?php if ( intval($row[2]) > 0 ) {
-				echo '<span class="active">' . $row[2] . '</span>';
+		<div class="browser<?php echo $row->engine != $engine ? " clear" : "";?><?php echo $row->found ? " you" : "";?>">
+			<img src="<?php echo swarmpath( "images/{$row->engine}.sm.png" ); ?>" class="browser-icon <?php echo $row->engine; ?>" alt="<?php echo $row->name; ?>" title="<?php echo $row->name; ?>"/>
+			<span class="browser-name"><?php echo $namePart; ?></span>
+			<?php if ( intval( $row->clients ) > 0 ) {
+				echo '<span class="active">' . $row->clients . '</span>';
 			}?>
 		</div>
-		<?php $engine = $row[0];
+		<?php $engine = $row->engine;
 	}
 
 	echo '</div>';
@@ -114,7 +114,7 @@ function loadBrowsers($headingTitle, $mobile) {
 if ( $found ) { ?>
 <div class="join">
 	<p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
-	<?php if ( !isset( $_SESSION["username"] ) ) { ?>
+	<?php if ( !$swarmRequest->getSessionData( "username" ) ) { ?>
 	<form action="" method="get">
 		<input type="hidden" name="state" value="run"/>
 		<br/><strong>Username:</strong><br/>
@@ -122,7 +122,7 @@ if ( $found ) { ?>
 		<input type="submit" value="Join the Swarm"/>
 	</form>
 	<?php } else { ?>
-	<br/><p><strong>&raquo; <?php echo $_SESSION["username"]; ?></strong> <a href="<?php echo swarmpath("run/{$_SESSION["username"]}/" ); ?>">Start Running Tests</a></p>
+	<br/><p><strong>&raquo; <?php echo $swarmRequest->getSessionData( "username" ); ?></strong> <a href="<?php echo swarmpath("run/{$swarmRequest->getSessionData( "username" )}/" ); ?>">Start Running Tests</a></p>
 <?php } ?>
 </div>
 <?php } else { ?>

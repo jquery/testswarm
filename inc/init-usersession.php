@@ -10,7 +10,7 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-	global $swarmBrowser, $swarmRequest;
+	global $swarmBrowser, $swarmDB, $swarmRequest;
 
 	$username = $swarmRequest->getSessionData( "username", $swarmRequest->getVal( "user" ) );
 	if ( !$username ) {
@@ -23,7 +23,7 @@
 
 	# We need a username to set up an account
 	if ( !$username ) {
-		# TODO: Improve error message quality.
+		// @todo Improve error message quality.
 		exit( "Username required. ?user=USERNAME." );
 	}
 
@@ -33,7 +33,7 @@
 	if ( $client_id ) {
 		// Verify that the client exists,
 		// And get the user ID.
-		$result = mysql_queryf(
+		$user_id = $swarmDB->getOne(str_queryf(
 			"SELECT
 				user_id
 			FROM
@@ -41,23 +41,21 @@
 			WHERE id=%u
 			LIMIT 1;",
 			$client_id
-		);
+		));
 
-		if ( $row = mysql_fetch_array( $result ) ) {
-			$user_id = $row[0];
-
+		if ( $user_id ) {
 			// If the client ID is already provided, update its record so
 			// that we know that it's still alive
-			mysql_queryf(
+			$swarmDB->query(str_queryf(
 				"UPDATE clients SET updated=%s WHERE id=%u LIMIT 1;",
 				swarmdb_dateformat( SWARM_NOW ),
 				$client_id
-			);
+			));
 
-		// TODO: Improve error message quality.
 		} else {
+			// @todo Improve error message quality.
 			echo "Client doesn't exist.";
-			exit();
+			exit;
 		}
 
 	// No client id passed, create one
@@ -71,24 +69,21 @@
 		}
 
 		// Figure out what the user's ID number is
-		$result = mysql_queryf( "SELECT id FROM users WHERE name=%s;", $username );
-
-		if ( $row = mysql_fetch_array( $result ) ) {
-			$user_id = intval( $row[0] );
+		$user_id = $swarmDB->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
 
 		// If the user doesn't have one, create a new user account
-		} else {
-			$result = mysql_queryf(
+		if ( !$user_id ) {
+			$swarmDB->query(str_queryf(
 				"INSERT INTO users (name, created, updated, seed) VALUES(%s, %s, %s, RAND());",
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
-			);
-			$user_id = intval( mysql_insert_id() );
+			));
+			$user_id = $swarmDB->getInsertId();
 		}
 
 		// Insert in a new record for the client and get its ID
-		mysql_queryf(
+		$swarmDB->query(str_queryf(
 			"INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created)
 			VALUES(%u, %u, %s, %s, %s, %s);",
 			$user_id,
@@ -97,7 +92,7 @@
 			$swarmBrowser->getOsCodename(),
 			$swarmRequest->getIP(),
 			swarmdb_dateformat( SWARM_NOW )
-		);
+		));
 
-		$client_id = mysql_insert_id();
+		$client_id = $swarmDB->getInsertId();
 	}
