@@ -24,7 +24,7 @@ if ( false ) {
 
 	$num = 1;
 
-	while ( $row = mysql_fetch_array($result) ) {
+	while ( $row = mysql_fetch_array( $result ) ) {
 		$user = $row[0];
 		$total = $row[1];
 
@@ -59,8 +59,8 @@ if ( false ) {
 
 }
 
-function loadBrowsers($name, $mobile) {
-	global $found, $browser, $version, $os;
+function loadBrowsers($headingTitle, $mobile) {
+	global $found, $swarmBrowser;
 
 	$result = mysql_queryf(
 	"SELECT
@@ -79,16 +79,16 @@ function loadBrowsers($name, $mobile) {
 	AND	mobile = %s
 	ORDER BY engine, name;",
 	swarmdb_dateformat( strtotime( '1 minute ago' ) ),
-	$browser,
-	$version,
+	$swarmBrowser->getBrowserCodename(),
+	$swarmBrowser->getBrowserVersion(),
 	$mobile
 	);
 
 	$engine = "";
 
-	echo "<div class=\"browsers\"><h3>$name</h3>";
+	echo "<div class=\"browsers\"><h3>$headingTitle</h3>";
 
-	while ( $row = mysql_fetch_array($result) ) {
+	while ( $row = mysql_fetch_array( $result ) ) {
 		if ( $row[3] ) {
 			$found = 1;
 		}
@@ -105,7 +105,7 @@ function loadBrowsers($name, $mobile) {
 				echo '<span class="active">' . $row[2] . '</span>';
 			}?>
 		</div>
-	<?php $engine = $row[0];
+		<?php $engine = $row[0];
 	}
 
 	echo '</div>';
@@ -128,6 +128,6 @@ if ( $found ) { ?>
 <?php } else { ?>
 <div class="join">
 	<p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>
-	<p>If you feel that this may be a mistake, copy the following information (<?php echo $browser; ?> <?php echo $version; ?> <?php echo $os; ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
+	<p>If you feel that this may be a mistake, copy the following information (<?php echo $swarmBrowser->getBrowserCodename(); ?> <?php echo $swarmBrowser->getBrowserVersion(); ?> <?php echo $swarmBrowser->getOsCodename(); ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
 </div>
 <?php }
