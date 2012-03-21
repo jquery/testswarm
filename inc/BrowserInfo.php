@@ -7,8 +7,7 @@
  * @package TestSwarm
  */
 class BrowserInfo {
-
-	protected static $cache = array();
+	private $context;
 
 	protected $userAgent = "";
 	protected $browserCodename;
@@ -19,38 +18,15 @@ class BrowserInfo {
 	protected $swarmUserAgentName;
 
 	/**
+	 * @param $context TestSwarmContext
 	 * @param $userAgent string
 	 * @return BrowserInfo
 	 */
-	public static function newFromUA( $userAgent ) {
-		// Cached already?
-		if ( isset( self::$cache[$userAgent] ) ) {
-			return self::$cache[$userAgent];
-		}
-
-		$bi = new self( $userAgent );
-		return self::$cache[$userAgent] = $bi;
-	}
-
-	/**
-	 * Get information from the TestSwarm useragents table.
-	 * @param $bi BrowserInfo
-	 * @return array|false Database row or false if no matches.
-	 */
-	public static function findSwarmUAFromBI( BrowserInfo $bi ) {
-		global $swarmDB;
-
-		return $swarmDB->getRow(str_queryf(
-			"SELECT
-				id,
-				name
-			FROM
-				useragents
-			WHERE	engine = %s
-			AND	%s REGEXP version;",
-			$bi->getBrowserCodename(),
-			$bi->getBrowserVersion()
-		));
+	public static function newFromContext( TestSwarmContext $context, $userAgent ) {
+		$bi = new self();
+		$bi->context = $context;
+		$bi->parseUserAgnet( $userAgent );
+		return $bi;
 	}
 
 	/** @return string */
@@ -94,7 +70,17 @@ class BrowserInfo {
 	}
 
 	public function loadSwarmUserAgentData() {
-		$uaRow = self::findSwarmUAFromBI( $this );
+		$uaRow = $this->context->getDB()->getRow(str_queryf(
+			"SELECT
+				id,
+				name
+			FROM
+				useragents
+			WHERE	engine = %s
+			AND	%s REGEXP version;",
+			$this->getBrowserCodename(),
+			$this->getBrowserVersion()
+		));
 		if ( $uaRow ) {
 			$this->swarmUserAgentID = $uaRow->id ? intval( $uaRow->id ) : null;
 			$this->swarmUserAgentName = $uaRow->name ? (string)$uaRow->name : null;
@@ -107,7 +93,7 @@ class BrowserInfo {
 	 * Instances may not be created directly, use the static newFromUA method instead
 	 * @param $userAgent string
 	 */
-	private function __construct( $userAgent ) {
+	private function parseUserAgnet( $userAgent ) {
 		$lcUA = strtolower( $userAgent );
 
 		// Version
@@ -202,4 +188,7 @@ class BrowserInfo {
 
 		return $this;
 	}
+
+	/** Don't allow direct instantiations of this class, use newFromContext instead */
+	private function __construct() {}
 }

@@ -12,8 +12,6 @@
 
 require_once "inc/init.php";
 
-$swarmBrowser = BrowserInfo::newFromUA( isset( $_SERVER["HTTP_USER_AGENT"] ) ? $_SERVER["HTTP_USER_AGENT"] : "" );
-
 $state = preg_replace("/[^a-z]/", "", $swarmRequest->getVal( "state", "" ) );
 
 if ( !$state ) {

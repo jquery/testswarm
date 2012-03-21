@@ -7,6 +7,8 @@
  * @package TestSwarm
  */
 class Database {
+	private $context;
+
 	protected $host, $username, $password, $dbname;
 	protected $conn;
 	protected $isOpen = false;
@@ -14,21 +16,23 @@ class Database {
 	/**
 	 * Creates a Database object, opens the connection and returns the instance.
 	 *
-	 * @param $host string
-	 * @param $username string
-	 * @param $password string
+	 * @param context TestSwarmContext
 	 * @param $connType int: [optional]
-	 * @param $dbname string: [optiona]
 	 */
-	public function __construct( $host, $username, $password, $connType = DBCON_DEFAULT, $dbname = false ) {
-		$this->checkEnvironment();
-		$this->host = $host;
-		$this->username = $username;
-		$this->password = $password;
-		$this->dbname = $dbname;
 
-		$this->open( $connType );
-		return $this;
+	public static function newFromContext( TestSwarmContext $context, $connType = DBCON_DEFAULT ) {
+		$dbConf = $context->getConf()->database;
+		$db = new self();
+
+		$db->context = $context;
+		$db->host = $dbConf->host;
+		$db->username = $dbConf->username;
+		$db->password = $dbConf->password;
+		$db->dbname = $dbConf->database;
+
+		$db->open( $connType );
+
+		return $db;
 	}
 
 	/**
@@ -156,5 +160,9 @@ class Database {
 		if ( !function_exists( "mysql_connect" ) ) {
 			throw new SwarmException( "MySQL functions missing." );
 		}
+	}
+
+	private function __construct() {
+		$this->checkEnvironment();
 	}
 }
