@@ -138,10 +138,10 @@
 		static $contextpath;
 
 		if ( is_null( $contextpath ) ) {
-			// Strip trailing slash if there is one
+			// Add trailing slash if it's missing
 			$path = $swarmConfig["web"]["contextpath"];
-			if ( substr( $path, -1 ) === '/' ) {
-				$path = substr( $path, 0, -1 );
+			if ( substr( $path, -1 ) !== '/' ) {
+				$path = "$path/";
 			}
 
 			// Make sure path starts absolute.
@@ -150,13 +150,16 @@
 			if ( substr( $path, 0, 6 ) !== 'http:/' && substr( $path, 0, 6 ) !== 'https:' && $path[0] !== '/' ) {
 				$path = "/$path";
 			}
+
+			$swarmConfig["web"]["contextpath"] = $path;
 		}
 
 		// Just in case, strip the leading slash
-		// from the requested path
-		if ( $rel[0] === '/' ) {
+		// from the requested path (check length, becuase may be an empty string,
+		// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
+		if ( strlen( $rel ) > 0 && $rel[0] === '/' ) {
 			$rel = substr($rel, 1);
 		}
 
-		return "$path/$rel";
+		return $path . $rel;
 	}

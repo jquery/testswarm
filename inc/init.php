@@ -40,6 +40,12 @@ $swarmConfig = array(
 		"contextpath" => "",
 		"title" => "Test Swarm",
 	),
+	"client" => array(
+		"cooldown_rate" => "15",
+		"update_rate" => "30",
+		"timeout_rate" => "180",
+		"refresh_control" => "1",
+	),
 	"debug" => array(
 		"show_exception_details" => "0",
 		"php_error_reporting" => "0",
@@ -55,8 +61,14 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 
 // Type conversion
 // (parse_ini_file reads everything as strings)
+
 $swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
 $swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
+
+$swarmConfig["client"]["cooldown_rate"] = intval( $swarmConfig["client"]["cooldown_rate"] );
+$swarmConfig["client"]["update_rate"] = intval( $swarmConfig["client"]["update_rate"] );
+$swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout_rate"] );
+$swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
 /**@}*/
 

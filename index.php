@@ -42,6 +42,14 @@ if ( $title ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<title><?php echo htmlentities( $swarmConfig['web']['title'] . ': ' . $title ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>"/>
+	<script>window.SWARM = <?php echo json_encode( array(
+		// Derived version of $swarmConfig for the browser
+		// (not the entire array since it also contains DB passwords!)
+		"web" => array(
+			"contextpath" => swarmpath( "" ),
+		),
+		"client" => $swarmConfig["client"],
+	) ); ?>;</script>
 <?php
 		echo isset( $scripts ) ? "\t" . $scripts . "\n" : "";
 ?>
