@@ -44,7 +44,7 @@
 					AND 	clients.useragent_id = %u;",
 					$run_id,
 					$client_id,
-					$useragent_id
+					$swarmBrowser->getSwarmUserAgentID()
 				);
 
 				while ( $row = mysql_fetch_array($result) ) {
@@ -61,7 +61,7 @@
 					WHERE	useragent_id = %u
 					AND 	run_id = %u
 					LIMIT 1;",
-					$useragent_id,
+					$swarmBrowser->getSwarmUserAgentID(),
 					$run_id
 				);
 			} else {
@@ -79,7 +79,7 @@
 						AND 	clients.useragent_id = %u;",
 						$run_id,
 						$client_id,
-						$useragent_id
+						$swarmBrowser->getSwarmUserAgentID()
 					);
 
 					while ( $row = mysql_fetch_array($result) ) {
@@ -100,7 +100,7 @@
 					WHERE	useragent_id = %u
 					AND 	run_id = %u
 					LIMIT 1;",
-					$useragent_id,
+					$swarmBrowser->getSwarmUserAgentID(),
 					$run_id
 				);
 			}

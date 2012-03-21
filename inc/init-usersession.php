@@ -35,7 +35,7 @@
 		// And get the user ID.
 		$result = mysql_queryf(
 			"SELECT
-				user_id,
+				user_id
 			FROM
 				clients
 			WHERE id=%u
