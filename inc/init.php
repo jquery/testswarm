@@ -15,9 +15,9 @@ if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.
 }
 
 // Global requirements
-require "inc/BrowserInfo.php";
-require "inc/request.php";
-require "inc/utilities.php";
+require_once "inc/BrowserInfo.php";
+require_once "inc/request.php";
+require_once "inc/utilities.php";
 
 // Defines
 define( 'SWARM_NOW', 0 );
