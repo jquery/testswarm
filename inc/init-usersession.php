@@ -6,6 +6,7 @@
  * @since 0.1.0
  * @package TestSwarm
  */
+	global $swarmRequest;
 
 	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
 	if ( !$username ) {
@@ -96,7 +97,7 @@
 		mysql_queryf(
 			"INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created)
 			VALUES(%u, %u, %s, %s, %s, %s);",
-			$user_id, $useragent_id, $useragent, $os, $ip, swarmdb_dateformat( SWARM_NOW )
+			$user_id, $useragent_id, $useragent, $os, $swarmRequest->getIP(), swarmdb_dateformat( SWARM_NOW )
 		);
 		$client_id = mysql_insert_id();
 	}

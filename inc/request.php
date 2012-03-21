@@ -12,6 +12,7 @@
 
 class WebRequest {
 	protected $raw;
+	private $ip;
 
 	function __construct() {
 		$this->checkMagicQuotes();
@@ -142,5 +143,32 @@ class WebRequest {
 		}
 		$arr = $clean;
 		return $arr;
+	}
+
+	/**
+	 * @source http://roshanbh.com.np/2007/12/getting-real-ip-address-in-php.html
+	 * @return string IP
+	 */
+	public function getIP() {
+		// Cached?
+		if ( $this->ip !== null ) {
+			return $this->ip;
+		}
+
+		$ip = false;
+		if ( isset( $_SERVER["HTTP_X_FORWARDED_FOR"] ) ) {
+			$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+		} elseif ( isset( $_SERVER["HTTP_CLIENT_IP"] ) ) {
+			$ip = $_SERVER["HTTP_CLIENT_IP"];
+		} elseif ( isset( $_SERVER["REMOTE_ADDR"] ) ) {
+			$ip = $_SERVER["REMOTE_ADDR"];
+		}
+
+		if ( !$ip ) {
+			throw new SwarmException( "Could not determine client IP-address." );
+		}
+
+		$this->ip = $ip;
+		return $ip;
 	}
 }
