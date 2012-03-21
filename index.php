@@ -17,7 +17,7 @@ require_once "inc/db.php";
 // @todo: Move both to init.php, but needs to be after $swarmConfig, because db.php needs that
 $swarmBrowser = BrowserInfo::newFromUA( isset( $_SERVER["HTTP_USER_AGENT"] ) ? $_SERVER["HTTP_USER_AGENT"] : "" );
 
-$state = preg_replace("/[^a-z]/", "", getItem( "state", $_REQUEST, "" ) );
+$state = preg_replace("/[^a-z]/", "", $swarmRequest->getVal( "state", "" ) );
 
 if ( !$state ) {
 	$state = "home";

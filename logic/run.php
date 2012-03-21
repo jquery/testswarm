@@ -1,9 +1,9 @@
 <?php
 	require "inc/init-usersession.php";
 
-	$user = getItem("username", $_REQUEST, getItem("username", $_SESSION, ""));
+	$user = $swarmRequest->getVal( "username", $swarmRequest->getSessionData( "username" ) );
 
-	if ( !getItem("user", $_REQUEST, false) && $user ) {
+	if ( !$swarmRequest->getVal( "user" ) && $user ) {
 		header("Location: " . swarmpath( "run/$user/" ) );
 		exit;
 	}

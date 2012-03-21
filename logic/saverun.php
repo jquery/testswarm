@@ -1,11 +1,16 @@
 <?php
 	require "inc/init-usersession.php";
 
-	$run_id  = preg_replace("/[^0-9]/",  "", getItem("run_id", $_POST, ""));
-	$fail    = preg_replace("/[^0-9-]/", "", getItem("fail"  , $_POST, ""));
-	$error   = preg_replace("/[^0-9-]/", "", getItem("error" , $_POST, ""));
-	$total   = preg_replace("/[^0-9-]/", "", getItem("total" , $_POST, ""));
-	$results = gzencode(getItem("results", $_POST, ""));
+	if ( $swarmRequest->wasPosted() ) {
+		$run_id  = preg_replace( "/[^0-9]/",  "", $swarmRequest->getVal( "run_id", "" ) );
+		$fail    = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "fail", "" ) );
+		$error   = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "error", "" ) );
+		$total   = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "total", "" ) );
+
+		$results = gzencode( $swarmRequest->getVal( "results", "" ) );
+	} else {
+		$results = false;
+	}
 
 	# Make sure we've received some results from the client
 	if ( $results ) {
@@ -106,5 +111,6 @@
 			}
 		}
 	}
+
 	echo '<script>window.top.done();</script>';
-	exit();
+	exit;

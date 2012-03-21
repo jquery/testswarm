@@ -82,25 +82,6 @@
 	}
 
 	/**
-	 * Get item out of array, falling back on a default if need be.
-	 * Complains loudly on failing.
-	 * @since 0.1.0
-	 */
-	function getItem( $key, Array $array, $default = null ) {
-		if ( array_key_exists( $key, $array ) ) {
-			return $array[$key];
-		} else {
-			if ( func_num_args() === 3 ) {
-				return $default;
-			} else {
-				throw new SwarmException(
-					"Unable to find key `" . $key . "` in the array:\n" . print_r( $array, true )
-				);
-			}
-		}
-	}
-
-	/**
 	 * Convert a date string into a Unix timestamp.
 	 * Interpreteting the date string in GMT context (instead of the time zone currently 
 	 * set with date_default_timezone_set in ./inc/init.php)

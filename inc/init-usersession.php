@@ -12,11 +12,11 @@
  */
 	global $swarmBrowser, $swarmRequest;
 
-	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
+	$username = $swarmRequest->getSessionData( "username", $swarmRequest->getVal( "user" ) );
 	if ( !$username ) {
 		$username = $_REQUEST["user"];
 	}
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
+	$username = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $username );
 	if ( $username ) {
 		$_SESSION["username"] = $username;
 	}
@@ -24,10 +24,10 @@
 	# We need a username to set up an account
 	if ( !$username ) {
 		# TODO: Improve error message quality.
-		exit("Username required. ?user=USERNAME.");
+		exit( "Username required. ?user=USERNAME." );
 	}
 
-	$client_id = preg_replace("/[^0-9]/", "", getItem("client_id", $_REQUEST, ""));
+	$client_id = preg_replace( "/[^0-9]/", "", $swarmRequest->getVal( "client_id" ) );
 
 	// Client passed
 	if ( $client_id ) {
@@ -43,7 +43,7 @@
 			$client_id
 		);
 
-		if ( $row = mysql_fetch_array($result) ) {
+		if ( $row = mysql_fetch_array( $result ) ) {
 			$user_id = $row[0];
 
 			// If the client ID is already provided, update its record so
