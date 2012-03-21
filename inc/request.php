@@ -65,7 +65,7 @@ class WebRequest {
 	 * Returns true if the key is set, whatever the value. Useful when dealing with HTML checkboxes.
 	 */
 	public function hasKey( $key, $negative = false ) {
-		return array_key_exists( $key, $this->raw ) ? $negative : true;
+		return !array_key_exists( $key, $this->raw ) ? $negative : true;
 	}
 
 	/** @return bool */
