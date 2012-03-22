@@ -1,9 +1,9 @@
 <blockquote>Welcome to the TestSwarm Alpha! Please be aware that TestSwarm is still under heavy testing and during this alpha period data may be lost or corrupted and clients may be unexpectedly disconnected. More information about TestSwarm can be found <a href="//github.com/jquery/testswarm/wiki">on the TestSwarm wiki</a>.</blockquote>
 <?php
-	$found = 0;
+	$foundDesktop = loadBrowsers( "Desktop Browsers", /*mobile=*/0 );
+	$foundMobile = loadBrowsers( "Mobile Browsers", /*mobile=*/1 );
 
-	loadBrowsers("Desktop Browsers", 0);
-	loadBrowsers("Mobile Browsers", 1);
+	$found = $foundDesktop || $foundMobile;
 
 if ( false ) {
 
@@ -24,7 +24,7 @@ if ( false ) {
 
 	$num = 1;
 
-	while ( $row = mysql_fetch_array($result) ) {
+	while ( $row = mysql_fetch_array( $result ) ) {
 		$user = $row[0];
 		$total = $row[1];
 
@@ -59,62 +59,67 @@ if ( false ) {
 
 }
 
-function loadBrowsers($name, $mobile) {
-	global $found, $browser, $version, $os;
+/** @return bool: Whether the current user was found in the swarm */
+function loadBrowsers($headingTitle, $mobile) {
+	global $swarmBrowser, $swarmDB;
 
-	$result = mysql_queryf(
-	"SELECT
-		useragents.engine as engine,
-		useragents.name as name,
-		(
-			SELECT COUNT(*)
-			FROM clients
-			WHERE	clients.useragent_id = useragents.id
-			AND clients.updated > %u
-		) as clients,
-		(engine=%s AND %s REGEXP version) as found
-	FROM
-		useragents
-	WHERE	active = 1
-	AND	mobile = %s
-	ORDER BY engine, name;",
-	swarmdb_dateformat( strtotime( '1 minute ago' ) ),
-	$browser,
-	$version,
-	$mobile
-	);
+	$foundSelf = false;
+
+	$rows = $swarmDB->getRows(str_queryf(
+		"SELECT
+			useragents.engine as engine,
+			useragents.name as name,
+			(
+				SELECT COUNT(*)
+				FROM clients
+				WHERE	clients.useragent_id = useragents.id
+				AND clients.updated > %u
+			) as clients,
+			(engine=%s AND %s REGEXP version) as found
+		FROM
+			useragents
+		WHERE	active = 1
+		AND	mobile = %s
+		ORDER BY engine, name;",
+		swarmdb_dateformat( strtotime( '1 minute ago' ) ),
+		$swarmBrowser->getBrowserCodename(),
+		$swarmBrowser->getBrowserVersion(),
+		$mobile
+	));
 
 	$engine = "";
 
-	echo "<div class=\"browsers\"><h3>$name</h3>";
+	echo "<div class=\"browsers\"><h3>$headingTitle</h3>";
 
-	while ( $row = mysql_fetch_array($result) ) {
-		if ( $row[3] ) {
-			$found = 1;
+	foreach ( $rows as $row ) {
+		if ( $row->found ) {
+			$foundSelf = true;
 		}
 
-		if ( $row[0] != $engine ) {
+		if ( $row->engine != $engine ) {
 			echo '<br style="clear: both;"/>';
 		}
-		$num = preg_replace("/\w+ /", "", $row[1]);
+		$namePart = preg_replace( "/\w+ /", "", $row->name );
 		?>
-		<div class="browser<?php echo $row[0] != $engine ? " clear" : "";?><?php echo $row[3] ? " you" : "";?>">
-			<img src="<?php echo swarmpath( "images/{$row[0]}.sm.png" ); ?>" class="browser-icon <?php echo $row[0]; ?>" alt="<?php echo $row[1]; ?>" title="<?php echo $row[1]; ?>"/>
-			<span class="browser-name"><?php echo $num; ?></span>
-			<?php if ( intval($row[2]) > 0 ) {
-				echo '<span class="active">' . $row[2] . '</span>';
+		<div class="browser<?php echo $row->engine != $engine ? " clear" : "";?><?php echo $row->found ? " you" : "";?>">
+			<img src="<?php echo swarmpath( "images/{$row->engine}.sm.png" ); ?>" class="browser-icon <?php echo $row->engine; ?>" alt="<?php echo $row->name; ?>" title="<?php echo $row->name; ?>"/>
+			<span class="browser-name"><?php echo $namePart; ?></span>
+			<?php if ( intval( $row->clients ) > 0 ) {
+				echo '<span class="active">' . $row->clients . '</span>';
 			}?>
 		</div>
-	<?php $engine = $row[0];
+		<?php $engine = $row->engine;
 	}
 
 	echo '</div>';
+
+	return $foundSelf;
 }
 
 if ( $found ) { ?>
 <div class="join">
 	<p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
-	<?php if ( !isset( $_SESSION["username"] ) ) { ?>
+	<?php if ( !$swarmRequest->getSessionData( "username" ) ) { ?>
 	<form action="" method="get">
 		<input type="hidden" name="state" value="run"/>
 		<br/><strong>Username:</strong><br/>
@@ -122,12 +127,12 @@ if ( $found ) { ?>
 		<input type="submit" value="Join the Swarm"/>
 	</form>
 	<?php } else { ?>
-	<br/><p><strong>&raquo; <?php echo $_SESSION["username"]; ?></strong> <a href="<?php echo swarmpath("run/{$_SESSION["username"]}/" ); ?>">Start Running Tests</a></p>
+	<br/><p><strong>&raquo; <?php echo $swarmRequest->getSessionData( "username" ); ?></strong> <a href="<?php echo swarmpath("run/{$swarmRequest->getSessionData( "username" )}/" ); ?>">Start Running Tests</a></p>
 <?php } ?>
 </div>
 <?php } else { ?>
 <div class="join">
 	<p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>
-	<p>If you feel that this may be a mistake, copy the following information (<?php echo $browser; ?> <?php echo $version; ?> <?php echo $os; ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
+	<p>If you feel that this may be a mistake, copy the following information (<?php echo $swarmBrowser->getBrowserCodename(); ?> <?php echo $swarmBrowser->getBrowserVersion(); ?> <?php echo $swarmBrowser->getOsCodename(); ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
 </div>
 <?php }

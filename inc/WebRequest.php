@@ -6,11 +6,13 @@
  * - https://svn.toolserver.org/svnroot/krinkle/trunk/common/Request.php
  * - https://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/WebRequest.php?view=markup&pathrev=114154
  *
+ * @since 0.3.0
  * @package TestSwarm
  */
 
 class WebRequest {
 	protected $raw;
+	private $ip;
 
 	function __construct() {
 		$this->checkMagicQuotes();
@@ -62,10 +64,29 @@ class WebRequest {
 	}
 
 	/**
-	 * Returns true if the key is set, whatever the value. Useful when dealing with HTML checkboxes.
+	 * Is the key is set, whatever the value. Useful when dealing with HTML checkboxes.
+	 * @return bool
 	 */
-	public function hasKey( $key, $negative = false ) {
-		return array_key_exists( $key, $this->raw ) ? $negative : true;
+	public function hasKey( $key ) {
+		return !array_key_exists( $key, $this->raw ) ? false : true;
+	}
+
+	/**
+	 * @example:
+	 * $request->hasKeys( 'foo', 'bar' );
+	 * @example:
+	 * $request->hasKeys( array( 'foo', 'bar' ) );
+	 *
+	 * @return bool
+	 */
+	public function hasKeys( $keys/* , .. */ ) {
+		$keys = is_array( $keys ) ? $keys : func_get_args();
+		foreach ( $keys as $key ) {
+			if ( !array_key_exists( $key, $this->raw ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/** @return bool */
@@ -122,5 +143,32 @@ class WebRequest {
 		}
 		$arr = $clean;
 		return $arr;
+	}
+
+	/**
+	 * @source http://roshanbh.com.np/2007/12/getting-real-ip-address-in-php.html
+	 * @return string IP
+	 */
+	public function getIP() {
+		// Cached?
+		if ( $this->ip !== null ) {
+			return $this->ip;
+		}
+
+		$ip = false;
+		if ( isset( $_SERVER["HTTP_X_FORWARDED_FOR"] ) ) {
+			$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+		} elseif ( isset( $_SERVER["HTTP_CLIENT_IP"] ) ) {
+			$ip = $_SERVER["HTTP_CLIENT_IP"];
+		} elseif ( isset( $_SERVER["REMOTE_ADDR"] ) ) {
+			$ip = $_SERVER["REMOTE_ADDR"];
+		}
+
+		if ( !$ip ) {
+			throw new SwarmException( "Could not determine client IP-address." );
+		}
+
+		$this->ip = $ip;
+		return $ip;
 	}
 }

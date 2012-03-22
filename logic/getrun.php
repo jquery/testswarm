@@ -1,12 +1,7 @@
 <?php
-
-	# Uncomment to reload all connected clients.
-	#echo '{ "cmd": "reload", "args": "" }'; exit;
-
-	# Uncomment to set a different updateRate in the client memory.
-	#echo '{ "cmd": "rate", "args": "10" }'; exit;
-
 	require "inc/init-usersession.php";
+
+	global $swarmConfig;
 
 	$result = mysql_queryf(
 		"SELECT
@@ -18,9 +13,11 @@
 		AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id = run_id AND client_id = %u)
 		ORDER BY run_id DESC
 		LIMIT 1;",
-		$useragent_id,
+		$swarmBrowser->getSwarmUserAgentID(),
 		$client_id
 	);
+
+	$runInfo = false;
 
 	# A run was found
 	if ( $row = mysql_fetch_array( $result ) ) {
@@ -40,15 +37,15 @@
 		);
 
 		if ( $row = mysql_fetch_array( $result ) ) {
-			$url = $row[0];
-			$text = $row[1] . " " . ucfirst($row[2]);
+			$run_url = $row[0];
+			$run_desc = $row[1] . " " . ucfirst($row[2]);
 		}
 
 		# Mark the run as "in progress" on the useragent
 		mysql_queryf(
 			"UPDATE run_useragent SET runs = runs + 1, status = 1 WHERE run_id=%u AND useragent_id=%u LIMIT 1;",
 			$run_id,
-			$useragent_id
+			$swarmBrowser->getSwarmUserAgentID()
 		);
 
 		# Initialize the client run
@@ -59,11 +56,18 @@
 			swarmdb_dateformat( SWARM_NOW )
 		);
 
-		echo json_encode(array(
-			"id" => $run_id,
-			"url" => $url,
-			"desc" => $text
-		));
+		if ( $run_id && $run_url && $run_desc ) {
+			$runInfo =  array(
+				"id" => $run_id,
+				"url" => $run_url,
+				"desc" => $run_desc
+			);
+		}
 	}
+
+	echo json_encode( array(
+		"swarmUpdate" => array( "client" => $swarmConfig["client"] ),
+		"runInfo" => $runInfo,
+	) );
 
 	exit;

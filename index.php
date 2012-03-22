@@ -6,15 +6,15 @@
  * The recommended configuration will have web requests
  * rewritten from a path to a query string calling index.php
  *
+ * @since 0.1.0
  * @package TestSwarm
  */
 
-require "inc/init.php";
+require_once "inc/init.php";
 
-require "inc/browser.php";
-require "inc/db.php";
+$swarmBrowser = BrowserInfo::newFromUA( isset( $_SERVER["HTTP_USER_AGENT"] ) ? $_SERVER["HTTP_USER_AGENT"] : "" );
 
-$state = preg_replace("/[^a-z]/", "", getItem( "state", $_REQUEST, "" ) );
+$state = preg_replace("/[^a-z]/", "", $swarmRequest->getVal( "state", "" ) );
 
 if ( !$state ) {
 	$state = "home";
@@ -36,12 +36,20 @@ if ( $state ) {
 if ( $title ) {
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
 	<meta charset="UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<title><?php echo htmlentities( $swarmConfig['web']['title'] . ': ' . $title ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>"/>
+	<script>window.SWARM = <?php echo json_encode( array(
+		// Derived version of $swarmConfig for the browser
+		// (not the entire array since it also contains DB passwords!)
+		"web" => array(
+			"contextpath" => swarmpath( "" ),
+		),
+		"client" => $swarmConfig["client"],
+	) ); ?>;</script>
 <?php
 		echo isset( $scripts ) ? "\t" . $scripts . "\n" : "";
 ?>

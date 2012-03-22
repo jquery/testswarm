@@ -1,7 +1,16 @@
 <?php
+/**
+ * Various utility classes and global functions.
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
+
 	/**
 	 * TestSwarm exception
 	 * Just a placeholder for now, can be expanded further in the future.
+	 *
+	 * @since 0.3.0
 	 */
 	class SwarmException extends Exception {
 
@@ -11,6 +20,8 @@
 	 * Utility function to overwrite keys and support multiple levels.
 	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
 	 * is recurive but doesn't overwrite deper level's keys..)
+	 *
+	 * @since 0.1.0
 	 */
 	function array_extend( $arr1, $arr2 ) {
 		foreach ( $arr2 as $key => $val ) {
@@ -24,10 +35,23 @@
 	}
 
 	/**
-	 * MySQL query utility function
+	 * SQL query utility function
+	 * @since 0.1.0
 	 * @source php.net/mysql-query#86447
 	 */
-	function mysql_queryf($string) {
+	function mysql_queryf(/* $string, $arg, .. */) {
+		$args = func_get_args();
+		$sql_query = call_user_func_array( 'str_queryf', $args );
+
+		$result = mysql_query( $sql_query );
+		if (!$result) {
+			echo "Invalid query: " . mysql_error();
+			exit;
+		}
+
+		return $result;
+	}
+	function str_queryf($string) {
 		$args = func_get_args();
 		array_shift($args);
 		$len = strlen($string);
@@ -60,31 +84,7 @@
 			}
 		}
 
-		$result = mysql_query( $sql_query );
-		if (!$result) {
-			echo "Invalid query: " . mysql_error();
-			exit;
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Get item out of array, falling back on a default if need be.
-	 * Complains loudly on failing.
-	 */
-	function getItem( $key, Array $array, $default = null ) {
-		if ( array_key_exists( $key, $array ) ) {
-			return $array[$key];
-		} else {
-			if ( func_num_args() === 3 ) {
-				return $default;
-			} else {
-				throw new SwarmException(
-					"Unable to find key `" . $key . "` in the array:\n" . print_r( $array, true )
-				);
-			}
-		}
+		return $sql_query;
 	}
 
 	/**
@@ -97,6 +97,7 @@
 	 * will be incorrectly offset applied. gmstrototime() is only to be used on actual dates
 	 * such as "2012-01-01 15:45:01".
 	 *
+	 * @since 0.3.0
 	 * @source php.net/strtotime#107773
 	 *
 	 * @param $time string
@@ -119,6 +120,8 @@
 	/**
 	 * Convert Unix timestamp into a 14-digit timestamp (YYYYMMDDHHIISS).
 	 * For usage in the TestSwarm database.
+	 * @since 0.3.0
+	 *
 	 * @param $timestamp int Unix timestamp, if 0 is given, "now" will be assumed.
 	 */
 	function swarmdb_dateformat( $timestamp = 0 ) {
@@ -128,6 +131,8 @@
 
 	/*
 	 * Central function to get paths to files and directories
+	 * @since 0.1.0
+	 *
 	 * @param $rel string Relative path from the testswarm root, without leading slash
 	 * @return string Relative path from the domain root to the specified file or directory
 	 */
@@ -138,10 +143,10 @@
 		static $contextpath;
 
 		if ( is_null( $contextpath ) ) {
-			// Strip trailing slash if there is one
+			// Add trailing slash if it's missing
 			$path = $swarmConfig["web"]["contextpath"];
-			if ( substr( $path, -1 ) === '/' ) {
-				$path = substr( $path, 0, -1 );
+			if ( substr( $path, -1 ) !== '/' ) {
+				$path = "$path/";
 			}
 
 			// Make sure path starts absolute.
@@ -150,13 +155,16 @@
 			if ( substr( $path, 0, 6 ) !== 'http:/' && substr( $path, 0, 6 ) !== 'https:' && $path[0] !== '/' ) {
 				$path = "/$path";
 			}
+
+			$swarmConfig["web"]["contextpath"] = $path;
 		}
 
 		// Just in case, strip the leading slash
-		// from the requested path
-		if ( $rel[0] === '/' ) {
+		// from the requested path (check length, becuase may be an empty string,
+		// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
+		if ( strlen( $rel ) > 0 && $rel[0] === '/' ) {
 			$rel = substr($rel, 1);
 		}
 
-		return "$path/$rel";
+		return $path . $rel;
 	}

@@ -7,11 +7,11 @@
 		exit;
 	}
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", getItem( "username", $_POST, false ) );
-	$password = getItem( "password", $_POST, false );
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $swarmRequest->getVal( "username" ) );
+	$password = $swarmRequest->getVal( "password" );
 	$error = "";
 
-	if ( $username && $password ) {
+	if ( $swarmRequest->wasPosted() && $username && $password ) {
 
 		$result = mysql_queryf(
 			"SELECT id
