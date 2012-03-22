@@ -35,7 +35,7 @@ require_once "inc/utilities.php";
  */
 $swarmInstallDir = dirname( __DIR__ );
 
-// Verify that the config.ini file exists
+// Verify that the testswarm.ini file exists
 if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
 	echo "testswarm.ini missing!\n";
 	exit;
@@ -113,8 +113,8 @@ function swarmExceptionHandler( Exception $e ) {
 			"</p>\n";
 	} else {
 		$msg .=
-			'<p>Set <b><tt>debug[show_exception_details] = 1;</tt></b> ' .
-			'at the bottom of testswarm.ini to show detailed debugging information.</p>';
+			'<p>Set <b><tt>show_exception_details = 1;</tt></b> ' .
+			'in the <tt>[debug]</tt> section at the bottom of testswarm.ini to show detailed debugging information.</p>';
 	}
 
 	if ( !headers_sent() ) {
