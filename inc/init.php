@@ -102,8 +102,8 @@ function swarmExceptionHandler( Exception $e ) {
 			"</p>\n";
 	} else {
 		$msg .=
-			'<p>Set <b><tt>debug[show_exception_details] = 1;</tt></b> ' .
-			'at the bottom of testswarm.ini to show detailed debugging information.</p>';
+			'<p>Set <b><tt>show_exception_details = 1;</tt></b> ' .
+			'in the <tt>[debug]</tt> section at the bottom of testswarm.ini to show detailed debugging information.</p>';
 	}
 
 	if ( !headers_sent() ) {
