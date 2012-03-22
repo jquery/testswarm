@@ -1,7 +1,10 @@
+<?php
+$bi = $swarmContext->getBrowserInfo();
+?>
 <div class="userinfo">
 	<div class="browser you">
-		<img src="<?php echo swarmpath( "images/{$swarmBrowser->getBrowserCodename()}.sm.png" ); ?>" class="browser-icon <?php echo $swarmBrowser->getBrowserCodename(); ?>" alt="<?php echo $swarmBrowser->getSwarmUserAgentName(); ?>" title="<?php echo $swarmBrowser->getSwarmUserAgentName(); ?>"/>
-		<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $swarmBrowser->getSwarmUserAgentName()); ?></span>
+		<img src="<?php echo swarmpath( "images/{$bi->getBrowserCodename()}.sm.png" ); ?>" class="browser-icon <?php echo $bi->getBrowserCodename(); ?>" alt="<?php echo $bi->getSwarmUserAgentName(); ?>" title="<?php echo $bi->getSwarmUserAgentName(); ?>"/>
+		<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $bi->getSwarmUserAgentName()); ?></span>
 	</div>
 
 	<h3><?php echo $username; ?></h3>

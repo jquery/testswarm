@@ -16,14 +16,16 @@ if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.
 
 // Defines
 define( 'SWARM_NOW', 0 );
-
 define( 'DBCON_DEFAULT', 10 );
 define( 'DBCON_PERSISTENT', 11 );
 
-// Global requirements
+// Load classes
 require_once "inc/BrowserInfo.php";
 require_once "inc/Database.php";
+require_once "inc/TestSwarm.php";
 require_once "inc/WebRequest.php";
+
+// Other requirements
 require_once "inc/utilities.php";
 
 
@@ -87,15 +89,24 @@ $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refr
 
 
 /**
+ * Context
+ * @{
+ */
+$swarmContext = new TestSwarmContext( $swarmConfig );
+
+/**@}*/
+
+
+/**
  * Debugging
  * @{
  */
 function swarmExceptionHandler( Exception $e ) {
-	global $swarmConfig;
+	global $swarmContext;
 
 	$msg = "<h2>TestSwarm internal error</h2>\n\n";
 
-	if ( $swarmConfig["debug"]["show_exception_details"] ) {
+	if ( $swarmContext->getConf()->debug->show_exception_details ) {
 		$msg .=
 			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
 			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
@@ -116,25 +127,10 @@ function swarmExceptionHandler( Exception $e ) {
 
 set_exception_handler( "swarmExceptionHandler" );
 
-if ( $swarmConfig["debug"]["php_error_reporting"] ) {
+if ( $swarmContext->getConf()->debug->php_error_reporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }
-
-/**@}*/
-
-
-/**
- * Database
- * @{
- */
-$swarmDB = new Database(
-	$swarmConfig["database"]["host"],
-	$swarmConfig["database"]["username"],
-	$swarmConfig["database"]["password"],
-	$swarmConfig["database"]["database"]
-);
-$swarmDB->open( DBCON_PERSISTENT );
 
 /**@}*/
 
@@ -149,7 +145,4 @@ session_start();
 // Increase the session timeout to two weeks (3600 * 24 * 14)
 ini_set( 'session.gc_maxlifetime', '1209600' );
 
-$swarmRequest = new WebRequest();
-
 /**@}*/
-

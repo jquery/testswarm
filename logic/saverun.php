@@ -1,13 +1,16 @@
 <?php
 	require "inc/init-usersession.php";
 
-	if ( $swarmRequest->wasPosted() ) {
-		$run_id  = preg_replace( "/[^0-9]/",  "", $swarmRequest->getVal( "run_id", "" ) );
-		$fail    = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "fail", "" ) );
-		$error   = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "error", "" ) );
-		$total   = preg_replace( "/[^0-9-]/", "", $swarmRequest->getVal( "total", "" ) );
+	$bi = $swarmContext->getBrowserInfo();
+	$request = $swarmContext->getRequest();
 
-		$results = gzencode( $swarmRequest->getVal( "results", "" ) );
+	if ( $request->wasPosted() ) {
+		$run_id  = preg_replace( "/[^0-9]/",  "", $request->getVal( "run_id", "" ) );
+		$fail    = preg_replace( "/[^0-9-]/", "", $request->getVal( "fail", "" ) );
+		$error   = preg_replace( "/[^0-9-]/", "", $request->getVal( "error", "" ) );
+		$total   = preg_replace( "/[^0-9-]/", "", $request->getVal( "total", "" ) );
+
+		$results = gzencode( $request->getVal( "results", "" ) );
 	} else {
 		$results = false;
 	}
@@ -49,7 +52,7 @@
 					AND 	clients.useragent_id = %u;",
 					$run_id,
 					$client_id,
-					$swarmBrowser->getSwarmUserAgentID()
+					$bi->getSwarmUserAgentID()
 				);
 
 				while ( $row = mysql_fetch_array($result) ) {
@@ -66,7 +69,7 @@
 					WHERE	useragent_id = %u
 					AND 	run_id = %u
 					LIMIT 1;",
-					$swarmBrowser->getSwarmUserAgentID(),
+					$bi->getSwarmUserAgentID(),
 					$run_id
 				);
 			} else {
@@ -84,7 +87,7 @@
 						AND 	clients.useragent_id = %u;",
 						$run_id,
 						$client_id,
-						$swarmBrowser->getSwarmUserAgentID()
+						$bi->getSwarmUserAgentID()
 					);
 
 					while ( $row = mysql_fetch_array($result) ) {
@@ -105,7 +108,7 @@
 					WHERE	useragent_id = %u
 					AND 	run_id = %u
 					LIMIT 1;",
-					$swarmBrowser->getSwarmUserAgentID(),
+					$bi->getSwarmUserAgentID(),
 					$run_id
 				);
 			}

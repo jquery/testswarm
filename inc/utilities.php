@@ -40,10 +40,12 @@
 	 * @source php.net/mysql-query#86447
 	 */
 	function mysql_queryf(/* $string, $arg, .. */) {
+		global $swarmContext;
+
 		$args = func_get_args();
 		$sql_query = call_user_func_array( 'str_queryf', $args );
 
-		$result = mysql_query( $sql_query );
+		$result = $swarmContext->getDB()->query( $sql_query );
 		if (!$result) {
 			echo "Invalid query: " . mysql_error();
 			exit;
@@ -137,14 +139,14 @@
 	 * @return string Relative path from the domain root to the specified file or directory
 	 */
 	function swarmpath( $rel ) {
-		global $swarmConfig;
+		global $swarmContext;
 
 		// Only normalize the contextpath once
 		static $contextpath;
 
 		if ( is_null( $contextpath ) ) {
 			// Add trailing slash if it's missing
-			$path = $swarmConfig["web"]["contextpath"];
+			$path = $swarmContext->getConf()->web->contextpath;
 			if ( substr( $path, -1 ) !== '/' ) {
 				$path = "$path/";
 			}
@@ -156,7 +158,8 @@
 				$path = "/$path";
 			}
 
-			$swarmConfig["web"]["contextpath"] = $path;
+			// Update it (just in case it's used elsewhere)
+			$swarmContext->getConf()->web->contextpath = $path;
 		}
 
 		// Just in case, strip the leading slash

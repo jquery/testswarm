@@ -1,15 +1,17 @@
 <?php
 	$title = "Signup";
 
-	if ( !$swarmRequest->wasPosted() ) {
+	$request = $swarmContext->getRequest();
+
+	if ( !$request->wasPosted() ) {
 		return;
 	)
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $swarmRequest->getVal( "username", false ) );
-	$password = $swarmRequest->getVal( "password", false );
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username", false ) );
+	$password = $request->getVal( "password", false );
 
-	$email    = $swarmRequest->getVal( "email" );
-	$request  = $swarmRequest->getVal( "request" );
+	$email    = $request->getVal( "email" );
+	$request  = $request->getVal( "request" );
 	$error    = "";
 
 	if ( !$username || !$password ) {

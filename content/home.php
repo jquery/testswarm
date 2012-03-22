@@ -61,11 +61,13 @@ if ( false ) {
 
 /** @return bool: Whether the current user was found in the swarm */
 function loadBrowsers($headingTitle, $mobile) {
-	global $swarmBrowser, $swarmDB;
+	global $swarmContext;
+	$bi = $swarmContext->getBrowserInfo();
+	$db = $swarmContext->getDB();
 
 	$foundSelf = false;
 
-	$rows = $swarmDB->getRows(str_queryf(
+	$rows = $db->getRows(str_queryf(
 		"SELECT
 			useragents.engine as engine,
 			useragents.name as name,
@@ -82,8 +84,8 @@ function loadBrowsers($headingTitle, $mobile) {
 		AND	mobile = %s
 		ORDER BY engine, name;",
 		swarmdb_dateformat( strtotime( '1 minute ago' ) ),
-		$swarmBrowser->getBrowserCodename(),
-		$swarmBrowser->getBrowserVersion(),
+		$bi->getBrowserCodename(),
+		$bi->getBrowserVersion(),
 		$mobile
 	));
 
@@ -116,10 +118,13 @@ function loadBrowsers($headingTitle, $mobile) {
 	return $foundSelf;
 }
 
+$request = $swarmContext->getRequest();
+$bi = $swarmContext->getBrowserInfo();
+
 if ( $found ) { ?>
 <div class="join">
 	<p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
-	<?php if ( !$swarmRequest->getSessionData( "username" ) ) { ?>
+	<?php if ( !$request->getSessionData( "username" ) ) { ?>
 	<form action="" method="get">
 		<input type="hidden" name="state" value="run"/>
 		<br/><strong>Username:</strong><br/>
@@ -127,12 +132,12 @@ if ( $found ) { ?>
 		<input type="submit" value="Join the Swarm"/>
 	</form>
 	<?php } else { ?>
-	<br/><p><strong>&raquo; <?php echo $swarmRequest->getSessionData( "username" ); ?></strong> <a href="<?php echo swarmpath("run/{$swarmRequest->getSessionData( "username" )}/" ); ?>">Start Running Tests</a></p>
+	<br/><p><strong>&raquo; <?php echo $request->getSessionData( "username" ); ?></strong> <a href="<?php echo swarmpath("run/{$request->getSessionData( "username" )}/" ); ?>">Start Running Tests</a></p>
 <?php } ?>
 </div>
 <?php } else { ?>
 <div class="join">
 	<p>TestSwarm doesn't need your help at this time. If you wish to help run tests you should load up one of the below browsers.</p>
-	<p>If you feel that this may be a mistake, copy the following information (<?php echo $swarmBrowser->getBrowserCodename(); ?> <?php echo $swarmBrowser->getBrowserVersion(); ?> <?php echo $swarmBrowser->getOsCodename(); ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
+	<p>If you feel that this may be a mistake, copy the following information (<?php echo $bi->getBrowserCodename(); ?> <?php echo $bi->getBrowserVersion(); ?> <?php echo $bi->getOsCodename(); ?>) and your <a href="http://useragentstring.com/">useragent string</a>, and post it to the <a href="//groups.google.com/group/testswarm">discussion group</a>.</a>
 </div>
 <?php }

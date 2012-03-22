@@ -1,17 +1,19 @@
 <?php
 	$title = "Login";
 
+	$request = $swarmContext->getRequest();
+
 	if ( isset( $_SESSION["username"] ) && isset( $_SESSION["auth"] ) && $_SESSION["auth"] == "yes" ) {
 		$username = $_SESSION["username"];
 		header("Location: " . swarmpath( "user/$username/" ) );
 		exit;
 	}
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $swarmRequest->getVal( "username" ) );
-	$password = $swarmRequest->getVal( "password" );
+	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username" ) );
+	$password = $request->getVal( "password" );
 	$error = "";
 
-	if ( $swarmRequest->wasPosted() && $username && $password ) {
+	if ( $request->wasPosted() && $username && $password ) {
 
 		$result = mysql_queryf(
 			"SELECT id
