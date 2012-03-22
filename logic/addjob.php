@@ -2,12 +2,13 @@
 
 	$title = "Add New Job";
 
-	if ( $_REQUEST["state"] !== "addjob" ) {
+	if ( $swarmRequest->getVal( "state" ) !== "addjob" || !$swarmRequest->hasKeys( "user", "auth", "job_name" ) ) {
 		return;
 	}
 
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $_REQUEST["user"]);
-	$auth = preg_replace("/[^a-z0-9]/", "", $_REQUEST["auth"]);
+	$username = $swarmRequest->getVal( "user", "" );
+	$auth = $swarmRequest->getVal( "auth", "" );
+	$user_id = null;
 
 	$result = mysql_queryf("SELECT id FROM users WHERE name=%s AND auth=%s;", $username, $auth);
 
@@ -17,7 +18,7 @@
 	# TODO: Improve error message quality.
 	} else {
 		echo "Incorrect username or auth token.";
-		exit();
+		exit;
 	}
 
 	mysql_queryf("INSERT INTO jobs (user_id, name, created) VALUES(%u, %s, %s);",

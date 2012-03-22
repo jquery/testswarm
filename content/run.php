@@ -1,7 +1,7 @@
 <div class="userinfo">
 	<div class="browser you">
-		<img src="<?php echo swarmpath( "images/{$browser}.sm.png" ); ?>" class="browser-icon <?php echo $browser; ?>" alt="<?php echo $useragent_name; ?>" title="<?php echo $useragent_name; ?>"/>
-		<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $useragent_name); ?></span>
+		<img src="<?php echo swarmpath( "images/{$swarmBrowser->getBrowserCodename()}.sm.png" ); ?>" class="browser-icon <?php echo $swarmBrowser->getBrowserCodename(); ?>" alt="<?php echo $swarmBrowser->getSwarmUserAgentName(); ?>" title="<?php echo $swarmBrowser->getSwarmUserAgentName(); ?>"/>
+		<span class="browser-name"><?php echo preg_replace('/\w+ /', "", $swarmBrowser->getSwarmUserAgentName()); ?></span>
 	</div>
 
 	<h3><?php echo $username; ?></h3>

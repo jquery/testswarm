@@ -1,94 +1,98 @@
 <?php
-	$username = getItem("username", $_SESSION, getItem("user", $_REQUEST, ""));
+/**
+ * Initialize global variables related to a user,
+ * for requests that require a username.
+ * Sets the following globals:
+ * - $username
+ * - $user_id
+ * - $client_id
+ *
+ * @since 0.1.0
+ * @package TestSwarm
+ */
+	global $swarmBrowser, $swarmDB, $swarmRequest;
+
+	$username = $swarmRequest->getSessionData( "username", $swarmRequest->getVal( "user" ) );
 	if ( !$username ) {
 		$username = $_REQUEST["user"];
 	}
-	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $username);
+	$username = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $username );
 	if ( $username ) {
 		$_SESSION["username"] = $username;
 	}
 
 	# We need a username to set up an account
 	if ( !$username ) {
-		# TODO: Improve error message quality.
-		exit("Username required. ?user=USERNAME.");
+		// @todo Improve error message quality.
+		exit( "Username required. ?user=USERNAME." );
 	}
 
-	$client_id = preg_replace("/[^0-9]/", "", getItem("client_id", $_REQUEST, ""));
+	$client_id = preg_replace( "/[^0-9]/", "", $swarmRequest->getVal( "client_id" ) );
 
-	# Existing client
+	// Client passed
 	if ( $client_id ) {
-		$result = mysql_queryf(
+		// Verify that the client exists,
+		// And get the user ID.
+		$user_id = $swarmDB->getOne(str_queryf(
 			"SELECT
-				user_id,
-				useragent_id
+				user_id
 			FROM
 				clients
 			WHERE id=%u
 			LIMIT 1;",
 			$client_id
-		);
+		));
 
-		if ( $row = mysql_fetch_array($result) ) {
-			$user_id = $row[0];
-			$useragent_id = $row[1];
-
-			# If the client ID is already provided, update its record so
-			# that we know that it's still alive
-			mysql_queryf(
+		if ( $user_id ) {
+			// If the client ID is already provided, update its record so
+			// that we know that it's still alive
+			$swarmDB->query(str_queryf(
 				"UPDATE clients SET updated=%s WHERE id=%u LIMIT 1;",
 				swarmdb_dateformat( SWARM_NOW ),
 				$client_id
-			);
+			));
 
-		# TODO: Improve error message quality.
 		} else {
+			// @todo Improve error message quality.
 			echo "Client doesn't exist.";
-			exit();
+			exit;
 		}
 
-	# The user is setting up a new client session
+	// No client id passed, create one
 	} else {
-		# Figure out the exact useragent that the user is using
-		$result = mysql_queryf(
-			"SELECT id, name from useragents WHERE engine=%s AND %s REGEXP version;",
-			$browser,
-			$version
-		);
 
-		if ( $row = mysql_fetch_array($result) ) {
-			$useragent_id = $row[0];
-			$useragent_name = $row[1];
-
-		# If the useragent isn't needed, failover with an error message
-		# TODO: Improve error message quality.
-		} else {
-			echo "Browser is not needed for testing. Browser: $browser Version: $version";
-			exit();
+		// If the useragent isn't known, abort with an error message
+		if ( !$swarmBrowser->isKnownInTestSwarm() ) {
+			echo "Your browser is not supported for testing right now.\n"
+				. "Browser: {$swarmBrowser->getBrowserCodename()} Version: {$swarmBrowser->getBrowserVersion()}";
+			exit;
 		}
 
-		# Figure out what the user's ID number is
-		$result = mysql_queryf( "SELECT id FROM users WHERE name=%s;", $username );
+		// Figure out what the user's ID number is
+		$user_id = $swarmDB->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
 
-		if ( $row = mysql_fetch_array($result) ) {
-			$user_id = intval($row[0]);
-
-		# If the user doesn't have one, create a new user account
-		} else {
-			$result = mysql_queryf(
+		// If the user doesn't have one, create a new user account
+		if ( !$user_id ) {
+			$swarmDB->query(str_queryf(
 				"INSERT INTO users (name, created, updated, seed) VALUES(%s, %s, %s, RAND());",
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
-			);
-			$user_id = intval( mysql_insert_id() );
+			));
+			$user_id = $swarmDB->getInsertId();
 		}
 
-		# Insert in a new record for the client and get its ID
-		mysql_queryf(
+		// Insert in a new record for the client and get its ID
+		$swarmDB->query(str_queryf(
 			"INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created)
 			VALUES(%u, %u, %s, %s, %s, %s);",
-			$user_id, $useragent_id, $useragent, $os, $ip, swarmdb_dateformat( SWARM_NOW )
-		);
-		$client_id = mysql_insert_id();
+			$user_id,
+			$swarmBrowser->getSwarmUserAgentID(),
+			$swarmBrowser->getRawUA(),
+			$swarmBrowser->getOsCodename(),
+			$swarmRequest->getIP(),
+			swarmdb_dateformat( SWARM_NOW )
+		));
+
+		$client_id = $swarmDB->getInsertId();
 	}

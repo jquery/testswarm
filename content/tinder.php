@@ -98,7 +98,7 @@
 
 	}
 
-	$job_search = preg_replace("/[^a-zA-Z ]/", "", getItem( "job", $_REQUEST, "" ) );
+	$job_search = preg_replace( "/[^a-zA-Z ]/", "", $swarmRequest->getVal( "job", "" ) );
 	$job_search .= "%";
 
 	$search_result = mysql_queryf(
@@ -108,10 +108,9 @@
 			jobs.id
 		FROM
 			jobs, users
-		WHERE
-			jobs.name LIKE %s
-			AND users.name=%s
-			AND jobs.user_id=users.id
+		WHERE	jobs.name LIKE %s
+		AND	users.name = %s
+		AND	jobs.user_id = users.id
 		ORDER BY jobs.created DESC
 		LIMIT 15;",
 		$job_search,
@@ -129,7 +128,7 @@
 
 		while ( $row = mysql_fetch_array( $search_result ) ) {
 			$job_name = $row[0];
-			$job_status = get_status(intval($row[1]));
+			$job_status = get_status( intval( $row[1] ) );
 			$job_id = $row[2];
 
 			$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}/" ) . '">' . strip_tags($job_name) . "</a></th>\n";
