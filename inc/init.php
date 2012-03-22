@@ -33,7 +33,7 @@ require_once "inc/utilities.php";
  */
 $swarmInstallDir = dirname( __DIR__ );
 
-// Verify that the config.ini file exists
+// Verify that the testswarm.ini file exists
 if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
 	echo "testswarm.ini missing!\n";
 	exit;
