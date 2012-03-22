@@ -25,7 +25,7 @@ class BrowserInfo {
 	public static function newFromContext( TestSwarmContext $context, $userAgent ) {
 		$bi = new self();
 		$bi->context = $context;
-		$bi->parseUserAgnet( $userAgent );
+		$bi->parseUserAgent( $userAgent );
 		return $bi;
 	}
 
@@ -93,7 +93,7 @@ class BrowserInfo {
 	 * Instances may not be created directly, use the static newFromUA method instead
 	 * @param $userAgent string
 	 */
-	private function parseUserAgnet( $userAgent ) {
+	private function parseUserAgent( $userAgent ) {
 		$lcUA = strtolower( $userAgent );
 
 		// Version
