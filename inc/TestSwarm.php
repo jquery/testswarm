@@ -16,11 +16,11 @@ class TestSwarmContext {
 	 * needs to be passed is an array with all setting keys from testswarm.ini
 	 * (including ones commented out in the sample file, it has to contain them all)
 	 * Population of default values of optional settings happens in init.php
-	 * @param $swarmConfig array
+	 * @param $config array
 	 */
-	public function __construct( Array $swarmConfig ) {
+	public function __construct( Array $config ) {
 		$conf = new stdClass;
-		foreach ( $swarmConfig as $key => $val ) {
+		foreach ( $config as $key => $val ) {
 			$conf->$key = is_array( $val ) ? (object)$val : $val;
 		}
 		$this->conf = $conf;

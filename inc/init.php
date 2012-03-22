@@ -89,15 +89,24 @@ $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refr
 
 
 /**
+ * Context
+ * @{
+ */
+$swarmContext = new TestSwarmContext( $swarmConfig );
+
+/**@}*/
+
+
+/**
  * Debugging
  * @{
  */
 function swarmExceptionHandler( Exception $e ) {
-	global $swarmConfig;
+	global $swarmContext;
 
 	$msg = "<h2>TestSwarm internal error</h2>\n\n";
 
-	if ( $swarmConfig["debug"]["show_exception_details"] ) {
+	if ( $swarmContext->getConf()->debug->show_exception_details ) {
 		$msg .=
 			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
 			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
@@ -118,24 +127,10 @@ function swarmExceptionHandler( Exception $e ) {
 
 set_exception_handler( "swarmExceptionHandler" );
 
-if ( $swarmConfig["debug"]["php_error_reporting"] ) {
+if ( $swarmContext->getConf()->debug->php_error_reporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }
-
-/**@}*/
-
-
-/**
- * Context
- * @{
- */
-$swarmContext = new TestSwarmContext( $swarmConfig );
-
-// Set globals for backwards compatibility
-$swarmDB = $swarmContext->getDB();
-$swarmRequest = $swarmContext->getRequest();
-$swarmBrowser = $swarmContext->getBrowserInfo();
 
 /**@}*/
 

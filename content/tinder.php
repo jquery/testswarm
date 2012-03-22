@@ -98,7 +98,7 @@
 
 	}
 
-	$job_search = preg_replace( "/[^a-zA-Z ]/", "", $swarmRequest->getVal( "job", "" ) );
+	$job_search = preg_replace( "/[^a-zA-Z ]/", "", $swarmContext->getRequest()->getVal( "job", "" ) );
 	$job_search .= "%";
 
 	$search_result = mysql_queryf(

@@ -110,6 +110,7 @@ class Database {
 
 	/** 
 	 * Queries other than SELECT, such as DELETE, UPDATE and INSERT.
+	 * @return resource|false
 	 */
 	public function query( $sql ) {
 		return $this->doQuery( $sql );

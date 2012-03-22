@@ -2,7 +2,8 @@
 /**
  * Initialize global variables related to a user,
  * for requests that require a username.
- * Sets the following globals:
+ *
+ * @todo Deprecate these globals:
  * - $username
  * - $user_id
  * - $client_id
@@ -10,9 +11,13 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-	global $swarmBrowser, $swarmDB, $swarmRequest;
+	global $swarmContext;
 
-	$username = $swarmRequest->getSessionData( "username", $swarmRequest->getVal( "user" ) );
+	$bi = $swarmContext->getBrowserInfo();
+	$db = $swarmContext->getDB();
+	$request = $swarmContext->getRequest();
+
+	$username = $request->getSessionData( "username", $request->getVal( "user" ) );
 	if ( !$username ) {
 		$username = $_REQUEST["user"];
 	}
@@ -27,13 +32,13 @@
 		exit( "Username required. ?user=USERNAME." );
 	}
 
-	$client_id = preg_replace( "/[^0-9]/", "", $swarmRequest->getVal( "client_id" ) );
+	$client_id = preg_replace( "/[^0-9]/", "", $request->getVal( "client_id" ) );
 
 	// Client passed
 	if ( $client_id ) {
 		// Verify that the client exists,
 		// And get the user ID.
-		$user_id = $swarmDB->getOne(str_queryf(
+		$user_id = $db->getOne(str_queryf(
 			"SELECT
 				user_id
 			FROM
@@ -46,7 +51,7 @@
 		if ( $user_id ) {
 			// If the client ID is already provided, update its record so
 			// that we know that it's still alive
-			$swarmDB->query(str_queryf(
+			$db->query(str_queryf(
 				"UPDATE clients SET updated=%s WHERE id=%u LIMIT 1;",
 				swarmdb_dateformat( SWARM_NOW ),
 				$client_id
@@ -62,37 +67,37 @@
 	} else {
 
 		// If the useragent isn't known, abort with an error message
-		if ( !$swarmBrowser->isKnownInTestSwarm() ) {
+		if ( !$bi->isKnownInTestSwarm() ) {
 			echo "Your browser is not supported for testing right now.\n"
-				. "Browser: {$swarmBrowser->getBrowserCodename()} Version: {$swarmBrowser->getBrowserVersion()}";
+				. "Browser: {$bi->getBrowserCodename()} Version: {$bi->getBrowserVersion()}";
 			exit;
 		}
 
 		// Figure out what the user's ID number is
-		$user_id = $swarmDB->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
+		$user_id = $db->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
 
 		// If the user doesn't have one, create a new user account
 		if ( !$user_id ) {
-			$swarmDB->query(str_queryf(
+			$db->query(str_queryf(
 				"INSERT INTO users (name, created, updated, seed) VALUES(%s, %s, %s, RAND());",
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
 			));
-			$user_id = $swarmDB->getInsertId();
+			$user_id = $db->getInsertId();
 		}
 
 		// Insert in a new record for the client and get its ID
-		$swarmDB->query(str_queryf(
+		$db->query(str_queryf(
 			"INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created)
 			VALUES(%u, %u, %s, %s, %s, %s);",
 			$user_id,
-			$swarmBrowser->getSwarmUserAgentID(),
-			$swarmBrowser->getRawUA(),
-			$swarmBrowser->getOsCodename(),
-			$swarmRequest->getIP(),
+			$bi->getSwarmUserAgentID(),
+			$bi->getRawUA(),
+			$bi->getOsCodename(),
+			$request->getIP(),
 			swarmdb_dateformat( SWARM_NOW )
 		));
 
-		$client_id = $swarmDB->getInsertId();
+		$client_id = $db->getInsertId();
 	}
