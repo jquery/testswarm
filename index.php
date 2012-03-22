@@ -12,9 +12,7 @@
 
 require_once "inc/init.php";
 
-$swarmBrowser = BrowserInfo::newFromUA( isset( $_SERVER["HTTP_USER_AGENT"] ) ? $_SERVER["HTTP_USER_AGENT"] : "" );
-
-$state = preg_replace("/[^a-z]/", "", $swarmRequest->getVal( "state", "" ) );
+$state = preg_replace("/[^a-z]/", "", $swarmContext->getRequest()->getVal( "state", "" ) );
 
 if ( !$state ) {
 	$state = "home";
@@ -40,15 +38,15 @@ if ( $title ) {
 <head>
 	<meta charset="UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title><?php echo htmlentities( $swarmConfig['web']['title'] . ': ' . $title ); ?></title>
+	<title><?php echo htmlentities( $swarmContext->getConf()->web->title . ': ' . $title ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>"/>
 	<script>window.SWARM = <?php echo json_encode( array(
-		// Derived version of $swarmConfig for the browser
-		// (not the entire array since it also contains DB passwords!)
+		// Export a simplified version of the TestSwarm configuration object to the browser
+		// (not the entire object since it also contains DB password and such..).
 		"web" => array(
 			"contextpath" => swarmpath( "" ),
 		),
-		"client" => $swarmConfig["client"],
+		"client" => $swarmContext->getConf()->client,
 	) ); ?>;</script>
 <?php
 		echo isset( $scripts ) ? "\t" . $scripts . "\n" : "";

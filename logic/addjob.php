@@ -2,12 +2,14 @@
 
 	$title = "Add New Job";
 
-	if ( $swarmRequest->getVal( "state" ) !== "addjob" || !$swarmRequest->hasKeys( "user", "auth", "job_name" ) ) {
+	$request = $swarmContext->getRequest();
+
+	if ( $request->getVal( "state" ) !== "addjob" || !$request->hasKeys( "user", "auth", "job_name" ) ) {
 		return;
 	}
 
-	$username = $swarmRequest->getVal( "user", "" );
-	$auth = $swarmRequest->getVal( "auth", "" );
+	$username = $request->getVal( "user", "" );
+	$auth = $request->getVal( "auth", "" );
 	$user_id = null;
 
 	$result = mysql_queryf("SELECT id FROM users WHERE name=%s AND auth=%s;", $username, $auth);

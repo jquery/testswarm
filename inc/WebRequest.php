@@ -11,10 +11,13 @@
  */
 
 class WebRequest {
+	private $context;
+
 	protected $raw;
 	private $ip;
 
-	function __construct() {
+	function __construct( TestSwarmContext $context ) {
+		$this->context = $context;
 		$this->checkMagicQuotes();
 
 		// POST overrides GET data

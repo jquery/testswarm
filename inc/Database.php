@@ -7,24 +7,40 @@
  * @package TestSwarm
  */
 class Database {
+	private $context;
+
 	protected $host, $username, $password, $dbname;
 	protected $conn;
 	protected $isOpen = false;
 
-	public function __construct( $host, $username, $password, $dbname = false ) {
-		$this->checkEnvironment();
+	/**
+	 * Creates a Database object, opens the connection and returns the instance.
+	 *
+	 * @param context TestSwarmContext
+	 * @param $connType int: [optional]
+	 */
 
-		$this->host = $host;
-		$this->username = $username;
-		$this->password = $password;
-		$this->dbname = $dbname;
-		return $this;
+	public static function newFromContext( TestSwarmContext $context, $connType = DBCON_DEFAULT ) {
+		$dbConf = $context->getConf()->database;
+		$db = new self();
+
+		$db->context = $context;
+		$db->host = $dbConf->host;
+		$db->username = $dbConf->username;
+		$db->password = $dbConf->password;
+		$db->dbname = $dbConf->database;
+
+		$db->open( $connType );
+
+		return $db;
 	}
 
 	/**
 	 * @param $connType int: DBCON_DEFAULT or DBCON_PERSISTENT.
 	 */
 	public function open( $connType = DBCON_DEFAULT ) {
+		$this->close();
+
 		switch ( $connType ) {
 		case DBCON_DEFAULT:
 			$this->conn = mysql_connect( $this->host, $this->username, $this->password, /*force_new=*/true );
@@ -35,9 +51,11 @@ class Database {
 		default:
 			throw new SwarmException( "Invalid connection type." );
 		}
+
 		if ( !$this->conn ) {
 			throw new SwarmException( "Connection to {$this->host} failed.\nMySQL Error " . $this->lastErrNo() . ": " . $this->lastErrMsg() );
 		}
+
 		if ( $this->dbname ) {
 			$isOK = mysql_select_db( $this->dbname, $this->conn );
 			if ( !$isOK ) {
@@ -46,6 +64,7 @@ class Database {
 		} else {
 			$isOK = (bool)$this->conn;
 		}
+
 		$this->isOpen = $isOK;
 		return $this;
 	}
@@ -91,6 +110,7 @@ class Database {
 
 	/** 
 	 * Queries other than SELECT, such as DELETE, UPDATE and INSERT.
+	 * @return resource|false
 	 */
 	public function query( $sql ) {
 		return $this->doQuery( $sql );
@@ -141,5 +161,9 @@ class Database {
 		if ( !function_exists( "mysql_connect" ) ) {
 			throw new SwarmException( "MySQL functions missing." );
 		}
+	}
+
+	private function __construct() {
+		$this->checkEnvironment();
 	}
 }

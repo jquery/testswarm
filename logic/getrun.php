@@ -1,7 +1,9 @@
 <?php
 	require "inc/init-usersession.php";
 
-	global $swarmConfig;
+	global $swarmContext;
+
+	$bi = $swarmContext->getBrowserInfo();
 
 	$result = mysql_queryf(
 		"SELECT
@@ -13,7 +15,7 @@
 		AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id = run_id AND client_id = %u)
 		ORDER BY run_id DESC
 		LIMIT 1;",
-		$swarmBrowser->getSwarmUserAgentID(),
+		$bi->getSwarmUserAgentID(),
 		$client_id
 	);
 
@@ -45,7 +47,7 @@
 		mysql_queryf(
 			"UPDATE run_useragent SET runs = runs + 1, status = 1 WHERE run_id=%u AND useragent_id=%u LIMIT 1;",
 			$run_id,
-			$swarmBrowser->getSwarmUserAgentID()
+			$bi->getSwarmUserAgentID()
 		);
 
 		# Initialize the client run
@@ -66,7 +68,7 @@
 	}
 
 	echo json_encode( array(
-		"swarmUpdate" => array( "client" => $swarmConfig["client"] ),
+		"swarmUpdate" => array( "client" => $swarmContext->getConf()->client ),
 		"runInfo" => $runInfo,
 	) );
 
