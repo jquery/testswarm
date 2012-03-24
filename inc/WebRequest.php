@@ -16,13 +16,19 @@ class WebRequest {
 	protected $raw;
 	private $ip;
 
-	function __construct( TestSwarmContext $context ) {
-		$this->context = $context;
-		$this->checkMagicQuotes();
+	/**
+	 * @param $context TestSwarmContext
+	 * @return WebRequest
+	 */
+	function newFromContext( TestSwarmContext $context ) {
+		$req = new self();
+		$req->context = $context;
+		$req->checkMagicQuotes();
 
 		// POST overrides GET data
 		// We don't use $_REQUEST here to avoid interference from cookies...
-		$this->raw = $_POST + $_GET;
+		$req->raw = $_POST + $_GET;
+		return $req;
 	}
 
 	public function getRawVal( $arr, $key, $default ) {
@@ -174,4 +180,7 @@ class WebRequest {
 		$this->ip = $ip;
 		return $ip;
 	}
+
+	/** Don't allow direct instantiations of this class, use newFromContext instead */
+	private function __construct() {}
 }
