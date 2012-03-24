@@ -115,5 +115,8 @@
 		}
 	}
 
-	echo '<script>window.top.done();</script>';
+	// Must be valid JSON for the ajax-success handler to fire
+	// for now we don't exchange data during a saverun, so just
+	// return a simple string.
+	echo json_encode( "ok" );
 	exit;

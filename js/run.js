@@ -84,7 +84,13 @@
 		cancelTest();
 		retrySend( "state=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
 			+ currRunId + "&client_id=" + SWARM.client_id,
-			testTimedout, getTests );
+			testTimedout, function ( data ) {
+				if ( data === "ok" ) {
+					done();
+				} else {
+					getTests();
+				}
+			} );
 	}
 
 	/**
