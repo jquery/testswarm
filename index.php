@@ -12,21 +12,21 @@
 
 require_once "inc/init.php";
 
-$state = preg_replace("/[^a-z]/", "", $swarmContext->getRequest()->getVal( "state", "" ) );
+$action = preg_replace("/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "" ) );
 
-if ( !$state ) {
-	$state = "home";
+if ( !$action ) {
+	$action = "home";
 }
 
-$logicFile = "logic/$state.php";
-$contentFile = "content/$state.php";
+$actionFile = "inc/actions/$action.php";
+$pageFile = "inc/pages/$action.php";
 
-if ( $state ) {
-	if ( file_exists( $logicFile ) ) {
-		require $logicFile;
-	} elseif ( !file_exists($contentFile) ) {
+if ( $action ) {
+	if ( file_exists( $actionFile ) ) {
+		require $actionFile;
+	} elseif ( !file_exists( $pageFile ) ) {
 		header( $_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404 );
-		echo '<h2>TestSwarm: Invalid state</h2>';
+		echo '<h2>TestSwarm: Invalid action</h2>';
 		exit;
 	}
 }
@@ -71,8 +71,8 @@ if ( $title ) {
 	<h1><a href="<?php echo swarmpath( "/" ); ?>"><img src="<?php echo swarmpath( "images/testswarm_logo_wordmark.png" ); ?>" alt="TestSwarm" title="TestSwarm"/></a></h1>
 	<h2><?php echo  $title; ?></h2>
 	<div id="main">
-	<?php } if ( $state && file_exists($contentFile) ) {
-		require $contentFile;
+	<?php } if ( $action && file_exists( $pageFile ) ) {
+		require $pageFile;
 	} if ( $title ) { ?>
 	</div>
 </body>
