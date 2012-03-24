@@ -1,6 +1,6 @@
 <?php
 
-	$search_user = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $swarmContext->getRequest()->getVal( "user" ) );
+	$search_user = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $swarmContext->getRequest()->getVal( "item" ) );
 
 	$title = "$search_user";
 	$scripts =

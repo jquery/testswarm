@@ -1,6 +1,6 @@
 <form action="" method="post">
 	<input type="hidden" name="client_id" value="<?php echo $client_id; ?>"/>
-	<input type="hidden" name="state" value="addjob"/>
+	<input type="hidden" name="action" value="addjob"/>
 
 	<fieldset>
 		<legend>Job Information</legend>

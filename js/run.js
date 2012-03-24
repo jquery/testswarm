@@ -68,7 +68,7 @@
 		currRunUrl = false;
 
 		msg( "Querying for more tests to run..." );
-		retrySend( "state=getrun&client_id=" + SWARM.client_id, getTests, runTests );
+		retrySend( "action=getrun&client_id=" + SWARM.client_id, getTests, runTests );
 	}
 
 	function cancelTest() {
@@ -82,19 +82,19 @@
 
 	function testTimedout() {
 		cancelTest();
-		retrySend( "state=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
+		retrySend( "action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
 			+ currRunId + "&client_id=" + SWARM.client_id,
 			testTimedout, getTests );
 	}
 
 	/**
-	 * @param data Object Data returned by state=getrun
+	 * @param data Object Data returned by action=getrun
 	 */
 	function runTests( data ) {
 		var norun_msg, timeLeft, runInfo, params, iframe;
 
 		if ( !$.isPlainObject( data ) ) {
-			// Handle session timeout, where server sends back "Username required. ?user=USERNAME."
+			// Handle session timeout, where server sends back "Username required."
 			// Handle TestSwarm reset, where server sends back "Client doesn't exist."
 			if ( /^Username required|^Client doesn/.test( data ) ) {
 				cmds.reload();
@@ -129,7 +129,7 @@
 			iframe.className = "test";
 			iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?") +
 				"_=" + new Date().getTime() + "&swarmURL=" +
-				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&state=" );
+				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&action=" );
 			$( "#iframes" ).append( iframe );
 
 			// Timeout after a period of time

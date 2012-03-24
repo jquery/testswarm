@@ -270,8 +270,8 @@
 			}
 		}
 
-		if ( !params.state ) {
-			params.state = "saverun";
+		if ( !params.action ) {
+			params.action = "saverun";
 		}
 
 		if ( !params.results ) {

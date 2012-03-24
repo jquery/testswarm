@@ -22,7 +22,7 @@ jQuery(function(){
 		jQuery.ajax({
 			url: ".",
 			type: "POST",
-			data: "state=wiperun" + params
+			data: "action=wiperun" + params
 		});
 		jQuery(this).empty().attr("class", "notstarted notdone");
 	});

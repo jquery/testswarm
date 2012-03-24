@@ -126,9 +126,9 @@ if ( $found ) { ?>
 	<p><strong>TestSwarm Needs Your Help!</strong> You have a browser that we need to test against, you should join the swarm to help us out.</p>
 	<?php if ( !$request->getSessionData( "username" ) ) { ?>
 	<form action="" method="get">
-		<input type="hidden" name="state" value="run"/>
+		<input type="hidden" name="action" value="run"/>
 		<br/><strong>Username:</strong><br/>
-		<input type="text" name="user" value=""/>
+		<input type="text" name="item" value=""/>
 		<input type="submit" value="Join the Swarm"/>
 	</form>
 	<?php } else { ?>

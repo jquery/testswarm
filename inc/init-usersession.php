@@ -17,9 +17,9 @@
 	$db = $swarmContext->getDB();
 	$request = $swarmContext->getRequest();
 
-	$username = $request->getSessionData( "username", $request->getVal( "user" ) );
+	$username = $request->getSessionData( "username", $request->getVal( "item" ) );
 	if ( !$username ) {
-		$username = $_REQUEST["user"];
+		$username = $_REQUEST["item"];
 	}
 	$username = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $username );
 	if ( $username ) {
@@ -29,7 +29,7 @@
 	# We need a username to set up an account
 	if ( !$username ) {
 		// @todo Improve error message quality.
-		exit( "Username required. ?user=USERNAME." );
+		exit( "Username required. ?item=USERNAME." );
 	}
 
 	$client_id = preg_replace( "/[^0-9]/", "", $request->getVal( "client_id" ) );

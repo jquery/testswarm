@@ -5,7 +5,7 @@
 
 	$user = $request->getVal( "username", $request->getSessionData( "username" ) );
 
-	if ( !$request->getVal( "user" ) && $user ) {
+	if ( !$request->getVal( "item" ) && $user ) {
 		header("Location: " . swarmpath( "run/$user/" ) );
 		exit;
 	}

@@ -4,7 +4,7 @@
 
 	$request = $swarmContext->getRequest();
 
-	if ( $request->getVal( "state" ) !== "addjob" || !$request->hasKeys( "user", "auth", "job_name" ) ) {
+	if ( $request->getVal( "action" ) !== "addjob" || !$request->hasKeys( "user", "auth", "job_name" ) ) {
 		return;
 	}
 

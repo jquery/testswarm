@@ -40,7 +40,7 @@
 
 <?php if ( $owner && $_SESSION["auth"] == "yes" ) { ?>
 <form action="" method="POST">
-	<input type="hidden" name="state" value="wipejob"/>
+	<input type="hidden" name="action" value="wipejob"/>
 	<input type="hidden" name="job_id" value="<?php echo $job_id; ?>"/>
 	<input type="submit" name="type" value="delete"/>
 	<input type="submit" name="type" value="reset"/>
@@ -93,7 +93,7 @@
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 				if ( $last_browser != $ua["useragent_id"] ) {
-					$output .= "<td class='$status " . $row["browser"] . "'><a href='" . swarmpath ( '/' ) . "?state=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
+					$output .= "<td class='$status " . $row["browser"] . "'><a href='" . swarmpath ( '/' ) . "?action=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
 						($ua["status"] == 2 ?
 							($ua["total"] < 0 ?
 								"Err" :

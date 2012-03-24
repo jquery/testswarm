@@ -87,7 +87,7 @@ foreach my $frev ( @revs ) {
 		}
 
 		my %props = (
-			"state" => "addjob",
+			"action" => "addjob",
 			"output" => "dump",
 			"user" => $USER,
 			"max" => $MAX_RUNS,
