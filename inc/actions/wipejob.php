@@ -1,5 +1,5 @@
 <?php
-	$job_id = preg_replace("/[^0-9]/", "", $_POST["job_id"]);
+	$job_id = preg_replace("/[^0-9]/", "", $_POST["item"]);
 	$type = $_POST["type"];
 
 	if ( $job_id && $_SESSION["username"] && $_SESSION["auth"] == "yes" ) {
@@ -42,10 +42,10 @@
 		}
 
 		if ( $type == "delete" ) {
-			header("Location: " . swarmpath( "user/{$_SESSION["username"]}/" ) );
+			header( "Location: " . swarmpath( "user/{$_SESSION["username"]}/" ) );
 		} else {
-		header("Location: " . swarmpath( "job/{$job_id}/" ) );
+			header( "Location: " . swarmpath( "job/{$job_id}/" ) );
 		}
 	}
 
-	exit();
+	exit;

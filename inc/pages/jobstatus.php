@@ -24,7 +24,7 @@
 		}
 	}
 
-	$job_id = preg_replace("/[^0-9]/", "", $_REQUEST["job_id"]);
+	$job_id = preg_replace("/[^0-9]/", "", $_REQUEST["item"]);
 
 	$result = mysql_queryf("SELECT jobs.name, jobs.status, users.name FROM jobs, users WHERE jobs.id=%u AND users.id=jobs.user_id;", $job_id);
 
@@ -41,7 +41,7 @@
 <?php if ( $owner && $_SESSION["auth"] == "yes" ) { ?>
 <form action="" method="POST">
 	<input type="hidden" name="action" value="wipejob"/>
-	<input type="hidden" name="job_id" value="<?php echo $job_id; ?>"/>
+	<input type="hidden" name="item" value="<?php echo $job_id; ?>"/>
 	<input type="submit" name="type" value="delete"/>
 	<input type="submit" name="type" value="reset"/>
 </form>
