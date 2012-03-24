@@ -59,7 +59,7 @@ class TestSwarmContext {
 	 */
 	public function getRequest() {
 		if ( $this->request === null ) {
-			$this->request = new WebRequest( $this );
+			$this->request = WebRequest::newFromContext( $this );
 		}
 		return $this->request;
 	}
