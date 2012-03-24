@@ -31,7 +31,9 @@ if ( $action ) {
 	}
 }
 
-if ( $title ) {
+// If $title is set, then the logic-file intends to make an HTML response
+// Otherwise it doesn't (such as runresults for example)
+if ( isset( $title ) ) {
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -71,10 +73,18 @@ if ( $title ) {
 	<h1><a href="<?php echo swarmpath( "/" ); ?>"><img src="<?php echo swarmpath( "images/testswarm_logo_wordmark.png" ); ?>" alt="TestSwarm" title="TestSwarm"/></a></h1>
 	<h2><?php echo  $title; ?></h2>
 	<div id="main">
-	<?php } if ( $action && file_exists( $pageFile ) ) {
-		require $pageFile;
-	} if ( $title ) { ?>
+	<?php
+}
+
+if ( $action && file_exists( $pageFile ) ) {
+	require $pageFile;
+}
+
+// Wrap up the HTML response
+if ( $title ) {
+?>
 	</div>
 </body>
 </html>
-<?php }
+<?php
+}
