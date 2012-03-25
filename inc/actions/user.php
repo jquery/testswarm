@@ -6,5 +6,5 @@
 	$scripts =
 		'<script src="' . swarmpath( 'js/jquery.js' ) . '"></script>'
 		. '<script src="' . swarmpath( 'js/pretty.js' ) . '"></script>'
-		. '<script src="' . swarmpath( 'js/view.js' ) . '"></script>';
+		. '<script src="' . swarmpath( 'js/user.js' ) . '"></script>';
 
