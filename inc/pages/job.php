@@ -67,7 +67,7 @@
 			$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id FROM run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id ORDER BY useragent_id;", $row["run_id"]);
 
 			while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-				if ( !$useragents[ $ua_row['useragent_id'] ] ) {
+				if ( !isset( $useragents[ $ua_row['useragent_id'] ] ) ) {
 					$useragents[ $ua_row['useragent_id'] ] = array();
 				}
 
@@ -89,7 +89,7 @@
 
 		$last_browser = -1;
 
-		if ( $useragents[ $row["useragent_id"] ] ) {
+		if ( isset( $useragents[ $row["useragent_id"] ] ) ) {
 			foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 				$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 				if ( $last_browser != $ua["useragent_id"] ) {
@@ -117,9 +117,9 @@
 
 	if ( $last ) {
 		$header = "<tr><th></th>\n";
-		$last_browser = array();
+		$last_browser = null;
 		foreach ( $browsers as $browser ) {
-			if ( $last_browser["id"] != $browser["id"] ) {
+			if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
 				$header .= '<th><div class="browser">' .
 					'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
 					'.sm.png" class="browser-icon ' . $browser["engine"] .

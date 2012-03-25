@@ -183,7 +183,7 @@
 					);
 
 					while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-						if ( !$useragents[ $ua_row["useragent_id"] ] ) {
+						if ( !isset( $useragents[ $ua_row["useragent_id"] ] ) ) {
 							$useragents[ $ua_row["useragent_id"] ] = array();
 						}
 
@@ -201,7 +201,7 @@
 
 				$last_browser = "";
 
-				if ( $useragents[ $row["useragent_id"] ] ) {
+				if ( isset( $useragents[ $row["useragent_id"] ] ) ) {
 					foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 						$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 						if ( $last_browser != $ua["browser"] ) {
@@ -246,9 +246,9 @@
 
 		if ( $last ) {
 			$header = "<tr><th></th>\n";
-			$last_browser = array();
+			$last_browser = null;
 			foreach ( $browsers as $browser ) {
-				if ( $last_browser["id"] != $browser["id"] ) {
+				if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
 					$header .= '<th><div class="browser">' .
 						'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
 						'.sm.png" class="browser-icon ' . $browser["engine"] .
