@@ -6,17 +6,16 @@ Deny from all
 RewriteEngine On
 RewriteBase /
 
+# Don't touch real files and directories (such as ./js/ and ./css/)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^.*$ - [S=51]
 
-RewriteRule (.*[^/])$ $1/ [R=301,QSA]
+# Don't touch .* files or directories (skip the following 10 lines)
+RewriteRule ^.*$ - [S=10]
 
-RewriteRule ^run/$ index.php?action=run [QSA,L]
-RewriteRule ^run/(.*)/?$ index.php?action=run&item=$1 [QSA,L]
-RewriteRule ^login/$ index.php?action=login [QSA,L]
-RewriteRule ^logout/$ index.php?action=logout [QSA,L]
-RewriteRule ^signup/$ index.php?action=signup [QSA,L]
-RewriteRule ^scores/$ index.php?action=scores [QSA,L]
-RewriteRule ^user/(.*)/?$ index.php?action=tinder&item=$1 [QSA,L]
-RewriteRule ^job/(.*)/?$ index.php?action=jobstatus&item=$1 [QSA,L]
+# Remove any trailing slash
+RewriteRule ^(.*)/$ $1 [R=301,QSA]
+
+# Dynamic action paths
+RewriteRule ^([a-z]*)$ index.php?action=$1 [QSA]
+RewriteRule ^([a-z]*)/(.*)$ index.php?action=$1&item=$2 [QSA]
