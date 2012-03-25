@@ -4,26 +4,44 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-jQuery(function(){
-	setTimeout(function(){
-		if ( jQuery("td.notdone").length ) {
-			jQuery.get(window.location.href, function(html){
-				var table = jQuery("table", html).html(), insert = jQuery("table.results");
-				if ( table !== insert.html() ) {
-					insert.html( table );
+jQuery(function ( $ ) {
+	var updateInterval = SWARM.web.ajax_update_interval * 1000;
+
+	setTimeout(function refreshTable() {
+		if ( $( "td.notdone" ).length ) {
+			$.get( window.location.href, function ( html ) {
+				var tableHtml, $targetTable;
+
+				tableHtml = $( html ).find( "table" ).html();
+				$targetTable = $( "table.results" );
+				if ( tableHtml !== $targetTable.html() ) {
+					$targetTable.html( tableHtml );
 				}
 			});
-			setTimeout(arguments.callee, 5000);
-		}
-	}, 5000);
 
-	jQuery("td:has(a)").live("dblclick", function(){
-		var params = /&.*$/.exec( jQuery(this).find("a").attr("href") );
-		jQuery.ajax({
-			url: ".",
-			type: "POST",
-			data: "action=wiperun" + params
-		});
-		jQuery(this).empty().attr("class", "notstarted notdone");
+			setTimeout( refreshTable, updateInterval );
+		}
+	}, updateInterval );
+
+	$( document ).on( "dblclick", "td:has(a)", function () {
+		var href, qs, $el;
+		$el = $( this );
+		href = $el.find( "a" ).attr( "href" );
+		if ( href ) {
+			// extract &run_id=..&client_id=.. from the "?action=runresults&run_id=6&client_id=252" url
+			// basically transforming runresults into wiperun
+			qs = href.match( /&.*$/ );
+			$.ajax({
+				url: SWARM.web.contextpath,
+				dataType: "json",
+				type: "POST",
+				data: "action=wiperun" + ( qs ? qs[0] : "" ),
+				success: function ( data ) {
+					if ( data === "ok" ) {
+						$el.empty().attr( "class", "notstarted notdone" );
+					}
+				}
+			});
+		}
 	});
 });

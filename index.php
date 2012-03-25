@@ -47,6 +47,7 @@ if ( isset( $title ) ) {
 		// (not the entire object since it also contains DB password and such..).
 		"web" => array(
 			"contextpath" => swarmpath( "" ),
+			"ajax_update_interval" => $swarmContext->getConf()->web->ajax_update_interval,
 		),
 		"client" => $swarmContext->getConf()->client,
 	) ); ?>;</script>

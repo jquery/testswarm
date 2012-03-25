@@ -4,8 +4,8 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-jQuery(function ($) {
+jQuery(function ( $ ) {
 	if ( $.fn.prettyDate ) {
-		$(".pretty").prettyDate();
+		$( ".pretty" ).prettyDate();
 	}
 });

@@ -82,15 +82,18 @@
 
 	function testTimedout() {
 		cancelTest();
-		retrySend( "action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
-			+ currRunId + "&client_id=" + SWARM.client_id,
-			testTimedout, function ( data ) {
+		retrySend(
+			"action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id=" +
+				currRunId + "&client_id=" + SWARM.client_id,
+			testTimedout,
+			function ( data ) {
 				if ( data === "ok" ) {
 					SWARM.runDone();
 				} else {
 					getTests();
 				}
-			} );
+			}
+		);
 	}
 
 	/**
@@ -136,6 +139,7 @@
 			iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?") +
 				"_=" + new Date().getTime() + "&swarmURL=" +
 				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&action=" );
+
 			$( "#iframes" ).append( iframe );
 
 			// Timeout after a period of time
@@ -147,7 +151,7 @@
 
 			norun_msg = data.timeoutMsg || "No new tests to run.";
 
-			msg(norun_msg);
+			msg( norun_msg );
 
 			// If we just completed a run, do a cooldown_rate timeout before we fetch the next
 			// run (if there is one). If we just completed a cooldown a no runs where available,

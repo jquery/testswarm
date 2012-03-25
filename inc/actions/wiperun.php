@@ -1,6 +1,7 @@
 <?php
 	$run_id = preg_replace("/[^0-9]/", "", $_POST["run_id"]);
 	$client_id = preg_replace("/[^0-9]/", "", $_POST["client_id"]);
+	$wipedRun = false;
 
 	if ( $run_id && $client_id && $_SESSION["username"] && $_SESSION["auth"] == "yes" ) {
 
@@ -37,14 +38,23 @@
 					$useragent_id
 				);
 				mysql_queryf(
-					"UPDATE runs SET status=1, updated=%s WHERE run_id=%u;",
+					"UPDATE runs SET status=1, updated=%s WHERE id=%u;",
 					swarmdb_dateformat( SWARM_NOW ),
 					$run_id
 				);
+
+				$wipedRun = true;
 			}
 		}
+	}
 
+	if ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] )
+		&& strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'
+	) {
+		echo json_encode( $wipedRun ? "ok" : "error" );
+
+	} else {
 		header("Location: " . swarmpath( "job/{$job_id}/" ) );
 	}
 
-	exit();
+	exit;

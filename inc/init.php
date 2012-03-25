@@ -54,6 +54,7 @@ $swarmConfig = array(
 	"web" => array(
 		"contextpath" => "",
 		"title" => "Test Swarm",
+		"ajax_update_interval" => "5",
 	),
 	"client" => array(
 		"cooldown_rate" => "15",
@@ -84,6 +85,8 @@ $swarmConfig["client"]["cooldown_rate"] = intval( $swarmConfig["client"]["cooldo
 $swarmConfig["client"]["update_rate"] = intval( $swarmConfig["client"]["update_rate"] );
 $swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout_rate"] );
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
+
+$swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
 
 /**@}*/
 
