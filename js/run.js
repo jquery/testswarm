@@ -84,7 +84,13 @@
 		cancelTest();
 		retrySend( "action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
 			+ currRunId + "&client_id=" + SWARM.client_id,
-			testTimedout, getTests );
+			testTimedout, function ( data ) {
+				if ( data === "ok" ) {
+					SWARM.runDone();
+				} else {
+					getTests();
+				}
+			} );
 	}
 
 	/**
@@ -162,7 +168,11 @@
 		}
 	}
 
-	function done() {
+	// Needs to be a publicly exposed function,
+	// so that when inject.js does a <form> submission,
+	// it can call this from within the frame
+	// as window.parent.SWARM.runDone();
+	SWARM.runDone = function () {
 		cancelTest();
 		runTests({ timeoutMsg: "Cooling down." });
 	}
@@ -171,7 +181,7 @@
 		e = e || window.event;
 		retrySend( e.data, function () {
 			handleMessage(e);
-		}, done );
+		}, SWARM.runDone );
 	}
 
 	/**

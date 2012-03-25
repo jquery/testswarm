@@ -5,7 +5,7 @@
 	var doPost = false;
 
 	try {
-		doPost = !!window.top.postMessage;
+		doPost = !!window.parent.postMessage;
 	} catch(e){}
 
 	var search = window.location.search,
@@ -21,6 +21,14 @@
 
 	var curHeartbeat;
 	var beatRate = 20;
+
+	function debugObj(obj) {
+		var str = "";
+		for ( var i in obj ) {
+			str += ( str ? "\n" : "" ) + i + ":\n\t " + obj[i];
+		}
+		return str;
+	}
 
 	// Expose the TestSwarm API
 	window.TestSwarm = {
@@ -40,7 +48,9 @@
 	};
 
 	// Prevent careless things from executing
-	window.print = window.confirm = window.alert = window.open = function(){};
+	if ( !DEBUG ) {
+		window.print = window.confirm = window.alert = window.open = function(){};
+	}
 
 	window.onerror = function(e){
 		document.body.appendChild( document.createTextNode( "ERROR: " + e ));
@@ -278,6 +288,10 @@
 			params.results = window.TestSwarm.serialize();
 		}
 
+		if ( DEBUG ) {
+			alert( debugObj( params ) ) ;
+		}
+
 		if ( doPost ) {
 			// Build Query String
 			var query = "";
@@ -287,10 +301,8 @@
 					encodeURIComponent(params[i]);
 			}
 
-			if ( DEBUG ) {
-				alert( query );
-			} else {
-				window.top.postMessage( query, "*" );
+			if ( !DEBUG ) {
+				window.parent.postMessage( query, "*" );
 			}
 
 		} else {
