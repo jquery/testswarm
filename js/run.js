@@ -175,7 +175,7 @@
 	SWARM.runDone = function () {
 		cancelTest();
 		runTests({ timeoutMsg: "Cooling down." });
-	}
+	};
 
 	function handleMessage(e) {
 		e = e || window.event;
