@@ -8,31 +8,35 @@
  * @package TestSwarm
  */
 
+/**
+ * Environmental requirements
+ * @{
+ */
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
 	echo "TestSwarm requires at least PHP 5.2.3\n";
 	exit;
 }
 
-// Defines
+/**@}*/
+
+/**
+ * Defines
+ * @{
+ */
 define( 'SWARM_NOW', 0 );
 define( 'DBCON_DEFAULT', 10 );
 define( 'DBCON_PERSISTENT', 11 );
 
-// Load classes
-require_once "inc/BrowserInfo.php";
-require_once "inc/Database.php";
-require_once "inc/TestSwarm.php";
-require_once "inc/WebRequest.php";
-
-// Other requirements
-require_once "inc/utilities.php";
-
+/**@}*/
 
 /**
  * Default settings
  * @{
  */
+// Generic requirements that we still need globally unconditionally
+require_once "inc/utilities.php";
+
 $swarmInstallDir = dirname( __DIR__ );
 
 // Verify that the testswarm.ini file exists
@@ -87,6 +91,34 @@ $swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
 $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
+
+/**@}*/
+
+/**
+ * AutoLoader
+ * @{
+ */
+$swarmAutoLoadClasses = array(
+	"BrowserInfo" => "inc/BrowserInfo.php",
+	"Database" =>"inc/Database.php",
+	"TestSwarmContext" => "inc/TestSwarm.php",
+	"WebRequest" => "inc/WebRequest.php",
+);
+
+function swarmAutoLoader( $className ) {
+	global $swarmAutoLoadClasses, $swarmInstallDir;
+
+	if ( !isset( $swarmAutoLoadClasses[$className] ) ) {
+		return false;
+	}
+
+	$filename = $swarmAutoLoadClasses[$className];
+	require_once( "$swarmInstallDir/$filename" );
+
+	return true;
+}
+
+spl_autoload_register( "swarmAutoLoader" );
 
 /**@}*/
 
