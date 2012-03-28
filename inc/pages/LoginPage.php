@@ -9,8 +9,18 @@
 class LoginPage extends Page {
 
 	public function execute() {
-		$this->actionClass = 'LoginAction';
-		parent::execute();
+		$action = LoginAction::newFromContext( $this->getContext() );
+		$action->doAction();
+		$error = $action->getError();
+		if ( !$error ) {
+			$data = $action->getData();
+			if ( $data["status"] === "logged-in" ) {
+				$this->redirect( swarmpath( "user/" . $data["username"] ) );
+			}
+		}
+
+		$this->setAction( $action );
+		$this->content = $this->initContent();
 	}
 
 	protected function initContent() {
@@ -23,7 +33,8 @@ class LoginPage extends Page {
 			. '<legend>Login</legend>';
 
 		$error = $this->getAction()->getError();
-		if ( $error ) {
+
+		if ( $request->wasPosted() && $error ) {
 			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
 		}
 

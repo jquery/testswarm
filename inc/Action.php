@@ -16,15 +16,22 @@ abstract class Action {
 	protected $context;
 
 	/**
-	 * @var $error array|false: Boolean false if there are no errors,
-	 * or an array with a 'code' and 'info' property. The 'info' property
-	 * is a humanreadable string explaining the error briefly. The 'code'
-	 * property should be one of the following that should be machine
-	 * readable to give respond in a certain way. Keep the unique codes
-	 * limited.
-	 * Possible codes: 'internal-error', 'invalid-input'
+	 * @var $error stroing|false: Boolean false if there are no errors,
+	 * or one of the errorCodes.
 	 */
 	protected $error = false;
+
+	protected static $errorCodes = array(
+		"internal-error" => "An internal error occurred. Action could not be performed",
+		"invalid-input" => "One or more input fields were invalid.",
+		"missing-parameters" => "One ore more required fields were not submitted.",
+		"requires-post" => "This action requires a POST action.",
+	);
+
+	/**
+	 * @var $data array: Data to give to the action handler (Page, Api).
+	 */
+	protected $data = array();
 
 	/**
 	 * Perform the actual action based on the current context.
@@ -35,35 +42,27 @@ abstract class Action {
 	 */
 	abstract public function doAction();
 
-	/**
-	 * Useful utility function to send a redirect as reponse and close the request.
-	 * @param $target string: Url
-	 * @param $code int: 30x 
-	 */
-	protected function redirect( $target = '', $code = 302 ) {
-		static $httpCodes = array(
-			301 => 'Moved Permanently',
-			302 => 'Found',
-			303 => 'See Other',
-			304 => 'Not Modified',
-			305 => 'Use Proxy',
-			307 => 'Temporary Redirect',
-		);
-		$httpCode = $httpCodes[$code];
-		if ( !$httpCodes[$code] ) {
-			throw new SwarmError( "Invalid redirect http code." );
+	final protected function setError( $error ) {
+		if ( !isset( self::$errorCodes[$error] ) ) {
+			throw new SwarmException( "Unrecognized error code used." );
 		}
-
-		session_write_close();
-		header( $_SERVER["SERVER_PROTOCOL"] . " $code $httpCode", true, $code );
-		header( "Content-Type: text/html; charset=utf-8" );
-		header( 'Location: ' . $target );
-
-		exit;
+		$this->error = $error;
 	}
 
 	final public function getError() {
-		return $this->error;
+		return $this->error
+			? array(
+				"code" => $this->error,
+				"info" => self::$errorCodes[$this->error],
+			) : false;
+	}
+
+	final protected function setData( Array $data ) {
+		$this->data = $data;
+	}
+
+	final public function getData() {
+		return $this->data;
 	}
 
 	final public static function newFromContext( TestSwarmContext $context ) {

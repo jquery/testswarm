@@ -19,11 +19,6 @@ abstract class Page {
 	protected $context;
 
 	/**
-	 * @var $action string|null: Class name
-	 */
-	protected $actionClass;
-
-	/**
 	 * @var $action Action|null: An Action object
 	 */
 	protected $action;
@@ -53,17 +48,13 @@ abstract class Page {
 	 * so that the Api can easily re-use it.
 	 * @example
 	 * <code>
-	 * $this->actionClass = 'LoginAction';
-	 *	parent::execute();
+	 * $action = FooAction::newFromContext( $this->getContext() );
+	 * $action->doAction();
+	 *	$this->setAction( $action );
+	 *	$this->content = $this->initContent();
 	 * </code>
 	 */
 	public function execute() {
-		if ( $this->actionClass !== null ) {
-			$className = $this->actionClass;
-			$this->action = $className::newFromContext( $this->getContext() );
-			$this->action->doAction();
-		}
-
 		// By default a Page has no executable logic, only content.
 		$this->content = $this->initContent();
 	}
@@ -221,6 +212,33 @@ abstract class Page {
 	// End of Page::output
 	}
 
+	/**
+	 * Useful utility function to send a redirect as reponse and close the request.
+	 * @param $target string: Url
+	 * @param $code int: 30x
+	 */
+	protected function redirect( $target = '', $code = 302 ) {
+		static $httpCodes = array(
+			301 => 'Moved Permanently',
+			302 => 'Found',
+			303 => 'See Other',
+			304 => 'Not Modified',
+			305 => 'Use Proxy',
+			307 => 'Temporary Redirect',
+		);
+		$httpCode = $httpCodes[$code];
+		if ( !$httpCodes[$code] ) {
+			throw new SwarmError( "Invalid redirect http code." );
+		}
+
+		session_write_close();
+		header( $_SERVER["SERVER_PROTOCOL"] . " $code $httpCode", true, $code );
+		header( "Content-Type: text/html; charset=utf-8" );
+		header( 'Location: ' . $target );
+
+		exit;
+	}
+
 	final public function handleException( Exception $e ) {
 
 		header( $_SERVER["SERVER_PROTOCOL"] . " 500 TestSwarm Internal Error", true, 500 );
@@ -260,6 +278,10 @@ abstract class Page {
 
 	final protected function getContext() {
 		return $this->context;
+	}
+
+	final protected function setAction( Action $action ) {
+		$this->action = $action;
 	}
 
 	final protected function getAction() {

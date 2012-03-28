@@ -12,19 +12,24 @@ class LoginAction extends Action {
 
 		$request = $this->getContext()->getRequest();
 
-		if ( isset( $_SESSION["username"] ) && isset( $_SESSION["auth"] ) && $_SESSION["auth"] == "yes" ) {
-			$username = $_SESSION["username"];
-			$this->redirect( swarmpath( "user/$username" ) );
-		}
+		// Already logged in ?
+		if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
+			$username = $request->getSessionData( "username" );
+		// Try logging in
+		} else {
 
-		if ( !$request->wasPosted() ) {
-			return;
-		}
+			if ( !$request->wasPosted() ) {
+				$this->setError( "requires-post" );
+				return;
+			}
 
-		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username" ) );
-		$password = $request->getVal( "password" );
+			$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username" ) );
+			$password = $request->getVal( "password" );
 
-		if ( $username && $password ) {
+			if ( !$username || !$password ) {
+				$this->setError( "missing-parameters" );
+				return;
+			}
 
 			$result = mysql_queryf(
 				"SELECT id
@@ -37,18 +42,21 @@ class LoginAction extends Action {
 			);
 
 			if ( mysql_num_rows( $result ) > 0 ) {
+				// Start logged-in session
 				$request->setSessionData( "username", $username );
 				$request->setSessionData( "auth", "yes" );
 
-				$this->redirect( swarmpath( "user/$username" ) );
-
+			} else {
+				$this->setError( "invalid-input" );
+				return;
 			}
 		}
 
-		// We're still here, show error
-		$this->error = array(
-			"code" => "invalid-input",
-			"info" => "Incorrect username or password.",
-		);
+		// We're still here, logged-in succeeded!
+		$this->setData( array(
+			"status" => "logged-in",
+			"username" => $username,
+		) );
+		return;
 	}
 }
