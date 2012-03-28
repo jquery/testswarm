@@ -108,9 +108,11 @@ $swarmAutoLoadClasses = array(
 	"WebRequest" => "inc/WebRequest.php",
 	# Actions
 	"LoginAction" => "inc/actions/LoginAction.php",
+	"LogoutAction" => "inc/actions/LogoutAction.php",
 	# Pages
 	"HomePage" => "inc/pages/HomePage.php",
 	"LoginPage" => "inc/pages/LoginPage.php",
+	"LogoutPage" => "inc/pages/LogoutPage.php",
 );
 
 function swarmAutoLoader( $className ) {
