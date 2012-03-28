@@ -17,6 +17,58 @@
 	}
 
 	/**
+	 * Utility function for formatting HTML.
+	 * @since 0.3.0
+	 *
+	 * @param $tagName string: HTML tag name
+	 * @param #attribs array: Key/value pairs, unescaped
+	 * @param $content string|null: [optional] Text content, to be escaped.
+	 */
+	function html_tag( $tagName, Array $attribs = array(), $content = "" ) {
+		static $voidElements = array(
+			'area',
+			'base',
+			'br',
+			'col',
+			'command',
+			'embed',
+			'hr',
+			'img',
+			'input',
+			'keygen',
+			'link',
+			'meta',
+			'param',
+			'source',
+		);
+
+		$html = "<$tagName";
+
+		foreach ( $attribs as $key => $value ) {
+			$html .= ' ' . strtolower( $key ) . '="' . strtr( $value, array(
+				'&' => '&amp;',
+				'"' => '&quot;',
+				"\n" => '&#10;',
+				"\r" => '&#13;',
+				"\t" => '&#9;',
+			) ) . '"';
+		}
+
+		if ( in_array( $tagName, $voidElements ) ) {
+			$html .= ">";
+
+		} else {
+			$content = strtr( $content, array(
+				'&' => '&amp;',
+				'<' => '&lt;',
+			) );
+			$html .= ">$content</$tagName>";
+		}
+
+		return $html;
+	}
+
+	/**
 	 * Utility function to overwrite keys and support multiple levels.
 	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
 	 * is recurive but doesn't overwrite deper level's keys..)

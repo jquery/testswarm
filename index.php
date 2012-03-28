@@ -12,7 +12,7 @@
 
 require_once "inc/init.php";
 
-$action = preg_replace("/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "" ) );
+$action = preg_replace( "/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "" ) );
 
 if ( !$action ) {
 	$action = "home";
@@ -20,72 +20,22 @@ if ( !$action ) {
 
 $actionFile = "inc/actions/$action.php";
 $pageFile = "inc/pages/$action.php";
+$pageObj = $swarmContext->getRequest()->getPageInstance();
 
-if ( $action ) {
-	if ( file_exists( $actionFile ) ) {
-		require $actionFile;
-	} elseif ( !file_exists( $pageFile ) ) {
-		header( $_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404 );
-		echo '<h2>TestSwarm: Invalid action</h2>';
-		exit;
-	}
+// Action
+if ( file_exists( $actionFile ) ) {
+	require $actionFile;
 }
 
-// If $title is set, then the logic-file intends to make an HTML response
-// Otherwise it doesn't (such as runresults for example)
-if ( isset( $title ) ) {
-?>
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-	<meta charset="UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title><?php echo htmlentities( $swarmContext->getConf()->web->title . ': ' . $title ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>"/>
-	<script>window.SWARM = <?php echo json_encode( array(
-		// Export a simplified version of the TestSwarm configuration object to the browser
-		// (not the entire object since it also contains DB password and such..).
-		"web" => array(
-			"contextpath" => swarmpath( "" ),
-			"ajax_update_interval" => $swarmContext->getConf()->web->ajax_update_interval,
-		),
-		"client" => $swarmContext->getConf()->client,
-	) ); ?>;</script>
-<?php
-		echo isset( $scripts ) ? "\t" . $scripts . "\n" : "";
-?>
-</head>
-<body>
-	<ul class="nav">
-		<?php if ( isset( $_SESSION["username"] ) && isset( $_SESSION["auth"] ) && $_SESSION["auth"] == "yes" ) { ?>
-		<li><strong><a href="<?php echo swarmpath( "user/{$_SESSION["username"]}/" ); ?>"><?php echo $_SESSION["username"];?></a></strong></li>
-		<li><a href="<?php echo swarmpath( "run/{$_SESSION["username"]}" );?>">Join the Swarm</a></li>
-		<li><a href="<?php echo swarmpath( "logout/" ); ?>">Logout</a></li>
-		<?php } else { ?>
-		<li><a href="<?php echo swarmpath( "login/" ); ?>">Login</a></li>
-		<li><a href="<?php echo swarmpath( "signup/" ); ?>">Signup</a></li>
-		<?php } ?>
-		<li><a href="//github.com/jquery/testswarm">Source Code</a></li>
-		<li><a href="//github.com/jquery/testswarm/issues">Issue Tracker</a></li>
-		<li><a href="//github.com/jquery/testswarm/wiki">About</a></li>
-		<li><a href="//groups.google.com/group/testswarm">Discuss</a></li>
-		<li><a href="//twitter.com/testswarm">Twitter</a></li>
-	</ul>
-	<h1><a href="<?php echo swarmpath( "/" ); ?>"><img src="<?php echo swarmpath( "images/testswarm_logo_wordmark.png" ); ?>" alt="TestSwarm" title="TestSwarm"/></a></h1>
-	<h2><?php echo  $title; ?></h2>
-	<div id="main">
-	<?php
-}
+// Page
+if ( $pageObj instanceof Page ) {
+	$pageObj->output();
 
-if ( $action && file_exists( $pageFile ) ) {
+} elseif  ( file_exists( $pageFile ) ) {
 	require $pageFile;
-}
 
-// Wrap up the HTML response
-if ( isset( $title ) ) {
-?>
-	</div>
-</body>
-</html>
-<?php
+} else {
+	header( $_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404 );
+	echo '<h2>TestSwarm: Invalid action</h2>';
+	exit;
 }

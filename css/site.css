@@ -306,3 +306,20 @@ ul.clients li img {
 ul.clients li img.msie {
 	margin-top: -2px;
 }
+
+.errorbox {
+	background: whiteSmoke;
+	border: 2px solid #AAA;
+	color: darkRed;
+	padding: 1em;
+	width: auto;
+}
+
+#footer {
+	clear: both;
+	background: whiteSmoke;
+	border-top: 1px solid #E5E5E5;
+	text-align: center;
+	padding: 1em 0 2em 0;
+	margin: 1em 0 0 0;
+}

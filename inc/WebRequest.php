@@ -181,6 +181,13 @@ class WebRequest {
 		return $ip;
 	}
 
+	/** @return Page|null */
+	public function getPageInstance() {
+		$pageAction = $this->getVal( "action", "home" );
+		$pageClass = Page::getPageClassByName( $pageAction );
+		return $pageClass ? $pageClass::newFromContext( $this->context ) : null;
+	}
+
 	/** Don't allow direct instantiations of this class, use newFromContext instead */
 	private function __construct() {}
 }

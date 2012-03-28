@@ -99,10 +99,18 @@ $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_
  * @{
  */
 $swarmAutoLoadClasses = array(
+	# Main includes
+	"Action" => "inc/Action.php",
 	"BrowserInfo" => "inc/BrowserInfo.php",
 	"Database" =>"inc/Database.php",
+	"Page" => "inc/Page.php",
 	"TestSwarmContext" => "inc/TestSwarm.php",
 	"WebRequest" => "inc/WebRequest.php",
+	# Actions
+	"LoginAction" => "inc/actions/LoginAction.php",
+	# Pages
+	"HomePage" => "inc/pages/HomePage.php",
+	"LoginPage" => "inc/pages/LoginPage.php",
 );
 
 function swarmAutoLoader( $className ) {
