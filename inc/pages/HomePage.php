@@ -16,6 +16,7 @@ class HomePage extends Page {
 		$browserInfo = $this->getContext()->getBrowserInfo();
 
 		$this->setTitle( "Distributed Continuous Integration for JavaScript" );
+		$this->headScripts[] = swarmpath( "js/jquery.js" );
 
 		$html = '<blockquote>Welcome to the TestSwarm Alpha! Please be aware that'
 			. ' TestSwarm is still under heavy testing and during this alpha period'
