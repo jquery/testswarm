@@ -52,12 +52,12 @@ class HomePage extends Page {
 				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>'
 				. ' and include the following information:<br><code>clientprofile: '
 				. htmlspecialchars(
-					$bi->getBrowserCodename()
-					. '/' . $bi->getBrowserVersion()
-					. '/' . $bi->getOsCodename()
+					$browserInfo->getBrowserCodename()
+					. '/' . $browserInfo->getBrowserVersion()
+					. '/' . $browserInfo->getOsCodename()
 				)
 				. '</code><br><code><a href="http://useragentstring.com/">useragent string</a>: '
-				. htmlspecialchars( $bi->getRawUA() )
+				. htmlspecialchars( $browserInfo->getRawUA() )
 				. '</p></div>';
 		}
 

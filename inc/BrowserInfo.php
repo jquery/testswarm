@@ -94,6 +94,8 @@ class BrowserInfo {
 	 * @param $userAgent string
 	 */
 	private function parseUserAgent( $userAgent ) {
+		$this->userAgent = $userAgent;
+
 		$lcUA = strtolower( $userAgent );
 
 		// Version
