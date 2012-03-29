@@ -57,7 +57,7 @@ $swarmConfig = array(
 	),
 	"web" => array(
 		"contextpath" => "",
-		"title" => "Test Swarm",
+		"title" => "TestSwarm",
 		"ajax_update_interval" => "5",
 	),
 	"client" => array(
@@ -102,17 +102,23 @@ $swarmAutoLoadClasses = array(
 	# Main includes
 	"Action" => "inc/Action.php",
 	"BrowserInfo" => "inc/BrowserInfo.php",
+	"Client" => "inc/Client.php",
 	"Database" =>"inc/Database.php",
 	"Page" => "inc/Page.php",
 	"TestSwarmContext" => "inc/TestSwarm.php",
 	"WebRequest" => "inc/WebRequest.php",
 	# Actions
+	"GetrunAction" => "inc/actions/GetrunAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
 	"LogoutAction" => "inc/actions/LogoutAction.php",
+	"SaverunAction" => "inc/actions/SaverunAction.php",
 	# Pages
+	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: API
 	"HomePage" => "inc/pages/HomePage.php",
 	"LoginPage" => "inc/pages/LoginPage.php",
 	"LogoutPage" => "inc/pages/LogoutPage.php",
+	"RunPage" => "inc/pages/RunPage.php",
+	"SaverunPage" => "inc/pages/SaverunPage.php", // @todo: API
 );
 
 function swarmAutoLoader( $className ) {

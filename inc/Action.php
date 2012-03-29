@@ -22,10 +22,11 @@ abstract class Action {
 	protected $error = false;
 
 	protected static $errorCodes = array(
-		"internal-error" => "An internal error occurred. Action could not be performed",
+		// "internal-error" is exclusively for use by the exception handler
+		"internal-error" => "An internal error occurred. Action could not be performed.",
 		"invalid-input" => "One or more input fields were invalid.",
 		"missing-parameters" => "One ore more required fields were not submitted.",
-		"requires-post" => "This action requires a POST action.",
+		"requires-post" => "This action requires a POST request.",
 	);
 
 	/**
@@ -57,7 +58,10 @@ abstract class Action {
 			) : false;
 	}
 
-	final protected function setData( Array $data ) {
+	/**
+	 * @param $data mixed
+	 */
+	final protected function setData( $data ) {
 		$this->data = $data;
 	}
 

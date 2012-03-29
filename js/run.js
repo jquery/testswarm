@@ -7,15 +7,15 @@
 (function ( $, SWARM, undefined ) {
 	var currRunId, currRunUrl, testTimeout, pauseTimer, cmds, errorOut;
 
-	function msg( txt ) {
-		$( "#msg" ).html( txt );
+	function msg( htmlMsg ) {
+		$( "#msg" ).html( htmlMsg );
 	}
 
-	function log( txt ) {
+	function log( htmlMsg ) {
 		$( "#history" ).prepend( "<li><strong>" +
 			new Date().toString().replace( /^\w+ /, "" ).replace( /:[^:]+$/, "" ) +
-			":</strong> " + txt + "</li>" );
-		msg( txt );
+			":</strong> " + htmlMsg + "</li>" );
+		msg( htmlMsg );
 	}
 
 	/**
@@ -102,11 +102,13 @@
 	function runTests( data ) {
 		var norun_msg, timeLeft, runInfo, params, iframe;
 
-		if ( !$.isPlainObject( data ) ) {
+		if ( !$.isPlainObject( data ) || data.error ) {
 			// Handle session timeout, where server sends back "Username required."
 			// Handle TestSwarm reset, where server sends back "Client doesn't exist."
-			if ( /^Username required|^Client doesn/.test( data ) ) {
-				cmds.reload();
+			if ( data.error ) {
+				$(function () {
+					msg( 'action=getrun failed. ' + $( "<div>" ).text( data.error.info ).html() );
+				});
 				return;
 			}
 		}
