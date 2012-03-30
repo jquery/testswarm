@@ -5,7 +5,7 @@
 
 	if ( !$request->wasPosted() ) {
 		return;
-	)
+	}
 
 	$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username", false ) );
 	$password = $request->getVal( "password", false );
