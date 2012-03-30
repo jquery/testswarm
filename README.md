@@ -84,7 +84,7 @@ TestSwarm only supports Apache and MySQL as servers.
 
 
 
-Get involed
+Get involved
 ---------------------
 
 You're welcome to use the Github issue tracker to start discussions.
