@@ -56,7 +56,7 @@ class JobPage extends Page {
 
 		$this->setTitle( "Job Status" );
 		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
-		$this->bodyScripts[] = swarmpath( "js/job.js?" );
+		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
 		$status = $this->getJobStatus();
 
