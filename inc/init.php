@@ -115,6 +115,7 @@ $swarmAutoLoadClasses = array(
 	"SaverunAction" => "inc/actions/SaverunAction.php",
 	# Pages
 	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: API
+	"JobPage" => "inc/pages/JobPage.php",
 	"HomePage" => "inc/pages/HomePage.php",
 	"LoginPage" => "inc/pages/LoginPage.php",
 	"LogoutPage" => "inc/pages/LogoutPage.php",
