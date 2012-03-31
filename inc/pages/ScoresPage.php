@@ -6,7 +6,6 @@
  * @package TestSwarm
  */
 
-// TODO need to test the table with actual runs in the database
 class ScoresPage extends Page {
 
 	protected function initContent() {
