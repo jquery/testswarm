@@ -256,7 +256,7 @@ abstract class Page {
 				"</pre>\n";
 		} else {
 			$msg .=
-				'<p>Set <b><code>show_exception_details = 1;</code></b> ' .
+				'<p><strong>To the administrator</strong>:<br>Set <b><code>show_exception_details = 1;</code></b> ' .
 				'in the <code>[debug]</code> section at the bottom of <code>testswarm.ini</code> to show detailed debugging information.</p>';
 		}
 

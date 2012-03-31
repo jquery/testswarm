@@ -38,7 +38,7 @@ class CleanupAction extends Action {
 						runs = runs - 1
 					WHERE	run_id = %u
 					AND 	useragent_id = %u;",
-					$row->row_id,
+					$row->run_id,
 					$row->useragent_id
 				);
 				// Remove run_client entry
@@ -47,7 +47,7 @@ class CleanupAction extends Action {
 						run_client
 					WHERE	run_id = %u
 					AND	client_id = %u;",
-					$row->row_id,
+					$row->run_id,
 					$row->client_id
 				);
 			}

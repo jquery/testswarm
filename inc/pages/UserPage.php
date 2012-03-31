@@ -20,32 +20,6 @@ class UserPage extends Page {
 		$this->bodyScripts[] = swarmpath( "js/pretty.js" );
 		$this->bodyScripts[] = swarmpath( "js/user.js" );
 
-		// TODO extract and share with JobPage
-		function get_status($num) {
-			if ( $num == 0 ) {
-				return "Not started yet.";
-			} elseif ( $num == 1 ) {
-				return "In progress.";
-			} else {
-				return "Completed.";
-			}
-		}
-
-		// TODO extract and share with JobPage
-		function get_status2($num, $fail, $error, $total){
-			if ( $num == 0 ) {
-				return "notstarted notdone";
-			} elseif ( $num == 1 ) {
-				return "progress notdone";
-			} elseif ( $num == 2 && $fail == -1 ) {
-				return "timeout";
-			} elseif ( $num == 2 && ($error > 0 || $total == 0) ) {
-				return "error";
-			} else {
-				return $fail > 0 ? "fail" : "pass";
-			}
-		}
-
 		// Get the user's ID
 		$result = $db->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
 		if ( $result ) {
@@ -150,7 +124,6 @@ class UserPage extends Page {
 
 			while ( $row = mysql_fetch_array( $search_result ) ) {
 				$job_name = $row[0];
-				$job_status = get_status( intval( $row[1] ) );
 				$job_id = $row[2];
 
 				$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}" ) . '">' . strip_tags($job_name) . "</a></th>\n";
@@ -204,12 +177,12 @@ class UserPage extends Page {
 							$row["run_id"]
 						);
 
-						while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-							if ( !isset( $useragents[ $ua_row["useragent_id"] ] ) ) {
-								$useragents[ $ua_row["useragent_id"] ] = array();
+						while ( $clientRunRow = mysql_fetch_assoc($runResult) ) {
+							if ( !isset( $useragents[ $clientRunRow["useragent_id"] ] ) ) {
+								$useragents[ $clientRunRow["useragent_id"] ] = array();
 							}
 
-							array_push( $useragents[ $ua_row["useragent_id"] ], $ua_row );
+							array_push( $useragents[ $clientRunRow["useragent_id"] ], $clientRunRow );
 						}
 					}
 
@@ -223,36 +196,25 @@ class UserPage extends Page {
 
 					$last_browser = "";
 
+					// @todo This throws 'Undefined index' notices, figure out why...
+					// surpressed now with @
 					if ( isset( $useragents[ $row["useragent_id"] ] ) ) {
 						foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
-							$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
+							$status = JobAction::getStatusFromClientRunRow( (object)$ua );
 							if ( $last_browser != $ua["browser"] ) {
 								$cur = @$results[ $ua["useragent_id"] ];
 								$results[ $ua["useragent_id"] ] = $cur + intval($ua["fail"]);
 
 								$cur = @$states[ $ua["useragent_id"] ];
 
-								if ( strstr($status, "notdone") || strstr($cur, "notdone") ) {
-									$status = "notstarted notdone";
-								} elseif ( $status == "error" || $cur == "error" ) {
-									$status = "error";
-								} elseif ( $status == "timeout" || $cur == "timeout" ) {
-									$status = "timeout";
-								} elseif ( $status == "fail" || $cur == "fail" ) {
-									$status = "fail";
-								} else {
-									$status = "pass";
-								}
-
 								$states[ $ua["useragent_id"] ] = $status;
 							}
 							$last_browser = $ua["browser"];
 						}
 					} else {
-						// TODO this throws 'Undefined index' errors, figure out why...
 						$cur = @$results[ $row["useragent_id"] ];
 						$results[ $row["useragent_id"] ] = $cur + 0;
-						$states[ $row["useragent_id"] ] = "notstarted notdone";
+						$states[ $row["useragent_id"] ] = "new";
 					}
 
 					$last = $row["run_id"];
@@ -260,7 +222,7 @@ class UserPage extends Page {
 
 
 				foreach ( $results as $key => $fail ) {
-					$output .= '<td class="' . $states[$key] . '"></td>';
+					$output .= '<td class="status-' . $states[$key] . '"></td>';
 				}
 
 				$output .= "</tr>\n";
@@ -278,7 +240,7 @@ class UserPage extends Page {
 							'" alt="' . $browser["name"] .
 							'" title="' . $browser["name"] .
 							'"><span class="browser-name">' .
-							preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
+							preg_replace('/\w+ /', "", $browser["name"]) .
 							'</span></div></th>';
 					}
 					$last_browser = $browser;

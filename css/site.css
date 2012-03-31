@@ -68,7 +68,7 @@ ul.nav li a {
 
 #main {
 	padding: 8px;
-	width: 780px;
+	width: 840px;
 	position: relative;
 }
 
@@ -213,45 +213,54 @@ div.browser span.active {
 	border-radius: 10px;
 }
 
-table.results div.browser {
-	width: 20px;
-	height: 20px;
-}
-
+table.results div.browser,
 table.results div.browser img {
-	width: 20px;
+	width: 30px;
 }
 
 table.results div.browser span {
-	display: none;
+	background: transparent;
 }
 
-table.results td.pass {
-	background: lightgreen;
+table.results div.browser {
+	height: 50px;
 }
 
-table.results td.fail {
-	background: red;
+/* Result statuses */
+
+table.results td.status-new {
+	background: gray;
 }
 
-table.results td.progress {
+table.results td.status-progress {
 	background: yellow;
 }
 
-table.results td.timeout, table.results td.error {
+table.results td.status-passed {
+	background: lightgreen;
+}
+
+table.results td.status-failed {
+	background: red;
+}
+
+table.results td.status-timedout,
+table.results td.status-error {
 	background: black;
 	color: white;
 }
 
-table.results td.timeout a, table.results td.error a {
+table.results td.status-timedout a,
+table.results td.status-error a {
 	color: white;
 }
 
+table.results.td.notscheduled {
+	background: #F2F2F2;
+}
+
 table.results td {
-	background: gray;
-	/* padding: 15px 5px; */
 	padding: 4px 3px;
-	text-align: right;
 }
 
 table.results a {

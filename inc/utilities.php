@@ -126,8 +126,10 @@
 					case "s":
 						$sql_query .= "'" . mysql_real_escape_string( $args[$args_i] ) . "'";
 						break;
-					case "x":
-						$sql_query .= "'" . dechex( $args[$args_i] ) . "'";
+					case "l":
+						$rawList = is_array( $args[$args_i] ) ? $args[$args_i] : array( $args[$args_i] );
+						$escapedList = array_map( "mysql_real_escape_string", $rawList );
+						$sql_query .= "('" . implode( "', '", $escapedList ) . "')";
 						break;
 				}
 				if ($char != "x") {

@@ -27,6 +27,7 @@ abstract class Action {
 		"invalid-input" => "One or more input fields were invalid.",
 		"missing-parameters" => "One ore more required fields were not submitted.",
 		"requires-post" => "This action requires a POST request.",
+		"data-corrupt" => "Data was retreived but was found to be corrupt or incomplete.",
 	);
 
 	/**

@@ -1,5 +1,5 @@
 /**
- * JavaScript file for the "jobstatus" page in the browser.
+ * JavaScript file for the "job" page in the browser.
  *
  * @since 0.1.0
  * @package TestSwarm
@@ -8,7 +8,7 @@ jQuery(function ( $ ) {
 	var updateInterval = SWARM.web.ajax_update_interval * 1000;
 
 	setTimeout(function refreshTable() {
-		if ( $( "td.notdone" ).length ) {
+		if ( $( "td.status-new" ).length ) {
 			$.get( window.location.href, function ( html ) {
 				var tableHtml, $targetTable;
 

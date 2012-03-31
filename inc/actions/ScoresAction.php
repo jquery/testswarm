@@ -25,12 +25,14 @@ class ScoresAction extends Action {
 		);
 
 		$scores = array();
-		foreach ( $rows as $pos => $row ) {
-			$scores[] = array(
-				"position" => intval( $pos + 1 ), // Array is 0 based
-				"userName" => $row->user_name,
-				"score" => intval( $row->score )
-			);
+		if ( $rows ) {
+			foreach ( $rows as $pos => $row ) {
+				$scores[] = array(
+					"position" => intval( $pos + 1 ), // Array is 0 based
+					"userName" => $row->user_name,
+					"score" => intval( $row->score )
+				);
+			}
 		}
 
 		$this->setData( $scores );

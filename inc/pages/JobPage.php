@@ -8,193 +8,93 @@
 
 class JobPage extends Page {
 
-	private function getJobStatus() {
-		$db = $this->getContext()->getDB();
-		$request = $this->getContext()->getRequest();
+	public function execute() {
+		$action = JobAction::newFromContext( $this->getContext() );
+		$action->doAction();
 
-		function get_status($num){
-			if ( $num == 0 ) {
-				return "Not started yet.";
-			} elseif ( $num == 1 ) {
-				return "In progress.";
-			} else {
-				return "Completed.";
-			}
-		}
-
-		$jobId = $request->getInt( "item" );
-
-		if ( !$jobId ) {
-			$this->setError( "invalid-input" );
-			return;
-		}
-
-		$result = $db->getRow(str_queryf(
-			"SELECT
-				jobs.name as job_name,
-				jobs.status as job_status,
-				users.name as user_name
-			FROM
-				jobs, users
-			WHERE
-				jobs.id=%u
-			AND users.id=jobs.user_id;",
-			$jobId
-		));
-
-		return array(
-			"jobId" => $jobId,
-			"jobName" => $result->job_name,
-			"jobStatus" => get_status( intval( $result->job_status ) ),
-			"owner" => $result->user_name === $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) === "yes"
-		);
+		$this->setAction( $action );
+		$this->content = $this->initContent();
 	}
 
-	// TODO clean this up
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
 
-		$status = $this->getJobStatus();
-
-		$this->setTitle( "Job Status" );
-		$this->setSubTitle( $status["jobName"] );
+		$this->setTitle( "Job status" );
 		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
-		$html = '<h3>Status of runs belonging to this job:</h3>';
+		$error = $this->getAction()->getError();
+		$data = $this->getAction()->getData();
+		$html = '';
 
-		if ( $status["owner"] ) {
+		if ( $error ) {
+			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
+		}
+
+		if ( !$data["jobInfo"] ) {
+			return $html;
+		}
+
+		$this->setSubTitle( '#' . $data["jobInfo"]["id"] );
+
+		$html .=
+			'<h3>' . htmlspecialchars( $data["jobInfo"]["name"] ) .'</h3>'
+			. '<p><em>Submitted by '
+			. html_tag( "a", array( "href" => swarmpath( "user/{$data["jobInfo"]["ownerName"]}" ) ), $data["jobInfo"]["ownerName"] )
+			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )
+			. ' (UTC)' . '</em>.</p>';
+
+		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
 			$html .= '<form action="" method="POST">'
 				. '<input type="hidden" name="action" value="wipejob">'
-				. '<input type="hidden" name="item" value="' . $status["jobId"] . '">'
+				. '<input type="hidden" name="item" value="' . $data["jobInfo"]["id"] . '">'
 				. '<input type="submit" name="type" value="delete">'
 				. '<input type="submit" name="type" value="reset">'
 				. '</form>';
 		}
 
-		$html .= '<table class="results"><tbody>';
+		$html .= '<table class="results"><thead><tr><th>&nbsp;</th>';
 
-		$result = mysql_queryf(
-			"SELECT
-				runs.id as run_id,
-				runs.url as run_url,
-				runs.name as run_name,
-				useragents.engine as browser,
-				useragents.name as browsername,
-				useragents.id as useragent_id,
-				run_useragent.status as status
-			FROM
-				run_useragent, runs, useragents
-			WHERE
-				runs.job_id=%u
-			AND run_useragent.run_id=runs.id
-			AND run_useragent.useragent_id=useragents.id
-			ORDER BY
-				run_id, browsername;",
-			$status["jobId"]
-		);
-
-		$last = "";
-		$output = "";
-		$browsers = array();
-		$addBrowser = true;
-
-		function get_status2($num, $fail, $error, $total){
-			if ( $num == 0 ) {
-				return "notstarted notdone";
-			} elseif ( $num == 1 ) {
-				return "progress notdone";
-			} elseif ( $num == 2 && $fail == -1 ) {
-				return "timeout";
-			} elseif ( $num == 2 && ($error > 0 || $total == 0) ) {
-				return "error";
-			} else {
-				return $fail > 0 ? "fail" : "pass";
-			}
+		// Header with user agents
+		foreach ( $data["userAgents"] as $userAgent ) {
+			$html .= '<th><div class="browser"><img src="' . swarmpath( "images/" . $userAgent["engine"] )
+				. '.sm.png" class="browser-icon ' . $userAgent["engine"]
+				. '" alt="' . $userAgent["name"]
+				. '" title="' . $userAgent["name"]
+				. '"><span class="browser-name">'
+				. preg_replace( "/\w+ /", "", $userAgent["name"] )
+				. '</span></div></th>';
 		}
 
-		while ( $row = mysql_fetch_assoc($result) ) {
-			if ( $row["run_id"] != $last ) {
-				if ( $last ) {
-					$addBrowser = false;
-				}
-				$useragents = array();
+		$html .= '</tr></thead><tbody>';
 
-				$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id FROM run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id ORDER BY useragent_id;", $row["run_id"]);
+		foreach ( $data["runs"] as $run ) {
+			$html .= '<tr><th><a href="' . htmlspecialchars( $run["info"]["url"] ) . '">'
+				. $run["info"]["name"] . '</a></th>';
 
-				while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-					if ( !isset( $useragents[ $ua_row["useragent_id"] ] ) ) {
-						$useragents[ $ua_row["useragent_id"] ] = array();
+			// Looping over $data["userAgents"] instead of $run["uaRuns"],
+			// to avoid shifts in the table (github.com/jquery/testswarm/issues/13)
+			foreach ( $data["userAgents"] as $uaID => $uaInfo ) {
+				if ( isset( $run["uaRuns"][$uaID] ) ) {
+					$uaRun = $run["uaRuns"][$uaID];
+					if ( $uaRun["runStatus"] !== "new" && $uaRun["runStatus"] !== "progress" ) {
+						$html .=
+							'<td class="status-' . $uaRun["runStatus"] . '">'
+							. html_tag( 'a', array(
+								"href" => $uaRun["runResultsUrl"],
+							), $uaRun["runResultsLabel"] )
+							. '</td>';
+					} else {
+						$html .= '<td class="status-new"></a>';
 					}
-
-					array_push( $useragents[ $ua_row["useragent_id"] ], $ua_row );
+				} else {
+					// This run isn't schedules to be ran in this UA
+					$html .= '<td class="notscheduled"></td>';
 				}
-
-				$output .= '<tr><th><a href="' . $row["run_url"] . '">' . $row["run_name"] . "</a></th>\n";
 			}
-
-			if ( $addBrowser ) {
-				array_push( $browsers, array(
-					"name" => $row["browsername"],
-					"engine" => $row["browser"],
-					"id" => $row["useragent_id"]
-				) );
-			}
-
-			$last_browser = -1;
-
-			if ( isset( $useragents[ $row["useragent_id"] ] ) ) {
-				foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
-					$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
-					if ( $last_browser != $ua["useragent_id"] ) {
-						$output .= "<td class='$status " . $row["browser"] . "'><a href='" . swarmpath ( '/' ) . "?action=runresults&run_id=" . $row["run_id"] . "&client_id=" . $ua["client_id"] . "'>" .
-							($ua["status"] == 2 ?
-								($ua["total"] < 0 ?
-									"Err" :
-									($ua["error"] > 0 ?
-										$ua["error"] :
-										($ua["fail"] > 0 ?
-											$ua["fail"] :
-											$ua["total"]
-										)
-									)
-								)
-								: ""
-							) . "</a></td>\n";
-					}
-					$last_browser = $ua["useragent_id"];
-				}
-			} else {
-				$output .= '<td class="notstarted notdone">&nbsp;</td>';
-			}
-
-			$last = $row["run_id"];
 		}
 
-		if ( $last ) {
-			$header = "<tr><th></th>\n";
-			$last_browser = null;
-			foreach ( $browsers as $browser ) {
-				if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
-					$header .= '<th><div class="browser">' .
-						'<img src="' . swarmpath( "images/" . $browser["engine"] ) .
-						'.sm.png" class="browser-icon ' . $browser["engine"] .
-						'" alt="' . $browser["name"] .
-						'" title="' . $browser["name"] .
-						'"><span class="browser-name">' .
-						preg_replace( "/\w+ /", "", $browser["name"] ) . ', ' .
-						'</span></div></th>';
-				}
-				$last_browser = $browser;
-			}
-			$header .= '</tr>';
-			$output = $header . $output;
-			$output .= '</tr>';
-		}
-
-		$html .= $output . '</tr></tbody></table>';
-
-
+		$html .= '</tbody></table>';
 		return $html;
 	}
 }
