@@ -124,40 +124,42 @@ class JobAction extends Action {
 				$runRow->run_id
 			));
 
-			foreach ( $clientRunRows as $clientRunRow ) {
-				$runUaRuns[$clientRunRow->useragent_id] = array(
-					"useragentID" => $clientRunRow->useragent_id,
-					"clientID" => $clientRunRow->client_id,
-					"failedTests" => $clientRunRow->fail,
-					"totalTests" => $clientRunRow->total,
-					"errors" => $clientRunRow->error,
-					// new, progress, error, timedout, failed, or passed
-					"runStatus" => self::getStatusFromClientRunRow( $clientRunRow ),
-					// Add link to runresults
-					"runResultsUrl" => swarmpath( "index.php" ) . "?" . http_build_query(array(
-						"action" => "runresults",
-						"run_id" => $runRow->run_id,
-						"client_id" => $clientRunRow->client_id,
-					)),
-					"runResultsLabel" =>
-						$clientRunRow->status < 2
-						// If new or in progress, show nothing
-						?  ""
-						: ( $clientRunRow->total < 0
-							// Timeout 
-							? "Err"
-							: ( $clientRunRow->error > 0
-									// If there were errors, show number of errors
-									? $clientRunRow->error
-									: ( $clientRunRow->fail > 0
-										// If it failed, show number of failures
-										? $clientRunRow->fail
-										// If it passed, show total number of tests
-										: $clientRunRow->total
+			if ( $clientRunRows ) {
+				foreach ( $clientRunRows as $clientRunRow ) {
+					$runUaRuns[$clientRunRow->useragent_id] = array(
+						"useragentID" => $clientRunRow->useragent_id,
+						"clientID" => $clientRunRow->client_id,
+						"failedTests" => $clientRunRow->fail,
+						"totalTests" => $clientRunRow->total,
+						"errors" => $clientRunRow->error,
+						// new, progress, error, timedout, failed, or passed
+						"runStatus" => self::getStatusFromClientRunRow( $clientRunRow ),
+						// Add link to runresults
+						"runResultsUrl" => swarmpath( "index.php" ) . "?" . http_build_query(array(
+							"action" => "runresults",
+							"run_id" => $runRow->run_id,
+							"client_id" => $clientRunRow->client_id,
+						)),
+						"runResultsLabel" =>
+							$clientRunRow->status < 2
+							// If new or in progress, show nothing
+							?  ""
+							: ( $clientRunRow->total < 0
+								// Timeout 
+								? "Err"
+								: ( $clientRunRow->error > 0
+										// If there were errors, show number of errors
+										? $clientRunRow->error
+										: ( $clientRunRow->fail > 0
+											// If it failed, show number of failures
+											? $clientRunRow->fail
+											// If it passed, show total number of tests
+											: $clientRunRow->total
+										)
 									)
-								)
-							),
-				);
+								),
+					);
+				}
 			}
 
 			$respData["runs"][] = array(
