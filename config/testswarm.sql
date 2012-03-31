@@ -119,7 +119,7 @@ CREATE TABLE `users` (
   `password` varchar(40) NOT NULL default '',
   `auth` varchar(40) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
-  `request` mediumtext NOT NULL,
+  `request` mediumtext NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
