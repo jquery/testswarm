@@ -9,7 +9,7 @@ class SaverunPage extends Page {
 
 	public function execute() {
 		$action = SaverunAction::newFromContext( $this->getContext() );
-		
+
 		try {
 			$action->doAction();
 

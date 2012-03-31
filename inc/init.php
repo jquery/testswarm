@@ -108,6 +108,7 @@ $swarmAutoLoadClasses = array(
 	"TestSwarmContext" => "inc/TestSwarm.php",
 	"WebRequest" => "inc/WebRequest.php",
 	# Actions
+	"CleanupAction" => "inc/actions/CleanupAction.php",
 	"GetrunAction" => "inc/actions/GetrunAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
 	"LogoutAction" => "inc/actions/LogoutAction.php",
@@ -115,6 +116,7 @@ $swarmAutoLoadClasses = array(
 	"ScoresAction" => "inc/actions/ScoresAction.php",
 	"SignupAction" => "inc/actions/SignupAction.php",
 	# Pages
+	"CleanupPage" => "inc/pages/CleanupPage.php", // @todo: rm Page, add Api
 	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: rm Page, add Api
 	"HomePage" => "inc/pages/HomePage.php",
 	"JobPage" => "inc/pages/JobPage.php",

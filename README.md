@@ -67,8 +67,9 @@ TestSwarm only supports Apache and MySQL as servers.
 4. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
    RewriteBase to match the contextpath configuration.
 
-5. Load the cronjob (changing the URL to point to your site).
-   `crontab << config/cronjob.txt`
+5. Create an entry to your crontab for action=cleanup. This performs various
+   cleaning duties such as making timed-out runs available again for testing.
+   `* * * * * curl -s http://path/to/testswarm/index.php?action=cleanup > /dev/null`
 
 6. Currently the server must be run in Apache (it uses a .htaccess file).
 
@@ -87,7 +88,7 @@ TestSwarm only supports Apache and MySQL as servers.
 Get involed
 ---------------------
 
-You're welcome to use the Github issue tracker to start discussions.
+You're welcome to use the GitHub issue tracker to start discussions.
 
 There is also a mailing list at Google Groups available:
 

@@ -1,1 +1,0 @@
-* * * * * curl -s http://localhost/?state=wipe > /dev/null

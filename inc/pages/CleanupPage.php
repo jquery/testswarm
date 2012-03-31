@@ -1,14 +1,14 @@
 <?php
 /**
- * "Getrun" page.
+ * "Cleanup" page.
  *
  * @since 0.1.0
  * @package TestSwarm
  */
-class GetrunPage extends Page {
+class CleanupPage extends Page {
 
 	public function execute() {
-		$action = GetrunAction::newFromContext( $this->getContext() );
+		$action = CleanupAction::newFromContext( $this->getContext() );
 
 		try {
 			$action->doAction();
