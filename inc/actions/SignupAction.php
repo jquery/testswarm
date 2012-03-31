@@ -50,26 +50,22 @@ class SignupAction extends Action {
 			return;
 		}
 
+		// Random between 1,000,000,000 and 9,999,999,999
+		$seedHash = sha1( mt_rand( 1000000000, 9999999999 ) );
+		$passwordHash = sha1( $seedHash . $password );
+		$authTokenHash = sha1( mt_rand( 1000000000, 9999999999 ) );
+
 		// Create the user
 		$db->query(str_queryf(
-			"INSERT INTO users (name, created, seed) VALUES(%s, %s, RAND());",
+			"INSERT INTO users
+			(name, updated, created, seed, password, auth)
+			VALUES(%s, %s, %s, %s, %s, %s);",
 			$username,
-			swarmdb_dateformat( SWARM_NOW )
-		));
-		$userID = $db->getInsertId();
-
-		$db->query(str_queryf(
-			"UPDATE
-				users
-			SET
-				updated = %s,
-				password = SHA1(CONCAT(seed, %s)),
-				auth = SHA1(RAND())
-			WHERE	id = %u
-			LIMIT 1;",
 			swarmdb_dateformat( SWARM_NOW ),
-			$password,
-			$userID
+			swarmdb_dateformat( SWARM_NOW ),
+			$seedHash,
+			$passwordHash,
+			$authTokenHash
 		));
 
 		$request->setSessionData( "username", $username );

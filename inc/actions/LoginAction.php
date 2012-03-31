@@ -31,7 +31,7 @@ class LoginAction extends Action {
 				return;
 			}
 
-			$result = mysql_queryf(
+			$res = $db->query(str_queryf(
 				"SELECT id
 				FROM users
 				WHERE	name = %s
@@ -39,9 +39,9 @@ class LoginAction extends Action {
 				LIMIT 1;",
 				$username,
 				$password
-			);
+			));
 
-			if ( mysql_num_rows( $result ) > 0 ) {
+			if ( $res && $db->getNumRows( $res ) > 0 ) {
 				// Start logged-in session
 				$request->setSessionData( "username", $username );
 				$request->setSessionData( "auth", "yes" );
