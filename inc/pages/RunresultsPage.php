@@ -8,26 +8,41 @@
 
 class RunresultsPage extends Page {
 
-	public function output() {
+	public function execute() {
 		$db = $this->getContext()->getDB();
+		$request = $this->getContext()->getRequest();
 
-		$run_id    = preg_replace("/[^0-9]/", "", $_REQUEST["run_id"]    );
-		$client_id = preg_replace("/[^0-9]/", "", $_REQUEST["client_id"] );
+		$runID    = $request->getInt( "run_id" );
+		$clientID = $request->getInt( "client_id" );
 
-		$result = $db->getRow(str_queryf(
-			"SELECT
-				results
-			FROM
-				run_client
-			WHERE
-				run_id=%s
-			AND client_id=%s;",
-			$run_id, $client_id)
-		);
+		if ( $runID && $clientID ) {
+			$row = $db->getRow(str_queryf(
+				"SELECT
+					results
+				FROM
+					run_client
+				WHERE run_id = %s
+				AND   client_id = %s;",
+				$runID, $clientID
+			));
 
-		header( "Content-Type: text/html; charset=utf-8" );
-		header( "Content-Encoding: gzip" );
-		echo $result->results;
+			if ( $row ) {
+				header( "Content-Type: text/html; charset=utf-8" );
+				header( "Content-Encoding: gzip" );
+				echo $row->results;
+
+				// Prevent Page from building
+				exit;
+			}
+		}
+		// We're still here, continue building the page,
+		parent::execute();
+	}
+
+	protected function initContent() {
+		// If we got here, we've got an error
+		$this->setTitle( "Run results" );
+		return '<div class="errorbox">Invalid or missing <code>run_id</code>/<code>client_id</code> parameters.</div>';
 	}
 
 }

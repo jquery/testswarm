@@ -10,10 +10,11 @@ class SignupAction extends Action {
 
 	public function doAction() {
 
+		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
 		// Already logged in ?
-		if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
+		if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) === "yes" ) {
 			$this->setData( array(
 				"status" => "logged-in",
 				"username" => $request->getSessionData( "username" ),
@@ -26,7 +27,7 @@ class SignupAction extends Action {
 			return;
 		}
 
-		$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username" ) );
+		$username = $request->getVal( "username" );
 		$password = $request->getVal( "password" );
 
 		if ( !$username || !$password ) {
@@ -34,23 +35,30 @@ class SignupAction extends Action {
 			return;
 		}
 
-		# Figure out what the user's ID is
-		$result = mysql_queryf("SELECT id, password FROM users WHERE name = %s;", $username);
-
-		if ( $row = mysql_fetch_array($result) ) {
-			$this->setError( "account-already-exists" );
+		// Validate user name (github.com/jquery/testswarm/issues/118)
+		// Only allow lowercase a-z, 0-9 and dashed, must start with a letter
+		if ( !preg_match( "/^[a-z][-a-z0-9]*$/", $username ) ) {
+			$this->setError( "invalid-input", "Username may only contain lowercase a-z, 0-9 and dashes and must start with a letter." );
 			return;
 		}
 
-		# If the user doesn't have one, create a new user account
-		$result = mysql_queryf(
+		// Check if this user name is already taken
+		$row = $db->getRow(str_queryf( "SELECT id FROM users WHERE name = %s;", $username ));
+
+		if ( $row ) {
+			$this->setError( "invalid-input", "Username \"$username\" is already taken." );
+			return;
+		}
+
+		// Create the user
+		$db->query(str_queryf(
 			"INSERT INTO users (name, created, seed) VALUES(%s, %s, RAND());",
 			$username,
 			swarmdb_dateformat( SWARM_NOW )
-		);
-		$user_id = intval( mysql_insert_id() );
+		));
+		$userID = $db->getInsertId();
 
-		mysql_queryf(
+		$db->query(str_queryf(
 			"UPDATE
 				users
 			SET
@@ -61,8 +69,8 @@ class SignupAction extends Action {
 			LIMIT 1;",
 			swarmdb_dateformat( SWARM_NOW ),
 			$password,
-			$user_id
-		);
+			$userID
+		));
 
 		$request->setSessionData( "username", $username );
 		$request->setSessionData( "auth", "yes" );

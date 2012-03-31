@@ -8,42 +8,30 @@
 
 class ScoresPage extends Page {
 
+	public function execute() {
+		$action = ScoresAction::newFromContext( $this->getContext() );
+		$action->doAction();
+
+		$this->setAction( $action );
+		$this->content = $this->initContent();
+	}
+
 	protected function initContent() {
-		$db = $this->getContext()->getDB();
-
 		$this->setTitle( "Scores" );
+		$scores = $this->getAction()->getData();
 
-		$html = '<blockquote>All users with a score greater than zero. The score is the number of tests run by that user\'s clients.</blockquote>';
+		$html = '<blockquote>All users with a score greater than zero.'
+		 .' The score is the number of tests run by that user\'s clients.</blockquote>'
+		 . '<table class="scores">'
+		 . '<thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>'
+		 . '<tbody>';
 
-		$result = $db->getRows(
-			"SELECT
-				users.name as user_name,
-				SUM(total) as alltotal
-			FROM
-				clients, run_client, users
-			WHERE	clients.id=run_client.client_id
-			AND	clients.user_id=users.id
-			GROUP BY user_id
-			HAVING alltotal > 0
-			ORDER by alltotal DESC;"
-		);
-
-		$num = 1;
-
-		if ($result) {
-			$html .= '<table class="scores">';
-			foreach ( $result as $row ) {
-				$user  = $row->user_name;
-				$total = $row->alltotal;
-
-				$html .= '<tr><td class="num">' . $num. '</td>'
-					. '<td><a href="' . swarmpath("user/$user/") . '">' . $user . '</a></td>'
-					. '<td class="num">' . $total . '</td></tr>';
-				$num++;
-			}
-
-			$html .= '</table>';
+		foreach ( $scores as $item ) {
+			$html .= '<tr><td class="num">' . htmlspecialchars( number_format( $item["position"] ) ) . '</td>'
+				. '<td><a href="' . htmlspecialchars( swarmpath("user/{$item["userName"]}") ) . '">' . htmlspecialchars( $item["userName"] ) . '</a></td>'
+				. '<td class="num">' . htmlspecialchars( number_format( $item["score"] ) ) . '</td></tr>';
 		}
+		$html .= '</body></table>';
 
 		return $html;
 	}

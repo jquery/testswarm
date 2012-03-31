@@ -45,8 +45,8 @@ class JobPage extends Page {
 		return array(
 			"jobId" => $jobId,
 			"jobName" => $result->job_name,
-			"jobStatus" => get_status(intval($result->job_status)),
-			"owner" => ($result->user_name == $request->getSessionData("username") && $request->getSessionData("auth"))
+			"jobStatus" => get_status( intval( $result->job_status ) ),
+			"owner" => $result->user_name === $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) === "yes"
 		);
 	}
 
@@ -54,20 +54,21 @@ class JobPage extends Page {
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
 
+		$status = $this->getJobStatus();
+
 		$this->setTitle( "Job Status" );
+		$this->setSubTitle( $status["jobName"] );
 		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
-		$status = $this->getJobStatus();
+		$html = '<h3>Status of runs belonging to this job:</h3>';
 
-		$html = '<h3>' . $status['jobName'] . '</h3>';
-
-		if ($status['owner'] && $request->getSessionData) {
+		if ( $status["owner"] ) {
 			$html .= '<form action="" method="POST">'
-				. '<input type="hidden" name="action" value="wipejob"/>'
-				. '<input type="hidden" name="item" value="' . $status['jobId'] . '"/>'
-				. '<input type="submit" name="type" value="delete"/>'
-				. '<input type="submit" name="type" value="reset"/>'
+				. '<input type="hidden" name="action" value="wipejob">'
+				. '<input type="hidden" name="item" value="' . $status["jobId"] . '">'
+				. '<input type="submit" name="type" value="delete">'
+				. '<input type="submit" name="type" value="reset">'
 				. '</form>';
 		}
 
@@ -90,7 +91,7 @@ class JobPage extends Page {
 			AND run_useragent.useragent_id=useragents.id
 			ORDER BY
 				run_id, browsername;",
-			$status['jobId']
+			$status["jobId"]
 		);
 
 		$last = "";
@@ -122,11 +123,11 @@ class JobPage extends Page {
 				$runResult = mysql_queryf("SELECT run_client.client_id as client_id, run_client.status as status, run_client.fail as fail, run_client.error as error, run_client.total as total, clients.useragent_id as useragent_id FROM run_client, clients WHERE run_client.run_id=%u AND run_client.client_id=clients.id ORDER BY useragent_id;", $row["run_id"]);
 
 				while ( $ua_row = mysql_fetch_assoc($runResult) ) {
-					if ( !isset( $useragents[ $ua_row['useragent_id'] ] ) ) {
-						$useragents[ $ua_row['useragent_id'] ] = array();
+					if ( !isset( $useragents[ $ua_row["useragent_id"] ] ) ) {
+						$useragents[ $ua_row["useragent_id"] ] = array();
 					}
 
-					array_push( $useragents[ $ua_row['useragent_id'] ], $ua_row );
+					array_push( $useragents[ $ua_row["useragent_id"] ], $ua_row );
 				}
 
 				$output .= '<tr><th><a href="' . $row["run_url"] . '">' . $row["run_name"] . "</a></th>\n";
@@ -154,13 +155,17 @@ class JobPage extends Page {
 										$ua["error"] :
 										($ua["fail"] > 0 ?
 											$ua["fail"] :
-											$ua["total"])))
-								: "") . "</a></td>\n";
+											$ua["total"]
+										)
+									)
+								)
+								: ""
+							) . "</a></td>\n";
 					}
 					$last_browser = $ua["useragent_id"];
 				}
 			} else {
-				$output .= "<td class='notstarted notdone'>&nbsp;</td>";
+				$output .= '<td class="notstarted notdone">&nbsp;</td>';
 			}
 
 			$last = $row["run_id"];
@@ -172,19 +177,19 @@ class JobPage extends Page {
 			foreach ( $browsers as $browser ) {
 				if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
 					$header .= '<th><div class="browser">' .
-						'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
+						'<img src="' . swarmpath( "images/" . $browser["engine"] ) .
 						'.sm.png" class="browser-icon ' . $browser["engine"] .
 						'" alt="' . $browser["name"] .
 						'" title="' . $browser["name"] .
-						'"/><span class="browser-name">' .
-						preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
+						'"><span class="browser-name">' .
+						preg_replace( "/\w+ /", "", $browser["name"] ) . ', ' .
 						'</span></div></th>';
 				}
 				$last_browser = $browser;
 			}
-			$header .= "</tr>\n";
+			$header .= '</tr>';
 			$output = $header . $output;
-			$output .= "</tr>\n";
+			$output .= '</tr>';
 		}
 
 		$html .= $output . '</tr></tbody></table>';

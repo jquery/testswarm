@@ -23,7 +23,7 @@ class LoginAction extends Action {
 				return;
 			}
 
-			$username = preg_replace("/[^a-zA-Z0-9_ -]/", "", $request->getVal( "username" ) );
+			$username = $request->getVal( "username" );
 			$password = $request->getVal( "password" );
 
 			if ( !$username || !$password ) {

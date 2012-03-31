@@ -25,6 +25,11 @@ class GetrunAction extends Action {
 			return;
 		}
 
+		// Create a Client object to verify that the client exists
+		// throws an exception, caught higher up, if it doesn't exist.
+		// Also updates the timestamp so that it shows up on HomePage and UserPage
+		$client = Client::newFromContext( $this->getContext(), $clientID );
+
 		$runID = $db->getOne(str_queryf(
 			"SELECT
 				run_id

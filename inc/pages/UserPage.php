@@ -12,15 +12,16 @@ class UserPage extends Page {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$search_user = preg_replace( "/[^a-zA-Z0-9_ -]/", "", $request->getVal( "item" ) );
+		$username = $request->getVal( "item" );
 
-		$this->setTitle( $search_user );
+		$this->setTitle( "User" );
+		$this->setSubTitle( $username );
 		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/pretty.js" );
 		$this->bodyScripts[] = swarmpath( "js/user.js" );
 
 		// TODO extract and share with JobPage
-		function get_status($num){
+		function get_status($num) {
 			if ( $num == 0 ) {
 				return "Not started yet.";
 			} elseif ( $num == 1 ) {
@@ -46,9 +47,9 @@ class UserPage extends Page {
 		}
 
 		// Get the user's ID
-		$result = mysql_queryf( "SELECT id FROM users WHERE name=%s;", $search_user );
-		if ( $row = mysql_fetch_array( $result ) ) {
-			$user_id = intval($row[0]);
+		$result = $db->getOne(str_queryf( "SELECT id FROM users WHERE name=%s;", $username ));
+		if ( $result ) {
+			$userID = intval( $result );
 		} else {
 			return '<h3>User does not exist</h3>';
 		}
@@ -69,7 +70,7 @@ class UserPage extends Page {
 				useragents.engine,
 				useragents.name;",
 			swarmdb_dateformat( strtotime( '1 minutes ago' ) ),
-			$user_id
+			$userID
 		);
 
 		$html = '';
@@ -112,7 +113,7 @@ class UserPage extends Page {
 					$name = "Linux";
 				}
 
-				$html .= "<li><img src=\"" . swarmpath( "/" ) . "images/$engine.sm.png\" class=\"$engine\"/> <strong class=\"name\">$browser_name $name</strong><br/>Connected <span title=\"" . htmlspecialchars( $since_zulu_iso ) . "\" class=\"pretty\">" . htmlspecialchars( $since_local ) . "</span></li>";
+				$html .= "<li><img src=\"" . swarmpath( "images/$engine.sm.png" ) . "\" class=\"$engine\"> <strong class=\"name\">$browser_name $name</strong><br>Connected <span title=\"" . htmlspecialchars( $since_zulu_iso ) . "\" class=\"pretty\">" . htmlspecialchars( $since_local ) . "</span></li>";
 			}
 
 			$html .=  "</ul>";
@@ -135,12 +136,12 @@ class UserPage extends Page {
 			ORDER BY jobs.created DESC
 			LIMIT 15;",
 			$job_search,
-			$search_user
+			$username
 		);
 
 		if ( mysql_num_rows( $search_result ) > 0 ) {
 
-			$html .=  '<br/><h3>Recent Jobs:</h3><table class="results"><tbody>';
+			$html .=  '<h3>Recent Jobs:</h3><table class="results"><tbody>';
 
 			$output = "";
 			$browsers = array();
@@ -152,7 +153,7 @@ class UserPage extends Page {
 				$job_status = get_status( intval( $row[1] ) );
 				$job_id = $row[2];
 
-				$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}/" ) . '">' . strip_tags($job_name) . "</a></th>\n";
+				$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}" ) . '">' . strip_tags($job_name) . "</a></th>\n";
 
 				$results = array();
 				$states = array();
@@ -226,10 +227,10 @@ class UserPage extends Page {
 						foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
 							$status = get_status2(intval($ua["status"]), intval($ua["fail"]), intval($ua["error"]), intval($ua["total"]));
 							if ( $last_browser != $ua["browser"] ) {
-								$cur = $results[ $ua["useragent_id"] ];
+								$cur = @$results[ $ua["useragent_id"] ];
 								$results[ $ua["useragent_id"] ] = $cur + intval($ua["fail"]);
 
-								$cur = $states[ $ua["useragent_id"] ];
+								$cur = @$states[ $ua["useragent_id"] ];
 
 								if ( strstr($status, "notdone") || strstr($cur, "notdone") ) {
 									$status = "notstarted notdone";
@@ -249,7 +250,7 @@ class UserPage extends Page {
 						}
 					} else {
 						// TODO this throws 'Undefined index' errors, figure out why...
-						$cur = $results[ $row["useragent_id"] ];
+						$cur = @$results[ $row["useragent_id"] ];
 						$results[ $row["useragent_id"] ] = $cur + 0;
 						$states[ $row["useragent_id"] ] = "notstarted notdone";
 					}
@@ -276,7 +277,7 @@ class UserPage extends Page {
 							'.sm.png" class="browser-icon ' . $browser["engine"] .
 							'" alt="' . $browser["name"] .
 							'" title="' . $browser["name"] .
-							'"/><span class="browser-name">' .
+							'"><span class="browser-name">' .
 							preg_replace('/\w+ /', "", $browser["name"]) . ', ' .
 							'</span></div></th>';
 					}

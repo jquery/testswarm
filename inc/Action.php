@@ -27,7 +27,6 @@ abstract class Action {
 		"invalid-input" => "One or more input fields were invalid.",
 		"missing-parameters" => "One ore more required fields were not submitted.",
 		"requires-post" => "This action requires a POST request.",
-		"account-already-exists" => "Account already exists. Please login instead."
 	);
 
 	/**
@@ -44,19 +43,18 @@ abstract class Action {
 	 */
 	abstract public function doAction();
 
-	final protected function setError( $error ) {
-		if ( !isset( self::$errorCodes[$error] ) ) {
+	final protected function setError( $errorCode, $errorMsg = null ) {
+		if ( !isset( self::$errorCodes[$errorCode] ) ) {
 			throw new SwarmException( "Unrecognized error code used." );
 		}
-		$this->error = $error;
+		$this->error = array(
+			"code" => $errorCode,
+			"info" => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
+		);
 	}
 
 	final public function getError() {
-		return $this->error
-			? array(
-				"code" => $this->error,
-				"info" => self::$errorCodes[$this->error],
-			) : false;
+		return $this->error ? $this->error : false;
 	}
 
 	/**

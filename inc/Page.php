@@ -247,7 +247,7 @@ abstract class Page {
 		$this->setSubTitle( null );
 
 		$msg = '<div class="errorbox">An internal error occurred.'
-				. ' The following error message was caught:<br/><br/><strong>'
+				. ' The following error message was caught:<br><br><strong>'
 				. nl2br( htmlspecialchars( $e->getMessage() ) ) . '</strong></div>';
 
 		if ( $this->getContext()->getConf()->debug->show_exception_details ) {

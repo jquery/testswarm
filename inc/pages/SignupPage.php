@@ -38,11 +38,11 @@ class SignupPage extends Page {
 			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
 		}
 
-		$html .= '<p>Signup to use TestSwarm. If you already have an account you may <a href="' . swarmpath( "login" )
-			. '">Login Here</a>.</p>'
-			. '<label>Username: <input type="text" name="username"/></label><br/>'
-			. '<label>Password: <input type="password" name="password"/></label><br/>'
-			. '<input type="submit" value="Signup"/>'
+		$html .= '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )
+			. '">login here</a>.</p>'
+			. '<label>Username: <input type="text" name="username"></label><br>'
+			. '<label>Password: <input type="password" name="password"></label><br>'
+			. '<input type="submit" value="Signup">'
 			. '</fieldset></form>';
 
 		return $html;
