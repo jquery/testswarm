@@ -121,6 +121,7 @@ $swarmAutoLoadClasses = array(
 	"LogoutPage" => "inc/pages/LogoutPage.php",
 	"RunPage" => "inc/pages/RunPage.php",
 	"SaverunPage" => "inc/pages/SaverunPage.php", // @todo: API
+	"ScoresPage" => "inc/pages/ScoresPage.php",
 	"SignupPage" => "inc/pages/SignupPage.php",
 	"UserPage" => "inc/pages/UserPage.php"
 );

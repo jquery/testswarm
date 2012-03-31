@@ -1,2 +1,0 @@
-<?php
-	$title = "Scores";
