@@ -11,7 +11,7 @@
 abstract class Action {
 	/**
 	 * @var $context TestSwarmContext: Needs to be protected instead of private
-	 * in order for extending Api classes to access the context. 
+	 * in order for extending Api classes to access the context.
 	 */
 	protected $context;
 
@@ -27,6 +27,7 @@ abstract class Action {
 		"invalid-input" => "One or more input fields were invalid.",
 		"missing-parameters" => "One ore more required fields were not submitted.",
 		"requires-post" => "This action requires a POST request.",
+		"account-already-exists" => "Account already exists. Please login instead."
 	);
 
 	/**
