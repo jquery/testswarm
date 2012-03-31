@@ -111,17 +111,18 @@ $swarmAutoLoadClasses = array(
 	"GetrunAction" => "inc/actions/GetrunAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
 	"LogoutAction" => "inc/actions/LogoutAction.php",
-	"SignupAction" => "inc/actions/SignupAction.php",
 	"SaverunAction" => "inc/actions/SaverunAction.php",
+	"SignupAction" => "inc/actions/SignupAction.php",
 	# Pages
 	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: API
-	"JobPage" => "inc/pages/JobPage.php",
 	"HomePage" => "inc/pages/HomePage.php",
+	"JobPage" => "inc/pages/JobPage.php",
 	"LoginPage" => "inc/pages/LoginPage.php",
 	"LogoutPage" => "inc/pages/LogoutPage.php",
-	"SignupPage" => "inc/pages/SignupPage.php",
 	"RunPage" => "inc/pages/RunPage.php",
 	"SaverunPage" => "inc/pages/SaverunPage.php", // @todo: API
+	"SignupPage" => "inc/pages/SignupPage.php",
+	"UserPage" => "inc/pages/UserPage.php"
 );
 
 function swarmAutoLoader( $className ) {
