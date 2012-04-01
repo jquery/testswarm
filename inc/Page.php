@@ -158,15 +158,11 @@ abstract class Page {
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>">
-	<script>window.SWARM = <?php echo json_encode( array(
-		// Export a simplified version of the TestSwarm configuration object to the browser
-		// (not the entire object since it also contains DB password and such..).
-		"web" => array(
-			"contextpath" => swarmpath( "" ),
-			"ajax_update_interval" => $this->getContext()->getConf()->web->ajax_update_interval,
-		),
-		"client" => $this->getContext()->getConf()->client,
-	) ); ?>;</script><?php
+	<script>window.SWARM = <?php
+		$infoAction = InfoAction::newFromContext( $this->getContext() );
+		$infoAction->doAction();
+		echo json_encode( $infoAction->getData() );
+	?>;</script><?php
 
 	foreach ( $this->styleSheets as $styleSheet ) {
 		echo "\n\t" . html_tag( "link", array( "rel" => "stylesheet", "href" => $styleSheet ) );

@@ -33,7 +33,7 @@ class JobPage extends Page {
 			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
 		}
 
-		if ( !$data["jobInfo"] ) {
+		if ( !isset( $data["jobInfo"] ) ) {
 			return $html;
 		}
 
@@ -47,12 +47,10 @@ class JobPage extends Page {
 			. ' (UTC)' . '</em>.</p>';
 
 		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
-			$html .= '<form action="" method="POST">'
-				. '<input type="hidden" name="action" value="wipejob">'
-				. '<input type="hidden" name="item" value="' . $data["jobInfo"]["id"] . '">'
-				. '<input type="submit" name="type" value="delete">'
-				. '<input type="submit" name="type" value="reset">'
-				. '</form>';
+			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
+				. '<button id="swarm-job-delete">Delete job</button>'
+				. '<button id="swarm-job-reset">Reset job</button>'
+				. '<div class="errorbox" id="swarm-wipejob-error" style="display: none;"></div>';
 		}
 
 		$html .= '<table class="results"><thead><tr><th>&nbsp;</th>';

@@ -88,7 +88,7 @@ class GetrunAction extends Action {
 		}
 
 		$this->setData( array(
-			"swarmUpdate" => array( "client" => $this->getContext()->getConf()->client ),
+			"confUpdate" => array( "client" => $this->getContext()->getConf()->client ),
 			"runInfo" => $runInfo,
 		) );
 	}

@@ -6,9 +6,14 @@
  * @package TestSwarm
  */
 jQuery(function ( $ ) {
-	var updateInterval = SWARM.web.ajax_update_interval * 1000;
+	var updateInterval = SWARM.conf.web.ajax_update_interval * 1000,
+		$wipejobErr = $("#swarm-wipejob-error"),
+		refreshTableTimout;
 
-	setTimeout(function refreshTable() {
+	function refreshTable() {
+		if ( refreshTableTimout ) {
+			clearTimeout( refreshTableTimout );
+		}
 		if ( $( "td.status-new" ).length ) {
 			$.get( window.location.href, function ( html ) {
 				var tableHtml, $targetTable;
@@ -22,7 +27,9 @@ jQuery(function ( $ ) {
 
 			setTimeout( refreshTable, updateInterval );
 		}
-	}, updateInterval );
+	}
+
+	refreshTableTimout = setTimeout( refreshTable, updateInterval );
 
 	$( document ).on( "dblclick", "td:has(a)", function () {
 		var href, qs, $el;
@@ -33,10 +40,10 @@ jQuery(function ( $ ) {
 			// basically transforming runresults into wiperun
 			qs = href.match( /&.*$/ );
 			$.ajax({
-				url: SWARM.web.contextpath,
-				dataType: "json",
+				url: SWARM.conf.web.contextpath,
 				type: "POST",
 				data: "action=wiperun" + ( qs ? qs[0] : "" ),
+				dataType: "json",
 				success: function ( data ) {
 					if ( data === "ok" ) {
 						$el.empty().attr( "class", "notstarted notdone" );
@@ -45,4 +52,55 @@ jQuery(function ( $ ) {
 			});
 		}
 	});
+
+	function wipejobFail( data ) {
+		$wipejobErr.hide().text( data.error && data.error.info || "Action failed." ).slideDown();
+	}
+
+	$( "#swarm-job-delete" ).click( function () {
+		$wipejobErr.hide();
+		$.ajax({
+			url: SWARM.conf.web.contextpath + "api.php",
+			type: "POST",
+			data: {
+				action: "wipejob",
+				job_id: SWARM.jobInfo.id,
+				type: "delete"
+			},
+			dataType: "json",
+			success: function ( data ) {
+				if ( data.wipejob && data.wipejob.result === "ok" ) {
+					// Right now the only user authorized to delete a job is the creator,
+					// the below code makes that assumption.
+					window.location.href = SWARM.conf.web.contextpath + 'user/' + SWARM.session.username;
+					return;
+				}
+				wipejobFail( data );
+			},
+			error: wipejobFail
+		});
+	} );
+
+	$( "#swarm-job-reset" ).click( function () {
+		$wipejobErr.hide();
+		$.ajax({
+			url: SWARM.conf.web.contextpath + "api.php",
+			type: "POST",
+			data: {
+				action: "wipejob",
+				job_id: SWARM.jobInfo.id,
+				type: "reset"
+			},
+			dataType: "json",
+			success: function ( data ) {
+				if ( data.wipejob && data.wipejob.result === "ok" ) {
+					refreshTable();
+					return;
+				}
+				wipejobFail( data );
+			},
+			error: wipejobFail
+		});
+	} );
+
 });

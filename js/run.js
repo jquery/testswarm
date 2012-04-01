@@ -23,7 +23,7 @@
 	/**
 	 * Softly validate the SWARM object
 	 */
-	if ( !SWARM.client_id || !SWARM.client ) {
+	if ( !SWARM.client_id || !SWARM.conf ) {
 		$( function() {
 			msg( "Error: No client id configured! Aborting." );
 		});
@@ -40,7 +40,7 @@
 	function retrySend( query, retry, ok ) {
 		$.ajax({
 			type: "POST",
-			url: SWARM.web.contextpath + "/api.php",
+			url: SWARM.conf.web.contextpath + "api.php",
 			timeout: 10000,
 			cache: false,
 			data: query,
@@ -117,15 +117,15 @@
 
 		if ( data.getrun ) {
 			// Handle configuration update
-			if ( data.getrun.swarmUpdate ) {
+			if ( data.getrun.confUpdate ) {
 
 				// Refresh control
-				if ( SWARM.client.refresh_control < data.getrun.swarmUpdate.client.refresh_control ) {
+				if ( SWARM.conf.client.refresh_control < data.getrun.confUpdate.client.refresh_control ) {
 					cmds.reload();
 					return;
 				}
 
-				$.extend( SWARM, data.getrun.swarmUpdate );
+				$.extend( SWARM.conf, data.getrun.confUpdate );
 			}
 
 			// Handle actual retreived tests from runInfo
@@ -146,14 +146,14 @@
 					// Homing signal for inject.js so that it can find it's POST target for action=saverun
 					// (only used in the <form> fallback in case postMessage isn't supported)
 					+ "&swarmURL=" + encodeURIComponent(
-						window.location.protocol + "//" + window.location.host + SWARM.web.contextpath
+						window.location.protocol + "//" + window.location.host + SWARM.conf.web.contextpath
 						+ "index.php?run_id=" + currRunId + "&client_id=" + SWARM.client_id
 					);
 
 				$( "#iframes" ).append( iframe );
 
 				// Timeout after a period of time
-				testTimeout = setTimeout( testTimedout, SWARM.client.timeout_rate * 1000 );
+				testTimeout = setTimeout( testTimedout, SWARM.conf.client.timeout_rate * 1000 );
 
 				return;
 			}
@@ -172,7 +172,7 @@
 		// If we just completed a run, do a cooldown_rate timeout before we fetch the next
 		// run (if there is one). If we just completed a cooldown a no runs where available,
 		// go for a (usually longer, depending on configuration) update_rate timeout instead.
-		timeLeft = currRunUrl ? SWARM.client.cooldown_rate : SWARM.client.update_rate;
+		timeLeft = currRunUrl ? SWARM.conf.client.cooldown_rate : SWARM.conf.client.update_rate;
 
 		pauseTimer = setTimeout(function leftTimer() {
 			msg(norun_msg + " Getting more in " + timeLeft + " seconds." );
