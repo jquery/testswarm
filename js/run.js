@@ -40,7 +40,7 @@
 	function retrySend( query, retry, ok ) {
 		$.ajax({
 			type: "POST",
-			url: SWARM.web.contextpath,
+			url: SWARM.web.contextpath + "/api.php",
 			timeout: 10000,
 			cache: false,
 			data: query,
@@ -89,7 +89,7 @@
 				currRunId + "&client_id=" + SWARM.client_id,
 			testTimedout,
 			function ( data ) {
-				if ( data === "ok" ) {
+				if ( data.saverun === "ok" ) {
 					SWARM.runDone();
 				} else {
 					getTests();
@@ -99,7 +99,7 @@
 	}
 
 	/**
-	 * @param data Object Data returned by action=getrun
+	 * @param data Object: Reponse from api.php?action=getrun
 	 */
 	function runTests( data ) {
 		var norun_msg, timeLeft, runInfo, params, iframe;
@@ -115,65 +115,76 @@
 			}
 		}
 
-		// Handle configuration update
-		if ( data.swarmUpdate ) {
+		if ( data.getrun ) {
+			// Handle configuration update
+			if ( data.getrun.swarmUpdate ) {
 
-			// Refresh control
-			if ( SWARM.client.refresh_control < data.swarmUpdate.client.refresh_control ) {
-				cmds.reload();
+				// Refresh control
+				if ( SWARM.client.refresh_control < data.getrun.swarmUpdate.client.refresh_control ) {
+					cmds.reload();
+					return;
+				}
+
+				$.extend( SWARM, data.getrun.swarmUpdate );
+			}
+
+			// Handle actual retreived tests from runInfo
+			runInfo = data.getrun.runInfo;
+			if ( runInfo ) {
+				currRunId = runInfo.id;
+				currRunUrl = runInfo.url;
+
+				log( "Running " + ( runInfo.desc || "" ) + " tests..." );
+
+				iframe = document.createElement( "iframe" );
+				iframe.width = 1000;
+				iframe.height = 600;
+				iframe.className = "test-runner-frame";
+				iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?")
+					// Cache buster
+					+ "_=" + new Date().getTime()
+					// Homing signal for inject.js so that it can find it's POST target for action=saverun
+					// (only used in the <form> fallback in case postMessage isn't supported)
+					+ "&swarmURL=" + encodeURIComponent(
+						window.location.protocol + "//" + window.location.host + SWARM.web.contextpath
+						+ "index.php?run_id=" + currRunId + "&client_id=" + SWARM.client_id
+					);
+
+				$( "#iframes" ).append( iframe );
+
+				// Timeout after a period of time
+				testTimeout = setTimeout( testTimedout, SWARM.client.timeout_rate * 1000 );
+
 				return;
 			}
 
-			$.extend( SWARM, data.swarmUpdate );
 		}
 
-		// Handle run
-		runInfo = data.runInfo;
-		if ( runInfo ) {
-			currRunId = runInfo.id;
-			currRunUrl = runInfo.url;
+		// If we're still here then either there are no new tests to run, or this is a call
+		// triggerd by an iframe to continue the loop. We'll do so a short timeout,
+		// optionally replacing the message by data.timeoutMsg
+		clearTimeout( pauseTimer );
 
-			log( "Running " + ( runInfo.desc || "" ) + " tests..." );
+		norun_msg = data.timeoutMsg || "No new tests to run.";
 
-			params = "run_id=" + currRunId + "&client_id=" + SWARM.client_id;
-			iframe = document.createElement( "iframe" );
-			iframe.width = 1000;
-			iframe.height = 600;
-			iframe.className = "test";
-			iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?") +
-				"_=" + new Date().getTime() + "&swarmURL=" +
-				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&action=" );
+		msg( norun_msg );
 
-			$( "#iframes" ).append( iframe );
+		// If we just completed a run, do a cooldown_rate timeout before we fetch the next
+		// run (if there is one). If we just completed a cooldown a no runs where available,
+		// go for a (usually longer, depending on configuration) update_rate timeout instead.
+		timeLeft = currRunUrl ? SWARM.client.cooldown_rate : SWARM.client.update_rate;
 
-			// Timeout after a period of time
-			testTimeout = setTimeout( testTimedout, SWARM.client.timeout_rate * 1000 );
+		pauseTimer = setTimeout(function leftTimer() {
+			msg(norun_msg + " Getting more in " + timeLeft + " seconds." );
+			if ( timeLeft >= 1 ) {
+				timeLeft -= 1;
+				pauseTimer = setTimeout( leftTimer, 1000 );
+			} else {
+				timeLeft -= 1;
+				getTests();
+			}
+		}, 1000);
 
-		} else {
-
-			clearTimeout( pauseTimer );
-
-			norun_msg = data.timeoutMsg || "No new tests to run.";
-
-			msg( norun_msg );
-
-			// If we just completed a run, do a cooldown_rate timeout before we fetch the next
-			// run (if there is one). If we just completed a cooldown a no runs where available,
-			// go for a (usually longer, depending on configuration) update_rate timeout instead.
-			timeLeft = currRunUrl ? SWARM.client.cooldown_rate : SWARM.client.update_rate;
-
-			pauseTimer = setTimeout(function leftTimer() {
-				msg(norun_msg + " Getting more in " + timeLeft + " seconds." );
-				if ( timeLeft >= 1 ) {
-					timeLeft -= 1;
-					pauseTimer = setTimeout( leftTimer, 1000 );
-				} else {
-					timeLeft -= 1;
-					getTests();
-				}
-			}, 1000);
-
-		}
 	}
 
 	// Needs to be a publicly exposed function,

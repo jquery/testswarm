@@ -145,7 +145,7 @@
 			}
 
 			if ( DEBUG ) {
-				alert( form.innerHTML );
+				alert( url );
 
 			} else {
 				// Watch for the result submission timing out

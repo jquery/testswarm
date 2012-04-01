@@ -10,66 +10,55 @@ class SaverunPage extends Page {
 
 	public function execute() {
 		$action = SaverunAction::newFromContext( $this->getContext() );
+		$action->doAction();
 
-		try {
-			$action->doAction();
-
-			if ( $action->getError() ) {
-				$response = array(
-					"error" => $action->getError(),
-				);
-			} else {
-				$response = $action->getData();
-			}
-
-		} catch ( Exception $e ) {
-			$response = array(
-				"error" => array(
-					"code" => "internal-error",
-					"info" => "An internal error occurred. Action could not be performed. Error message:\n" . $e->getMessage(),
-				),
-			);
-		}
-
-		// This should really be in the API,
-		// but until we have an actual API, we do it as a Page
-		$this->saveRunActionResponse( $response );
-		exit;
-		#$this->setAction( $action );
-		#$this->content = $this->initContent();
+		$this->setAction( $action );
+		parent::execute();
 	}
 
-	public function saveRunActionResponse( $response ) {
+	protected function initContent() {
+		$request = $this->getContext()->getRequest();
 		/**
 		 * action=saverun is used in 3 scenarios:
 		 *
-		 * - A modern browser is viewing action=run&item=username,
-		 *   running tests in an iframe with a test suite and inject.js,
-		 *   the test suite is done and uses postMessage to contact the parent frame where a
-		 *   handler from run.js takes it, and fires AJAX request to action=saverun.
+		 * - RunPage embeds a testsuite in <iframe> that loads inject.js, uses postMessage
+		 *   to contact handler in run.js and fires AJAX request to api.php?action=saverun.
 		 *
-		 * - An old browser is running tests like above but has no postMessage support.
-		 *   In that case inject.js will build a <form> that POSTs to action=saverun,
-		 *   The reponse of the form submission will still be in the iframe.
+		 * - RunPage embeds a testsuite in <iframe> that loads inject.js, postMessage not supported,
+		 *   builds a <form> that POSTs to SaverunPage (this page).
 		 *
-		 * - In either an old or a new browser, if a test times out something in run.js
-		 *   will make an ajax request here to report the time out failure
+		 * - RunPage embeds a testsuite that times out.
+		 *   Handler in run.js fires AJAX request to api.php?action=saverun reporting the time out.
 		 *
-		 * In the first and last case we should respond with JSON, becuase that's what the
-		 * handlers expect. If the response is valid JSON, it will call SWARM.runDone() (or
-		 * something like it) and continue.
-		 * In the second case we want to output a little bit of HTML, that will contact the
-		 * parent frame to let it know that the form submission completed and it should
-		 * continue on.
+		 * In the first and last case api.php handles the the request.
+		 * In the second case we can't use the API cross-domain, so we cross-domain submit a form,
+		 * and then output a bit of HTML contacting the parent frame to as a "callback" to continue
+		 * the test runner loop.
 		 */
-		if ( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] )
-			&& strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest'
-		) {
-			echo json_encode( $response );
-		} else {
-			echo '<script>window.parent.SWARM.runDone();</script>';
+		$script =
+			'<script>'
+			. 'if ( window.parent !== window && window.parent.SWARM.runDone ) {'
+			. 'window.parent.SWARM.runDone();'
+			. '}'
+			. '</script>';
+
+		$html = '<p>This page is used as cross-domain form submission target in the fallback saving method for browsers'
+			. ' that don\'t support postMessage().</p>';
+
+		if ( $request->wasPosted() ) {
+			if ( $this->getAction()->getData() === "ok" ) {
+				$this->setTitle( "Saved run!" );
+				return $script . $html;
+			}
+
+			$this->setTitle( "Saving run failed." );
+			return $script . $html;
 		}
 
+		// If someone visits SaverunPage directly,
+		// just show an informative message.
+		$this->setTitle( 'Save run' );
+		return $html;
 	}
 }
 
