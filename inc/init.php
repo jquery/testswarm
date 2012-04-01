@@ -118,6 +118,8 @@ $swarmAutoLoadClasses = array(
 	"SignupAction" => "inc/actions/SignupAction.php",
 	# Pages
 	"CleanupPage" => "inc/pages/CleanupPage.php", // @todo: rm Page, add Api
+	"Error404Page" => "inc/pages/Error404Page.php",
+	"Error500Page" => "inc/pages/Error500Page.php",
 	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: rm Page, add Api
 	"HomePage" => "inc/pages/HomePage.php",
 	"JobPage" => "inc/pages/JobPage.php",
@@ -162,32 +164,6 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
  * Debugging
  * @{
  */
-function swarmExceptionHandler( Exception $e ) {
-	global $swarmContext;
-
-	$msg = "<h2>TestSwarm internal error</h2>\n\n";
-
-	if ( $swarmContext->getConf()->debug->show_exception_details ) {
-		$msg .=
-			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
-			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
-			"</p>\n";
-	} else {
-		$msg .=
-			'<p>Set <b><tt>show_exception_details = 1;</tt></b> ' .
-			'in the <tt>[debug]</tt> section at the bottom of testswarm.ini to show detailed debugging information.</p>';
-	}
-
-	if ( !headers_sent() ) {
-		header( $_SERVER["SERVER_PROTOCOL"] . " 500 TestSwarm Internal Error", true, 500 );
-	}
-
-	echo $msg;
-	exit;
-}
-
-set_exception_handler( "swarmExceptionHandler" );
-
 if ( $swarmContext->getConf()->debug->php_error_reporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );

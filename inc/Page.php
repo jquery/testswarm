@@ -39,6 +39,7 @@ abstract class Page {
 	protected $styleSheets = array();
 
 	protected $title;
+	protected $displayTitle; // optional, fallsback to title + subtitle
 	protected $subTitle;
 	protected $content;
 
@@ -73,6 +74,23 @@ abstract class Page {
 	 */
 	public function getTitle() {
 		return $this->title;
+	}
+
+	/**
+	 * Override the page title for the <h1> of the HTML skin in Page::output().
+	 * @param $title string: Page title (should not be escaped in any way)
+	 */
+	public function setDisplayTitle( $title ) {
+		$this->displayTitle = $title;
+	}
+
+	/**
+	 * @return string: The page name
+	 */
+	public function getDisplayTitle() {
+		return $this->displayTitle
+			? $this->displayTitle
+			: ( $this->getTitle() . ( $this->getSubTitle() ? ": {$this->getSubTitle()}" : $this->getSubTitle() ) );
 	}
 
 	/**
@@ -111,20 +129,16 @@ abstract class Page {
 	}
 
 	public function output() {
-		try {
-			$this->execute();
+		$this->execute();
 
-			if ( !$this->getContent() ) {
-				throw new SwarmException( "Page `content` must not be empty." );
-			}
-			if ( !$this->getTitle() ) {
-				throw new SwarmException( "Page `title` must not be empty." );
-			}
-			if ( headers_sent( $filename, $linenum ) ) {
-				throw new SwarmException( "Headers already sent in `$filename` on line $linenum." );
-			}
-		} catch ( Exception $e ) {
-			$this->handleException( $e );
+		if ( !$this->getContent() ) {
+			throw new SwarmException( "Page `content` must not be empty." );
+		}
+		if ( !$this->getTitle() ) {
+			throw new SwarmException( "Page `title` must not be empty." );
+		}
+		if ( headers_sent( $filename, $linenum ) ) {
+			throw new SwarmException( "Headers already sent in `$filename` on line $linenum." );
 		}
 
 		header( "Content-Type: text/html; charset=utf-8" );
@@ -136,14 +150,12 @@ abstract class Page {
 <head><?php
 
 	foreach ( $this->metaTags as $metaTag ) {
-		echo "\n\t" . html_tag( 'meta', $metaTag );
+		echo "\n\t" . html_tag( "meta", $metaTag );
 	}
 
 	$subTitleSuffix = $this->getSubTitle() ? ": {$this->getSubTitle()}" : "";
-	$displayTitle = $this->getTitle() . $subTitleSuffix;
-
-
-	$htmlTitle = $displayTitle . " - " . $this->getContext()->getConf()->web->title;
+	$htmlTitle = $this->getTitle() . $subTitleSuffix . " - " . $this->getContext()->getConf()->web->title;
+	$displayTitle = $this->getDisplayTitle();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>">
@@ -217,54 +229,44 @@ abstract class Page {
 	 * @param $target string: Url
 	 * @param $code int: 30x
 	 */
-	protected function redirect( $target = '', $code = 302 ) {
-		static $httpCodes = array(
-			301 => 'Moved Permanently',
-			302 => 'Found',
-			303 => 'See Other',
-			304 => 'Not Modified',
-			305 => 'Use Proxy',
-			307 => 'Temporary Redirect',
-		);
-		$httpCode = $httpCodes[$code];
-		if ( !$httpCodes[$code] ) {
-			throw new SwarmError( "Invalid redirect http code." );
-		}
-
+	protected function redirect( $target = "", $code = 302 ) {
 		session_write_close();
-		header( $_SERVER["SERVER_PROTOCOL"] . " $code $httpCode", true, $code );
+		self::httpStatusHeader( $code );
 		header( "Content-Type: text/html; charset=utf-8" );
-		header( 'Location: ' . $target );
+		header( "Location: " . $target );
 
 		exit;
 	}
 
-	final public function handleException( Exception $e ) {
+	final public static function getHttpStatusMsg( $code ) {
+		static $httpCodes = array(
+			200 => "OK",
+			301 => "Moved Permanently",
+			302 => "Found",
+			303 => "See Other",
+			304 => "Not Modified",
+			305 => "Use Proxy",
+			307 => "Temporary Redirect",
+			400 => "Bad Request",
+			401 => "Unauthorized",
+			402 => "Payment Required",
+			403 => "Forbidden",
+			404 => "Not Found",
+			500 => "Internal Server Error",
+		);
+		return isset( $httpCodes[$code] ) ? $httpCodes[$code] : null;
+	}
 
-		header( $_SERVER["SERVER_PROTOCOL"] . " 500 TestSwarm Internal Error", true, 500 );
-
-		$this->setTitle( "Internal error" );
-		$this->setSubTitle( null );
-
-		$msg = '<div class="errorbox">An internal error occurred.'
-				. ' The following error message was caught:<br><br><strong>'
-				. nl2br( htmlspecialchars( $e->getMessage() ) ) . '</strong></div>';
-
-		if ( $this->getContext()->getConf()->debug->show_exception_details ) {
-			$msg .=
-				'<p>Backtrace:</p><pre>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
-				"</pre>\n";
-		} else {
-			$msg .=
-				'<p><strong>To the administrator</strong>:<br>Set <b><code>show_exception_details = 1;</code></b> ' .
-				'in the <code>[debug]</code> section at the bottom of <code>testswarm.ini</code> to show detailed debugging information.</p>';
+	final public static function httpStatusHeader( $code ) {
+		$message = self::getHttpStatusMsg( $code );
+		if ( !$message ) {
+			throw new SwarmError( "Unknown http code." );
 		}
-
-		$this->content = $msg;
+		header( $_SERVER["SERVER_PROTOCOL"] . " $code $message", true, $code );
 	}
 
 	final public static function getPageClassByName( $pageName ) {
-		$className = ucfirst( strtolower( $pageName ) ) . 'Page';
+		$className = ucfirst( strtolower( $pageName ) ) . "Page";
 		return class_exists( $className ) ? $className : null;
 	}
 

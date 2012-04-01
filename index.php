@@ -12,30 +12,33 @@
 
 require_once "inc/init.php";
 
-$action = preg_replace( "/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "" ) );
-
-if ( !$action ) {
-	$action = "home";
-}
-
+$action = preg_replace( "/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "home" ) );
 $actionFile = "inc/actions/$action.php";
 $pageFile = "inc/pages/$action.php";
+
 $pageObj = $swarmContext->getRequest()->getPageInstance();
 
-// Action
+// old style action (to be deleted)
 if ( file_exists( $actionFile ) ) {
 	require $actionFile;
 }
 
-// Page
 if ( $pageObj instanceof Page ) {
-	$pageObj->output();
+	try {
+		$pageObj->output();
+	} catch ( Exception $e ) {
+		$pageObj = Error500Page::newFromContext( $swarmContext );
+		$pageObj->setExceptionObj( $e );
+		$pageObj->output();
+	}
 
+// old style page (to be deleted)
 } elseif  ( file_exists( $pageFile ) ) {
 	require $pageFile;
 
 } else {
-	header( $_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404 );
-	echo '<h2>TestSwarm: Invalid action</h2>';
-	exit;
+	$pageObj = Error404Page::newFromContext( $swarmContext );
+	$pageObj->output();
 }
+
+exit;
