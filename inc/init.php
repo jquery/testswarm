@@ -124,7 +124,6 @@ $swarmAutoLoadClasses = array(
 	"ScoresAction" => "inc/actions/ScoresAction.php",
 	"SignupAction" => "inc/actions/SignupAction.php",
 	# Pages
-	"CleanupPage" => "inc/pages/CleanupPage.php", // @todo: rm Page, add Api
 	"Error404Page" => "inc/pages/Error404Page.php",
 	"Error500Page" => "inc/pages/Error500Page.php",
 	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: rm Page, add Api
