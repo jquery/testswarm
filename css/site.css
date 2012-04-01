@@ -38,7 +38,7 @@ h1 a img {
 
 h2 {
 	margin: 0;
-	padding: 8px 16px;
+	padding: 8px 20px;
 	border-top: 4px solid #6899D3;
 	color: #274E7D;
 	font-size: 24px;
@@ -67,7 +67,7 @@ ul.nav li a {
 }
 
 #main {
-	padding: 8px;
+	margin: 20px;
 	width: 840px;
 	position: relative;
 }
@@ -290,7 +290,7 @@ ul#history li {
 ul.clients {
 	list-style: none;
 	overflow: hidden;
-	margin: 0;
+	margin: 1em 0;
 	padding: 0;
 }
 
