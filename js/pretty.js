@@ -2,7 +2,6 @@
  * JavaScript Pretty Date
  *
  * @author John Resig (ejohn.org), 2008-2011
- * @author Timo Tijhof, 2012
  * @license Licensed under the MIT and GPL licenses.
  */
 

@@ -6,6 +6,8 @@
  * - https://github.com/jquery/jquery/blob/master/test/data/testrunner.js
  * - https://github.com/jquery/jquery/blob/master/test/index.html
  *
+ * @author John Resig, 2008-2011
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */

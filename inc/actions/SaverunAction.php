@@ -2,6 +2,8 @@
 /**
  * "Saverun" action.
  *
+ * @author John Resig, 2008-2011
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */

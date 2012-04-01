@@ -3,7 +3,7 @@
  * The Action class is base for the TestSwarm actions.
  * Used in Pages and Apis.
  *
- * @author Timo Tijhof
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */

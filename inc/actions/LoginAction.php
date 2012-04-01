@@ -2,6 +2,7 @@
 /**
  * "Login" action.
  *
+ * @author John Resig, 2008-2011
  * @since 0.1.0
  * @package TestSwarm
  */
@@ -9,7 +10,7 @@
 class LoginAction extends Action {
 
 	public function doAction() {
-
+		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
 		// Already logged in ?

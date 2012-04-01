@@ -1,6 +1,7 @@
 /**
  * JavaScript file for the "job" page in the browser.
  *
+ * @author John Resig, 2008-2011
  * @since 0.1.0
  * @package TestSwarm
  */

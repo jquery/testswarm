@@ -2,6 +2,7 @@
 /**
  * "Job" action.
  *
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */

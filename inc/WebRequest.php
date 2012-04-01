@@ -6,6 +6,7 @@
  * - https://svn.toolserver.org/svnroot/krinkle/trunk/common/Request.php
  * - https://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/WebRequest.php?view=markup&pathrev=114154
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */

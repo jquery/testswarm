@@ -2,6 +2,8 @@
 /**
  * Various utility classes and global functions.
  *
+ * @author John Resig, 2008-2011
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */
@@ -74,13 +76,24 @@
 	 * is recurive but doesn't overwrite deper level's keys..)
 	 *
 	 * @since 0.1.0
+	 * @param $arr1 array: Starting point
+	 * @param $arr2 array: Used to extend
+	 * @param $options array: one or more of 'add', 'overwrite'.
+	 * Defaults to array( 'add', 'overwrite' ); If neither is given, the function
+	 * will effectively be a no-op.
 	 */
-	function array_extend( $arr1, $arr2 ) {
+	function array_extend( $arr1, $arr2, $options = null ) {
+		$options = is_array( $options ) ? $options : array( 'add', 'overwrite' );
+
 		foreach ( $arr2 as $key => $val ) {
-			if ( array_key_exists( $key, $arr1 ) && is_array( $val ) ) {
-				$arr1[$key] = array_extend( $arr1[$key], $arr2[$key] );
-			} else {
-				$arr1[$key] = $val;
+			if ( array_key_exists( $key, $arr1 ) && in_array( 'overwrite', $options ) ) {
+				if ( is_array( $val ) ) {
+					$arr1[$key] = array_extend( $arr1[$key], $arr2[$key], $options );
+				} else {
+					$arr1[$key] = $val;
+				}
+			} elseif ( !array_key_exists( $key, $arr1 ) && in_array( 'add', $options ) ) {
+					$arr1[$key] = $val;
 			}
 		}
 		return $arr1;

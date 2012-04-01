@@ -4,6 +4,7 @@
  * All web requests have to go through here,
  * and do so as early as possible.
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
@@ -74,7 +75,11 @@ $swarmConfig = array(
 
 // Read configuration options and let the INI file
 // override default settings.
-$swarmConfig = array_extend( $swarmConfig, parse_ini_file( "$swarmInstallDir/testswarm.ini", true ) );
+$swarmConfig = array_extend(
+	$swarmConfig,
+	parse_ini_file( "$swarmInstallDir/testswarm.ini", true ),
+	array( 'overwrite' )
+);
 
 // Timezone
 date_default_timezone_set( $swarmConfig["general"]["timezone"] );
@@ -101,6 +106,7 @@ $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_
 $swarmAutoLoadClasses = array(
 	# Main includes
 	"Action" => "inc/Action.php",
+	"Api" => "inc/Api.php",
 	"BrowserInfo" => "inc/BrowserInfo.php",
 	"Client" => "inc/Client.php",
 	"Database" =>"inc/Database.php",
@@ -110,6 +116,7 @@ $swarmAutoLoadClasses = array(
 	# Actions
 	"CleanupAction" => "inc/actions/CleanupAction.php",
 	"GetrunAction" => "inc/actions/GetrunAction.php",
+	"InfoAction" => "inc/actions/InfoAction.php",
 	"JobAction" => "inc/actions/JobAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
 	"LogoutAction" => "inc/actions/LogoutAction.php",
@@ -161,23 +168,13 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
 
 
 /**
- * Debugging
+ * Custom settings
  * @{
  */
 if ( $swarmContext->getConf()->debug->php_error_reporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }
-
-/**@}*/
-
-
-/**
- * Session
- * @{
- */
-
-session_start();
 
 // Increase the session timeout to two weeks (3600 * 24 * 14)
 ini_set( 'session.gc_maxlifetime', '1209600' );

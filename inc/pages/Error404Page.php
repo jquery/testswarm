@@ -2,6 +2,7 @@
 /**
  * Error "404" handler.
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */

@@ -6,11 +6,14 @@
  * The recommended configuration will have web requests
  * rewritten from a path to a query string calling index.php
  *
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */
 
 require_once "inc/init.php";
+
+session_start();
 
 $action = preg_replace( "/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "home" ) );
 $actionFile = "inc/actions/$action.php";

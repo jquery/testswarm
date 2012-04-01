@@ -4,9 +4,8 @@
  * this includes:
  * - the HTML skin (doctype, head, body format)
  * - queue of javascript files and stylesheets
- * - the main try-catch that shows the "TestSwarm: Internal error" page
  *
- * @author Timo Tijhof
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
@@ -266,7 +265,7 @@ abstract class Page {
 	}
 
 	final public static function getPageClassByName( $pageName ) {
-		$className = ucfirst( strtolower( $pageName ) ) . "Page";
+		$className = ucfirst( $pageName ) . "Page";
 		return class_exists( $className ) ? $className : null;
 	}
 
