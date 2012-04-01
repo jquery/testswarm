@@ -2,6 +2,8 @@
 /**
  * Various utility classes and global functions.
  *
+ * @author John Resig, 2008-2011
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */
@@ -17,18 +19,81 @@
 	}
 
 	/**
+	 * Utility function for formatting HTML.
+	 * @since 0.3.0
+	 *
+	 * @param $tagName string: HTML tag name
+	 * @param #attribs array: Key/value pairs, unescaped
+	 * @param $content string|null: [optional] Text content, to be escaped.
+	 */
+	function html_tag( $tagName, Array $attribs = array(), $content = "" ) {
+		static $voidElements = array(
+			'area',
+			'base',
+			'br',
+			'col',
+			'command',
+			'embed',
+			'hr',
+			'img',
+			'input',
+			'keygen',
+			'link',
+			'meta',
+			'param',
+			'source',
+		);
+
+		$html = "<$tagName";
+
+		foreach ( $attribs as $key => $value ) {
+			$html .= ' ' . strtolower( $key ) . '="' . strtr( $value, array(
+				'&' => '&amp;',
+				'"' => '&quot;',
+				"\n" => '&#10;',
+				"\r" => '&#13;',
+				"\t" => '&#9;',
+			) ) . '"';
+		}
+
+		if ( in_array( $tagName, $voidElements ) ) {
+			$html .= ">";
+
+		} else {
+			$content = strtr( $content, array(
+				'&' => '&amp;',
+				'<' => '&lt;',
+			) );
+			$html .= ">$content</$tagName>";
+		}
+
+		return $html;
+	}
+
+	/**
 	 * Utility function to overwrite keys and support multiple levels.
 	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
 	 * is recurive but doesn't overwrite deper level's keys..)
 	 *
 	 * @since 0.1.0
+	 * @param $arr1 array: Starting point
+	 * @param $arr2 array: Used to extend
+	 * @param $options array: one or more of 'add', 'overwrite'.
+	 * Defaults to array( 'add', 'overwrite' ); If neither is given, the function
+	 * will effectively be a no-op.
 	 */
-	function array_extend( $arr1, $arr2 ) {
+	function array_extend( $arr1, $arr2, $options = null ) {
+		$options = is_array( $options ) ? $options : array( 'add', 'overwrite' );
+
 		foreach ( $arr2 as $key => $val ) {
-			if ( array_key_exists( $key, $arr1 ) && is_array( $val ) ) {
-				$arr1[$key] = array_extend( $arr1[$key], $arr2[$key] );
-			} else {
-				$arr1[$key] = $val;
+			if ( array_key_exists( $key, $arr1 ) && in_array( 'overwrite', $options ) ) {
+				if ( is_array( $val ) ) {
+					$arr1[$key] = array_extend( $arr1[$key], $arr2[$key], $options );
+				} else {
+					$arr1[$key] = $val;
+				}
+			} elseif ( !array_key_exists( $key, $arr1 ) && in_array( 'add', $options ) ) {
+					$arr1[$key] = $val;
 			}
 		}
 		return $arr1;
@@ -74,8 +139,10 @@
 					case "s":
 						$sql_query .= "'" . mysql_real_escape_string( $args[$args_i] ) . "'";
 						break;
-					case "x":
-						$sql_query .= "'" . dechex( $args[$args_i] ) . "'";
+					case "l":
+						$rawList = is_array( $args[$args_i] ) ? $args[$args_i] : array( $args[$args_i] );
+						$escapedList = array_map( "mysql_real_escape_string", $rawList );
+						$sql_query .= "('" . implode( "', '", $escapedList ) . "')";
 						break;
 				}
 				if ($char != "x") {

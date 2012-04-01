@@ -117,7 +117,7 @@ if (true || $fresh || $previous != $rev ) {
 	}
 
 	my %props = (
-		"state" => "addjob",
+		"action" => "addjob",
 		"output" => "dump",
 		"user" => $USER,
 		"max" => $MAX_RUNS,

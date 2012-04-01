@@ -1,21 +1,23 @@
 /**
  * JavaScript file for the "run" page in the browser.
  *
+ * @author John Resig, 2008-2011
+ * @author Timo Tijhof, 2012
  * @since 0.1.0
  * @package TestSwarm
  */
 (function ( $, SWARM, undefined ) {
 	var currRunId, currRunUrl, testTimeout, pauseTimer, cmds, errorOut;
 
-	function msg( txt ) {
-		$( "#msg" ).html( txt );
+	function msg( htmlMsg ) {
+		$( "#msg" ).html( htmlMsg );
 	}
 
-	function log( txt ) {
+	function log( htmlMsg ) {
 		$( "#history" ).prepend( "<li><strong>" +
 			new Date().toString().replace( /^\w+ /, "" ).replace( /:[^:]+$/, "" ) +
-			":</strong> " + txt + "</li>" );
-		msg( txt );
+			":</strong> " + htmlMsg + "</li>" );
+		msg( htmlMsg );
 	}
 
 	/**
@@ -68,7 +70,7 @@
 		currRunUrl = false;
 
 		msg( "Querying for more tests to run..." );
-		retrySend( "state=getrun&client_id=" + SWARM.client_id, getTests, runTests );
+		retrySend( "action=getrun&client_id=" + SWARM.client_id, getTests, runTests );
 	}
 
 	function cancelTest() {
@@ -82,28 +84,33 @@
 
 	function testTimedout() {
 		cancelTest();
-		retrySend( "state=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id="
-			+ currRunId + "&client_id=" + SWARM.client_id,
-			testTimedout, function ( data ) {
+		retrySend(
+			"action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id=" +
+				currRunId + "&client_id=" + SWARM.client_id,
+			testTimedout,
+			function ( data ) {
 				if ( data === "ok" ) {
-					done();
+					SWARM.runDone();
 				} else {
 					getTests();
 				}
-			} );
+			}
+		);
 	}
 
 	/**
-	 * @param data Object Data returned by state=getrun
+	 * @param data Object Data returned by action=getrun
 	 */
 	function runTests( data ) {
 		var norun_msg, timeLeft, runInfo, params, iframe;
 
-		if ( !$.isPlainObject( data ) ) {
-			// Handle session timeout, where server sends back "Username required. ?user=USERNAME."
+		if ( !$.isPlainObject( data ) || data.error ) {
+			// Handle session timeout, where server sends back "Username required."
 			// Handle TestSwarm reset, where server sends back "Client doesn't exist."
-			if ( /^Username required|^Client doesn/.test( data ) ) {
-				cmds.reload();
+			if ( data.error ) {
+				$(function () {
+					msg( 'action=getrun failed. ' + $( "<div>" ).text( data.error.info ).html() );
+				});
 				return;
 			}
 		}
@@ -135,7 +142,8 @@
 			iframe.className = "test";
 			iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?") +
 				"_=" + new Date().getTime() + "&swarmURL=" +
-				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&state=" );
+				encodeURIComponent(window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params + "&action=" );
+
 			$( "#iframes" ).append( iframe );
 
 			// Timeout after a period of time
@@ -147,7 +155,7 @@
 
 			norun_msg = data.timeoutMsg || "No new tests to run.";
 
-			msg(norun_msg);
+			msg( norun_msg );
 
 			// If we just completed a run, do a cooldown_rate timeout before we fetch the next
 			// run (if there is one). If we just completed a cooldown a no runs where available,
@@ -168,16 +176,20 @@
 		}
 	}
 
-	function done() {
+	// Needs to be a publicly exposed function,
+	// so that when inject.js does a <form> submission,
+	// it can call this from within the frame
+	// as window.parent.SWARM.runDone();
+	SWARM.runDone = function () {
 		cancelTest();
 		runTests({ timeoutMsg: "Cooling down." });
-	}
+	};
 
 	function handleMessage(e) {
 		e = e || window.event;
 		retrySend( e.data, function () {
 			handleMessage(e);
-		}, done );
+		}, SWARM.runDone );
 	}
 
 	/**

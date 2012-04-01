@@ -16,6 +16,7 @@ class BrowserInfo {
 
 	protected $swarmUserAgentID;
 	protected $swarmUserAgentName;
+	protected $swarmUserAgentVersion;
 
 	/**
 	 * @param $context TestSwarmContext
@@ -65,6 +66,10 @@ class BrowserInfo {
 		return $this->swarmUserAgentName;
 	}
 
+	public function getSwarmUserAgentVersion() {
+		return $this->swarmUserAgentVersion;
+	}
+
 	public function isKnownInTestSwarm() {
 		return !is_null( $this->swarmUserAgentID ) && !is_null( $this->swarmUserAgentName );
 	}
@@ -84,6 +89,7 @@ class BrowserInfo {
 		if ( $uaRow ) {
 			$this->swarmUserAgentID = $uaRow->id ? intval( $uaRow->id ) : null;
 			$this->swarmUserAgentName = $uaRow->name ? (string)$uaRow->name : null;
+			$this->swarmUserAgentVersion = preg_replace( "/\w+ /", "", $uaRow->name );
 		}
 	}
 
@@ -94,6 +100,8 @@ class BrowserInfo {
 	 * @param $userAgent string
 	 */
 	private function parseUserAgent( $userAgent ) {
+		$this->userAgent = $userAgent;
+
 		$lcUA = strtolower( $userAgent );
 
 		// Version

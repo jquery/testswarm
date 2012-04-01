@@ -6,6 +6,7 @@
  * - https://svn.toolserver.org/svnroot/krinkle/trunk/common/Request.php
  * - https://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/WebRequest.php?view=markup&pathrev=114154
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
@@ -179,6 +180,13 @@ class WebRequest {
 
 		$this->ip = $ip;
 		return $ip;
+	}
+
+	/** @return Page|null */
+	public function getPageInstance() {
+		$pageAction = $this->getVal( "action", "home" );
+		$pageClass = Page::getPageClassByName( $pageAction );
+		return $pageClass ? $pageClass::newFromContext( $this->context ) : null;
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead */

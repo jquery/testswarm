@@ -24,7 +24,6 @@ CREATE TABLE `jobs` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
-  `status` tinyint(4) NOT NULL default '0',
   `updated` binary(14) NOT NULL default '19700101000000',
   `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`id`)
@@ -112,12 +111,12 @@ CREATE TABLE `useragents` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
+  `name` varchar(255) NOT NULL,
   `updated` binary(14) NOT NULL default '19700101000000',
   `created` binary(14) NOT NULL default '19700101000000',
-  `seed` double NOT NULL default '0',
-  `password` varchar(40) NOT NULL default '',
-  `auth` varchar(40) NOT NULL default '',
+  `seed` varchar(40) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `auth` varchar(40) NOT NULL,
   `email` varchar(255) NOT NULL default '',
   `request` mediumtext NOT NULL default '',
   PRIMARY KEY  (`id`),

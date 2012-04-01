@@ -4,35 +4,40 @@
  * All web requests have to go through here,
  * and do so as early as possible.
  *
+ * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
 
+/**
+ * Environmental requirements
+ * @{
+ */
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
 	echo "TestSwarm requires at least PHP 5.2.3\n";
 	exit;
 }
 
-// Defines
+/**@}*/
+
+/**
+ * Defines
+ * @{
+ */
 define( 'SWARM_NOW', 0 );
 define( 'DBCON_DEFAULT', 10 );
 define( 'DBCON_PERSISTENT', 11 );
 
-// Load classes
-require_once "inc/BrowserInfo.php";
-require_once "inc/Database.php";
-require_once "inc/TestSwarm.php";
-require_once "inc/WebRequest.php";
-
-// Other requirements
-require_once "inc/utilities.php";
-
+/**@}*/
 
 /**
  * Default settings
  * @{
  */
+// Generic requirements that we still need globally unconditionally
+require_once "inc/utilities.php";
+
 $swarmInstallDir = dirname( __DIR__ );
 
 // Verify that the testswarm.ini file exists
@@ -53,7 +58,8 @@ $swarmConfig = array(
 	),
 	"web" => array(
 		"contextpath" => "",
-		"title" => "Test Swarm",
+		"title" => "TestSwarm",
+		"ajax_update_interval" => "5",
 	),
 	"client" => array(
 		"cooldown_rate" => "15",
@@ -69,7 +75,11 @@ $swarmConfig = array(
 
 // Read configuration options and let the INI file
 // override default settings.
-$swarmConfig = array_extend( $swarmConfig, parse_ini_file( "$swarmInstallDir/testswarm.ini", true ) );
+$swarmConfig = array_extend(
+	$swarmConfig,
+	parse_ini_file( "$swarmInstallDir/testswarm.ini", true ),
+	array( 'overwrite' )
+);
 
 // Timezone
 date_default_timezone_set( $swarmConfig["general"]["timezone"] );
@@ -85,6 +95,66 @@ $swarmConfig["client"]["update_rate"] = intval( $swarmConfig["client"]["update_r
 $swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout_rate"] );
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
+$swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
+
+/**@}*/
+
+/**
+ * AutoLoader
+ * @{
+ */
+$swarmAutoLoadClasses = array(
+	# Main includes
+	"Action" => "inc/Action.php",
+	"Api" => "inc/Api.php",
+	"BrowserInfo" => "inc/BrowserInfo.php",
+	"Client" => "inc/Client.php",
+	"Database" =>"inc/Database.php",
+	"Page" => "inc/Page.php",
+	"TestSwarmContext" => "inc/TestSwarm.php",
+	"WebRequest" => "inc/WebRequest.php",
+	# Actions
+	"CleanupAction" => "inc/actions/CleanupAction.php",
+	"GetrunAction" => "inc/actions/GetrunAction.php",
+	"InfoAction" => "inc/actions/InfoAction.php",
+	"JobAction" => "inc/actions/JobAction.php",
+	"LoginAction" => "inc/actions/LoginAction.php",
+	"LogoutAction" => "inc/actions/LogoutAction.php",
+	"SaverunAction" => "inc/actions/SaverunAction.php",
+	"ScoresAction" => "inc/actions/ScoresAction.php",
+	"SignupAction" => "inc/actions/SignupAction.php",
+	# Pages
+	"CleanupPage" => "inc/pages/CleanupPage.php", // @todo: rm Page, add Api
+	"Error404Page" => "inc/pages/Error404Page.php",
+	"Error500Page" => "inc/pages/Error500Page.php",
+	"GetrunPage" => "inc/pages/GetrunPage.php", // @todo: rm Page, add Api
+	"HomePage" => "inc/pages/HomePage.php",
+	"JobPage" => "inc/pages/JobPage.php",
+	"LoginPage" => "inc/pages/LoginPage.php",
+	"LogoutPage" => "inc/pages/LogoutPage.php",
+	"RunPage" => "inc/pages/RunPage.php",
+	"RunresultsPage" => "inc/pages/RunresultsPage.php",
+	"SaverunPage" => "inc/pages/SaverunPage.php", // @todo: rm Page, add Api
+	"ScoresPage" => "inc/pages/ScoresPage.php",
+	"SignupPage" => "inc/pages/SignupPage.php",
+	"UserPage" => "inc/pages/UserPage.php"
+);
+
+function swarmAutoLoader( $className ) {
+	global $swarmAutoLoadClasses, $swarmInstallDir;
+
+	if ( !isset( $swarmAutoLoadClasses[$className] ) ) {
+		return false;
+	}
+
+	$filename = $swarmAutoLoadClasses[$className];
+	require_once( "$swarmInstallDir/$filename" );
+
+	return true;
+}
+
+spl_autoload_register( "swarmAutoLoader" );
+
 /**@}*/
 
 
@@ -98,49 +168,13 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
 
 
 /**
- * Debugging
+ * Custom settings
  * @{
  */
-function swarmExceptionHandler( Exception $e ) {
-	global $swarmContext;
-
-	$msg = "<h2>TestSwarm internal error</h2>\n\n";
-
-	if ( $swarmContext->getConf()->debug->show_exception_details ) {
-		$msg .=
-			'<p>' . nl2br( htmlspecialchars( $e->getMessage() ) ) .
-			'</p><p>Backtrace:</p><p>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) ) .
-			"</p>\n";
-	} else {
-		$msg .=
-			'<p>Set <b><tt>show_exception_details = 1;</tt></b> ' .
-			'in the <tt>[debug]</tt> section at the bottom of testswarm.ini to show detailed debugging information.</p>';
-	}
-
-	if ( !headers_sent() ) {
-		header( $_SERVER["SERVER_PROTOCOL"] . " 500 TestSwarm Internal Error", true, 500 );
-	}
-
-	echo $msg;
-	exit;
-}
-
-set_exception_handler( "swarmExceptionHandler" );
-
 if ( $swarmContext->getConf()->debug->php_error_reporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }
-
-/**@}*/
-
-
-/**
- * Session
- * @{
- */
-
-session_start();
 
 // Increase the session timeout to two weeks (3600 * 24 * 14)
 ini_set( 'session.gc_maxlifetime', '1209600' );
