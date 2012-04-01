@@ -30,7 +30,7 @@ class UserPage extends Page {
 			return '<h3>User does not exist</h3>';
 		}
 
-		$result = mysql_queryf(
+		$rows = $db->getRows(str_queryf(
 			"SELECT
 				useragents.engine as engine,
 				useragents.name as name,
@@ -38,35 +38,30 @@ class UserPage extends Page {
 				clients.created as since
 			FROM
 				clients, useragents
-			WHERE
-				clients.useragent_id=useragents.id
-				AND clients.updated > %s
-				AND clients.user_id=%u
+			WHERE clients.useragent_id = useragents.id
+			AND   clients.updated > %s
+			AND   clients.user_id = %u
 			ORDER BY
 				useragents.engine,
 				useragents.name;",
 			swarmdb_dateformat( strtotime( '1 minutes ago' ) ),
 			$userID
-		);
+		));
 
 		$html = '';
 
-		if ( mysql_num_rows( $result ) > 0 ) {
+		if ( $rows ) {
 
-			$html .= '<h3>Active Clients:</h3><ul class="clients">';
+			$html .= '<h3>Active clients</h3><ul class="clients">';
 
-			while ( $row = mysql_fetch_array($result) ) {
-				$engine = $row[0];
-				$browser_name = $row[1];
-				$name = $row[2];
-				$since = $row[3];
-
-				$since_local = date( 'r', gmstrtotime( $since ) );
+			foreach ( $rows as $row ) {
+				$since_local = date( 'r', gmstrtotime( $row->since ) );
 				// PHP's "c" claims to be ISO compatible but prettyDate JS disagrees
 				// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z")
 				// Constructing format manually instead
-				$since_zulu_iso = gmdate( 'Y-m-d\TH:i:s\Z', gmstrtotime( $since ) );
+				$since_zulu_iso = gmdate( 'Y-m-d\TH:i:s\Z', gmstrtotime( $row->since ) );
 
+				$name = $row->os;
 				if ( $name == "xp" ) {
 					$name = "Windows XP";
 				} elseif ( $name == "vista" ) {
@@ -89,51 +84,54 @@ class UserPage extends Page {
 					$name = "Linux";
 				}
 
-				$html .= "<li><img src=\"" . swarmpath( "images/$engine.sm.png" ) . "\" class=\"$engine\"> <strong class=\"name\">$browser_name $name</strong><br>Connected <span title=\"" . htmlspecialchars( $since_zulu_iso ) . "\" class=\"pretty\">" . htmlspecialchars( $since_local ) . "</span></li>";
+				$html .= '<li><img src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '" class="'
+					. $row->engine . '"> <strong class="name">' . $row->name . $name
+					. '</strong><br>Connected <span title="'
+					. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
+					. htmlspecialchars( $since_local ) . '</span></li>';
 			}
 
-			$html .=  "</ul>";
+			$html .=  '</ul>';
 
 		}
 
 		$job_search = preg_replace( "/[^a-zA-Z ]/", "", $request->getVal( "job", "" ) );
 		$job_search .= "%";
 
-		$search_result = mysql_queryf(
+		$rows = $db->getRows(str_queryf(
 			"SELECT
-				jobs.name,
-				jobs.status,
-				jobs.id
+				jobs.id as job_id,
+				jobs.name as job_name
 			FROM
 				jobs, users
-			WHERE	jobs.name LIKE %s
-			AND	users.name = %s
-			AND	jobs.user_id = users.id
+			WHERE jobs.name LIKE %s
+			AND   users.name = %s
+			AND   jobs.user_id = users.id
 			ORDER BY jobs.created DESC
 			LIMIT 15;",
 			$job_search,
 			$username
-		);
+		));
 
-		if ( mysql_num_rows( $search_result ) > 0 ) {
-
-			$html .=  '<h3>Recent Jobs:</h3><table class="results"><tbody>';
+		if ( $rows ) {
+			$html .=  '<h3>Recent jobs</h3><table class="results"><tbody>';
 
 			$output = "";
 			$browsers = array();
 			$addBrowser = true;
 			$last = "";
 
-			while ( $row = mysql_fetch_array( $search_result ) ) {
-				$job_name = $row[0];
-				$job_id = $row[2];
-
-				$output .= '<tr><th><a href="' . swarmpath( "job/{$job_id}" ) . '">' . strip_tags($job_name) . "</a></th>\n";
+			foreach ( $rows as $row ) {
+				// Job names can and may contain HTML, thats fine for in the heading of the JobPage,
+				// but in this overview we neem them to be plain text so that we can actually link
+				// to the JobPage, stripping html.
+				// @todo Revisit this.
+				$output .= '<tr><th><a href="' . swarmpath( "job/{$row->job_id}" ) . '">' . htmlspecialchars( strip_tags( $row->job_name ) ) . "</a></th>\n";
 
 				$results = array();
 				$states = array();
 
-				$result = mysql_queryf(
+				$rows = $db->getRows(str_queryf(
 					"SELECT
 						runs.id as run_id,
 						runs.url as run_url,
@@ -149,11 +147,14 @@ class UserPage extends Page {
 						AND run_useragent.run_id=runs.id
 						AND run_useragent.useragent_id=useragents.id
 					ORDER BY run_id, browsername;",
-					$job_id
-				);
+					$row->job_id
+				));
+				if ( !$rows ) {
+					$rows = array();
+				}
 
-				while ( $row = mysql_fetch_assoc($result) ) {
-					if ( $row["run_id"] != $last ) {
+				foreach ( $rows as $row ) {
+					if ( $row->run_id != $last ) {
 						if ( $last ) {
 							$addBrowser = false;
 						}
@@ -176,7 +177,7 @@ class UserPage extends Page {
 								AND run_client.client_id=clients.id
 								AND useragents.id=useragent_id
 							ORDER BY browser;",
-							$row["run_id"]
+							$row->run_id
 						);
 
 						while ( $clientRunRow = mysql_fetch_assoc($runResult) ) {
@@ -190,9 +191,9 @@ class UserPage extends Page {
 
 					if ( $addBrowser ) {
 						array_push( $browsers, array(
-							"name" => $row["browsername"],
-							"engine" => $row["browser"],
-							"id" => $row["useragent_id"]
+							"name" => $row->browsername,
+							"engine" => $row->browser,
+							"id" => $row->useragent_id,
 						) );
 					}
 
@@ -200,8 +201,8 @@ class UserPage extends Page {
 
 					// @todo This throws 'Undefined index' notices, figure out why...
 					// surpressed now with @
-					if ( isset( $useragents[ $row["useragent_id"] ] ) ) {
-						foreach ( $useragents[ $row["useragent_id"] ] as $ua ) {
+					if ( isset( $useragents[ $row->useragent_id ] ) ) {
+						foreach ( $useragents[ $row->useragent_id ] as $ua ) {
 							$status = JobAction::getStatusFromClientRunRow( (object)$ua );
 							if ( $last_browser != $ua["browser"] ) {
 								$cur = @$results[ $ua["useragent_id"] ];
@@ -214,12 +215,12 @@ class UserPage extends Page {
 							$last_browser = $ua["browser"];
 						}
 					} else {
-						$cur = @$results[ $row["useragent_id"] ];
-						$results[ $row["useragent_id"] ] = $cur + 0;
-						$states[ $row["useragent_id"] ] = "new";
+						$cur = @$results[ $row->useragent_id ];
+						$results[ $row->useragent_id ] = $cur + 0;
+						$states[ $row->useragent_id ] = "new";
 					}
 
-					$last = $row["run_id"];
+					$last = $row->run_id;
 				}
 
 

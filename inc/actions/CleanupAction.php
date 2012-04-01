@@ -32,7 +32,7 @@ class CleanupAction extends Action {
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				// Undo run count
-				mysql_queryf(
+				$db->query(str_queryf(
 					"UPDATE
 						run_useragent
 					SET
@@ -41,16 +41,16 @@ class CleanupAction extends Action {
 					AND 	useragent_id = %u;",
 					$row->run_id,
 					$row->useragent_id
-				);
+				));
 				// Remove run_client entry
-				mysql_queryf(
+				$db->query(str_queryf(
 					"DELETE FROM
 						run_client
 					WHERE	run_id = %u
 					AND	client_id = %u;",
 					$row->run_id,
 					$row->client_id
-				);
+				));
 			}
 		}
 
