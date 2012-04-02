@@ -189,8 +189,7 @@ class JobAction extends Action {
 	}
 
 	/**
-	 * Resolve the numerical status IDs found in the database tables
-	 * in jobs.status and runs.status.
+	 * Resolve the numerical status codes found in the database tables.
 	 *
 	 * @param $statusId integer: A number between 0 and 2.
 	 * @return string: One of 'new', 'progress', 'complete' or 'unknown'.

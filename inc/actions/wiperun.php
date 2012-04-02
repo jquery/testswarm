@@ -51,13 +51,6 @@
 						$run_id,
 						$useragent_id
 					);
-					mysql_queryf(
-						"UPDATE runs
-						SET status = 1, updated = %s
-						WHERE id = %u;",
-						swarmdb_dateformat( SWARM_NOW ),
-						$run_id
-					);
 
 					$wipedRun = true;
 				}

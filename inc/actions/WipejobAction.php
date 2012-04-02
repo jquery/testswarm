@@ -66,17 +66,16 @@ class WipejobAction extends Action {
 			$jobID
 		));
 
-		if ( $runRows ) {
-			if ( $wipeType === "delete" ) {
-				$db->query(str_queryf( "DELETE FROM run_client WHERE run_id in (SELECT id FROM runs WHERE job_id=%u);", $jobID ));
-				$db->query(str_queryf( "DELETE FROM run_useragent WHERE run_id in (SELECT id FROM runs WHERE job_id=%u);", $jobID ));
-				$db->query(str_queryf( "DELETE FROM runs WHERE job_id=%u;", $jobID ));
-				$db->query(str_queryf( "DELETE FROM jobs WHERE id=%u;", $jobID ));
-			} elseif ( $wipeType === "reset" ) {
-				$db->query(str_queryf( "UPDATE jobs SET status=0, updated=%s WHERE id=%u;", swarmdb_dateformat( SWARM_NOW ), $jobID ));
-				$db->query(str_queryf( "UPDATE runs SET status=0, updated=%s WHERE job_id=%u;", swarmdb_dateformat( SWARM_NOW ), $jobID ));
-			}
+		// Put this outside the if for runRows,
+		// otherwise bogus jobs with 0 runs can't be deleted
+		if ( $wipeType === "delete" ) {
+			$db->query(str_queryf( "DELETE FROM run_client WHERE run_id in (SELECT id FROM runs WHERE job_id=%u);", $jobID ));
+			$db->query(str_queryf( "DELETE FROM run_useragent WHERE run_id in (SELECT id FROM runs WHERE job_id=%u);", $jobID ));
+			$db->query(str_queryf( "DELETE FROM runs WHERE job_id=%u;", $jobID ));
+			$db->query(str_queryf( "DELETE FROM jobs WHERE id=%u;", $jobID ));
+		}
 
+		if ( $runRows ) {
 			foreach ( $runRows as $runRow ) {
 				$db->query(str_queryf(
 					"DELETE FROM run_client WHERE run_id=%u;",

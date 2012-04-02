@@ -77,7 +77,6 @@ CREATE TABLE `runs` (
   `job_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `url` tinytext NOT NULL,
-  `status` tinyint(4) NOT NULL default '0',
   `updated` binary(14) NOT NULL default '19700101000000',
   `created` binary(14) NOT NULL default '19700101000000',
   PRIMARY KEY  (`id`)

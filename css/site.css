@@ -321,7 +321,13 @@ ul.clients li img.msie {
 	border: 2px solid #AAA;
 	color: darkRed;
 	padding: 1em;
-	width: auto;
+}
+
+.successbox {
+	background: #F5FFF5;
+	border: 2px solid #0A0;
+	color: #333;
+	padding: 1em;
 }
 
 #footer {
