@@ -59,32 +59,29 @@ At the moment the only supported servers are Apache and MySQL.
 
 1. Create a mysql database and a user who can connect and write to it.
 
-2. Initialize the database: 
+1. Initialize the database:
    `mysql DBNAME -u USER -p < config/testswarm.sql`
    `mysql DBNAME -u USER -p < config/useragents.sql`
 
-3. Copy the ./config/testswarm-sample.ini to ./testswarm.ini and change the
+1. Copy the ./config/testswarm-sample.ini to ./testswarm.ini and change the
    options to correspond to your MySQL database information.
 
-4. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
+1. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
    RewriteBase to match the contextpath configuration set in the testswarm.ini
 
-5. Currently the only supported webserver is Apache (which uses a .htaccess
+1. Currently the only supported webserver is Apache (which uses a .htaccess
    file).
-
    To run testswarm from a non-root directory of Apache, modify the
    contextpath option in the testswarm.ini to fit for your needs, e.g.
    `contextpath = "/testswarm/"`.
-   
    If you do so also update the `.htaccess` file, like so:
    `RewriteBase /testswarm/`
-
    Test if `/testswarm/login` loads. If it doesn't, make sure your .htaccess
    gets loaded (e.g. by putting some jibberish into the .htaccess file). If it
    doesn't get loaded, make sure `AllowOverride` is set to "`All`" (at least not
    to "`None`") in your Apache configuration.
-   
-6. Create an entry to your crontab for action=cleanup. This performs various
+
+1. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
    `* * * * * curl -s http://example.org/api.php?action=cleanup > /dev/null`
 
