@@ -254,6 +254,11 @@ class UserPage extends Page {
 
 			$html .=  "$output</tr>\n</tbody>\n</table>";
 		}
+
+		if (!$html) {
+			return "No active useragents or jobs.";
+		}
+
 		return $html;
 	}
 
