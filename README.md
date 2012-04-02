@@ -1,7 +1,8 @@
 TestSwarm - Distributed Continuous Integration for JavaScript
 =================
 
-TestSwarm provides distributed continuous integration testing for JavaScript.
+TestSwarm provides distributed continuous integration testing for
+JavaScript.
 
 The main instance monitoring jQuery core and related projects runs at
 [swarm.jquery.org](http://swarm.jquery.org/).
@@ -11,8 +12,9 @@ The main instance monitoring jQuery core and related projects runs at
 Quick start
 ----------
 
-Clone the repo, `git clone git://github.com/jquery/testswarm.git`, or [download
-the latest release](https://github.com/jquery/testswarm/zipball/master).
+Clone the repo, `git clone git://github.com/jquery/testswarm.git`, or
+[download the latest
+release](https://github.com/jquery/testswarm/zipball/master).
 
 
 
@@ -35,7 +37,8 @@ For more information on SemVer, please visit http://semver.org/.
 Bug tracker
 -----------
 
-Found a bug? Please report it using our [issue tracker](https://github.com/jquery/testswarm/issues)!
+Found a bug? Please report it using our [issue
+tracker](https://github.com/jquery/testswarm/issues)!
 
 
 
@@ -66,22 +69,24 @@ At the moment the only supported servers are Apache and MySQL.
 4. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
    RewriteBase to match the contextpath configuration set in the testswarm.ini
 
-5. Currently the only supported webserver is Apache (which uses a .htaccess file).
+5. Currently the only supported webserver is Apache (which uses a .htaccess
+   file).
 
-   To run testswarm from a non-root directory of Apache, modify the contextpath option 
-   in the testswarm.ini to fit for your needs, e.g. `contextpath = "/testswarm/"`.
+   To run testswarm from a non-root directory of Apache, modify the
+   contextpath option in the testswarm.ini to fit for your needs, e.g.
+   `contextpath = "/testswarm/"`.
    
-   If you do so also update the `.htaccess` file, like so: `RewriteBase /testswarm/`
+   If you do so also update the `.htaccess` file, like so:
+   `RewriteBase /testswarm/`
 
-   Test if `/testswarm/login` loads.
-   If it doesn't, make sure your .htaccess gets loaded (e.g. by putting some jibberish into the
-   .htaccess file).
-   If it doesn't get loaded, make sure `AllowOverride` is set to "`All`" (at least not to "`None`")
-   in your Apache configuration.
+   Test if `/testswarm/login` loads. If it doesn't, make sure your .htaccess
+   gets loaded (e.g. by putting some jibberish into the .htaccess file). If it
+   doesn't get loaded, make sure `AllowOverride` is set to "`All`" (at least not
+   to "`None`") in your Apache configuration.
    
 6. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
-   `* * * * * curl -s http://path/to/testswarm/api.php?action=cleanup > /dev/null`
+   `* * * * * curl -s http://example.org/api.php?action=cleanup > /dev/null`
 
 
 
@@ -95,8 +100,9 @@ There is also a mailing list at Google Groups available:
 * https://groups.google.com/group/testswarm
 * testswarm@googlegroups.com
 
-Most of us are also on IRC in the 
-[#jquery-dev](http://de.irc2go.com/webchat/?net=freenode&room=jquery-dev) channel at irc.freenode.net
+Most of us are also on IRC in the
+[#jquery-dev](http://webchat.freenode.net/?channels=jquery-dev) channel at
+irc.freenode.net
 
 Planning for TestSwarm and other projects related to testing of javascript
 applications based around jQuery happens on the [jQuery Testing Team
@@ -107,15 +113,16 @@ wiki](http://jquerytesting.pbworks.com)
 Copyright and license
 ---------------------
 
-See [MIT-LICENSE](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE).
+See
+[MIT-LICENSE](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE).
 
 
 
 History
 ---------------------
 
-TestSwarm was originally created by [John Resig](http://ejohn.org/) as a basic
-tool to support unit testing of the [jQuery JavaScript
-library](http://jquery.com). It was later moved to become an official [Mozilla
-Labs](http://labs.mozilla.com/) and has since moved again to become a
-[jQuery](http://jquery.org/) project.
+TestSwarm was originally created by [John Resig](http://ejohn.org/) as a
+basic tool to support unit testing of the [jQuery JavaScript
+library](http://jquery.com). It was later moved to become an official
+[Mozilla Labs](http://labs.mozilla.com/) and has since moved again to become
+a [jQuery](http://jquery.org/) project.
