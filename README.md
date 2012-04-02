@@ -106,8 +106,7 @@ wiki](http://jquerytesting.pbworks.com)
 Copyright and license
 ---------------------
 
-See [LICENSE](https://raw.github.com/jquery/testswarm/master/LICENSE) for more
-information.
+See [MIT-LICENSE](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE).
 
 
 
