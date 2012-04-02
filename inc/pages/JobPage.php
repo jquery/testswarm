@@ -77,16 +77,21 @@ class JobPage extends Page {
 			foreach ( $data["userAgents"] as $uaID => $uaInfo ) {
 				if ( isset( $run["uaRuns"][$uaID] ) ) {
 					$uaRun = $run["uaRuns"][$uaID];
-					if ( $uaRun["runStatus"] !== "new" && $uaRun["runStatus"] !== "progress" ) {
-						$html .=
-							'<td class="status-' . $uaRun["runStatus"] . '">'
-							. html_tag( 'a', array(
-								"href" => $uaRun["runResultsUrl"],
-							), $uaRun["runResultsLabel"] )
-							. '</td>';
-					} else {
-						$html .= '<td class="status-new"></a>';
+					$html .= html_tag_open( "td", array(
+						"class" => "status-" . $uaRun["runStatus"],
+						"data-job-id" => $data["jobInfo"]["id"],
+						"data-run-id" => $run["info"]["id"],
+						"data-run-status" => $uaRun["runStatus"],
+						"data-useragent-id" => $uaID,
+						// Un-ran tests don't have a client id
+						"data-client-id" => isset( $uaRun["clientID"] ) ? $uaRun["clientID"] : "",
+					));
+					if ( isset( $uaRun["runResultsUrl"] ) ) {
+						$html .= html_tag( 'a', array(
+							"href" => $uaRun["runResultsUrl"],
+						), $uaRun["runResultsLabel"] );
 					}
+					$html .= '</td>';
 				} else {
 					// This run isn't schedules to be ran in this UA
 					$html .= '<td class="notscheduled"></td>';

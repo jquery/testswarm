@@ -43,8 +43,8 @@ class SaverunAction extends Action {
 				error = %u,
 				total = %u,
 				results = %s
-			WHERE	client_id = %u
-			AND 	run_id = %u
+			WHERE client_id = %u
+			AND   run_id = %u
 			LIMIT 1;",
 			$fail,
 			$error,
@@ -63,11 +63,11 @@ class SaverunAction extends Action {
 					"SELECT client_id
 					FROM
 						run_client, clients
-					WHERE	run_id = %u
-					AND 	client_id != %u
-					AND 	(total <= 0 OR error > 0 OR fail > 0)
-					AND 	clients.id=client_id
-					AND 	clients.useragent_id = %u;",
+					WHERE run_id = %u
+					AND   client_id != %u
+					AND   (total <= 0 OR error > 0 OR fail > 0)
+					AND   clients.id=client_id
+					AND   clients.useragent_id = %u;",
 					$runID,
 					$clientID,
 					$browserInfo->getSwarmUserAgentID()
@@ -77,8 +77,8 @@ class SaverunAction extends Action {
 					foreach ( $rows as $row ) {
 						$db->query(str_queryf(
 							"DELETE FROM run_client
-							WHERE	run_id=%u
-							AND	client_id=%u;",
+							WHERE run_id=%u
+							AND   client_id=%u;",
 							$runID,
 							$row->client_id
 						));
@@ -92,8 +92,8 @@ class SaverunAction extends Action {
 						runs = max,
 						completed = completed + 1,
 						status = 2
-					WHERE	useragent_id = %u
-					AND 	run_id = %u
+					WHERE useragent_id = %u
+					AND   run_id = %u
 					LIMIT 1;",
 					$browserInfo->getSwarmUserAgentID(),
 					$runID
@@ -108,11 +108,11 @@ class SaverunAction extends Action {
 							client_id
 						FROM
 							run_client, clients
-						WHERE	run_id = %u
-						AND 	client_id != %u
-						AND 	total <= 0
-						AND 	clients.id = client_id
-						AND 	clients.useragent_id = %u;",
+						WHERE run_id = %u
+						AND   client_id != %u
+						AND   total <= 0
+						AND   clients.id = client_id
+						AND   clients.useragent_id = %u;",
 						$runID,
 						$clientID,
 						$browserInfo->getSwarmUserAgentID()
@@ -133,8 +133,8 @@ class SaverunAction extends Action {
 					SET
 						completed = completed + 1,
 						status = IF(completed + 1 < max, 1, 2)
-					WHERE	useragent_id = %u
-					AND 	run_id = %u
+					WHERE useragent_id = %u
+					AND   run_id = %u
 					LIMIT 1;",
 					$browserInfo->getSwarmUserAgentID(),
 					$runID

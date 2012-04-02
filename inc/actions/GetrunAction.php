@@ -36,8 +36,8 @@ class GetrunAction extends Action {
 				run_id
 			FROM
 				run_useragent
-			WHERE	useragent_id = %u
-			AND 	runs < max
+			WHERE useragent_id = %u
+			AND   runs < max
 			AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id = run_id AND client_id = %u)
 			ORDER BY run_id DESC
 			LIMIT 1;",
@@ -57,8 +57,8 @@ class GetrunAction extends Action {
 					runs.name as run_name
 				FROM
 					runs, jobs
-				WHERE	runs.id=%u
-				AND 	jobs.id=runs.job_id
+				WHERE runs.id=%u
+				AND   jobs.id=runs.job_id
 				LIMIT 1;",
 				$runID
 			));

@@ -126,6 +126,7 @@ $swarmAutoLoadClasses = array(
 	"ScoresAction" => "inc/actions/ScoresAction.php",
 	"SignupAction" => "inc/actions/SignupAction.php",
 	"WipejobAction" => "inc/actions/WipejobAction.php",
+	"WiperunAction" => "inc/actions/WiperunAction.php",
 	# Pages
 	"AddjobPage" => "inc/pages/AddjobPage.php",
 	"Error404Page" => "inc/pages/Error404Page.php",

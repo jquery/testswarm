@@ -26,6 +26,20 @@
 	 * @param #attribs array: Key/value pairs, unescaped
 	 * @param $content string|null: [optional] Text content, to be escaped.
 	 */
+	function html_tag_open( $tagName, Array $attribs = array() ) {
+		$html = "<$tagName";
+		foreach ( $attribs as $key => $value ) {
+			$html .= ' ' . strtolower( $key ) . '="' . strtr( $value, array(
+				'&' => '&amp;',
+				'"' => '&quot;',
+				"\n" => '&#10;',
+				"\r" => '&#13;',
+				"\t" => '&#9;',
+			) ) . '"';
+		}
+		$html .= ">";
+		return $html;
+	}
 	function html_tag( $tagName, Array $attribs = array(), $content = "" ) {
 		static $voidElements = array(
 			'area',
@@ -44,27 +58,14 @@
 			'source',
 		);
 
-		$html = "<$tagName";
+		$html = html_tag_open( $tagName, $attribs );
 
-		foreach ( $attribs as $key => $value ) {
-			$html .= ' ' . strtolower( $key ) . '="' . strtr( $value, array(
-				'&' => '&amp;',
-				'"' => '&quot;',
-				"\n" => '&#10;',
-				"\r" => '&#13;',
-				"\t" => '&#9;',
-			) ) . '"';
-		}
-
-		if ( in_array( $tagName, $voidElements ) ) {
-			$html .= ">";
-
-		} else {
+		if ( !in_array( $tagName, $voidElements ) ) {
 			$content = strtr( $content, array(
 				'&' => '&amp;',
 				'<' => '&lt;',
 			) );
-			$html .= ">$content</$tagName>";
+			$html .= "$content</$tagName>";
 		}
 
 		return $html;

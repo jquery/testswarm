@@ -23,9 +23,9 @@ class CleanupAction extends Action {
 				useragent_id
 			FROM
 				run_client, clients
-			WHERE	run_client.updated < %s
-			AND 	clients.id = client_id
-			AND 	run_client.status = 1;",
+			WHERE run_client.updated < %s
+			AND   clients.id = client_id
+			AND   run_client.status = 1;",
 			swarmdb_dateformat( strtotime( '5 minutes ago' ) )
 		));
 
@@ -37,8 +37,8 @@ class CleanupAction extends Action {
 						run_useragent
 					SET
 						runs = runs - 1
-					WHERE	run_id = %u
-					AND 	useragent_id = %u;",
+					WHERE run_id = %u
+					AND   useragent_id = %u;",
 					$row->run_id,
 					$row->useragent_id
 				));
@@ -46,8 +46,8 @@ class CleanupAction extends Action {
 				$db->query(str_queryf(
 					"DELETE FROM
 						run_client
-					WHERE	run_id = %u
-					AND	client_id = %u;",
+					WHERE run_id = %u
+					AND   client_id = %u;",
 					$row->run_id,
 					$row->client_id
 				));
@@ -62,13 +62,13 @@ class CleanupAction extends Action {
 				runs = 0,
 				completed = 0,
 				status = 0
-			WHERE	runs = max
+			WHERE runs = max
 			AND NOT EXISTS (
 					SELECT *
 					FROM run_client, clients
-					WHERE	run_client.run_id = run_useragent.run_id
-					AND 	run_client.client_id = clients.id
-					AND 	clients.useragent_id = run_useragent.useragent_id
+					WHERE run_client.run_id = run_useragent.run_id
+					AND   run_client.client_id = clients.id
+					AND   clients.useragent_id = run_useragent.useragent_id
 				);"
 		);
 

@@ -31,22 +31,25 @@ jQuery(function ( $ ) {
 
 	refreshTableTimout = setTimeout( refreshTable, updateInterval );
 
-	$( document ).on( "dblclick", "td:has(a)", function () {
-		var href, qs, $el;
+	$( document ).on( "dblclick", "table.results td", function () {
+		var $el;
 		$el = $( this );
-		href = $el.find( "a" ).attr( "href" );
-		if ( href ) {
-			// extract &run_id=..&client_id=.. from the "?action=runresults&run_id=6&client_id=252" url
-			// basically transforming runresults into wiperun
-			qs = href.match( /&.*$/ );
+		if ( $el.data( "runStatus" ) != "new" ) {
 			$.ajax({
-				url: SWARM.conf.web.contextpath,
+				url: SWARM.conf.web.contextpath + "api.php",
 				type: "POST",
-				data: "action=wiperun" + ( qs ? qs[0] : "" ),
+				data: {
+					action: "wiperun",
+					job_id: $el.data( "jobId" ),
+					run_id: $el.data( "runId" ),
+					client_id: $el.data( "clientId" ),
+					useragent_id: $el.data( "useragentId" )
+				},
 				dataType: "json",
 				success: function ( data ) {
-					if ( data === "ok" ) {
-						$el.empty().attr( "class", "notstarted notdone" );
+					if ( data.wiperun && data.wiperun.result === "ok" ) {
+						$el.empty().attr( "class", "" );
+						refreshTable();
 					}
 				}
 			});
