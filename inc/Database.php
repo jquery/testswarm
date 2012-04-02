@@ -74,10 +74,10 @@ class Database {
 		$res = $this->doQuery( $sql );
 		if ( $res && $this->getNumRows( $res ) ) {
 			$ret = array();
-         while ( $res && $row = $this->fetchObject( $res ) ) {
-         	$ret[] = $row;
-         }
-         return $ret;
+			while ( $res && $row = $this->fetchObject( $res ) ) {
+				$ret[] = $row;
+			}
+			return $ret;
 		}
 		return false;
 	}

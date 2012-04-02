@@ -91,7 +91,7 @@ class UserPage extends Page {
 					. htmlspecialchars( $since_local ) . '</span></li>';
 			}
 
-			$html .=  '</ul>';
+			$html .= '</ul>';
 
 		}
 
@@ -114,7 +114,7 @@ class UserPage extends Page {
 		));
 
 		if ( $rows ) {
-			$html .=  '<h3>Recent jobs</h3><table class="results"><tbody>';
+			$html .= '<h3>Recent jobs</h3><table class="results"><tbody>';
 
 			$output = "";
 			$browsers = array();
@@ -252,10 +252,10 @@ class UserPage extends Page {
 				$output = $header . $output;
 			}
 
-			$html .=  "$output</tr>\n</tbody>\n</table>";
+			$html .= "$output</tr>\n</tbody>\n</table>";
 		}
 
-		if (!$html) {
+		if ( !$html ) {
 			return "No active useragents or jobs.";
 		}
 

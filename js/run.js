@@ -69,7 +69,7 @@
 		currRunId = 0;
 		currRunUrl = false;
 
-		msg( "Querying for more tests to run..." );
+		msg( "Querying for tests to run..." );
 		retrySend( "action=getrun&client_id=" + SWARM.client_id, getTests, runTests );
 	}
 

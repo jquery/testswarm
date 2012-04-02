@@ -28,9 +28,9 @@ class SaverunAction extends Action {
 		}
 
 		$runID = $request->getInt( "run_id" );
-		$fail   = $request->getInt( "fail" );
-		$error  = $request->getInt( "error" );
-		$total  = $request->getInt( "total" );
+		$fail = $request->getInt( "fail" );
+		$error = $request->getInt( "error" );
+		$total = $request->getInt( "total" );
 
 		$results = gzencode( $request->getVal( "results", "" ) );
 
@@ -39,9 +39,9 @@ class SaverunAction extends Action {
 				run_client
 			SET
 				status = 2,
-				fail   = %u,
-				error  = %u,
-				total  = %u,
+				fail = %u,
+				error = %u,
+				total = %u,
 				results = %s
 			WHERE	client_id = %u
 			AND 	run_id = %u

@@ -144,7 +144,7 @@ class JobAction extends Action {
 						"runResultsLabel" =>
 							$clientRunRow->status < 2
 							// If new or in progress, show nothing
-							?  ""
+							? ""
 							: ( $clientRunRow->total < 0
 								// Timeout 
 								? "Err"

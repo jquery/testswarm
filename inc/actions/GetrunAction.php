@@ -79,7 +79,7 @@ class GetrunAction extends Action {
 					swarmdb_dateformat( SWARM_NOW )
 				));
 
-				$runInfo =  array(
+				$runInfo = array(
 					"id" => $runID,
 					"url" => $row->run_url,
 					"desc" => $row->job_name . ' ' . $row->run_name,

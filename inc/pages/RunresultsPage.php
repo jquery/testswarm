@@ -13,7 +13,7 @@ class RunresultsPage extends Page {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$runID    = $request->getInt( "run_id" );
+		$runID = $request->getInt( "run_id" );
 		$clientID = $request->getInt( "client_id" );
 
 		if ( $runID && $clientID ) {
