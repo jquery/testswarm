@@ -117,7 +117,6 @@ $swarmAutoLoadClasses = array(
 	"AddjobAction" => "inc/actions/AddjobAction.php",
 	"CleanupAction" => "inc/actions/CleanupAction.php",
 	"GetrunAction" => "inc/actions/GetrunAction.php",
-	"GetneededAction" => "inc/actions/GetneededAction.php",
 	"InfoAction" => "inc/actions/InfoAction.php",
 	"JobAction" => "inc/actions/JobAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
@@ -125,6 +124,7 @@ $swarmAutoLoadClasses = array(
 	"SaverunAction" => "inc/actions/SaverunAction.php",
 	"ScoresAction" => "inc/actions/ScoresAction.php",
 	"SignupAction" => "inc/actions/SignupAction.php",
+	"SwarmstateAction" => "inc/actions/SwarmstateAction.php",
 	"WipejobAction" => "inc/actions/WipejobAction.php",
 	"WiperunAction" => "inc/actions/WiperunAction.php",
 	# Pages
