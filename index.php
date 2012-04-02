@@ -15,16 +15,7 @@ require_once "inc/init.php";
 
 session_start();
 
-$action = preg_replace( "/[^a-z]/", "", $swarmContext->getRequest()->getVal( "action", "home" ) );
-$actionFile = "inc/actions/$action.php";
-$pageFile = "inc/pages/$action.php";
-
 $pageObj = $swarmContext->getRequest()->getPageInstance();
-
-// old style action (to be deleted)
-if ( file_exists( $actionFile ) ) {
-	require $actionFile;
-}
 
 if ( $pageObj instanceof Page ) {
 	try {
@@ -34,10 +25,6 @@ if ( $pageObj instanceof Page ) {
 		$pageObj->setExceptionObj( $e );
 		$pageObj->output();
 	}
-
-// old style page (to be deleted)
-} elseif  ( file_exists( $pageFile ) ) {
-	require $pageFile;
 
 } else {
 	$pageObj = Error404Page::newFromContext( $swarmContext );
