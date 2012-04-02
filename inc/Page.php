@@ -204,7 +204,6 @@ abstract class Page {
 		<a href="//github.com/jquery/testswarm">Source Code</a>
 		| <a href="//github.com/jquery/testswarm/issues">Issue Tracker</a>
 		| <a href="//github.com/jquery/testswarm/wiki">About</a>
-		| <a href="//groups.google.com/group/testswarm">Discuss</a>
 		| <a href="//twitter.com/testswarm">Twitter</a>
 	</div><?php
 

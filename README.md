@@ -92,11 +92,6 @@ Get involved
 
 You're welcome to use the GitHub issue tracker to start discussions.
 
-There is also a mailing list at Google Groups available:
-
-* https://groups.google.com/group/testswarm
-* testswarm@googlegroups.com
-
 Most of us are also on IRC in the
 [#jquery-dev](http://webchat.freenode.net/?channels=jquery-dev) channel at
 irc.freenode.net
