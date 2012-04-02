@@ -116,6 +116,7 @@ $swarmAutoLoadClasses = array(
 	# Actions
 	"CleanupAction" => "inc/actions/CleanupAction.php",
 	"GetrunAction" => "inc/actions/GetrunAction.php",
+	"GetneededAction" => "inc/actions/GetneededAction.php",
 	"InfoAction" => "inc/actions/InfoAction.php",
 	"JobAction" => "inc/actions/JobAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
