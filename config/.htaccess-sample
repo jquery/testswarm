@@ -4,7 +4,6 @@ Deny from all
 </Files>
 
 RewriteEngine On
-RewriteBase /
 
 # Don't touch real files and directories (such as ./js/ and ./css/)
 RewriteCond %{REQUEST_FILENAME} -f [OR]

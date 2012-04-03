@@ -46,7 +46,7 @@ Installation
 -----------
 
 To run TestSwarm you will need a web server, a database server and PHP.
-At the moment the only supported servers are Apache and MySQL.
+At the moment TestSwarm only supports Apache and MySQL.
 
 ### Requirements
 
@@ -63,10 +63,10 @@ At the moment the only supported servers are Apache and MySQL.
    `mysql DBNAME -u USER -p < config/testswarm.sql`
    `mysql DBNAME -u USER -p < config/useragents.sql`
 
-1. Copy the ./config/testswarm-sample.ini to ./testswarm.ini and change the
+1. Copy `./config/testswarm-sample.ini` to `./testswarm.ini` and change the
    options to correspond to your MySQL database information.
 
-1. Copy the ./config/.htaccess-sample to ./htaccess. If needed change the
+1. Copy `./config/.htaccess-sample` to `./.htaccess`. If needed change the
    RewriteBase to match the contextpath configuration set in the testswarm.ini
 
 1. Currently the only supported webserver is Apache (which uses a .htaccess
@@ -74,12 +74,11 @@ At the moment the only supported servers are Apache and MySQL.
    To run testswarm from a non-root directory of Apache, modify the
    contextpath option in the testswarm.ini to fit for your needs, e.g.
    `contextpath = "/testswarm/"`.<br/>
-   If you do so also update the `.htaccess` file, like so:
-   `RewriteBase /testswarm/`<br/>
-   Test if `/testswarm/login` loads. If it doesn't, make sure your .htaccess
-   gets loaded (e.g. by putting some jibberish into the .htaccess file). If it
-   doesn't get loaded, make sure `AllowOverride` is set to "`All`" (at least not
-   to "`None`") in your Apache configuration.<br/>
+   Test if `/testswarm/login` loads. If it doesn't, make sure your
+   `.htaccess` is actually being read (e.g. by putting some jibberish into the
+   `.htaccess` file, which should result in a HTTP 500 error). If it doesn't get
+   loaded, make sure `AllowOverride` is set to "`All`" (at least not to
+   "`None`") in your Apache configuration.
 
 1. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
