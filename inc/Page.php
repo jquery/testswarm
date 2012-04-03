@@ -163,7 +163,7 @@ abstract class Page {
 	$displayTitleHtml = $this->getDisplayTitleHtml();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.css" ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.min.css" ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/testswarm.css" ); ?>">
 	<script>window.SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
