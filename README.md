@@ -70,16 +70,16 @@ At the moment the only supported servers are Apache and MySQL.
    RewriteBase to match the contextpath configuration set in the testswarm.ini
 
 1. Currently the only supported webserver is Apache (which uses a .htaccess
-   file).
+   file).<br/>
    To run testswarm from a non-root directory of Apache, modify the
    contextpath option in the testswarm.ini to fit for your needs, e.g.
-   `contextpath = "/testswarm/"`.
+   `contextpath = "/testswarm/"`.<br/>
    If you do so also update the `.htaccess` file, like so:
-   `RewriteBase /testswarm/`
+   `RewriteBase /testswarm/`<br/>
    Test if `/testswarm/login` loads. If it doesn't, make sure your .htaccess
    gets loaded (e.g. by putting some jibberish into the .htaccess file). If it
    doesn't get loaded, make sure `AllowOverride` is set to "`All`" (at least not
-   to "`None`") in your Apache configuration.
+   to "`None`") in your Apache configuration.<br/>
 
 1. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
