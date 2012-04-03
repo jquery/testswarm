@@ -42,7 +42,8 @@ INSERT INTO `useragents` (`name`, `engine`, `version`, `active`, `current`, `pop
 
 ('Mobile Safari 3.1.3', 'mobilewebkit', '^528', 1, 0, 0, 0, 0, 1),
 ('Mobile Safari 3.2', 'mobilewebkit', '^531', 1, 0, 0, 0, 0, 1),
-('Mobile Safari 4.2', 'mobilewebkit', '^533', 1, 1, 0, 0, 0, 1),
+('Mobile Safari 4.2', 'mobilewebkit', '^533', 1, 0, 0, 0, 0, 1),
+('Mobile Safari 5.1', 'mobilewebkit', '^534', 1, 1, 1, 1, 0, 1),
 
 ('Opera Mobile 10.0', 'operamobile', '^2.4.18$', 1, 1, 0, 0, 0, 1),
 
