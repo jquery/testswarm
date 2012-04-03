@@ -22,18 +22,22 @@ class RunPage extends Page {
 		$html = '<script>window.SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';</script>';
 
 		$html .=
-			'<div class="userinfo">'
-				. '<div class="browser you">'
+			'<div class="row">'
+				. '<div class="span2">'
+					. '<div class="well pagination-centered thumbnail">'
 					. '<img src="' . swarmpath( "images/{$bi->getBrowserCodename()}.sm.png" )
-						. '" class="browser-icon ' . $bi->getBrowserCodename()
+						. '" class="swarm-browsericon ' . $bi->getBrowserCodename()
 						. '" alt="' . $bi->getSwarmUserAgentName()
 						. '" title="' . $bi->getSwarmUserAgentName() . '">'
-					. '<span class="browser-name">' . htmlspecialchars( $bi->getSwarmUserAgentVersion() ) . '</span>'
+					. '<span class="label">' . htmlspecialchars( $bi->getSwarmUserAgentVersion() ) . '</span>'
+					. '</div>'
 				. '</div>'
-				. '<h3>' . htmlspecialchars( $client->getUserRow()->name ) . '</h3>'
-				. '<p><strong>Status:</strong> <span id="msg"></span></p>'
+				. '<div class="span7">'
+					. '<h2>' . htmlspecialchars( $client->getUserRow()->name ) . '</h2>'
+					. '<p><strong>Status:</strong> <span id="msg"></span></p>'
+				. '</div>'
 			. '</div>'
-			. '<div class="userinfo">'
+			. '<div class="well">'
 				. '<h3>History</h3>'
 				. '<ul id="history"></ul>'
 			. '</div>'

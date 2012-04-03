@@ -30,7 +30,7 @@ class JobPage extends Page {
 		$html = '';
 
 		if ( $error ) {
-			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
+			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
 		if ( !isset( $data["jobInfo"] ) ) {
@@ -48,22 +48,24 @@ class JobPage extends Page {
 
 		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
 			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
-				. '<button id="swarm-job-delete">Delete job</button>'
-				. '<button id="swarm-job-reset">Reset job</button>'
-				. '<div class="errorbox" id="swarm-wipejob-error" style="display: none;"></div>';
+				. '<div class="form-actions">'
+				. ' <button id="swarm-job-delete" class="btn btn-danger">Delete job</button>'
+				. ' <button id="swarm-job-reset" class="btn btn-info">Reset job</button>'
+				. '</div>'
+				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
 		}
 
-		$html .= '<table class="results"><thead><tr><th>&nbsp;</th>';
+		$html .= '<table class="table table-bordered swarm-results"><thead><tr><th>&nbsp;</th>';
 
 		// Header with user agents
 		foreach ( $data["userAgents"] as $userAgent ) {
-			$html .= '<th><div class="browser"><img src="' . swarmpath( "images/" . $userAgent["engine"] )
-				. '.sm.png" class="browser-icon ' . $userAgent["engine"]
+			$html .= '<th><img src="' . swarmpath( "images/" . $userAgent["engine"] )
+				. '.sm.png" class="swarm-browsericon ' . $userAgent["engine"]
 				. '" alt="' . $userAgent["name"]
 				. '" title="' . $userAgent["name"]
-				. '"><span class="browser-name">'
+				. '"><br>'
 				. preg_replace( "/\w+ /", "", $userAgent["name"] )
-				. '</span></div></th>';
+				. '</th>';
 		}
 
 		$html .= '</tr></thead><tbody>';

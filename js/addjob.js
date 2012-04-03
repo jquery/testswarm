@@ -14,6 +14,7 @@ jQuery(function ($) {
 
 	$addRunBtn = $('<button>')
 		.text('+ Run')
+		.addClass('btn')
 		.click(function (e) {
 			e.preventDefault();
 
@@ -34,7 +35,9 @@ jQuery(function ($) {
 					.find('legend').text(fixNum)
 					.end()
 			);
-		});
+		})
+		.appendTo('<div class="form-actions"></div>')
+		.parent();
 
 	$runsContainer.append( $addRunBtn );
 });
