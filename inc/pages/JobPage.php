@@ -96,7 +96,7 @@ class JobPage extends Page {
 					$html .= '</td>';
 				} else {
 					// This run isn't schedules to be ran in this UA
-					$html .= '<td class="notscheduled"></td>';
+					$html .= '<td class="status-notscheduled"></td>';
 				}
 			}
 		}

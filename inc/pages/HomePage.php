@@ -126,7 +126,7 @@ class HomePage extends Page {
 				. ' title="' . htmlspecialchars( $row->name ) . '"'
 				. '>';
 			if ( $onlineCount > 0 ) {
-				$html .= '<span class="badge badge-info">' . $onlineCount . '</span>';
+				$html .= '<span class="badge badge-error">' . $onlineCount . '</span>';
 			}
 			$html .= '</div>';
 			$html .= '<span class="label">' . htmlspecialchars( $namePart ) . '</span>';

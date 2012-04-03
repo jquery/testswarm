@@ -27,12 +27,12 @@ table.swarm-results img.swarm-browsericon {
 
 table.swarm-results td.status-new,
 table.swarm-results tr:hover td.status-new {
-	background: #D9EDF7;
+	background: #FFF;
 }
 
 table.swarm-results td.status-progress,
 table.swarm-results tr:hover td.status-progress {
-	background: #FCF8E3;
+	background: #FBEED5;
 }
 
 table.swarm-results td.status-passed,
@@ -49,18 +49,17 @@ table.swarm-results td.status-timedout,
 table.swarm-results td.status-error,
 table.swarm-results tr:hover td.status-timedout,
 table.swarm-results tr:hover td.status-error {
-	background: black;
-	color: white;
+	background: #B94A48;
 }
 
 table.swarm-results td.status-timedout a,
 table.swarm-results td.status-error a,
 table.swarm-results tr:hover td.status-timedout a,
 table.swarm-results tr:hover td.status-error a {
-	color: white;
+	color: black;
 }
 
-table.swarm-results td.notscheduled,
-table.swarm-results tr:hover td.notscheduled {
+table.swarm-results td.status-notscheduled,
+table.swarm-results tr:hover td.status-notscheduled {
 	background: #F2F2F2;
 }
