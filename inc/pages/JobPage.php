@@ -40,7 +40,7 @@ class JobPage extends Page {
 		$this->setSubTitle( '#' . $data["jobInfo"]["id"] );
 
 		$html .=
-			'<h3>' . $data["jobInfo"]["name"] .'</h3>'
+			'<h2>' . $data["jobInfo"]["name"] .'</h2>'
 			. '<p><em>Submitted by '
 			. html_tag( "a", array( "href" => swarmpath( "user/{$data["jobInfo"]["ownerName"]}" ) ), $data["jobInfo"]["ownerName"] )
 			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )

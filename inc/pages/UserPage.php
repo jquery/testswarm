@@ -52,7 +52,7 @@ class UserPage extends Page {
 
 		if ( $rows ) {
 
-			$html .= '<h2>Active clients</h2><div class="clearfix">';
+			$html .= '<h2>Active clients</h2><div class="row">';
 
 			foreach ( $rows as $row ) {
 				$since_local = date( 'r', gmstrtotime( $row->since ) );
@@ -84,13 +84,14 @@ class UserPage extends Page {
 					$name = "Linux";
 				}
 
-				$html .= '<div class="well span3">'
-					. '<img src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '">'
-					. ' <strong class="name">' . $row->name . $name . '</strong><br>'
-					. '<small>Connected <span title="'
+				$html .=
+					'<div class="span4"><div class="well">'
+						. '<img class="pull-right" src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '">'
+						. '<strong class="label">' . $row->name . $name . '</strong>'
+						. '<p><small>Connected <span title="'
 						. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
-						. htmlspecialchars( $since_local ) . '</span>'
-					. '</small></div>';
+						. htmlspecialchars( $since_local ) . '</small></p>'
+					. '</div></div>';
 			}
 
 			$html .= '</div>';

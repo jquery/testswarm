@@ -31,15 +31,15 @@ class AddjobPage extends Page {
 		$data = $this->getAction()->getData();
 		if ( $request->wasPosted() ) {
 			if ( $error ) {
-				$html .= html_tag( "div", array( "class" => "errorbox" ), $error["info"] );
+				$html .= html_tag( "div", array( "class" => "alert alert-error" ), $error["info"] );
 			} elseif ( $data && isset( $data["id"] ) ) {
-				$html .= '<div class="successbox">'
+				$html .= '<div class="alert alert-success">'
 					. '<strong><a href="' . htmlspecialchars( swarmpath( "job/{$data["id"]}" ) )
 					. '">Job ' . $data["id"] . '</a> has been created!</strong><br>'
 					. $data["runTotal"] . ' runs have been scheduled to be ran in ' . $data["uaTotal"]
 					. ' different browsers.<br><br>'
-					. '<a href="' . htmlspecialchars( swarmpath( "job/{$data["id"]}" ) )
-					. '"><em>view job page &raquo;</em></a>'
+					. '<a class="btn btn-primary btn-small" href="' . htmlspecialchars( swarmpath( "job/{$data["id"]}" ) )
+					. '">continue to job page &raquo;</a>'
 					. '</div>';
 			}
 		}
