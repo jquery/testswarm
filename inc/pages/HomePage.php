@@ -48,9 +48,8 @@ class HomePage extends Page {
 					. ' <input type="submit" value="Join the swarm" class="btn btn-primary">'
 					. '</form>';
 			} else {
-				$html .= '<br><p><strong>&raquo; ' . htmlspecialchars( $request->getSessionData( "username" ) )
-				. '</strong> <a href="' . swarmpath( "run/{$request->getSessionData( "username" )}/" )
-				. '">Start Running Tests</a></p>';
+				$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( "username" )}/" )
+				. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 			}
 		} else {
 			$html .= '<p>TestSwarm currently does not recognize your browser. If you wish to'
