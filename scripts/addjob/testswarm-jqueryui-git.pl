@@ -92,7 +92,7 @@ foreach my $frev ( @revs ) {
 			"authToken" => $AUTH_TOKEN,
 			"jobName" => $JOB_NAME,
 			"runMax" => $MAX_RUNS,
-			"browserSets" => $BROWSERS
+			"browserSets[]" => $BROWSERS
 		);
 
 		my $query = "";
