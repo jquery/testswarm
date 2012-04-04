@@ -185,6 +185,12 @@ class WebRequest {
 	/** @return Page|null */
 	public function getPageInstance() {
 		$pageAction = $this->getVal( "action", "home" );
+		// getVal will onlt fallback to "home" if "action" isn't set,
+		// if it is falsy, also use home (we don't want to instantiate Page
+		// directly if it is an empty string
+		if ( !$pageAction ) {
+			$pageAction = "home";
+		}
 		$pageClass = Page::getPageClassByName( $pageAction );
 		return $pageClass ? $pageClass::newFromContext( $this->context ) : null;
 	}
