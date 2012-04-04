@@ -4,7 +4,7 @@
 
 # The location of the TestSwarm that you're going to run against.
 
-my $SWARM = "http://swarm.jquery.org";
+my $SWARM = "http://swarm.jquery.org/api.php";
 
 # Your TestSwarm username.
 my $USER = "jqueryui";
@@ -14,7 +14,7 @@ my $USER = "jqueryui";
 my $AUTH_TOKEN = "";
 
 # The number of commits to search back through
-my $NUM = 3;
+my $NUM = 1;
 
 # The maximum number of times you want the tests to be run.
 my $MAX_RUNS = 5;
@@ -41,7 +41,7 @@ my $JOB_NAME = "jQuery UI Commit <a href=\"http://github.com/jquery/jquery-ui/co
 #  - "mobile" the current releases of mobile browsers
 #  - "popularbeta" the most popular browser and their upcoming releases
 #  - "popularbetamobile" the most popular browser and their upcoming releases and mobile browsers
-my $BROWSERS = "popularbeta";
+my $BROWSERS = "popular";
 
 # All the suites that you wish to run within this job
 # (can be any number of suites)
@@ -55,7 +55,7 @@ my $SUITE = "http://swarm.jquery.org/git/jquery-ui/{REV}";
 
 sub BUILD_SUITES {
 	%SUITES = map { /(\w+).html$/; $1 => "$SUITE/$_?$1"; } glob("tests/unit/*/*.html");
-    
+
     print "suites: $SUITES";
     print %SUITES;
 }
@@ -88,12 +88,11 @@ foreach my $frev ( @revs ) {
 
 		my %props = (
 			"action" => "addjob",
-			"output" => "dump",
-			"user" => $USER,
-			"max" => $MAX_RUNS,
-			"job_name" => $JOB_NAME,
-			"browsers" => $BROWSERS,
-			"auth" => $AUTH_TOKEN
+			"authUsername" => $USER,
+			"authToken" => $AUTH_TOKEN,
+			"jobName" => $JOB_NAME,
+			"runMax" => $MAX_RUNS,
+			"browserSets" => $BROWSERS
 		);
 
 		my $query = "";
@@ -103,8 +102,8 @@ foreach my $frev ( @revs ) {
 		}
 
 		foreach my $suite ( sort keys %SUITES ) {
-			$query .= "&suites[]=" . clean($suite, $rev, $frev) .
-		          	"&urls[]=" . clean($SUITES{$suite}, $rev, $frev);
+			$query .= "&runNames[]=" . clean($suite, $rev, $frev) .
+		          	"&runUrls[]=" . clean($SUITES{$suite}, $rev, $frev);
 		}
 
 		print "curl -d \"$query\" $SWARM\n" if ( $DEBUG );
