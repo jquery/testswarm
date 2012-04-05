@@ -1,0 +1,65 @@
+.swarm-browseronline {
+	position: relative;
+}
+
+.swarm-browseronline img {
+	height: 48px;
+}
+
+.swarm-browseronline .badge {
+	position: absolute;
+	right: 5px;
+	top: 15px;
+}
+.swarm-browseronline .badge:hover {
+	cursor: default;
+}
+
+/* Result table */
+
+table.swarm-results th {
+	text-align: center;
+}
+
+table.swarm-results img.swarm-browsericon {
+	max-height: 28px;
+}
+
+table.swarm-results td.status-new,
+table.swarm-results tr:hover td.status-new {
+	background: #FFF;
+}
+
+table.swarm-results td.status-progress,
+table.swarm-results tr:hover td.status-progress {
+	background: #FBEED5;
+}
+
+table.swarm-results td.status-passed,
+table.swarm-results tr:hover td.status-passed {
+	background: #DFF0D8;
+}
+
+table.swarm-results td.status-failed,
+table.swarm-results tr:hover td.status-failed {
+	background: #F2DEDE;
+}
+
+table.swarm-results td.status-timedout,
+table.swarm-results td.status-error,
+table.swarm-results tr:hover td.status-timedout,
+table.swarm-results tr:hover td.status-error {
+	background: #B94A48;
+}
+
+table.swarm-results td.status-timedout a,
+table.swarm-results td.status-error a,
+table.swarm-results tr:hover td.status-timedout a,
+table.swarm-results tr:hover td.status-error a {
+	color: black;
+}
+
+table.swarm-results td.status-notscheduled,
+table.swarm-results tr:hover td.status-notscheduled {
+	background: #F2F2F2;
+}
