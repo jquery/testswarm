@@ -19,6 +19,6 @@ class LogoutPage extends Page {
 	protected function initContent() {
 		$this->setTitle( "Logged out" );
 
-		return "Thanks for running TestSwarm. You are now signed out.";
+		return '<div class="alert alert-info">Thanks for running TestSwarm. You are now signed out.</div>';
 	}
 }

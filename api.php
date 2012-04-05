@@ -2,9 +2,10 @@
 /**
  * This is the main front-end entry point for scripts.
  * All API responses start here.
- * @example ./api.php?format=json&action=info
- * @example ./api.php?format=json&action=scores
- * @example ./api.php?format=json&action=job&item=1
+ * @example ./api.php (same as: api.php?format=json&action=info)
+ * @example ./api.php?action=scores
+ * @example ./api.php?format=php&action=job&item=1
+ * @example ./api.php?format=jsonp&action=swarmstate
  *
  * @author Timo Tijhof, 2012
  * @since 0.3.0

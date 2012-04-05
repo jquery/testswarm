@@ -16,27 +16,27 @@ class Error500Page extends Page {
 
 		self::httpStatusHeader( 500 );
 
-		$this->setTitle( "Error 500: " . Page::getHttpStatusMsg( 500 ) );
+		$this->setTitle( Page::getHttpStatusMsg( 500 ) );
 
 		$e = $this->exceptionObj;
 
-		$html = '<div class="errorbox">An internal error occurred.'
+		$html = '<div class="alert alert-error">An internal error occurred.'
 				. ' The following error message was caught:<br><br><strong>'
 				. nl2br( htmlspecialchars( $e->getMessage() ) ) . '</strong></div>';
 
 		if ( $this->getContext()->getConf()->debug->show_exception_details ) {
 			$html .=
-				'<p>Caught in <b><code>.'
+				'<p>Caught in <code>.'
 				. htmlspecialchars( substr( $e->getFile(), strlen( $swarmInstallDir ) ) )
-				. '</code></b> on line <b><code>' . htmlspecialchars( $e->getLine() )
-				. '</code></b>.</p><p>Backtrace:</p><pre>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) )
+				. '</code> on line <code>' . htmlspecialchars( $e->getLine() )
+				. '</code>.</p><p>Backtrace:</p><pre>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) )
 				. '</pre>';
 		} else {
 			$html .=
-				'<p><strong>To the administrator</strong>:'
-				. '<br>Set <b><code>show_exception_details = 1;</code></b> '
-				. 'in the <code>[debug]</code> section at the bottom of '
-				. '<code>testswarm.ini</code> to show detailed debugging information.</p>';
+				'<p><small><strong>To the administrator</strong>:</small>'
+				. '<br><small>Set <tt>show_exception_details = 1;</tt> '
+				. 'in the <tt>[debug]</tt> section at the bottom of '
+				. '<tt>testswarm.ini</tt> to show detailed debugging information.</small></p>';
 		}
 
 		return $html;

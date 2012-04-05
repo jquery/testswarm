@@ -8,21 +8,27 @@
 jQuery(function ( $ ) {
 	var updateInterval = SWARM.conf.web.ajax_update_interval * 1000,
 		$wipejobErr = $("#swarm-wipejob-error"),
-		refreshTableTimout;
+		refreshTableTimout, $indicator;
+
+	$indicator = $( '<span class="btn pull-right disabled">updating <i class="icon-refresh"></i></span>' ).css( 'opacity', 0 );
 
 	function refreshTable() {
 		if ( refreshTableTimout ) {
 			clearTimeout( refreshTableTimout );
 		}
-		if ( $( "td.status-new" ).length ) {
+		if ( $( "table.swarm-results td.status-new" ).length ) {
+			$indicator.stop(true, true).css( 'opacity', 1 );
 			$.get( window.location.href, function ( html ) {
 				var tableHtml, $targetTable;
 
-				tableHtml = $( html ).find( "table" ).html();
-				$targetTable = $( "table.results" );
+				tableHtml = $( html ).find( "table.swarm-results" ).html();
+				$targetTable = $( "table.swarm-results" );
 				if ( tableHtml !== $targetTable.html() ) {
 					$targetTable.html( tableHtml );
 				}
+				setTimeout( function () {
+					$indicator.stop(true, true).animate({opacity: 0});
+				}, updateInterval > 500 ? 500 : updateInterval/2 );
 			});
 
 			setTimeout( refreshTable, updateInterval );
@@ -31,7 +37,9 @@ jQuery(function ( $ ) {
 
 	refreshTableTimout = setTimeout( refreshTable, updateInterval );
 
-	$( document ).on( "dblclick", "table.results td", function () {
+	$("table.swarm-results").prev().before( $indicator );
+
+	$( document ).on( "dblclick", "table.swarm-results td", function () {
 		var $el;
 		$el = $( this );
 		if ( $el.data( "runStatus" ) != "new" ) {

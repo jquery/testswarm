@@ -27,7 +27,7 @@ class UserPage extends Page {
 		if ( $result ) {
 			$userID = intval( $result );
 		} else {
-			return '<h3>User does not exist</h3>';
+			return '<div class="alert alert-error">User does not exist</div>';
 		}
 
 		$rows = $db->getRows(str_queryf(
@@ -52,7 +52,7 @@ class UserPage extends Page {
 
 		if ( $rows ) {
 
-			$html .= '<h3>Active clients</h3><ul class="clients">';
+			$html .= '<h2>Active clients</h2><div class="row">';
 
 			foreach ( $rows as $row ) {
 				$since_local = date( 'r', gmstrtotime( $row->since ) );
@@ -84,14 +84,17 @@ class UserPage extends Page {
 					$name = "Linux";
 				}
 
-				$html .= '<li><img src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '" class="'
-					. $row->engine . '"> <strong class="name">' . $row->name . $name
-					. '</strong><br>Connected <span title="'
-					. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
-					. htmlspecialchars( $since_local ) . '</span></li>';
+				$html .=
+					'<div class="span4"><div class="well">'
+						. '<img class="pull-right" src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '">'
+						. '<strong class="label">' . $row->name . $name . '</strong>'
+						. '<p><small>Connected <span title="'
+						. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
+						. htmlspecialchars( $since_local ) . '</small></p>'
+					. '</div></div>';
 			}
 
-			$html .= '</ul>';
+			$html .= '</div>';
 
 		}
 
@@ -114,7 +117,7 @@ class UserPage extends Page {
 		));
 
 		if ( $rows ) {
-			$html .= '<h3>Recent jobs</h3><table class="results"><tbody>';
+			$html .= '<h2>Recent jobs</h2><table class="table table-bordered swarm-results"><tbody>';
 
 			$output = "";
 			$browsers = array();
@@ -237,14 +240,14 @@ class UserPage extends Page {
 				$last_browser = null;
 				foreach ( $browsers as $browser ) {
 					if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
-						$header .= '<th><div class="browser">' .
+						$header .= '<th>' .
 							'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
-							'.sm.png" class="browser-icon ' . $browser["engine"] .
+							'.sm.png" class="swarm-browsericon ' . $browser["engine"] .
 							'" alt="' . $browser["name"] .
 							'" title="' . $browser["name"] .
-							'"><span class="browser-name">' .
+							'"><br>' .
 							preg_replace('/\w+ /', "", $browser["name"]) .
-							'</span></div></th>';
+							'</th>';
 					}
 					$last_browser = $browser;
 				}

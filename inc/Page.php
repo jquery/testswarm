@@ -38,7 +38,7 @@ abstract class Page {
 	protected $styleSheets = array();
 
 	protected $title;
-	protected $displayTitle; // optional, fallsback to title + subtitle
+	protected $rawDisplayTitle; // optional, fallsback to title + subtitle
 	protected $subTitle;
 	protected $content;
 
@@ -80,16 +80,21 @@ abstract class Page {
 	 * @param $title string: Page title (should not be escaped in any way)
 	 */
 	public function setDisplayTitle( $title ) {
-		$this->displayTitle = $title;
+		$this->rawDisplayTitle = htmlspecialchars( $title );
+	}
+	public function setRawDisplayTitle( $html ) {
+		$this->rawDisplayTitle = $html;
 	}
 
 	/**
 	 * @return string: The page name
 	 */
-	public function getDisplayTitle() {
-		return $this->displayTitle
-			? $this->displayTitle
-			: ( $this->getTitle() . ( $this->getSubTitle() ? ": {$this->getSubTitle()}" : $this->getSubTitle() ) );
+	public function getDisplayTitleHtml() {
+		if ( $this->rawDisplayTitle ) {
+			return $this->rawDisplayTitle;
+		}
+		$title = $this->getTitle() . ( $this->getSubTitle() ? ": {$this->getSubTitle()}" : $this->getSubTitle() );
+		return $title;
 	}
 
 	/**
@@ -146,18 +151,20 @@ abstract class Page {
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head><?php
+<head>
+<?php
 
 	foreach ( $this->metaTags as $metaTag ) {
-		echo "\n\t" . html_tag( "meta", $metaTag );
+		echo "\t" . html_tag( "meta", $metaTag ) . "\n";
 	}
 
 	$subTitleSuffix = $this->getSubTitle() ? ": {$this->getSubTitle()}" : "";
 	$htmlTitle = $this->getTitle() . $subTitleSuffix . " - " . $this->getContext()->getConf()->web->title;
-	$displayTitle = $this->getDisplayTitle();
+	$displayTitleHtml = $this->getDisplayTitleHtml();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( "css/site.css" ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.min.css" ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( "css/testswarm.css" ); ?>">
 	<script>window.SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
 		$infoAction->doAction();
@@ -174,38 +181,50 @@ abstract class Page {
 ?>
 </head>
 <body>
-	<ul class="nav">
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="<?php echo swarmpath( "" );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
+				<div class="nav-collapse">
+					<ul class="nav">
 <?php
 	if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
 		$username = htmlspecialchars( $request->getSessionData( "username" ) );
 ?>
-		<li><strong><a href="<?php echo swarmpath( "user/$username" ); ?>"><?php echo $username;?></a></strong></li>
-		<li><a href="<?php echo swarmpath( "run/{$username}" );?>">Join the Swarm</a></li>
-		<li><a href="<?php echo swarmpath( "logout" ); ?>">Logout</a></li>
+						<li><a href="<?php echo swarmpath( "user/$username" ); ?>"><?php echo $username;?></a></li>
+						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
+						<li><a href="<?php echo swarmpath( "logout" ); ?>">Logout</a></li>
 <?php
 	} else {
 ?>
-		<li><a href="<?php echo swarmpath( "login" ); ?>">Login</a></li>
-		<li><a href="<?php echo swarmpath( "signup" ); ?>">Signup</a></li>
+						<li><a href="<?php echo swarmpath( "login" ); ?>">Login</a></li>
+						<li><a href="<?php echo swarmpath( "signup" ); ?>">Signup</a></li>
 <?php
 	}
 ?>
-	</ul>
-	<h1><a href="<?php echo swarmpath( "" ); ?>">
-		<img src="<?php echo swarmpath( "images/testswarm_logo_wordmark.png" ); ?>" alt="TestSwarm" title="TestSwarm">
-	</a></h1>
-	<h2><?php echo htmlspecialchars( $displayTitle ); ?></h2>
-	<div id="main">
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="hero-unit">
+			<h1><?php echo $displayTitleHtml; ?></h1>
+		</div>
 <?php
 	echo $this->getContent();
 ?>
-	</div>
-	<div id="footer">Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
+
+	<hr>
+	<footer>
+		<p>Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
 		<a href="//github.com/jquery/testswarm">Source Code</a>
 		| <a href="//github.com/jquery/testswarm/issues">Issue Tracker</a>
 		| <a href="//github.com/jquery/testswarm/wiki">About</a>
 		| <a href="//twitter.com/testswarm">Twitter</a>
-	</div><?php
+		</p>
+	</footer><?php
 
 	foreach ( $this->bodyScripts as $bodyScript ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );
