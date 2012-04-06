@@ -62,12 +62,12 @@ $swarmConfig = array(
 		"ajax_update_interval" => "5",
 	),
 	"client" => array(
-		"cooldown_rate" => "15",
-		"update_rate" => "30",
-		"timeout_rate" => "180",
-		"run_savereq_timeout" => "10",
-		"run_saveretry_max" => "4",
-		"run_saveretry_sleep" => "15",
+		"cooldown_sleep" => "15",
+		"nonewruns_sleep" => "30",
+		"run_timeout" => "180",
+		"savereq_timeout" => "10",
+		"saveretry_max" => "4",
+		"saveretry_sleep" => "15",
 		"refresh_control" => "0",
 	),
 	"storage" => array(
@@ -96,12 +96,12 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 $swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
 $swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
 
-$swarmConfig["client"]["cooldown_rate"] = intval( $swarmConfig["client"]["cooldown_rate"] );
-$swarmConfig["client"]["update_rate"] = intval( $swarmConfig["client"]["update_rate"] );
-$swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout_rate"] );
-$swarmConfig["client"]["run_savereq_timeout"] = intval( $swarmConfig["client"]["run_savereq_timeout"] );
-$swarmConfig["client"]["run_saveretry_max"] = intval( $swarmConfig["client"]["run_saveretry_max"] );
-$swarmConfig["client"]["run_saveretry_sleep"] = intval( $swarmConfig["client"]["run_saveretry_sleep"] );
+$swarmConfig["client"]["cooldown_sleep"] = intval( $swarmConfig["client"]["cooldown_sleep"] );
+$swarmConfig["client"]["nonewruns_sleep"] = intval( $swarmConfig["client"]["nonewruns_sleep"] );
+$swarmConfig["client"]["run_timeout"] = intval( $swarmConfig["client"]["run_timeout"] );
+$swarmConfig["client"]["savereq_timeout"] = intval( $swarmConfig["client"]["savereq_timeout"] );
+$swarmConfig["client"]["saveretry_max"] = intval( $swarmConfig["client"]["saveretry_max"] );
+$swarmConfig["client"]["saveretry_sleep"] = intval( $swarmConfig["client"]["saveretry_sleep"] );
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
 $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
