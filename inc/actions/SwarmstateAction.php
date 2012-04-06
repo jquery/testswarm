@@ -23,23 +23,13 @@ class SwarmstateAction extends Action {
 			"useragents" => array(),
 		);
 
-		// @todo FIXME: query
-		$uaRows = $db->getRows(
-			"SELECT
-				id,
-				name,
-				engine
-			FROM
-				useragents
-			WHERE active = 1;"
-		);
+		$uaIndex = BrowserInfo::getSwarmUAIndex();
 
-		if ( !$uaRows ) {
-			$this->setError( "data-corrupt" );
-			return;
-		}
+		foreach( $uaIndex as $uaID => $uaData ) {
+			if ( $uaData["active"] !== true ) {
+				continue;
+			}
 
-		foreach( $uaRows as $uaRow ) {
 			// Count online clients with this UA
 			$clients = $db->getOne(str_queryf(
 				"SELECT
@@ -47,7 +37,7 @@ class SwarmstateAction extends Action {
 				FROM clients
 				WHERE useragent_id = %s
 				AND   updated > %u",
-				$uaRow->id,
+				$uaID,
 				swarmdb_dateformat( strtotime( '1 minute ago' ) )
 			));
 
@@ -58,16 +48,17 @@ class SwarmstateAction extends Action {
 				FROM run_useragent
 				WHERE useragent_id = %s
 				AND   status = 0;",
-				$uaRow->id
+				$uaID
 			));
 
 			if ( $showOnlyactive && !$clients && !$pendingRuns ) {
 				continue;
 			}
 
-			$data["useragents"][] = array(
-				"name" => $uaRow->name,
-				"engine" => $uaRow->engine,
+			$data["useragents"][$uaID] = array(
+				"id" => $uaID,
+				"displaytitle" => $uaData->displaytitle,
+				"displayicon" => $uaData->displayicon,
 				"stats" => array(
 					"onlineClients" => intval( $clients ),
 					"pendingRuns" => intval( $pendingRuns ),

@@ -23,9 +23,9 @@ class ScoresPage extends Page {
 		$scores = $this->getAction()->getData();
 
 		$html = '<blockquote>All users with a score greater than zero.'
-		 .' The score is the number of tests run by that user\'s clients.</blockquote>'
-		 . '<table class="scores">'
-		 . '<thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>'
+		 . ' The score is the number of tests run by that user\'s clients.</blockquote>'
+		 . '<table class="table table-bordered table-striped">'
+		 . '<thead><tr><th class="span1">#</th><th>User</th><th class="span2">Score</th></tr></thead>'
 		 . '<tbody>';
 
 		foreach ( $scores as $item ) {
