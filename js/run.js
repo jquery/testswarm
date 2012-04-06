@@ -24,7 +24,7 @@
 	 * Softly validate the SWARM object
 	 */
 	if ( !SWARM.client_id || !SWARM.conf ) {
-		$( function() {
+		$( function () {
 			msg( "Error: No client id configured! Aborting." );
 		});
 		return;
@@ -41,7 +41,7 @@
 		$.ajax({
 			type: "POST",
 			url: SWARM.conf.web.contextpath + "api.php",
-			timeout: 10000,
+			timeout: SWARM.conf.client.run_savereq_timeout * 1000,
 			cache: false,
 			data: query,
 			dataType: "json",
@@ -50,12 +50,12 @@
 				ok.apply( this, arguments );
 			},
 			error: function () {
-				if ( errorOut > 4 ) {
+				if ( errorOut > SWARM.conf.client.run_saveretry_max ) {
 					cmds.reload();
 				} else {
 					errorOut += 1;
 					msg( "Error connecting to server, retrying..." );
-					setTimeout( retry, 15000 );
+					setTimeout( retry, SWARM.conf.client.run_saveretry_sleep * 1000 );
 				}
 			}
 		});
