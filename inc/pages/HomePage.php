@@ -105,8 +105,8 @@ class HomePage extends Page {
 		foreach ( $swarmUaIndex as $swarmUaId => $swarmUaItem ) {
 			$isCurr = $swarmUaId == $browserInfo->getSwarmUaID();
 
-			$item = '<div class="span2 swarm-browseronline">'
-				. '<div class="well' . ( $isCurr ? " alert-info" : "" ) . '">'
+			$item = '<div class="span2">'
+				. '<div class="well swarm-browseronline' . ( $isCurr ? " alert-info" : "" ) . '">'
 				. '<img src="' . swarmpath( "img/" . $swarmUaItem->displayicon . ".sm.png" ) . '"'
 				. ' class="swarm-browsericon"'
 				. ' alt="' . htmlspecialchars( $swarmUaItem->displaytitle ) . '"'

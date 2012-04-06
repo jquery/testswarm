@@ -9,8 +9,8 @@
 
 .swarm-browseronline .badge {
 	position: absolute;
-	right: 5px;
-	top: 15px;
+	right: 7px;
+	top: 7px;
 }
 .swarm-browseronline .badge:hover {
 	cursor: default;
