@@ -30,45 +30,52 @@ class UserPage extends Page {
 			return '<div class="alert alert-error">User does not exist</div>';
 		}
 
-		$rows = $db->getRows(str_queryf(
+		$uaIndex = BrowserInfo::getSwarmUAIndex();
+
+		$clientRows = $db->getRows($q = str_queryf(
 			"SELECT
-				useragents.engine as engine,
-				useragents.name as name,
-				clients.created as since
+				useragent_id,
+				useragent,
+				created
 			FROM
-				clients, useragents
-			WHERE clients.useragent_id = useragents.id
-			AND   clients.updated > %s
-			AND   clients.user_id = %u
-			ORDER BY
-				useragents.engine,
-				useragents.name;",
-			swarmdb_dateformat( strtotime( '1 minutes ago' ) ),
-			$userID
+				clients
+			WHERE user_id = %u
+			AND   updated > %s
+			ORDER BY created DESC;",
+			$userID,
+			swarmdb_dateformat( strtotime( "1 minutes ago" ) )
 		));
 
-		$html = '';
+		$html = "";
 
-		if ( $rows ) {
+		if ( $clientRows ) {
 
 			$html .= '<h2>Active clients</h2><div class="row">';
 
-			foreach ( $rows as $row ) {
-				$since_local = date( 'r', gmstrtotime( $row->since ) );
+			foreach ( $clientRows as $clientRow ) {
+				$since_local = date( "r", gmstrtotime( $clientRow->created ) );
 				// PHP's "c" claims to be ISO compatible but prettyDate JS disagrees
 				// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z")
 				// Constructing format manually instead
-				$since_zulu_iso = gmdate( 'Y-m-d\TH:i:s\Z', gmstrtotime( $row->since ) );
+				$since_zulu_iso = gmdate( "Y-m-d\TH:i:s\Z", gmstrtotime( $clientRow->created ) );
 
-				$name = "unknown";
+				$bi = BrowserInfo::newFromContext( $this->getContext(), $clientRow->useragent );
 
+				if ( isset( $uaIndex->{$clientRow->useragent_id} ) ) {
+					$displayicon = $uaIndex->{$clientRow->useragent_id}->displayicon;
+					$label = $uaIndex->{$clientRow->useragent_id}->displaytitle;
+				} else {
+					$displayicon = "unknown";
+					$label = "Unrecognized [{$clientRow->useragent_id}]";
+				}
 				$html .=
 					'<div class="span4"><div class="well">'
-						. '<img class="pull-right" src="' . swarmpath( "img/{$row->engine}.sm.png" ) . '">'
-						. '<strong class="label">' . $row->name . $name . '</strong>'
-						. '<p><small>Connected <span title="'
-						. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
-						. htmlspecialchars( $since_local ) . '</small></p>'
+					. '<img class="pull-right" src="' . swarmpath( "img/{$displayicon}.sm.png" ) . '">'
+					. '<strong class="label">' . htmlspecialchars( $label ) . '</strong>'
+					. '<p><small>Platform: ' . htmlspecialchars( $bi->getBrowscap()->Platform )
+					. '</small><br><small>Connected <span title="'
+					. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
+					. htmlspecialchars( $since_local ) . '</small></p>'
 					. '</div></div>';
 			}
 

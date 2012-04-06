@@ -47,15 +47,16 @@ class Client {
 			throw new SwarmException( "Your user agent does not match this client's registered user agent." );
 		}
 
-		// Update its record so that we know that it's still alive
-		$db->query(str_queryf(
-			"UPDATE clients SET updated=%s WHERE id = %u LIMIT 1;",
-			swarmdb_dateformat( SWARM_NOW ),
-			$clientRow->id
-		));
-		// Don't re-query the row, assume success and
+		// Save a query by not re-selecting the row, assume success and
 		// simulate the same update on our object
 		$clientRow->updated = swarmdb_dateformat( SWARM_NOW );
+
+		// Update its record so that we know that it's still alive
+		$db->query(str_queryf(
+			"UPDATE clients SET updated = %s WHERE id = %u LIMIT 1;",
+			$clientRow->updated,
+			$clientRow->id
+		));
 
 		$userRow = $db->getRow(str_queryf(
 			"SELECT
@@ -66,9 +67,8 @@ class Client {
 			LIMIT 1;",
 			$clientRow->user_id
 		));
-		
 	
-	$this->clientRow = $clientRow;
+		$this->clientRow = $clientRow;
 		$this->userRow = $userRow;
 	}
 
@@ -91,7 +91,10 @@ class Client {
 		}
 
 		// Figure out what the user's ID number is
-		$userRow = $db->getRow(str_queryf( "SELECT * FROM users WHERE name=%s LIMIT 1;", $username ));
+		$userRow = $db->getRow(str_queryf(
+			"SELECT * FROM users WHERE name = %s LIMIT 1;",
+			$username
+		));
 
 		// If the user doesn't have one, create a new user row for this name
 		if ( !$userRow || !$userRow->id ) {
@@ -101,13 +104,16 @@ class Client {
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
 			));
-			$userRow = $db->getRow(str_queryf( "SELECT * FROM users WHERE id=%s LIMIT 1;", $db->getInsertId() ));
+			$userRow = $db->getRow(str_queryf(
+				"SELECT * FROM users WHERE id = %s LIMIT 1;",
+				$db->getInsertId()
+			));
 		}
 
 		// Insert in a new record for the client and get its ID
 		$db->query(str_queryf(
 			"INSERT INTO clients (user_id, useragent_id, useragent, ip, created)
-			VALUES(%u, %s, %s, %s, %s, %s);",
+			VALUES(%u, %s, %s, %s, %s);",
 			$userRow->id,
 			$browserInfo->getSwarmUaID(),
 			$browserInfo->getRawUA(),
@@ -115,7 +121,10 @@ class Client {
 			swarmdb_dateformat( SWARM_NOW )
 		));
 
-		$this->clientRow = $db->getRow(str_queryf( "SELECT * FROM clients WHERE id = %s LIMIT 1;", $db->getInsertId() ));
+		$this->clientRow = $db->getRow(str_queryf(
+			"SELECT * FROM clients WHERE id = %s LIMIT 1;",
+			$db->getInsertId()
+		));
 		$this->userRow = $userRow;
 	}
 
