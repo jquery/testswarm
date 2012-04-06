@@ -13,6 +13,12 @@
  * Environmental requirements
  * @{
  */
+
+// Protect against web entry
+if ( !defined( 'TESTSWARM' ) ) {
+	exit;
+}
+
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
 	echo "TestSwarm requires at least PHP 5.2.3\n";
@@ -153,6 +159,7 @@ $swarmAutoLoadClasses = array(
 	"WiperunAction" => "inc/actions/WiperunAction.php",
 	# Pages
 	"AddjobPage" => "inc/pages/AddjobPage.php",
+	"ApiDebugPage" => "inc/pages/ApiDebugPage.php",
 	"Error404Page" => "inc/pages/Error404Page.php",
 	"Error500Page" => "inc/pages/Error500Page.php",
 	"HomePage" => "inc/pages/HomePage.php",

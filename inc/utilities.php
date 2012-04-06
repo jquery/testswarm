@@ -8,6 +8,11 @@
  * @package TestSwarm
  */
 
+	// Protect against web entry
+	if ( !defined( 'TESTSWARM' ) ) {
+		exit;
+	}
+
 	/**
 	 * TestSwarm exception
 	 * Just a placeholder for now, can be expanded further in the future.
