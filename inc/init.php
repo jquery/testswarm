@@ -62,7 +62,7 @@ $swarmConfig = array(
 		"ajax_update_interval" => "5",
 	),
 	"client" => array(
-		"cooldown_sleep" => "15",
+		"cooldown_sleep" => "2",
 		"nonewruns_sleep" => "30",
 		"run_timeout" => "180",
 		"savereq_timeout" => "10",
