@@ -19,7 +19,7 @@ class HomePage extends Page {
 
 		$this->setTitle( "Home" );
 		$this->setRawDisplayTitle(
-			'<p style="text-align: center;"><img src="' . swarmpath( "images/testswarm_logo_wordmark.png" ) . '" alt="TestSwarm logo"></p>'
+			'<p style="text-align: center;"><img src="' . swarmpath( "img/testswarm_logo_wordmark.png" ) . '" alt="TestSwarm logo"></p>'
 		);
 		$this->headScripts[] = swarmpath( "js/jquery.js" );
 
@@ -33,11 +33,8 @@ class HomePage extends Page {
 			. ' <a href="//github.com/jquery/testswarm/wiki">on the TestSwarm wiki</a>.</blockquote>'
 			. '</div>';
 
-		$browserSections = $this->getBrowsersOnlineHtml( "Desktop Browsers", /*isMobile=*/0 );
-		$browserSections .= $this->getBrowsersOnlineHtml( "Mobile Browsers", /*isMobile=*/1 );
-
 		$html .= '<div class="span5"><div class="well">';
-		if ( $this->userHasKnownUA ) {
+		if ( $browserInfo->isInSwarmUaIndex() ) {
 				$html .= '<p><strong>TestSwarm needs your help!</strong><br>'
 				. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
 			if ( !$request->getSessionData( "username" ) ) {
@@ -52,89 +49,86 @@ class HomePage extends Page {
 				. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 			}
 		} else {
-			$html .= '<p>TestSwarm currently does not recognize your browser. If you wish to'
-				. ' help run tests you should join with one the below browsers.</p>'
+			$browscap = $browserInfo->getBrowscap();
+			$html .= '<div class="alert alert-info">TestSwarm currently does not recognize your browser. If you wish to'
+				. ' help run tests you should join with one the below browsers.</div>'
 				. '<p>If you feel that this may be a mistake, please report it to the TestSwarm'
 				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>'
-				. ' and include the following information:<br><code>clientprofile: '
-				. htmlspecialchars(
-					$browserInfo->getBrowserCodename()
-					. '/' . $browserInfo->getBrowserVersion()
-					. '/' . $browserInfo->getOsCodename()
-				)
-				. '</code><br><code><a href="http://useragentstring.com/">useragent string</a>: '
+				. ' and include the following information:</p><p><strong>browscap:</strong> <code>'
+				. htmlspecialchars( print_r( array(
+						"Platform" => $browscap->Platform,
+						"Browser" => $browscap->Browser,
+						"Version" => $browscap->Version,
+						"MajorVer" => $browscap->MajorVer,
+						"MinorVer" => $browscap->MinorVer,
+				), true ) )
+				. '</code></p><p><strong><a href="http://useragentstring.com/">useragent string</a>:</strong> <code>'
 				. htmlspecialchars( $browserInfo->getRawUA() )
-				. '</p>';
+				. '</code></p>';
 		}
 		$html .= '</div></div>';
 		$html .= '</div>';
 
-		$html .= $browserSections;
+		$html .= $this->getBrowsersOnlineHtml();
 
 		return $html;
 	}
 
 
 	/** @return bool: Whether the current user was found in the swarm */
-	function getBrowsersOnlineHtml( $headingTitle, $isMobile = 0 ) {
-		$bi = $this->getContext()->getBrowserInfo();
+	function getBrowsersOnlineHtml() {
+		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 		$db = $this->getContext()->getDB();
+		$browserInfo = $this->getContext()->getBrowserInfo();
 
 		$html = "";
 
-		$rows = $db->getRows(str_queryf(
+		$clientRows = $db->getRows(str_queryf(
 			"SELECT
-				useragents.engine as engine,
-				useragents.name as name,
-				(
-					SELECT COUNT(*)
-					FROM clients
-					WHERE	clients.useragent_id = useragents.id
-					AND clients.updated > %u
-				) as clients,
-				(engine=%s AND %s REGEXP version) as found
-			FROM
-				useragents
-			WHERE	active = 1
-			AND	mobile = %s
-			ORDER BY engine, name;",
-			swarmdb_dateformat( strtotime( '1 minute ago' ) ),
-			$bi->getBrowserCodename(),
-			$bi->getBrowserVersion(),
-			$isMobile
+				COUNT(*) as total,
+				useragent_id
+			FROM clients
+			WHERE	clients.updated > %u
+			GROUP BY useragent_id;",
+			swarmdb_dateformat( strtotime( '1 minute ago' ) )
 		));
-
-		$prevEngine = null;
-
-		$html .= '<h2>' . htmlspecialchars( $headingTitle ) . '</h2>';
-		$html .= '<div class="thumbnails">';
-
-		foreach ( $rows as $row ) {
-			if ( $row->found ) {
-				$this->userHasKnownUA = true;
+		$onlineStats = array();
+		if ( $clientRows ) {
+			foreach ( $clientRows as $clientRow ) {
+				$onlineStats[$clientRow->useragent_id] = intval( $clientRow->total );
 			}
-
-			$namePart = preg_replace( "/\w+ /", "", $row->name );
-			$onlineCount = $row->clients;
-
-			$html .= '<div class="well span1 pagination-centered swarm-browseronline' . ( $row->found ? " alert-info" : "" ) . '">'
-				. '<div class="thumbnail">'
-				. '<img src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '"'
-				. ' class="swarm-browsericon ' . htmlspecialchars( $row->engine ) . '"'
-				. ' alt="' . htmlspecialchars( $row->name ) . '"'
-				. ' title="' . htmlspecialchars( $row->name ) . '"'
-				. '>';
-			if ( $onlineCount > 0 ) {
-				$html .= '<span class="badge badge-error">' . $onlineCount . '</span>';
-			}
-			$html .= '</div>';
-			$html .= '<span class="label">' . htmlspecialchars( $namePart ) . '</span>';
-			$html .= '</div>';
-
-			$prevEngine = $row->engine;
 		}
 
-		$html .= '</div>';
+		$desktopHtml = '<h2>Desktop Browsers</h2><div class="row">';
+		$mobileHtml = '<h2>Mobile Browsers</h2><div class="row">';
+
+		foreach ( $swarmUaIndex as $swarmUaId => $swarmUaItem ) {
+			$isCurr = $swarmUaId == $browserInfo->getSwarmUaID();
+
+			$item = '<div class="span2 swarm-browseronline">'
+				. '<div class="well' . ( $isCurr ? " alert-info" : "" ) . '">'
+				. '<img src="' . swarmpath( "img/" . $swarmUaItem->displayicon . ".sm.png" ) . '"'
+				. ' class="swarm-browsericon"'
+				. ' alt="' . htmlspecialchars( $swarmUaItem->displaytitle ) . '"'
+				. ' title="' . htmlspecialchars( $swarmUaItem->displaytitle ) . '"'
+				. '>';
+			if ( isset( $onlineStats[$swarmUaId] ) && $onlineStats[$swarmUaId] > 0 ) {
+				$item .= '<span class="badge badge-error">' . $onlineStats[$swarmUaId] . '</span>';
+			}
+			$item .= '<br><span class="label">' . htmlspecialchars( $swarmUaItem->displaytitle ) . '</span>';
+			$item .= '</div></div>';
+
+			if ( $swarmUaItem->mobile ) {
+				$mobileHtml .= $item;
+			} else {
+				$desktopHtml .= $item;
+			}
+		}
+
+		$desktopHtml .= '</div>';
+		$mobileHtml .= '</div>';
+
+		$html .= $desktopHtml . $mobileHtml;
 
 		return $html;
 	}

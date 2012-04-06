@@ -109,7 +109,7 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="checkbox" for="form-browserset-current">
 				<input type="checkbox" name="browserSets[]" value="current" id="form-browserset-current">
-				<strong>Current</strong>: The current stable release of all the major browsers.
+				<strong>Current</strong>: The current stable release of all the major browsers (including mobile).
 			</label>
 		</div>
 		<div class="control-group">

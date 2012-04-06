@@ -58,13 +58,14 @@ class JobPage extends Page {
 		$html .= '<table class="table table-bordered swarm-results"><thead><tr><th>&nbsp;</th>';
 
 		// Header with user agents
+
 		foreach ( $data["userAgents"] as $userAgent ) {
-			$html .= '<th><img src="' . swarmpath( "images/" . $userAgent["engine"] )
-				. '.sm.png" class="swarm-browsericon ' . $userAgent["engine"]
-				. '" alt="' . $userAgent["name"]
-				. '" title="' . $userAgent["name"]
+			$html .= '<th><img src="' . swarmpath( "img/" . $userAgent["displayicon"] )
+				. '.sm.png" class="swarm-browsericon '
+				. '" alt="' . $userAgent["displaytitle"]
+				. '" title="' . $userAgent["displaytitle"]
 				. '"><br>'
-				. preg_replace( "/\w+ /", "", $userAgent["name"] )
+				. preg_replace( "/\w+ /", "", $userAgent["displaytitle"] )
 				. '</th>';
 		}
 

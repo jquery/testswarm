@@ -34,7 +34,6 @@ class UserPage extends Page {
 			"SELECT
 				useragents.engine as engine,
 				useragents.name as name,
-				clients.os as os,
 				clients.created as since
 			FROM
 				clients, useragents
@@ -61,32 +60,11 @@ class UserPage extends Page {
 				// Constructing format manually instead
 				$since_zulu_iso = gmdate( 'Y-m-d\TH:i:s\Z', gmstrtotime( $row->since ) );
 
-				$name = $row->os;
-				if ( $name == "xp" ) {
-					$name = "Windows XP";
-				} elseif ( $name == "vista" ) {
-					$name = "Windows Vista";
-				} elseif ( $name == "win7" ) {
-					$name = "Windows 7";
-				} elseif ( $name == "2000" ) {
-					$name = "Windows 2000";
-				} elseif ( $name == "2003" ) {
-					$name = "Windows 2003";
-				} elseif ( $name == "osx10.4" ) {
-					$name = "OS X 10.4";
-				} elseif ( $name == "osx10.5" ) {
-					$name = "OS X 10.5";
-				} elseif ( $name == "osx10.6" ) {
-					$name = "OS X 10.6";
-				} elseif ( $name == "osx" ) {
-					$name = "OS X";
-				} elseif ( $name == "linux" ) {
-					$name = "Linux";
-				}
+				$name = "unknown";
 
 				$html .=
 					'<div class="span4"><div class="well">'
-						. '<img class="pull-right" src="' . swarmpath( "images/{$row->engine}.sm.png" ) . '">'
+						. '<img class="pull-right" src="' . swarmpath( "img/{$row->engine}.sm.png" ) . '">'
 						. '<strong class="label">' . $row->name . $name . '</strong>'
 						. '<p><small>Connected <span title="'
 						. htmlspecialchars( $since_zulu_iso ) . '" class="pretty">'
@@ -241,7 +219,7 @@ class UserPage extends Page {
 				foreach ( $browsers as $browser ) {
 					if ( !isset( $last_browser ) || $last_browser["id"] != $browser["id"] ) {
 						$header .= '<th>' .
-							'<img src="' . swarmpath( 'images/' ) . $browser["engine"] .
+							'<img src="' . swarmpath( 'img/' ) . $browser["engine"] .
 							'.sm.png" class="swarm-browsericon ' . $browser["engine"] .
 							'" alt="' . $browser["name"] .
 							'" title="' . $browser["name"] .

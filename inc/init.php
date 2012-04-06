@@ -67,6 +67,9 @@ $swarmConfig = array(
 		"timeout_rate" => "180",
 		"refresh_control" => "1",
 	),
+	"storage" => array(
+		"cacheDir" => "$1/cache",
+	),
 	"debug" => array(
 		"show_exception_details" => "0",
 		"php_error_reporting" => "0",
@@ -86,6 +89,8 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 
 // Type conversion
 // (parse_ini_file reads everything as strings)
+
+$swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
 
 $swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
 $swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
@@ -140,7 +145,9 @@ $swarmAutoLoadClasses = array(
 	"SaverunPage" => "inc/pages/SaverunPage.php",
 	"ScoresPage" => "inc/pages/ScoresPage.php",
 	"SignupPage" => "inc/pages/SignupPage.php",
-	"UserPage" => "inc/pages/UserPage.php"
+	"UserPage" => "inc/pages/UserPage.php",
+	# Libs
+	"Browscap" => "inc/libs/GaretJax-phpbrowscap/browscap/Browscap.php",
 );
 
 function swarmAutoLoader( $className ) {

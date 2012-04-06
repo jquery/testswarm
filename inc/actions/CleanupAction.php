@@ -38,7 +38,7 @@ class CleanupAction extends Action {
 					SET
 						runs = runs - 1
 					WHERE run_id = %u
-					AND   useragent_id = %u;",
+					AND   useragent_id = %s;",
 					$row->run_id,
 					$row->useragent_id
 				));
@@ -63,13 +63,13 @@ class CleanupAction extends Action {
 				completed = 0,
 				status = 0
 			WHERE runs = max
-			AND NOT EXISTS (
-					SELECT *
-					FROM run_client, clients
-					WHERE run_client.run_id = run_useragent.run_id
-					AND   run_client.client_id = clients.id
-					AND   clients.useragent_id = run_useragent.useragent_id
-				);"
+			AND   NOT EXISTS (
+				SELECT *
+				FROM run_client, clients
+				WHERE run_client.run_id = run_useragent.run_id
+				AND   run_client.client_id = clients.id
+				AND   clients.useragent_id = run_useragent.useragent_id
+			);"
 		);
 
 		$this->setData( "ok" );

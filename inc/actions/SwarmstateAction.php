@@ -23,6 +23,7 @@ class SwarmstateAction extends Action {
 			"useragents" => array(),
 		);
 
+		// @todo FIXME: query
 		$uaRows = $db->getRows(
 			"SELECT
 				id,
@@ -44,7 +45,7 @@ class SwarmstateAction extends Action {
 				"SELECT
 					COUNT(id)
 				FROM clients
-				WHERE useragent_id = %u
+				WHERE useragent_id = %s
 				AND   updated > %u",
 				$uaRow->id,
 				swarmdb_dateformat( strtotime( '1 minute ago' ) )
@@ -55,7 +56,7 @@ class SwarmstateAction extends Action {
 				"SELECT
 					COUNT(*)
 				FROM run_useragent
-				WHERE useragent_id = %u
+				WHERE useragent_id = %s
 				AND   status = 0;",
 				$uaRow->id
 			));

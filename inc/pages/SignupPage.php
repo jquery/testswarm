@@ -44,7 +44,7 @@ class SignupPage extends Page {
 			. '">login here</a>.</p>'
 			. '<label>Username: <input type="text" name="username"></label><br>'
 			. '<label>Password: <input type="password" name="password"></label><br>'
-			. '<input type="submit" value="Signup">'
+			. '<input type="submit" value="Signup" class="btn btn-primary">'
 			. '</fieldset></form>';
 
 		return $html;

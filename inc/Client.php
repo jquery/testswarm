@@ -22,6 +22,7 @@ class Client {
 	 */
 	protected function loadFromID( $clientID ) {
 		$db = $this->context->getDB();
+		$browserInfo = $this->context->getBrowserInfo();
 
 		// Verify that the client exists.
 		$clientRow = $db->getRow(str_queryf(
@@ -29,7 +30,7 @@ class Client {
 				*
 			FROM
 				clients
-			WHERE id=%u
+			WHERE id = %u
 			LIMIT 1;",
 			$clientID
 		));
@@ -38,9 +39,17 @@ class Client {
 			throw new SwarmException( "Invalid client ID." );
 		}
 
+		// Although we can't completely prevent fraudulent submissions
+		// without switching to a token system, at least verify that the
+		// client_id's user_agent matches the User-Agent header that made
+		// this request.
+		if ( $clientRow->useragent_id != $browserInfo->getSwarmUaID() ) {
+			throw new SwarmException( "Your user agent does not match this client's registered user agent." );
+		}
+
 		// Update its record so that we know that it's still alive
 		$db->query(str_queryf(
-			"UPDATE clients SET updated=%s WHERE id=%u LIMIT 1;",
+			"UPDATE clients SET updated=%s WHERE id = %u LIMIT 1;",
 			swarmdb_dateformat( SWARM_NOW ),
 			$clientRow->id
 		));
@@ -53,12 +62,13 @@ class Client {
 				*
 			FROM
 				users
-			WHERE id=%u
+			WHERE id = %u
 			LIMIT 1;",
 			$clientRow->user_id
 		));
-
-		$this->clientRow = $clientRow;
+		
+	
+	$this->clientRow = $clientRow;
 		$this->userRow = $userRow;
 	}
 
@@ -69,9 +79,9 @@ class Client {
 	
 
 		// If the useragent isn't known, abort with an error message
-		if ( !$browserInfo->isKnownInTestSwarm() ) {
+		if ( !$browserInfo->isInSwarmUaIndex() ) {
 			throw new SwarmException( "Your browser is not suported in this TestSwarm "
-				. "(browser: {$browserInfo->getBrowserCodename()}; version: {$browserInfo->getBrowserVersion()})." );
+				. "(useragent string: {$browserInfo->getRawUA()})." );
 		}
 
 		// Running a client doesn't require being logged in
@@ -96,17 +106,16 @@ class Client {
 
 		// Insert in a new record for the client and get its ID
 		$db->query(str_queryf(
-			"INSERT INTO clients (user_id, useragent_id, useragent, os, ip, created)
-			VALUES(%u, %u, %s, %s, %s, %s);",
+			"INSERT INTO clients (user_id, useragent_id, useragent, ip, created)
+			VALUES(%u, %s, %s, %s, %s, %s);",
 			$userRow->id,
-			$browserInfo->getSwarmUserAgentID(),
+			$browserInfo->getSwarmUaID(),
 			$browserInfo->getRawUA(),
-			$browserInfo->getOsCodename(),
 			$request->getIP(),
 			swarmdb_dateformat( SWARM_NOW )
 		));
 
-		$this->clientRow = $db->getRow(str_queryf( "SELECT * FROM clients WHERE id=%s LIMIT 1;", $db->getInsertId() ));
+		$this->clientRow = $db->getRow(str_queryf( "SELECT * FROM clients WHERE id = %s LIMIT 1;", $db->getInsertId() ));
 		$this->userRow = $userRow;
 	}
 
