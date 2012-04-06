@@ -65,7 +65,7 @@ $swarmConfig = array(
 		"cooldown_rate" => "15",
 		"update_rate" => "30",
 		"timeout_rate" => "180",
-		"refresh_control" => "1",
+		"refresh_control" => "0",
 	),
 	"storage" => array(
 		"cacheDir" => "$1/cache",
@@ -90,8 +90,6 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 // Type conversion
 // (parse_ini_file reads everything as strings)
 
-$swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
-
 $swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
 $swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
 
@@ -101,6 +99,20 @@ $swarmConfig["client"]["timeout_rate"] = intval( $swarmConfig["client"]["timeout
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
 $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
+
+// Caching dir
+$swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
+
+// Refresh control
+// (for documentation see testswarm.ini)
+// Contrary to the one in testswarm.ini, this one is for internal changes.
+// The one in testswarm.ini is for changes by the local administrator.
+// This may be increased when for example run.js changes significantly.
+
+$refresh_control = 2; // 2012-04-06
+
+$swarmConfig["client"]["refresh_control"] += $refresh_control;
+
 
 /**@}*/
 
