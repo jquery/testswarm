@@ -34,7 +34,7 @@ class JobAction extends Action {
 		));
 
 		if ( !$jobRow ) {
-			$this->setError( "invalid-input" );
+			$this->setError( "invalid-input", "Job not found" );
 			return;
 		}
 

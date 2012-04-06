@@ -45,10 +45,24 @@ abstract class Action {
 	 */
 	abstract public function doAction();
 
+	/**
+	 * Can be called in 2 ways:
+	 * - Code and message:
+	 * @param $errorCode string
+	 * @param $errorMsg string [optional
+	 * - Array with code and message:
+	 * @param $param $error array: property "code" and optionally "info".
+	 */
 	final protected function setError( $errorCode, $errorMsg = null ) {
+		if ( is_array( $errorCode ) && isset( $errorCode["code"] ) ) {
+			$errorMsg = isset( $errorCode["info"] ) ? $errorCode["info"] : null;
+			$errorCode = $errorCode["code"];
+		}
+
 		if ( !isset( self::$errorCodes[$errorCode] ) ) {
 			throw new SwarmException( "Unrecognized error code used." );
 		}
+
 		$this->error = array(
 			"code" => $errorCode,
 			"info" => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
@@ -63,7 +77,8 @@ abstract class Action {
 	 * @param $data mixed
 	 */
 	final protected function setData( $data ) {
-		$this->data = $data;
+		// Convert all objects to arrays with json_decode(json_encode
+		$this->data = json_decode( json_encode( $data ), true );
 	}
 
 	final public function getData() {

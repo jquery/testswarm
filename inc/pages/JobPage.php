@@ -62,10 +62,10 @@ class JobPage extends Page {
 		foreach ( $data["userAgents"] as $userAgent ) {
 			$html .= '<th><img src="' . swarmpath( "img/" . $userAgent["displayicon"] )
 				. '.sm.png" class="swarm-browsericon '
-				. '" alt="' . $userAgent["displaytitle"]
-				. '" title="' . $userAgent["displaytitle"]
+				. '" alt="' . htmlspecialchars( $userAgent["displaytitle"] )
+				. '" title="' . htmlspecialchars( $userAgent["displaytitle"] )
 				. '"><br>'
-				. preg_replace( "/\w+ /", "", $userAgent["displaytitle"] )
+				. htmlspecialchars( preg_replace( "/\w+ /", "", $userAgent["displaytitle"] ) )
 				. '</th>';
 		}
 

@@ -56,11 +56,11 @@ class HomePage extends Page {
 				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>'
 				. ' and include the following information:</p><p><strong>browscap:</strong> <code>'
 				. htmlspecialchars( print_r( array(
-						"Platform" => $browscap->Platform,
-						"Browser" => $browscap->Browser,
-						"Version" => $browscap->Version,
-						"MajorVer" => $browscap->MajorVer,
-						"MinorVer" => $browscap->MinorVer,
+						"Platform" => $browscap["Platform"],
+						"Browser" => $browscap["Browser"],
+						"Version" => $browscap["Version"],
+						"MajorVer" => $browscap["MajorVer"],
+						"MinorVer" => $browscap["MinorVer"],
 				), true ) )
 				. '</code></p><p><strong><a href="http://useragentstring.com/">useragent string</a>:</strong> <code>'
 				. htmlspecialchars( $browserInfo->getRawUA() )

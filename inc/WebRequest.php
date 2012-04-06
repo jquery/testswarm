@@ -198,3 +198,28 @@ class WebRequest {
 	/** Don't allow direct instantiations of this class, use newFromContext instead */
 	private function __construct() {}
 }
+
+class DerivativeWebRequest extends WebRequest {
+	protected $derivPosted = false;
+
+	function newFromContext( TestSwarmContext $context ) {
+		$req = new self();
+		return $req;
+	}
+
+	public function setRawQuery( Array $query = array() ) {
+		$this->raw = $query;
+	}
+
+	public function setWasPosted( $posted )  {
+		$this->derivPosted = (bool)$posted;
+	}
+
+	/** @return bool */
+	public function wasPosted() {
+		return $this->derivPosted;
+	}
+
+	/** Don't allow direct instantiations of this class, use newFromContext instead */
+	private function __construct() {}
+}

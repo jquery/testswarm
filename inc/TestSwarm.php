@@ -9,7 +9,7 @@
  * @package TestSwarm
  */
 class TestSwarmContext {
-	private $browserInfo, $conf, $db, $request;
+	protected $browserInfo, $conf, $db, $request;
 
 	/**
 	 * The context is self-initializing. The only thing it
@@ -62,5 +62,16 @@ class TestSwarmContext {
 			$this->request = WebRequest::newFromContext( $this );
 		}
 		return $this->request;
+	}
+
+	public function createDerivedRequestContext( Array $query = array(), $method = 'GET' ) {
+		$derivContext = clone $this;
+
+		$req = DerivativeWebRequest::newFromContext( $derivContext );
+		$req->setRawQuery( $query );
+		$req->setWasPosted( $method === 'POST' );
+
+		$derivContext->request = $req;
+		return $derivContext;
 	}
 }

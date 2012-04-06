@@ -116,9 +116,12 @@ class BrowserInfo {
 		return $this->rawUserAgent;
 	}
 
-	/** @return Browscap */
+	/** @return Selective array with Browscap results */
 	public function getBrowscap() {
-		return $this->browscap;
+		return array_intersect_key(
+			(array)$this->browscap,
+			array_flip(array( "Platform", "Browser", "Version", "MajorVer", "MinorVer" ))
+		);
 	}
 
 	/** @return object|false */
@@ -127,7 +130,7 @@ class BrowserInfo {
 		// Lazy-init and cache
 		if ( $this->swarmUaItem === null ) {
 			$uaItems = self::getSwarmUAIndex();
-			$browscap = $this->getBrowscap();
+			$browscap = $this->browscap;
 			$found = false;
 			foreach ( $uaItems as $uaID => $uaItem ) {
 				if ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}|{$browscap->MinorVer}" ) {

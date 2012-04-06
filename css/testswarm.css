@@ -28,7 +28,7 @@ table.swarm-results img.swarm-browsericon {
 
 table.swarm-results td.status-new,
 table.swarm-results tr:hover td.status-new {
-	background: #FFF;
+	background: #F2F2F2;
 }
 
 table.swarm-results td.status-progress,
@@ -62,5 +62,5 @@ table.swarm-results tr:hover td.status-error a {
 
 table.swarm-results td.status-notscheduled,
 table.swarm-results tr:hover td.status-notscheduled {
-	background: #F2F2F2;
+	background: #fff;
 }
