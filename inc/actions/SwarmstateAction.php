@@ -26,7 +26,7 @@ class SwarmstateAction extends Action {
 		$uaIndex = BrowserInfo::getSwarmUAIndex();
 
 		foreach( $uaIndex as $uaID => $uaData ) {
-			if ( $uaData["active"] !== true ) {
+			if ( $uaData->active !== true ) {
 				continue;
 			}
 
