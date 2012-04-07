@@ -251,6 +251,15 @@ abstract class Page {
 		exit;
 	}
 
+	protected function setRobots( $value ) {
+		// Set both the header and the meta tag,
+		// so that the value also applies to pages where the html output is overwritten
+		// (such as Api responses and RunresultsPage),
+		// https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+		header( "X-Robots-Tag: $value", true );
+		$this->metaTags[] = array( "name" => "robots", "content" => $value );
+	}
+
 	final public static function getHttpStatusMsg( $code ) {
 		static $httpCodes = array(
 			200 => "OK",

@@ -80,6 +80,9 @@ At the moment TestSwarm only supports Apache and MySQL.
    loaded, make sure `AllowOverride` is set to "`All`" (at least not to
    "`None`") in your Apache configuration.
 
+1. Copy `./config/robots.txt` to `./robots.txt` (or add similar rules to your
+   main `robots.txt` file if TestSwarm is not in the root directory).
+
 1. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
    `* * * * * curl -s http://example.org/api.php?action=cleanup > /dev/null`

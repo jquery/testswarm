@@ -22,6 +22,7 @@ class JobPage extends Page {
 		$request = $this->getContext()->getRequest();
 
 		$this->setTitle( "Job status" );
+		$this->setRobots( "noindex,nofollow" );
 		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
@@ -91,6 +92,7 @@ class JobPage extends Page {
 					));
 					if ( isset( $uaRun["runResultsUrl"] ) ) {
 						$html .= html_tag( 'a', array(
+							"rel" => "nofollow",
 							"href" => $uaRun["runResultsUrl"],
 						), $uaRun["runResultsLabel"] );
 					}

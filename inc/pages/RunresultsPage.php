@@ -13,6 +13,8 @@ class RunresultsPage extends Page {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
+		$this->setRobots( "noindex,nofollow" );
+
 		$runID = $request->getInt( "run_id" );
 		$clientID = $request->getInt( "client_id" );
 

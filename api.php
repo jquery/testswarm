@@ -14,6 +14,8 @@
 // Valid entry point
 define( 'TESTSWARM', basename( __FILE__ ) );
 
+header( "X-Robots-Tag: noindex,nofollow", true );
+
 require_once "inc/init.php";
 
 $action = $swarmContext->getRequest()->getVal( "action", "info" );

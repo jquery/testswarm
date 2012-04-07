@@ -17,6 +17,7 @@ class Error500Page extends Page {
 		self::httpStatusHeader( 500 );
 
 		$this->setTitle( Page::getHttpStatusMsg( 500 ) );
+		$this->setRobots( "noindex,nofollow" );
 
 		$e = $this->exceptionObj;
 

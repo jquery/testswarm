@@ -18,6 +18,9 @@ class SaverunPage extends Page {
 
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
+
+		$this->setRobots( "noindex,nofollow" );
+
 		/**
 		 * action=saverun is used in 3 scenarios:
 		 *

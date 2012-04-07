@@ -20,6 +20,7 @@ class ApiDebugPage extends Page {
 		self::httpStatusHeader( 500 );
 
 		$this->setTitle( "API Response" );
+		$this->setRobots( "noindex,nofollow" );
 
 		$html = "";
 
