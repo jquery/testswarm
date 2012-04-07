@@ -17,8 +17,6 @@ class ApiDebugPage extends Page {
 			throw new SwarmException( "This page is not viewable outside the scope of the API." );
 		}
 
-		self::httpStatusHeader( 500 );
-
 		$this->setTitle( "API Response" );
 		$this->setRobots( "noindex,nofollow" );
 
