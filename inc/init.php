@@ -150,6 +150,7 @@ $swarmAutoLoadClasses = array(
 	"JobAction" => "inc/actions/JobAction.php",
 	"LoginAction" => "inc/actions/LoginAction.php",
 	"LogoutAction" => "inc/actions/LogoutAction.php",
+	"ProjectlistAction" => "inc/actions/ProjectlistAction.php",
 	"SaverunAction" => "inc/actions/SaverunAction.php",
 	"ScoresAction" => "inc/actions/ScoresAction.php",
 	"SignupAction" => "inc/actions/SignupAction.php",
