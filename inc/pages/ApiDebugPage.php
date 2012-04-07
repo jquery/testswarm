@@ -31,7 +31,7 @@ class ApiDebugPage extends Page {
 
 		ob_start();
 		var_dump( $_POST + $_GET );
-		$html .= ob_get_contents();
+		$html .= htmlspecialchars( ob_get_contents() );
 		ob_end_clean();
 
 		$html .= "</pre>";
@@ -41,7 +41,7 @@ class ApiDebugPage extends Page {
 
 		ob_start();
 		var_dump( $this->apiResponse );
-		$html .= ob_get_contents();
+		$html .= htmlspecialchars( ob_get_contents() );
 		ob_end_clean();
 
 		$html .= "</pre>";
