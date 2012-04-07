@@ -3,22 +3,26 @@
 	text-align: center;
 }
 
-.swarm-browseronline img {
-	height: 48px;
+.swarm-browseronline .swarm-onlineclients {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	line-height: normal;
 }
 
-.swarm-browseronline .badge {
-	position: absolute;
-	right: 7px;
-	top: 7px;
+.swarm-browseronline .swarm-browsericon {
+	height: 48px;
+	margin: 10px 0;
 }
-.swarm-browseronline .badge:hover {
+
+.swarm-browseronline .swarm-browsername:hover {
 	cursor: default;
 }
 
 /* Result table */
 
-table.swarm-results th {
+table.swarm-results th,
+table.swarm-results td {
 	text-align: center;
 }
 

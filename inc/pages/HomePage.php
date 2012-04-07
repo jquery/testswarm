@@ -13,6 +13,14 @@ class HomePage extends Page {
 
 	var $userHasKnownUA = false;
 
+	public function execute() {
+		$action = SwarmstateAction::newFromContext( $this->getContext() );
+		$action->doAction();
+
+		$this->setAction( $action );
+		$this->content = $this->initContent();
+	}
+
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
 		$browserInfo = $this->getContext()->getBrowserInfo();
@@ -76,49 +84,53 @@ class HomePage extends Page {
 
 
 	/** @return bool: Whether the current user was found in the swarm */
-	function getBrowsersOnlineHtml() {
-		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+	public function getBrowsersOnlineHtml() {
 		$db = $this->getContext()->getDB();
 		$browserInfo = $this->getContext()->getBrowserInfo();
 
-		$html = "";
+		$data = $this->getAction()->getData();
 
-		$clientRows = $db->getRows(str_queryf(
-			"SELECT
-				COUNT(*) as total,
-				useragent_id
-			FROM clients
-			WHERE	clients.updated > %u
-			GROUP BY useragent_id;",
-			swarmdb_dateformat( strtotime( '1 minute ago' ) )
-		));
-		$onlineStats = array();
-		if ( $clientRows ) {
-			foreach ( $clientRows as $clientRow ) {
-				$onlineStats[$clientRow->useragent_id] = intval( $clientRow->total );
-			}
-		}
+		$html = "";
 
 		$desktopHtml = '<h2>Desktop Browsers</h2><div class="row">';
 		$mobileHtml = '<h2>Mobile Browsers</h2><div class="row">';
 
-		foreach ( $swarmUaIndex as $swarmUaId => $swarmUaItem ) {
-			$isCurr = $swarmUaId == $browserInfo->getSwarmUaID();
+		foreach ( $data["userAgents"] as $uaID => $userAgent ) {
+			$isCurr = $uaID == $browserInfo->getSwarmUaID();
 
-			$item = '<div class="span2">'
-				. '<div class="well swarm-browseronline' . ( $isCurr ? " alert-info" : "" ) . '">'
-				. '<img src="' . swarmpath( "img/" . $swarmUaItem->displayicon . ".sm.png" ) . '"'
-				. ' class="swarm-browsericon"'
-				. ' alt="' . htmlspecialchars( $swarmUaItem->displaytitle ) . '"'
-				. ' title="' . htmlspecialchars( $swarmUaItem->displaytitle ) . '"'
-				. '>';
-			if ( isset( $onlineStats[$swarmUaId] ) && $onlineStats[$swarmUaId] > 0 ) {
-				$item .= '<span class="badge badge-error">' . $onlineStats[$swarmUaId] . '</span>';
-			}
-			$item .= '<br><span class="label">' . htmlspecialchars( $swarmUaItem->displaytitle ) . '</span>';
-			$item .= '</div></div>';
+			$item = ""
+				. '<div class="span2">'
+				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? " alert-info" : "" ) . '">'
+				. html_tag( "img", array(
+					"src" => swarmpath( "img/" . $userAgent["data"]["displayicon"] . ".sm.png" ),
+					"class" => "swarm-browsericon",
+					"alt" => "",
+					"title" => $userAgent["data"]["displaytitle"],
+				) )
+				. '<br>'
+				. html_tag( "span", array(
+					"class" => "badge swarm-browsername",
+				), $userAgent["data"]["displaytitle"] )
+				. '<br>'
+				. html_tag( "span", array(
+					"class" => "swarm-onlineclients " . (
+						$userAgent["stats"]["onlineClients"] > 0
+						 ? "badge"
+						 : ( $userAgent["stats"]["pendingRuns"] > 0 ? "badge badge-error" : "badge" )
+						),
+					"title" => $userAgent["stats"]["onlineClients"] . ' clients online',
+				), $userAgent["stats"]["onlineClients"] )
+				. html_tag( "span", array(
+					"class" => "swarm-pendingruns " . (
+						$userAgent["stats"]["pendingRuns"] > 0
+						 ? ( $userAgent["stats"]["onlineClients"] > 0 ? "label label-info" : "label label-warning" )
+						 : "label label-success"
+						)
+				), $userAgent["stats"]["pendingRuns"] . ' pending runs' )
+				. '</div>'
+				. '</div>';
 
-			if ( $swarmUaItem->mobile ) {
+			if ( $userAgent["data"]["mobile"] ) {
 				$mobileHtml .= $item;
 			} else {
 				$desktopHtml .= $item;

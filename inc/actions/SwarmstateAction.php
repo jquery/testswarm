@@ -55,10 +55,8 @@ class SwarmstateAction extends Action {
 				continue;
 			}
 
-			$data["useragents"][$uaID] = array(
-				"id" => $uaID,
-				"displaytitle" => $uaData->displaytitle,
-				"displayicon" => $uaData->displayicon,
+			$data["userAgents"][$uaID] = array(
+				"data" => $uaData,
 				"stats" => array(
 					"onlineClients" => intval( $clients ),
 					"pendingRuns" => intval( $pendingRuns ),
