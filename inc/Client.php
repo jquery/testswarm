@@ -67,7 +67,7 @@ class Client {
 			LIMIT 1;",
 			$clientRow->user_id
 		));
-	
+
 		$this->clientRow = $clientRow;
 		$this->userRow = $userRow;
 	}
@@ -76,7 +76,7 @@ class Client {
 		$browserInfo = $this->context->getBrowserInfo();
 		$db = $this->context->getDB();
 		$request = $this->context->getRequest();
-	
+
 
 		// If the useragent isn't known, abort with an error message
 		if ( !$browserInfo->isInSwarmUaIndex() ) {

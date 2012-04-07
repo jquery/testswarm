@@ -164,7 +164,7 @@
 
 	/**
 	 * Convert a date string into a Unix timestamp.
-	 * Interpreteting the date string in GMT context (instead of the time zone currently 
+	 * Interpreteting the date string in GMT context (instead of the time zone currently
 	 * set with date_default_timezone_set in ./inc/init.php)
 	 *
 	 * Be careful not to use this function when working with non-dates

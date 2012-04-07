@@ -114,7 +114,7 @@ class WebRequest {
 
 	public function setSessionData( $key, $data ) {
 		$_SESSION[$key] = $data;
-	} 
+	}
 
 	/**
 	 * Strip slashes from global arrays if magic_quotes_gpc is on.

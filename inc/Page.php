@@ -13,7 +13,7 @@
 abstract class Page {
 	/**
 	 * @var $context TestSwarmContext: Needs to be protected instead of private
-	 * in order for extending Page classes to access the context. 
+	 * in order for extending Page classes to access the context.
 	 */
 	protected $context;
 

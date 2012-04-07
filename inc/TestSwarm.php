@@ -2,7 +2,7 @@
 /**
  * Wrapper class containing various request-specific objects.
  * Each of these objects is created only once for the context.
- * The creation happends on-demand and is put in a private cache. 
+ * The creation happends on-demand and is put in a private cache.
  *
  * @author Timo Tijhof, 2012
  * @since 0.3.0

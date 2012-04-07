@@ -144,7 +144,7 @@ class JobAction extends Action {
 							// If new or in progress, show nothing
 							? ""
 							: ( $clientRunRow->total < 0
-								// Timeout 
+								// Timeout
 								? "Err"
 								: ( $clientRunRow->error > 0
 										// If there were errors, show number of errors
@@ -209,7 +209,7 @@ class JobAction extends Action {
 	}
 
 	/**
-	 * @param $clientRun object: Database row from run_client. 
+	 * @param $clientRun object: Database row from run_client.
 	 * @return string: One of 'new', 'progress', 'timedout', 'error', 'failed' or 'passed'.
 	 */
 	public static function getStatusFromClientRunRow( $clientRun ) {
