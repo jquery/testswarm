@@ -46,24 +46,16 @@ class UserAction extends Action {
 
 		if ( $clientRows ) {
 			foreach ( $clientRows as $clientRow ) {
-				$since_local = date( "r", gmstrtotime( $clientRow->created ) );
-
-				// PHP's "c" claims to be ISO compatible but prettyDateJS disagrees
-				// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z").
-				// Constructing format manually instead.
-				$since_zulu_iso = gmdate( "Y-m-d\TH:i:s\Z", gmstrtotime( $clientRow->created ) );
-
 				$bi = BrowserInfo::newFromContext( $this->getContext(), $clientRow->useragent );
 
-				$activeClients[] = array(
-					"connectedRawUTC" => $clientRow->created,
-					"connectedISO" => $since_zulu_iso,
-					"connectedLocalFormatted" => $since_local,
+				$activeClient = array(
 					"uaID" => $clientRow->useragent_id,
 					"uaRaw" => $bi->getRawUA(),
 					"uaData" => $bi->getSwarmUaItem(),
 					"uaBrowscap" => $bi->getBrowscap(),
 				);
+				self::addTimestampsTo( $activeClient, $clientRow->created, "connected" );
+				$activeClients[] = $activeClient;
 			}
 		}
 

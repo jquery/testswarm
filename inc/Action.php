@@ -85,6 +85,31 @@ abstract class Action {
 		return $this->data;
 	}
 
+	/**
+	 * @param &$target array: The array the keys should be added to, is passed by
+	 * reference, so it will be modified!
+	 * @param $tsRawUTC string:
+	 * @param $prefix string: [optional] If given, this string will be prefixed to
+	 * the added keys, and the rest of the name ucfirst'ed resulting in:
+	 * "rawUTC" or "prefixRawUTC" respectively.
+	 */
+	final protected static function addTimestampsTo( &$target, $tsRawUTC, $prefix = null ) {
+			$tsLocalFormatted = date( "r", gmstrtotime( $tsRawUTC ) );
+
+			// PHP's "c" claims to be ISO compatible but prettyDateJS disagrees
+			// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z").
+			// Constructing format manually instead.
+			$tsISO = gmdate( "Y-m-d\TH:i:s\Z", gmstrtotime( $tsRawUTC ) );
+
+			if ( is_array( $target ) ) {
+				$target[( $prefix ? "{$prefix}RawUTC" : "rawUTC" )] = $tsRawUTC;
+				$target[( $prefix ? "{$prefix}ISO" : "ISO" )] = $tsISO;
+				$target[( $prefix ? "{$prefix}LocalFormatted" : "localFormatted" )] = $tsLocalFormatted;
+			} else {
+				throw SwarmException( "Invalid arguments to " . __METHOD__ );
+			}
+	}
+
 	final public static function newFromContext( TestSwarmContext $context ) {
 		$page = new static();
 		$page->context = $context;
