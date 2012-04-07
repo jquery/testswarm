@@ -59,7 +59,7 @@ abstract class Action {
 			$errorCode = $errorCode["code"];
 		}
 
-		if ( !isset( self::$errorCodes[$errorCode] ) ) {
+		if ( !isset( $errorCode ) || !isset( self::$errorCodes[$errorCode] ) ) {
 			throw new SwarmException( "Unrecognized error code used." );
 		}
 
