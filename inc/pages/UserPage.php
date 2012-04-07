@@ -96,7 +96,7 @@ class UserPage extends Page {
 		}
 
 		if ( $html == '' ) {
-			return '<div class="alert alert-error">No active useragents or jobs.</div>';
+			return '<div class="alert alert-info">No active useragents or jobs.</div>';
 		}
 
 		return $html;

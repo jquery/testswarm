@@ -15,6 +15,11 @@
 	margin: 10px 0;
 }
 
+.swarm-browseronline .swarm-onlineclients,
+.swarm-browseronline .swarm-browsername {
+	font-size: 11px;
+}
+
 .swarm-browseronline .swarm-browsername:hover {
 	cursor: default;
 }
