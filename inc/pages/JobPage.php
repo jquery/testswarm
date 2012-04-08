@@ -22,7 +22,7 @@ class JobPage extends Page {
 		$request = $this->getContext()->getRequest();
 
 		$this->setTitle( "Job status" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
+		$this->setRobots( "noindex,nofollow" );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
 		$error = $this->getAction()->getError();
@@ -58,13 +58,14 @@ class JobPage extends Page {
 		$html .= '<table class="table table-bordered swarm-results"><thead><tr><th>&nbsp;</th>';
 
 		// Header with user agents
+
 		foreach ( $data["userAgents"] as $userAgent ) {
-			$html .= '<th><img src="' . swarmpath( "images/" . $userAgent["engine"] )
-				. '.sm.png" class="swarm-browsericon ' . $userAgent["engine"]
-				. '" alt="' . $userAgent["name"]
-				. '" title="' . $userAgent["name"]
+			$html .= '<th><img src="' . swarmpath( "img/" . $userAgent["displayicon"] )
+				. '.sm.png" class="swarm-browsericon '
+				. '" alt="' . htmlspecialchars( $userAgent["displaytitle"] )
+				. '" title="' . htmlspecialchars( $userAgent["displaytitle"] )
 				. '"><br>'
-				. preg_replace( "/\w+ /", "", $userAgent["name"] )
+				. htmlspecialchars( preg_replace( "/\w+ /", "", $userAgent["displaytitle"] ) )
 				. '</th>';
 		}
 
@@ -90,6 +91,7 @@ class JobPage extends Page {
 					));
 					if ( isset( $uaRun["runResultsUrl"] ) ) {
 						$html .= html_tag( 'a', array(
+							"rel" => "nofollow",
 							"href" => $uaRun["runResultsUrl"],
 						), $uaRun["runResultsLabel"] );
 					}

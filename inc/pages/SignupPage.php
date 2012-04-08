@@ -37,14 +37,14 @@ class SignupPage extends Page {
 		$error = $this->getAction()->getError();
 
 		if ( $request->wasPosted() && $error ) {
-			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
+			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
 		$html .= '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )
 			. '">login here</a>.</p>'
 			. '<label>Username: <input type="text" name="username"></label><br>'
 			. '<label>Password: <input type="password" name="password"></label><br>'
-			. '<input type="submit" value="Signup">'
+			. '<input type="submit" value="Signup" class="btn btn-primary">'
 			. '</fieldset></form>';
 
 		return $html;

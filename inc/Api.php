@@ -23,6 +23,7 @@ class Api {
 		"json",
 		"jsonp",
 		"php",
+		"debug",
 	);
 
 	// These formats will not be executed in a logged-in context
@@ -68,6 +69,13 @@ class Api {
 			case "php":
 				header( "Content-Type: application/vnd.php.serialized; charset=utf-8" );
 				echo serialize( $this->response );
+				break;
+
+			// http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/api/ApiFormatDump.php?revision=70727&view=markup
+			case "debug":
+				$debugPage = ApiDebugPage::newFromContext( $this->context );
+				$debugPage->setApiResponse( $this->response );
+				$debugPage->output();
 				break;
 		}
 	}

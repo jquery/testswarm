@@ -10,6 +10,8 @@
  * @since 0.1.0
  * @package TestSwarm
  */
+// Valid entry point
+define( 'TESTSWARM', basename( __FILE__ ) );
 
 require_once "inc/init.php";
 

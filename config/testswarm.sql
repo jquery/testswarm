@@ -5,8 +5,7 @@
 CREATE TABLE `clients` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
-  `useragent_id` int(11) NOT NULL default '0',
-  `os` varchar(10) NOT NULL default 'xp',
+  `useragent_id` varchar(40) NOT NULL,
   `useragent` tinytext NOT NULL,
   `ip` varchar(15) NOT NULL default '',
   `updated` binary(14) NOT NULL default '19700101000000',
@@ -56,7 +55,7 @@ CREATE TABLE `run_client` (
 
 CREATE TABLE `run_useragent` (
   `run_id` int(11) NOT NULL default '0',
-  `useragent_id` int(11) NOT NULL default '0',
+  `useragent_id` varchar(40) NOT NULL,
   `runs` int(11) NOT NULL default '0',
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
@@ -85,26 +84,6 @@ CREATE TABLE `runs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `useragents`
---
-
-CREATE TABLE `useragents` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `engine` varchar(255) NOT NULL default '',
-  `version` varchar(255) NOT NULL default '',
-  `active` tinyint(4) NOT NULL default '0',
-  `current` tinyint(4) NOT NULL default '0',
-  `popular` tinyint(4) NOT NULL default '0',
-  `gbs` tinyint(4) NOT NULL default '0',
-  `beta` tinyint(4) NOT NULL default '0',
-  `mobile` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -127,8 +106,7 @@ alter table clients
 	add index idx_clients_user_id (user_id),
 	add constraint fk_clients_user_id foreign key (user_id) references users (id);
 alter table clients
-	add index idx_clients_useragent_id (useragent_id),
-	add constraint fk_clients_useragent_id foreign key (useragent_id) references useragents (id);
+	add index idx_clients_useragent_id (useragent_id);
 alter table jobs
 	add index idx_jobs_user_id (user_id),
 	add constraint fk_jobs_user_id foreign key (user_id) references users (id);
@@ -142,8 +120,7 @@ alter table run_useragent
 	add index idx_run_useragent_run_id (run_id),
 	add constraint fk_run_useragent_run_id foreign key (run_id) references runs (id);
 alter table run_useragent
-	add index idx_run_useragent_useragent_id (useragent_id),
-	add constraint fk_run_useragent_useragent_id foreign key (useragent_id) references useragents (id);
+	add index idx_run_useragent_useragent_id (useragent_id);
 alter table runs
 	add index idx_runs_job_id (job_id),
 	add constraint fk_runs_job_id foreign key (job_id) references jobs (id);

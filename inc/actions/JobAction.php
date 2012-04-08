@@ -28,14 +28,13 @@ class JobAction extends Action {
 				users.name as user_name
 			FROM
 				jobs, users
-			WHERE
-				jobs.id=%u
-			AND users.id=jobs.user_id;",
+			WHERE jobs.id = %u
+			AND   users.id=jobs.user_id;",
 			$jobID
 		));
 
 		if ( !$jobRow ) {
-			$this->setError( "invalid-input" );
+			$this->setError( "invalid-input", "Job not found" );
 			return;
 		}
 
@@ -93,7 +92,6 @@ class JobAction extends Action {
 				WHERE run_useragent.run_id = %u;",
 				$runRow->run_id
 			));
-
 			foreach ( $runUaRows as $runUaRow ) {
 				// Create array for this ua run,
 				// If it has been run or is currently running,
@@ -146,7 +144,7 @@ class JobAction extends Action {
 							// If new or in progress, show nothing
 							? ""
 							: ( $clientRunRow->total < 0
-								// Timeout 
+								// Timeout
 								? "Err"
 								: ( $clientRunRow->error > 0
 										// If there were errors, show number of errors
@@ -170,18 +168,13 @@ class JobAction extends Action {
 		}
 
 		// Get information for all encounted useragents
-		$uaRows = $db->getRows(str_queryf(
-			"SELECT
-				id,
-				name,
-				engine
-			FROM useragents
-			WHERE id IN %l
-			ORDER BY name;",
-			$userAgentIDs
-		));
-		foreach ( $uaRows as $uaRow ) {
-			$respData["userAgents"][$uaRow->id] = (array)$uaRow;
+		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+		foreach ( $userAgentIDs as $userAgentID ) {
+			if ( !isset( $swarmUaIndex->$userAgentID ) ) {
+				throw new SwarmException( "Job $jobID has runs for unknown brower ID `$userAgentID`." );
+			} else {
+				$respData["userAgents"][$userAgentID] = (array)$swarmUaIndex->$userAgentID;
+			}
 		}
 
 		// Save data
@@ -216,7 +209,7 @@ class JobAction extends Action {
 	}
 
 	/**
-	 * @param $clientRun object: Database row from run_client. 
+	 * @param $clientRun object: Database row from run_client.
 	 * @return string: One of 'new', 'progress', 'timedout', 'error', 'failed' or 'passed'.
 	 */
 	public static function getStatusFromClientRunRow( $clientRun ) {

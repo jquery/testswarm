@@ -67,10 +67,10 @@ class SaverunAction extends Action {
 					AND   client_id != %u
 					AND   (total <= 0 OR error > 0 OR fail > 0)
 					AND   clients.id=client_id
-					AND   clients.useragent_id = %u;",
+					AND   clients.useragent_id = %s;",
 					$runID,
 					$clientID,
-					$browserInfo->getSwarmUserAgentID()
+					$browserInfo->getSwarmUaID()
 				));
 
 				if ( $rows ) {
@@ -92,10 +92,10 @@ class SaverunAction extends Action {
 						runs = max,
 						completed = completed + 1,
 						status = 2
-					WHERE useragent_id = %u
+					WHERE useragent_id = %s
 					AND   run_id = %u
 					LIMIT 1;",
-					$browserInfo->getSwarmUserAgentID(),
+					$browserInfo->getSwarmUaID(),
 					$runID
 				));
 
@@ -112,10 +112,10 @@ class SaverunAction extends Action {
 						AND   client_id != %u
 						AND   total <= 0
 						AND   clients.id = client_id
-						AND   clients.useragent_id = %u;",
+						AND   clients.useragent_id = %s;",
 						$runID,
 						$clientID,
-						$browserInfo->getSwarmUserAgentID()
+						$browserInfo->getSwarmUaID()
 					));
 
 					foreach ( $rows as $row ) {
@@ -133,10 +133,10 @@ class SaverunAction extends Action {
 					SET
 						completed = completed + 1,
 						status = IF(completed + 1 < max, 1, 2)
-					WHERE useragent_id = %u
+					WHERE useragent_id = %s
 					AND   run_id = %u
 					LIMIT 1;",
-					$browserInfo->getSwarmUserAgentID(),
+					$browserInfo->getSwarmUaID(),
 					$runID
 				));
 			}

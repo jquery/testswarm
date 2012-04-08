@@ -1,23 +1,33 @@
 .swarm-browseronline {
 	position: relative;
+	text-align: center;
 }
 
-.swarm-browseronline img {
-	height: 48px;
-}
-
-.swarm-browseronline .badge {
+.swarm-browseronline .swarm-onlineclients {
 	position: absolute;
+	top: 5px;
 	right: 5px;
-	top: 15px;
+	line-height: normal;
 }
-.swarm-browseronline .badge:hover {
+
+.swarm-browseronline .swarm-browsericon {
+	height: 48px;
+	margin: 10px 0;
+}
+
+.swarm-browseronline .swarm-onlineclients,
+.swarm-browseronline .swarm-browsername {
+	font-size: 11px;
+}
+
+.swarm-browseronline .swarm-browsername:hover {
 	cursor: default;
 }
 
 /* Result table */
 
-table.swarm-results th {
+table.swarm-results th,
+table.swarm-results td {
 	text-align: center;
 }
 
@@ -27,7 +37,7 @@ table.swarm-results img.swarm-browsericon {
 
 table.swarm-results td.status-new,
 table.swarm-results tr:hover td.status-new {
-	background: #FFF;
+	background: #F2F2F2;
 }
 
 table.swarm-results td.status-progress,
@@ -61,5 +71,5 @@ table.swarm-results tr:hover td.status-error a {
 
 table.swarm-results td.status-notscheduled,
 table.swarm-results tr:hover td.status-notscheduled {
-	background: #F2F2F2;
+	background: #fff;
 }

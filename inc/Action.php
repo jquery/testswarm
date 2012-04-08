@@ -45,10 +45,24 @@ abstract class Action {
 	 */
 	abstract public function doAction();
 
+	/**
+	 * Can be called in 2 ways:
+	 * - Code and message:
+	 * @param $errorCode string
+	 * @param $errorMsg string [optional
+	 * - Array with code and message:
+	 * @param $param $error array: property "code" and optionally "info".
+	 */
 	final protected function setError( $errorCode, $errorMsg = null ) {
-		if ( !isset( self::$errorCodes[$errorCode] ) ) {
+		if ( is_array( $errorCode ) && isset( $errorCode["code"] ) ) {
+			$errorMsg = isset( $errorCode["info"] ) ? $errorCode["info"] : null;
+			$errorCode = $errorCode["code"];
+		}
+
+		if ( !isset( $errorCode ) || !isset( self::$errorCodes[$errorCode] ) ) {
 			throw new SwarmException( "Unrecognized error code used." );
 		}
+
 		$this->error = array(
 			"code" => $errorCode,
 			"info" => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
@@ -63,11 +77,43 @@ abstract class Action {
 	 * @param $data mixed
 	 */
 	final protected function setData( $data ) {
-		$this->data = $data;
+		// Convert all objects to arrays with json_decode(json_encode
+		$this->data = json_decode( json_encode( $data ), true );
 	}
 
 	final public function getData() {
 		return $this->data;
+	}
+
+	/**
+	 * Central method to create keys in an Action response related to time for consistency.
+	 * Adds three keys:
+	 * - RawUTC (14-digit timestamp in UTC, as found in the database)
+	 * - ISO (naturally in UTC aka Zulu)
+	 * - Localized format in the timezone as configured in testswarm.ini
+	 *
+	 * @param &$target array: The array the keys should be added to, is passed by
+	 * reference, so it will be modified!
+	 * @param $tsRawUTC string:
+	 * @param $prefix string: [optional] If given, this string will be prefixed to
+	 * the added keys, and the rest of the name ucfirst'ed resulting in:
+	 * "rawUTC" or "prefixRawUTC" respectively.
+	 */
+	final protected static function addTimestampsTo( &$target, $tsRawUTC, $prefix = null ) {
+			$tsLocalFormatted = strftime( "%c", gmstrtotime( $tsRawUTC ) );
+
+			// PHP's "c" claims to be ISO compatible but prettyDateJS disagrees
+			// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z").
+			// Constructing format manually instead.
+			$tsISO = gmdate( "Y-m-d\TH:i:s\Z", gmstrtotime( $tsRawUTC ) );
+
+			if ( is_array( $target ) ) {
+				$target[( $prefix ? "{$prefix}RawUTC" : "rawUTC" )] = $tsRawUTC;
+				$target[( $prefix ? "{$prefix}ISO" : "ISO" )] = $tsISO;
+				$target[( $prefix ? "{$prefix}LocalFormatted" : "localFormatted" )] = $tsLocalFormatted;
+			} else {
+				throw SwarmException( "Invalid arguments to " . __METHOD__ );
+			}
 	}
 
 	final public static function newFromContext( TestSwarmContext $context ) {
