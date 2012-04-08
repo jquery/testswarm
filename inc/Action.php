@@ -86,6 +86,12 @@ abstract class Action {
 	}
 
 	/**
+	 * Central method to create keys in an Action response related to time for consistency.
+	 * Adds three keys:
+	 * - RawUTC (14-digit timestamp in UTC, as found in the database)
+	 * - ISO (naturally in UTC aka Zulu)
+	 * - Localized format in the timezone as configured in testswarm.ini
+	 *
 	 * @param &$target array: The array the keys should be added to, is passed by
 	 * reference, so it will be modified!
 	 * @param $tsRawUTC string:
