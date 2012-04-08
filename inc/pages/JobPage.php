@@ -23,7 +23,6 @@ class JobPage extends Page {
 
 		$this->setTitle( "Job status" );
 		$this->setRobots( "noindex,nofollow" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
 		$error = $this->getAction()->getError();

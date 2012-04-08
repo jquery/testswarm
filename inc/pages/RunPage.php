@@ -16,7 +16,6 @@ class RunPage extends Page {
 		$uaItem = $browserInfo->getSwarmUaItem();
 
 		$this->setTitle( "Test runner" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/run.js?" . time() );
 
 		$client = Client::newFromContext( $this->getContext() );

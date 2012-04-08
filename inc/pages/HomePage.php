@@ -27,9 +27,8 @@ class HomePage extends Page {
 
 		$this->setTitle( "Home" );
 		$this->setRawDisplayTitle(
-			'<p style="text-align: center;"><img src="' . swarmpath( "img/testswarm_logo_wordmark.png" ) . '" alt="TestSwarm logo"></p>'
+			'<div style="text-align: center;"><img src="' . swarmpath( "img/testswarm_logo_wordmark.png" ) . '" alt="TestSwarm logo"></div>'
 		);
-		$this->headScripts[] = swarmpath( "js/jquery.js" );
 
 		$html = '<div class="row">'
 			. '<div class="span7">'

@@ -1,12 +1,12 @@
 <?php
 /**
- * "Projectlist" action.
+ * "Projects" action.
  *
  * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
-class ProjectlistAction extends Action {
+class ProjectsAction extends Action {
 
 	/**
 	 * @requestParam "sort" string: [optional] Defaults to "name".

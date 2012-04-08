@@ -22,7 +22,6 @@ class AddjobPage extends Page {
 		$request = $this->getContext()->getRequest();
 
 		$this->setTitle( "Add new job" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/addjob.js" );
 
 		$html = "";

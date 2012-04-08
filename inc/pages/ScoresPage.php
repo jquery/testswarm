@@ -22,18 +22,18 @@ class ScoresPage extends Page {
 		$this->setTitle( "Scores" );
 		$scores = $this->getAction()->getData();
 
-		$html = '<blockquote>All users with a score greater than zero.'
-		 . ' The score is the number of tests run by that user\'s clients.</blockquote>'
-		 . '<table class="table table-bordered table-striped">'
+		$html = '<blockquote><p>All users with a score greater than zero.'
+		 . ' The score is the number of tests run by that user\'s clients.</p></blockquote>'
+		 . '<table class="table table-striped">'
 		 . '<thead><tr><th class="span1">#</th><th>User</th><th class="span2">Score</th></tr></thead>'
 		 . '<tbody>';
 
 		foreach ( $scores as $item ) {
 			$html .= '<tr><td class="num">' . htmlspecialchars( number_format( $item["position"] ) ) . '</td>'
-				. '<td><a href="' . htmlspecialchars( swarmpath("user/{$item["userName"]}") ) . '">' . htmlspecialchars( $item["userName"] ) . '</a></td>'
+				. '<td><a href="' . htmlspecialchars( swarmpath( "user/{$item["userName"]}" ) ) . '">' . htmlspecialchars( $item["userName"] ) . '</a></td>'
 				. '<td class="num">' . htmlspecialchars( number_format( $item["score"] ) ) . '</td></tr>';
 		}
-		$html .= '</body></table>';
+		$html .= '</tbody></table>';
 
 		return $html;
 	}

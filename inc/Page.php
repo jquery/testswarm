@@ -165,6 +165,8 @@ abstract class Page {
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.min.css" ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/testswarm.css" ); ?>">
+	<script src="<?php echo swarmpath( "js/jquery.js" ); ?>"></script>
+	<script src="<?php echo swarmpath( "js/bootstrap-dropdown.js" ); ?>"></script>
 	<script>window.SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
 		$infoAction->doAction();
@@ -178,6 +180,17 @@ abstract class Page {
 	foreach ( $this->headScripts as $headScript ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $headScript ) );
 	}
+
+	$projectsActionContext = $this->getContext()->createDerivedRequestContext(
+		array(
+			"action" => "projects",
+			"sort" => "name",
+			"sort_oder" => "asc",
+		)
+	);
+	$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
+	$projectsAction->doAction();
+	$projects = $projectsAction->getData();
 ?>
 </head>
 <body>
@@ -187,11 +200,35 @@ abstract class Page {
 				<a class="brand" href="<?php echo swarmpath( "" );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
 				<div class="nav-collapse">
 					<ul class="nav">
+						<li><a href="<?php echo swarmpath( "" ); ?>">Home</a></li>
+						<li class="dropdown" id="swarm-projectsmenu">
+							<a href="<?php echo swarmpath( "projects" ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
+								Projects
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="<?php echo swarmpath( "projects" ); ?>">All projects</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">Projects</li>
+<?php
+foreach ( $projects as $project ) {
+?>
+								<li><a href="<?php echo htmlspecialchars( swarmpath( "user/{$project["name"]}" ) ); ?>"><?php
+									echo htmlspecialchars( $project["name"] );
+								?></a></li>
+<?php
+}
+?>
+							</ul>
+						</li>
+						<li><a href="<?php echo swarmpath( "scores" ); ?>">Scores</a></li>
+					</ul>
+					<ul class="nav pull-right">
 <?php
 	if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
 		$username = htmlspecialchars( $request->getSessionData( "username" ) );
 ?>
-						<li><a href="<?php echo swarmpath( "user/$username" ); ?>"><?php echo $username;?></a></li>
+						<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
 						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
 						<li><a href="<?php echo swarmpath( "logout" ); ?>">Logout</a></li>
 <?php

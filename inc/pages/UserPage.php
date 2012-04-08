@@ -19,7 +19,6 @@ class UserPage extends Page {
 	protected function initContent() {
 
 		$this->setTitle( "User" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/pretty.js" );
 		$this->bodyScripts[] = swarmpath( "js/user.js" );
 
