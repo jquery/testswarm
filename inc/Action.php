@@ -100,7 +100,7 @@ abstract class Action {
 	 * "rawUTC" or "prefixRawUTC" respectively.
 	 */
 	final protected static function addTimestampsTo( &$target, $tsRawUTC, $prefix = null ) {
-			$tsLocalFormatted = date( "r", gmstrtotime( $tsRawUTC ) );
+			$tsLocalFormatted = strftime( "%c", gmstrtotime( $tsRawUTC ) );
 
 			// PHP's "c" claims to be ISO compatible but prettyDateJS disagrees
 			// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z").

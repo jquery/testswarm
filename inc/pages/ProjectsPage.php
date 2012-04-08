@@ -19,6 +19,7 @@ class ProjectsPage extends Page {
 
 	protected function initContent() {
 		$this->setTitle( "Projects" );
+
 		$projects = $this->getAction()->getData();
 
 		$html = '<blockquote><p>Below is an overview of all registered projects,'
@@ -31,7 +32,9 @@ class ProjectsPage extends Page {
 			$html .= '<tr>'
 				. '<td><a href="' . htmlspecialchars( swarmpath( "user/{$project["name"]}" ) ) . '">' . htmlspecialchars( $project["name"] ) . '</a></td>'
 				. '<td class="num">' . htmlspecialchars( number_format( $project["jobCount"] ) ) . '</td>'
-				. '<td class="num">' . htmlspecialchars( $project["createdLocalFormatted"] ) . '</td>'
+				. '<td class="num"><span title="'
+					. htmlspecialchars( $project["createdISO"] ) . '" class="pretty">'
+					. htmlspecialchars( $project["createdLocalFormatted"] ) . '</span></td>'
 				. '</tr>';
 		}
 		$html .= '</tbody></table>';

@@ -285,7 +285,9 @@ foreach ( $projects as $project ) {
 		| <a href="//github.com/jquery/testswarm/wiki">About</a>
 		| <a href="//twitter.com/testswarm">Twitter</a>
 		</p>
-	</footer><?php
+	</footer>
+	<script src="<?php echo swarmpath( "js/pretty.js" ); ?>"></script>
+	<script src="<?php echo swarmpath( "js/testswarm.js" ); ?>"></script><?php
 
 	foreach ( $this->bodyScripts as $bodyScript ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );

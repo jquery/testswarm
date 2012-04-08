@@ -19,8 +19,6 @@ class UserPage extends Page {
 	protected function initContent() {
 
 		$this->setTitle( "User" );
-		$this->bodyScripts[] = swarmpath( "js/pretty.js" );
-		$this->bodyScripts[] = swarmpath( "js/user.js" );
 
 		$html = "";
 
@@ -52,7 +50,7 @@ class UserPage extends Page {
 					. '<p><small>Platform: ' . htmlspecialchars( $activeClient["uaBrowscap"]["Platform"] )
 					. '</small><br><small>Connected <span title="'
 					. htmlspecialchars( $activeClient["connectedISO"] ) . '" class="pretty">'
-					. htmlspecialchars( $activeClient["connectedLocalFormatted"] ) . '</small></p>'
+					. htmlspecialchars( $activeClient["connectedLocalFormatted"] ) . '</span></small></p>'
 					. '</div></div>';
 			}
 
