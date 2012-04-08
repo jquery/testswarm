@@ -37,7 +37,7 @@ class SignupPage extends Page {
 		$error = $this->getAction()->getError();
 
 		if ( $request->wasPosted() && $error ) {
-			$html .= html_tag( 'div', array( 'class' => 'errorbox' ), $error['info'] );
+			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
 		$html .= '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )

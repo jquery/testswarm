@@ -45,7 +45,7 @@ class RunresultsPage extends Page {
 	protected function initContent() {
 		// If we got here, we've got an error
 		$this->setTitle( "Run results" );
-		return '<div class="errorbox">Invalid or missing <code>run_id</code>/<code>client_id</code> parameters.</div>';
+		return '<div class="alert alert-error">Invalid or missing <code>run_id</code>/<code>client_id</code> parameters.</div>';
 	}
 
 }

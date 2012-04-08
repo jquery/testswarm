@@ -58,7 +58,7 @@ class SignupAction extends Action {
 		$authTokenHash = sha1( mt_rand( 1000000000, 9999999999 ) );
 
 		// Create the user
-		$db->query(str_queryf(
+		$isInserted = $db->query(str_queryf(
 			"INSERT INTO users
 			(name, updated, created, seed, password, auth)
 			VALUES(%s, %s, %s, %s, %s, %s);",
@@ -69,6 +69,12 @@ class SignupAction extends Action {
 			$passwordHash,
 			$authTokenHash
 		));
+
+		$newUserId = $db->getInsertId();
+		if ( !$isInserted || !$newUserId ) {
+			$this->setError( "internal-error", "Insertion of user into database failed." );
+			return;
+		}
 
 		$request->setSessionData( "username", $username );
 		$request->setSessionData( "auth", "yes" );

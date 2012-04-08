@@ -132,6 +132,14 @@ abstract class Page {
 		return $this->content;
 	}
 
+	/**
+	 * Be careful to never throw exceptions from here if we're already
+	 * on the Error500Page. e.g. if content of FooPage is empty, this throws
+	 * an exception but then index.php instantiates a new page (Error500Page),
+	 * which does have content. So any exception thrown from here (either directly
+	 * or indirectly from an Action class), should either be caught or made sure
+	 * that it doesn't occurr for a Error500Page).
+	 */
 	public function output() {
 		$this->execute();
 
@@ -148,6 +156,33 @@ abstract class Page {
 		header( "Content-Type: text/html; charset=utf-8" );
 
 		$request = $this->getContext()->getRequest();
+
+		// ProjectsAction could throw an exception, which needs to be caught here,
+		// since Error500Page (exception handler) also uses Page::output() eventually.
+		// @todo: Find a cleaner way to deal with exceptions in the final page out,
+		// because page output is also used on the Error500Page.
+
+		$projects = array();
+
+		if ( !isset( $this->exceptionObj ) ) {
+			try {
+				$projectsActionContext = $this->getContext()->createDerivedRequestContext(
+					array(
+						"action" => "projects",
+						"sort" => "name",
+						"sort_oder" => "asc",
+					)
+				);
+				$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
+				$projectsAction->doAction();
+				$projects = $projectsAction->getData();
+			} catch ( Exception $e ) {
+				$pageObj = Error500Page::newFromContext( $this->getContext() );
+				$pageObj->setExceptionObj( $e );
+				$pageObj->output();
+				exit;
+			}
+		}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -180,17 +215,6 @@ abstract class Page {
 	foreach ( $this->headScripts as $headScript ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $headScript ) );
 	}
-
-	$projectsActionContext = $this->getContext()->createDerivedRequestContext(
-		array(
-			"action" => "projects",
-			"sort" => "name",
-			"sort_oder" => "asc",
-		)
-	);
-	$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
-	$projectsAction->doAction();
-	$projects = $projectsAction->getData();
 ?>
 </head>
 <body>
