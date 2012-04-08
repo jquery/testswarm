@@ -7,16 +7,67 @@
  * @package TestSwarm
  */
 class BrowserInfo {
+
+	/**
+	 * @var $context TestSwarmContext
+	 */
 	private $context;
 
-	protected $userAgent = "";
-	protected $browserCodename;
-	protected $browserVersion;
-	protected $osCodename;
+	/**
+	 * @var $rawUserAgent string
+	 */
+	protected $rawUserAgent = "";
 
-	protected $swarmUserAgentID;
-	protected $swarmUserAgentName;
-	protected $swarmUserAgentVersion;
+	/**
+	 * @var $browscap Browscap
+	 */
+	protected $browscap;
+
+	/**
+	 * @var $swarmUaItem stdClass object
+	 */
+	protected $swarmUaItem;
+
+	/**
+	 * @var $swarmUaIndex stdClass object: Cached object of parsed useragents.ini
+	 */
+	protected static $swarmUaIndex;
+
+	/** @return object */
+	public static function getSwarmUAIndex() {
+
+		// Lazy-init and cache
+		if ( self::$swarmUaIndex === null ) {
+			global $swarmInstallDir;
+
+			// Convert from array with string values
+			// to an object with boolean values
+			$swarmUaIndex = new stdClass;
+			$rawIndex = parse_ini_file( "$swarmInstallDir/config/useragents.ini", true );
+			foreach ( $rawIndex as $uaID => $uaItem ) {
+				if ( is_array( $uaItem ) ) {
+					$uaItem2 = $uaItem;
+					foreach( $uaItem2 as $uaDataKey => $uaDataVal ) {
+						if ( $uaDataKey !== "displaytitle" && $uaDataKey !== "displayicon" ) {
+							$uaItem[$uaDataKey] = (bool)trim( $uaDataVal );
+						} else {
+							$uaItem[$uaDataKey] = trim( $uaDataVal );
+						}
+					}
+					if ( !isset( $uaItem["displaytitle"] ) || !$uaItem["displaytitle"] ) {
+						throw new SwarmException( "User agent `$uaID` is missing a displaytitle property." );
+					}
+					if ( !isset( $uaItem["displayicon"] ) || !$uaItem["displayicon"] ) {
+						throw new SwarmException( "User agent `$uaID` is missing a displayicon property." );
+					}
+					$swarmUaIndex->$uaID = (object)$uaItem;
+				}
+			}
+			self::$swarmUaIndex = $swarmUaIndex;
+		}
+
+		return self::$swarmUaIndex;
+	}
 
 	/**
 	 * @param $context TestSwarmContext
@@ -30,171 +81,87 @@ class BrowserInfo {
 		return $bi;
 	}
 
-	/** @return string */
-	public function getRawUA() {
-		return $this->userAgent;
-	}
-
-	/** @return string|null */
-	public function getBrowserCodename() {
-		return $this->browserCodename;
-	}
-
-	/** @return string|null */
-	public function getBrowserVersion() {
-		return $this->browserVersion;
-	}
-
-	/** @return string|null */
-	public function getOsCodename() {
-		return $this->osCodename;
-	}
-
-	/**
-	 * ID of the matching entry in the TestSwarm useragent database table.
-	 * @return int|null
-	 */
-	public function getSwarmUserAgentID() {
-		return $this->swarmUserAgentID;
-	}
-
-	/**
-	 * ID of the matching entry in the TestSwarm useragent database table.
-	 * @return int|null
-	 */
-	public function getSwarmUserAgentName() {
-		return $this->swarmUserAgentName;
-	}
-
-	public function getSwarmUserAgentVersion() {
-		return $this->swarmUserAgentVersion;
-	}
-
-	public function isKnownInTestSwarm() {
-		return !is_null( $this->swarmUserAgentID ) && !is_null( $this->swarmUserAgentName );
-	}
-
-	public function loadSwarmUserAgentData() {
-		$uaRow = $this->context->getDB()->getRow(str_queryf(
-			"SELECT
-				id,
-				name
-			FROM
-				useragents
-			WHERE	engine = %s
-			AND	%s REGEXP version;",
-			$this->getBrowserCodename(),
-			$this->getBrowserVersion()
-		));
-		if ( $uaRow ) {
-			$this->swarmUserAgentID = $uaRow->id ? intval( $uaRow->id ) : null;
-			$this->swarmUserAgentName = $uaRow->name ? (string)$uaRow->name : null;
-			$this->swarmUserAgentVersion = preg_replace( "/\w+ /", "", $uaRow->name );
-		}
-	}
-
 	/**
 	 * Create a new BrowserInfo object for the given user agent string.
 	 *
 	 * Instances may not be created directly, use the static newFromUA method instead
 	 * @param $userAgent string
 	 */
-	private function parseUserAgent( $userAgent ) {
-		$this->userAgent = $userAgent;
+	protected function parseUserAgent( $userAgent ) {
+		$browscapCacheDir = $this->context->getConf()->storage->cacheDir . '/phpbrowscap';
 
-		$lcUA = strtolower( $userAgent );
+		/**
+		 * A Browscap object looks like this (simplified version of the actual object)
+		 * @source https://github.com/GaretJax/phpbrowscap/wiki/QuickStart
+		 *
+		 * stdClass Object (
+		 *     [Platform] => MacOSX
+		 *     [Browser] => Safari
+		 *     [Version] => 3.1
+		 *     [MajorVer] => 3
+		 *     [MinorVer] => 1
+		 * )
+		 */
+		$bs = new Browscap( $browscapCacheDir );
+		$baUa = $bs->getBrowser( $userAgent );
 
-		// Version
-		$version = null;
-		if ( preg_match( "/.+(rv|webos|applewebkit|presto|msie|konqueror)[\/: ]([0-9a-z.]+)/", $lcUA, $m ) ) {
-			$version = $m[2];
-		}
-		if ( preg_match( "/.*(webos|fennec|series60|blackberry[0-9]*[a-z]*)[\/: ]([0-9a-z.]+)/", $lcUA, $m ) ) {
-			$version = $m[2];
-		}
-		if ( preg_match("/ms-rtc lm 8/", $lcUA) ) {
-			$version = "8.0as7.0";
-		}
-		$this->browserVersion = $version;
-
-		// Browser/Engine code
-		$browser = null;
-		if ( strpos($lcUA, "msie") > -1 && strpos($lcUA, "windows phone") > -1 ) {
-			$browser = "winmo";
-		} elseif ( strpos($lcUA, "msie") > -1 ) {
-			$browser = "msie";
-		} elseif ( strpos($lcUA, "konqueror") > -1 ) {
-			$browser = "konqueror";
-		} elseif ( strpos($lcUA, "chrome") > -1 ) {
-			$browser = "chrome";
-		} elseif ( strpos($lcUA, "webos") > -1 ) {
-			$browser = "webos";
-		} elseif ( strpos($lcUA, "android") > -1 && strpos($lcUA, "mobile safari") > -1 ) {
-			$browser = "android";
-		} elseif ( strpos($lcUA, "series60") > -1 ) {
-			$browser = "s60";
-		} elseif ( strpos($lcUA, "blackberry") > -1 ) {
-			$browser = "blackberry";
-		} elseif ( strpos($lcUA, "opera mobi") > -1 ) {
-			$browser = "operamobile";
-		} elseif ( strpos($lcUA, "fennec") > -1 ) {
-			$browser = "fennec";
-		} elseif ( strpos($lcUA, "webkit") > -1 && strpos($lcUA, "mobile") > -1 ) {
-			$browser = "mobilewebkit";
-		} elseif ( strpos($lcUA, "webkit") > -1 ) {
-			$browser = "webkit";
-		} elseif ( strpos($lcUA, "presto") > -1 ) {
-			$browser = "presto";
-		} elseif ( strpos($lcUA, "gecko") > -1 ) {
-			$browser = "gecko";
-		}
-		$this->browserCodename = $browser;
-
-		// Operating system
-		$os = null;
-		if ( strpos($lcUA, "windows nt 6.1") > -1 ) {
-			$os = "win7";
-		} elseif ( strpos($lcUA, "windows nt 6.0") > -1 ) {
-			$os = "vista";
-		} elseif ( strpos($lcUA, "windows nt 5.2") > -1 ) {
-			$os = "2003";
-		} elseif ( strpos($lcUA, "windows nt 5.1") > -1 ) {
-			$os = "xp";
-		} elseif ( strpos($lcUA, "windows nt 5.0") > -1 ) {
-			$os = "2000";
-		} elseif ( strpos($lcUA, "blackberry") > -1 ) {
-			$os = "blackberry";
-		} elseif ( strpos($lcUA, "iphone") > -1 ) {
-			$os = "iphone";
-		} elseif ( strpos($lcUA, "ipod") > -1 ) {
-			$os = "ipod";
-		} elseif ( strpos($lcUA, "ipad") > -1 ) {
-			$os = "ipad";
-		} elseif ( strpos($lcUA, "symbian") > -1 ) {
-			$os = "symbian";
-		} elseif ( strpos($lcUA, "webos") > -1 ) {
-			$os = "webos";
-		} elseif ( strpos($lcUA, "android") > -1 ) {
-			$os = "android";
-		} elseif ( strpos($lcUA, "windows phone") > -1 ) {
-			$os = "winmo";
-		} elseif ( strpos($lcUA, "os x 10.4") > -1 || strpos($lcUA, "os x 10_4") > -1 ) {
-			$os = "osx10.4";
-		} elseif ( strpos($lcUA, "os x 10.5") > -1 || strpos($lcUA, "os x 10_5") > -1 ) {
-			$os = "osx10.5";
-		} elseif ( strpos($lcUA, "os x 10.6") > -1 || strpos($lcUA, "os x 10_6") > -1 ) {
-			$os = "osx10.6";
-		} elseif ( strpos($lcUA, "os x") > -1 ) {
-			$os = "osx";
-		} elseif ( strpos($lcUA, "linux") > -1 ) {
-			$os = "linux";
-		}
-		$this->os = $os;
-
-		// Try to load information about this user agent from the TestSwarm database
-		$this->loadSwarmUserAgentData();
+		$this->rawUserAgent = $userAgent;
+		$this->browscap = $baUa;
 
 		return $this;
+	}
+
+	/** @return string */
+	public function getRawUA() {
+		return $this->rawUserAgent;
+	}
+
+	/** @return Selective array with Browscap results */
+	public function getBrowscap() {
+		return array_intersect_key(
+			(array)$this->browscap,
+			array_flip(array( "Platform", "Browser", "Version", "MajorVer", "MinorVer" ))
+		);
+	}
+
+	/** @return object|false */
+	public function getSwarmUaItem() {
+
+		// Lazy-init and cache
+		if ( $this->swarmUaItem === null ) {
+			$uaItems = self::getSwarmUAIndex();
+			$browscap = $this->browscap;
+			$found = false;
+			foreach ( $uaItems as $uaID => $uaItem ) {
+				if ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}|{$browscap->MinorVer}" ) {
+					$found = $uaItem;
+					$found->id = $uaID;
+					break;
+				} elseif ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}" ) {
+					$found = $uaItem;
+					$found->id = $uaID;
+					break;
+				} elseif ( $uaID === $browscap->Browser ) {
+					$found = $uaItem;
+					$found->id = $uaID;
+					break;
+				}
+			}
+
+			$this->swarmUaItem = $found;
+		}
+
+		return $this->swarmUaItem;
+	}
+
+	/** @return bool */
+	public function isInSwarmUaIndex() {
+		return (bool)$this->getSwarmUaItem();
+	}
+
+	/** @return string|null */
+	public function getSwarmUaID() {
+		return $this->getSwarmUaItem() ? $this->getSwarmUaItem()->id : null;
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead */

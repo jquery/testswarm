@@ -11,6 +11,10 @@
  * @since 0.3.0
  * @package TestSwarm
  */
+// Valid entry point
+define( 'TESTSWARM', basename( __FILE__ ) );
+
+header( "X-Robots-Tag: noindex,nofollow", true );
 
 require_once "inc/init.php";
 

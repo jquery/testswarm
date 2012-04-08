@@ -13,7 +13,7 @@
 abstract class Page {
 	/**
 	 * @var $context TestSwarmContext: Needs to be protected instead of private
-	 * in order for extending Page classes to access the context. 
+	 * in order for extending Page classes to access the context.
 	 */
 	protected $context;
 
@@ -132,6 +132,14 @@ abstract class Page {
 		return $this->content;
 	}
 
+	/**
+	 * Be careful to never throw exceptions from here if we're already
+	 * on the Error500Page. e.g. if content of FooPage is empty, this throws
+	 * an exception but then index.php instantiates a new page (Error500Page),
+	 * which does have content. So any exception thrown from here (either directly
+	 * or indirectly from an Action class), should either be caught or made sure
+	 * that it doesn't occurr for a Error500Page).
+	 */
 	public function output() {
 		$this->execute();
 
@@ -148,6 +156,33 @@ abstract class Page {
 		header( "Content-Type: text/html; charset=utf-8" );
 
 		$request = $this->getContext()->getRequest();
+
+		// ProjectsAction could throw an exception, which needs to be caught here,
+		// since Error500Page (exception handler) also uses Page::output() eventually.
+		// @todo: Find a cleaner way to deal with exceptions in the final page out,
+		// because page output is also used on the Error500Page.
+
+		$projects = array();
+
+		if ( !isset( $this->exceptionObj ) ) {
+			try {
+				$projectsActionContext = $this->getContext()->createDerivedRequestContext(
+					array(
+						"action" => "projects",
+						"sort" => "name",
+						"sort_oder" => "asc",
+					)
+				);
+				$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
+				$projectsAction->doAction();
+				$projects = $projectsAction->getData();
+			} catch ( Exception $e ) {
+				$pageObj = Error500Page::newFromContext( $this->getContext() );
+				$pageObj->setExceptionObj( $e );
+				$pageObj->output();
+				exit;
+			}
+		}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -165,6 +200,8 @@ abstract class Page {
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.min.css" ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( "css/testswarm.css" ); ?>">
+	<script src="<?php echo swarmpath( "js/jquery.js" ); ?>"></script>
+	<script src="<?php echo swarmpath( "js/bootstrap-dropdown.js" ); ?>"></script>
 	<script>window.SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
 		$infoAction->doAction();
@@ -187,11 +224,35 @@ abstract class Page {
 				<a class="brand" href="<?php echo swarmpath( "" );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
 				<div class="nav-collapse">
 					<ul class="nav">
+						<li><a href="<?php echo swarmpath( "" ); ?>">Home</a></li>
+						<li class="dropdown" id="swarm-projectsmenu">
+							<a href="<?php echo swarmpath( "projects" ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
+								Projects
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="<?php echo swarmpath( "projects" ); ?>">All projects</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">Projects</li>
+<?php
+foreach ( $projects as $project ) {
+?>
+								<li><a href="<?php echo htmlspecialchars( swarmpath( "user/{$project["name"]}" ) ); ?>"><?php
+									echo htmlspecialchars( $project["name"] );
+								?></a></li>
+<?php
+}
+?>
+							</ul>
+						</li>
+						<li><a href="<?php echo swarmpath( "scores" ); ?>">Scores</a></li>
+					</ul>
+					<ul class="nav pull-right">
 <?php
 	if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
 		$username = htmlspecialchars( $request->getSessionData( "username" ) );
 ?>
-						<li><a href="<?php echo swarmpath( "user/$username" ); ?>"><?php echo $username;?></a></li>
+						<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
 						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
 						<li><a href="<?php echo swarmpath( "logout" ); ?>">Logout</a></li>
 <?php
@@ -224,7 +285,9 @@ abstract class Page {
 		| <a href="//github.com/jquery/testswarm/wiki">About</a>
 		| <a href="//twitter.com/testswarm">Twitter</a>
 		</p>
-	</footer><?php
+	</footer>
+	<script src="<?php echo swarmpath( "js/pretty.js" ); ?>"></script>
+	<script src="<?php echo swarmpath( "js/testswarm.js" ); ?>"></script><?php
 
 	foreach ( $this->bodyScripts as $bodyScript ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );
@@ -249,6 +312,15 @@ abstract class Page {
 		header( "Location: " . $target );
 
 		exit;
+	}
+
+	protected function setRobots( $value ) {
+		// Set both the header and the meta tag,
+		// so that the value also applies to pages where the html output is overwritten
+		// (such as Api responses and RunresultsPage),
+		// https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+		header( "X-Robots-Tag: $value", true );
+		$this->metaTags[] = array( "name" => "robots", "content" => $value );
 	}
 
 	final public static function getHttpStatusMsg( $code ) {

@@ -84,29 +84,22 @@ class AddjobAction extends Action {
 			$this->setError( "invalid-input", "Duplicate entries in browserSets parameter." );
 			return;
 		}
-		$uaWhereClause = "";
-		foreach ( $browserSets as $browserSet ) {
-			switch ( $browserSet ) {
-				case "current":
-				case "popular":
-				case "gbs":
-				case "beta":
-				case "mobile":
-					// space before/after is important
-					$uaWhereClause .= " AND $browserSet = 1 ";
+
+		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+		$uaIDs = array();
+
+		foreach ( $swarmUaIndex as $swarmUaID => $swarmUaData ) {
+
+			foreach ( $browserSets as $browserSet ) {
+				if ( $swarmUaData->$browserSet === true ) {
+					$uaIDs[] = $swarmUaID;
 					break;
-				default:
-					$this->setError( "invalid-input", "Unknown browserset `$browserSet`." );
-					return;
+				}
 			}
+
 		}
-		$uaRows = $db->getRows(
-			"SELECT
-				id
-			FROM useragents
-			WHERE active = 1 $uaWhereClause;"
-		);
-		if ( !$uaRows || !count( $uaRows ) ) {
+
+		if ( !count( $uaIDs ) ) {
 			$this->setError( "data-corrupt", "No user agents matched the generated browserset filter." );
 			return;
 		}
@@ -153,12 +146,12 @@ class AddjobAction extends Action {
 
 			// Schedule run_useragent entries for all user agents matching
 			// the browerset(s) for this job.
-			foreach ( $uaRows as $uaRow ) {
+			foreach ( $uaIDs as $uaID ) {
 				$isInserted = $db->query(str_queryf(
 					"INSERT INTO run_useragent (run_id, useragent_id, max, created)
-					VALUES(%u, %u, %u, %s);",
+					VALUES(%u, %s, %u, %s);",
 					$newRunId,
-					$uaRow->id,
+					$uaID,
 					$runMax,
 					swarmdb_dateformat( SWARM_NOW )
 				));
@@ -169,7 +162,7 @@ class AddjobAction extends Action {
 		$this->setData(array(
 			"id" => $newJobId,
 			"runTotal" => $createdRuns,
-			"uaTotal" => count( $uaRows ),
+			"uaTotal" => count( $uaIDs ),
 		));
 	}
 }

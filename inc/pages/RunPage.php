@@ -10,11 +10,12 @@
 class RunPage extends Page {
 
 	protected function initContent() {
-		$bi = $this->getContext()->getBrowserInfo();
+		$browserInfo = $this->getContext()->getBrowserInfo();
 		$request = $this->getContext()->getRequest();
 
+		$uaItem = $browserInfo->getSwarmUaItem();
+
 		$this->setTitle( "Test runner" );
-		$this->bodyScripts[] = swarmpath( "js/jquery.js" );
 		$this->bodyScripts[] = swarmpath( "js/run.js?" . time() );
 
 		$client = Client::newFromContext( $this->getContext() );
@@ -25,11 +26,11 @@ class RunPage extends Page {
 			'<div class="row">'
 				. '<div class="span2">'
 					. '<div class="well pagination-centered thumbnail">'
-					. '<img src="' . swarmpath( "images/{$bi->getBrowserCodename()}.sm.png" )
-						. '" class="swarm-browsericon ' . $bi->getBrowserCodename()
-						. '" alt="' . $bi->getSwarmUserAgentName()
-						. '" title="' . $bi->getSwarmUserAgentName() . '">'
-					. '<span class="label">' . htmlspecialchars( $bi->getSwarmUserAgentVersion() ) . '</span>'
+					. '<img src="' . swarmpath( "img/{$uaItem->displayicon}.sm.png" )
+						. '" class="swarm-browsericon '
+						. '" alt="' . htmlspecialchars( $uaItem->displaytitle )
+						. '" title="' . htmlspecialchars( $uaItem->displaytitle ) . '">'
+					. '<span class="label">' . htmlspecialchars( $uaItem->displaytitle ) . '</span>'
 					. '</div>'
 				. '</div>'
 				. '<div class="span7">'

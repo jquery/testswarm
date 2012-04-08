@@ -1,5 +1,5 @@
 /**
- * JavaScript file for the "user" page in the browser.
+ * JavaScript file for all Pages.
  *
  * @author John Resig, 2008-2011
  * @since 0.1.0

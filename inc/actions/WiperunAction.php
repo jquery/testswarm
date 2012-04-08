@@ -22,7 +22,7 @@ class WiperunAction extends Action {
 		$jobID = $request->getInt( "job_id" );
 		$runID = $request->getInt( "run_id" );
 		$clientID = $request->getInt( "client_id" );
-		$useragentID = $request->getInt( "useragent_id" );
+		$useragentID = $request->getVal( "useragent_id" );
 
 		if ( !$jobID || !$runID || !$clientID ) {
 			$this->setError( "missing-parameters" );
@@ -71,7 +71,7 @@ class WiperunAction extends Action {
 			WHERE id = %u;",
 			$clientID
 		));
-		if ( intval( $clientUseragentID ) !== $useragentID ) {
+		if ( $clientUseragentID !== $useragentID ) {
 			$this->setError( "invalid-input", "Client $clientID does not run useragent $useragentID" );
 			return;
 		}
@@ -82,7 +82,7 @@ class WiperunAction extends Action {
 				run_client, clients
 			WHERE run_id = %u
 			AND   clients.id = client_id
-			AND   clients.useragent_id = %u;",
+			AND   clients.useragent_id = %s;",
 			$runID,
 			$useragentID
 		));
@@ -95,7 +95,7 @@ class WiperunAction extends Action {
 				completed = 0,
 				updated = %s
 			WHERE run_id = %u
-			AND   useragent_id = %u;",
+			AND   useragent_id = %s;",
 			swarmdb_dateformat( SWARM_NOW ),
 			$runID,
 			$useragentID

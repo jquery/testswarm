@@ -100,7 +100,7 @@ class Database {
 		}
 		return false;
 	}
-	
+
 	/** @return int */
 	public function getNumRows( $res ) {
 		$n = mysql_num_rows( $res );
@@ -108,7 +108,7 @@ class Database {
 		return $n;
 	}
 
-	/** 
+	/**
 	 * Queries other than SELECT, such as DELETE, UPDATE and INSERT.
 	 * @return resource|false
 	 */

@@ -40,8 +40,8 @@ class LoginPage extends Page {
 			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
-		$html .= 
-		'<div class="well">' 
+		$html .=
+		'<div class="well">'
 			. '<p>Login using your TestSwarm username and password.'
 			. ' If you don\'t have one you may <a href="' . swarmpath( "signup" )
 			. '">Signup Here</a>.</p>'
