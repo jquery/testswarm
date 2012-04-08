@@ -27,22 +27,22 @@ class HomePage extends Page {
 
 		$this->setTitle( "Home" );
 		$this->setRawDisplayTitle(
-			'<div style="text-align: center;"><img src="' . swarmpath( "img/testswarm_logo_wordmark.png" ) . '" alt="TestSwarm logo"></div>'
+			'<div style="text-align: center;">' . htmlspecialchars( $this->getContext()->getConf()->web->title ) . '</div>'
 		);
+
+		$siteNameHtml = htmlspecialchars( $this->getContext()->getConf()->web->title );
 
 		$html = '<div class="row">'
 			. '<div class="span7">'
 			. '<h3>Distributed Continuous Integration for JavaScript</h3>'
-			. '<blockquote>Welcome to the TestSwarm Alpha! Please be aware that'
-			. ' TestSwarm is still under heavy testing and during this alpha period'
-			. ' data may be lost or corrupted and clients may be unexpectedly'
-			. ' disconnected. More information about TestSwarm can be found'
-			. ' <a href="//github.com/jquery/testswarm/wiki">on the TestSwarm wiki</a>.</blockquote>'
+			. '<blockquote><p>'
+			. str_replace( "$1", $siteNameHtml, $this->getContext()->getConf()->custom_msg->home_intro_html )
+			. '</p></blockquote>'
 			. '</div>';
 
-		$html .= '<div class="span5"><div class="well">';
+		$html .= '<div class="span5"><div class="well well-small">';
 		if ( $browserInfo->isInSwarmUaIndex() ) {
-				$html .= '<p><strong>TestSwarm needs your help!</strong><br>'
+				$html .= '<p><strong>' . $siteNameHtml . ' needs your help!</strong><br>'
 				. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
 			if ( !$request->getSessionData( "username" ) ) {
 				$html .= '<form action="' . swarmpath( "" ) . '" method="get" class="form-horizontal">'
@@ -57,11 +57,13 @@ class HomePage extends Page {
 			}
 		} else {
 			$browscap = $browserInfo->getBrowscap();
-			$html .= '<div class="alert alert-info">TestSwarm currently does not recognize your browser. If you wish to'
-				. ' help run tests you should join with one the below browsers.</div>'
-				. '<p>If you feel that this may be a mistake, please report it to the TestSwarm'
-				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>'
-				. ' and include the following information:</p><p><strong>browscap:</strong> <code>'
+			$html .= '<div class="alert alert-info">'
+				. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
+				. '<p>Please join with one the below browsers.</p></div>'
+				. '<p>If you feel that this may be an error, please report it to the TestSwarm '
+				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
+				. ' including the following 2 codes:'
+				. '<br><strong><a href="http://browsers.garykeith.com/">browscap</a>:</strong> <code>'
 				. htmlspecialchars( print_r( array(
 						"Platform" => $browscap["Platform"],
 						"Browser" => $browscap["Browser"],
@@ -69,7 +71,7 @@ class HomePage extends Page {
 						"MajorVer" => $browscap["MajorVer"],
 						"MinorVer" => $browscap["MinorVer"],
 				), true ) )
-				. '</code></p><p><strong><a href="http://useragentstring.com/">useragent string</a>:</strong> <code>'
+				. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
 				. htmlspecialchars( $browserInfo->getRawUA() )
 				. '</code></p>';
 		}

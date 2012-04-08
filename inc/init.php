@@ -62,6 +62,11 @@ $swarmConfig = array(
 		"username" => "root",
 		"password" => "root",
 	),
+	"custom_msg" => array(
+		"home_intro_html" => "Welcome to $1! More information about what TestSwarm is"
+		. " and how it works can be found on"
+		. " <a href=\"//github.com/jquery/testswarm/wiki\">the TestSwarm wiki</a>.",
+	),
 	"web" => array(
 		"contextpath" => "",
 		"title" => "TestSwarm",
@@ -90,7 +95,7 @@ $swarmConfig = array(
 $swarmConfig = array_extend(
 	$swarmConfig,
 	parse_ini_file( "$swarmInstallDir/testswarm.ini", true ),
-	array( 'overwrite' )
+	array( "overwrite" )
 );
 
 // Timezone
