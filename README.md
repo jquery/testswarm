@@ -61,7 +61,6 @@ At the moment TestSwarm only supports Apache and MySQL.
 
 1. Initialize the database:
    `mysql DBNAME -u USER -p < config/testswarm.sql`
-   `mysql DBNAME -u USER -p < config/useragents.sql`
 
 1. Copy `./config/testswarm-sample.ini` to `./testswarm.ini` and change the
    options to correspond to your MySQL database information.
@@ -82,8 +81,8 @@ At the moment TestSwarm only supports Apache and MySQL.
 
 1. Make sure [storage][cacheDir] is set to an existing writable directory that
    is not readable from the web. Either set it to a custom path outside the web
-   root in testswarm.ini, or create use the default 'cache' directory protected
-   with htaccess and chmod the directory 777.
+   root in testswarm.ini, or use the default 'cache' directory protected
+   with .htaccess and `chmod 777 cache`.
 
 1. Copy `./config/robots.txt` to `./robots.txt` (or add similar rules to your
    main `robots.txt` file if TestSwarm is not in the root directory).
