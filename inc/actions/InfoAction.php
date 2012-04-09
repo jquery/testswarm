@@ -13,6 +13,7 @@ class InfoAction extends Action {
 		$conf = $this->getContext()->getConf();
 
 		$info = array(
+			"version" => $conf->version,
 			"conf" => array(
 				"general" => $conf->general,
 				"web" => $conf->web,

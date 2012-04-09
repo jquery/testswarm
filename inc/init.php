@@ -53,6 +53,11 @@ if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
 }
 
 $swarmConfig = array(
+	// Not included in testswarm-sample.ini, not meant to be overridden,
+	// although users could ammend it to include something like "-foobarPatched".
+	"version" => array(
+		"testswarm" => "", // populated later
+	),
 	"general" => array(
 		"timezone" => "UTC",
 	),
@@ -119,6 +124,8 @@ $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_
 
 // Caching dir
 $swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
+
+$swarmConfig["version"]["testswarm"] = swarmGetVersion( $swarmConfig["storage"]["cacheDir"] . "/version_testswarm.cache" );
 
 // Refresh control
 // (for documentation see testswarm.ini)

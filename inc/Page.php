@@ -360,6 +360,9 @@ foreach ( $projects as $project ) {
 		// static refers to the current class (FoobarPage)
 		$page = new static();
 		$page->context = $context;
+
+		$page->metaTags[] = array( "name" => "generator", "content" => $context->getConf()->version->testswarm );
+
 		return $page;
 	}
 

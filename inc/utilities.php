@@ -220,14 +220,14 @@
 		if ( is_null( $contextpath ) ) {
 			// Add trailing slash if it's missing
 			$path = $swarmContext->getConf()->web->contextpath;
-			if ( substr( $path, -1 ) !== '/' ) {
+			if ( substr( $path, -1 ) !== "/" ) {
 				$path = "$path/";
 			}
 
 			// Make sure path starts absolute.
 			// Either with protocol https?://domain, relative-protocol //domain
 			// or starting at domain root with a slash.
-			if ( substr( $path, 0, 6 ) !== 'http:/' && substr( $path, 0, 6 ) !== 'https:' && $path[0] !== '/' ) {
+			if ( substr( $path, 0, 6 ) !== "http:/" && substr( $path, 0, 6 ) !== "https:" && $path[0] !== "/" ) {
 				$path = "/$path";
 			}
 
@@ -238,9 +238,76 @@
 		// Just in case, strip the leading slash
 		// from the requested path (check length, becuase may be an empty string,
 		// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
-		if ( strlen( $rel ) > 0 && $rel[0] === '/' ) {
+		if ( strlen( $rel ) > 0 && $rel[0] === "/" ) {
 			$rel = substr($rel, 1);
 		}
 
 		return $path . $rel;
+	}
+
+	/**
+	 * Get the current TestSwarm version (cached for 5 minutes).
+	 * It is a cheap operation but we want to avoid repeatative lookups.
+	 *
+	 * @author Timo Tijhof, 2012
+	 * @since 0.3.0
+	 *
+	 * @param $versionCacheFile string: Path to cache file,
+	 * parent directory must be writable by the script!
+	 * @return string: e.g. "0.3.0" (e.g. for installs from a tar or zip),
+	 * or something like "0.3.0-alpha (hash)" for installs on a live Git repo.
+	 */
+	function swarmGetVersion( $versionCacheFile ) {
+		static $versionCached;
+		if ( $versionCached !== null ) {
+			return $versionCached;
+		}
+
+		// Cache 5 minutes
+		$versionCacheFileUpdated = filemtime( $versionCacheFile );
+		if ( $versionCacheFileUpdated < strftime( '5 minutes ago' ) ) {
+			unlink( $versionCacheFile );
+		}
+
+		if ( !is_readable( $versionCacheFile ) ) {
+			global $swarmInstallDir;
+
+			$baseVersionFile = "$swarmInstallDir/config/version.ini";
+			if ( !is_readable( $baseVersionFile ) ) {
+				throw new SwarmException( "version.ini is missing or unreadable." );
+			}
+			$version = trim( file_get_contents( $baseVersionFile ) );
+
+			// If this is a git repository, get a hold of the HEAD SHA1 hash as well,
+			// and append it to the version.
+			$gitHeadFile = "$swarmInstallDir/.git/HEAD";
+			if ( is_readable( $gitHeadFile ) ) {
+				$gitHead = file_get_contents( $gitHeadFile );
+				if ( preg_match( "/ref: (.*)/", $gitHead, $matches ) ) {
+					$gitHead = rtrim( $matches[1] );
+				} else {
+					$gitHead = trim( $gitHead );
+				}
+
+				$gitRefFile = "$swarmInstallDir/.git/$gitHead";
+				if ( is_readable( $gitRefFile ) ) {
+					$gitSHA1 = rtrim( file_get_contents( $gitRefFile ) );
+				} else {
+					// If such refs file doesn't exist, maybe HEAD is detached,
+					// in which case ./.git/HEAD should contain the actual SHA1 already.
+					$gitSHA1 = $gitHead;
+				}
+
+				$version .= " (" . substr( $gitSHA1, 0, 8 ) . ")";
+				$isWritten = (bool)file_put_contents( $versionCacheFile, $version );
+				if ( !$isWritten ) {
+					throw new SwarmException( "Version cache must be writable." );
+				}
+				$versionCached = $version;
+				return $versionCached;
+			}
+		} else {
+			$versionCached = trim( file_get_contents( $versionCacheFile ) );
+			return $versionCached;
+		}
 	}
