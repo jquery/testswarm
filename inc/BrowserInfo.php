@@ -89,6 +89,11 @@ class BrowserInfo {
 	 */
 	protected function parseUserAgent( $userAgent ) {
 		$browscapCacheDir = $this->context->getConf()->storage->cacheDir . '/phpbrowscap';
+		if ( !is_dir( $browscapCacheDir ) ) {
+			if ( !mkdir( $browscapCacheDir, 755 ) ) {
+				throw new SwarmException( "Cache directory must be writable." );
+			}
+		}
 
 		/**
 		 * A Browscap object looks like this (simplified version of the actual object)

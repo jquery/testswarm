@@ -2,3 +2,4 @@
 .project
 testswarm.ini
 scripts/*.pl
+cache/*
