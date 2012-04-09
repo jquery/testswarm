@@ -252,18 +252,14 @@
 	 * @author Timo Tijhof, 2012
 	 * @since 0.3.0
 	 *
-	 * @param $versionCacheFile string: Path to cache file,
-	 * parent directory must be writable by the script!
+	 * @param $context TestSwarmContext
 	 * @return string: e.g. "0.3.0" (e.g. for installs from a tar or zip),
 	 * or something like "0.3.0-alpha (hash)" for installs on a live Git repo.
 	 */
-	function swarmGetVersion( $versionCacheFile ) {
-		static $versionCached;
-		if ( $versionCached !== null ) {
-			return $versionCached;
-		}
+	function swarmGetVersion( TestSwarmContext $context ) {
+		$versionCacheFile = $context->getConf()->storage->cacheDir . "/version_testswarm.cache";
 
-		// Cache 5 minutes
+		// Clear cache older than 5 minutes
 		if ( is_readable( $versionCacheFile ) ) {
 			$versionCacheFileUpdated = filemtime( $versionCacheFile );
 			if ( $versionCacheFileUpdated < strftime( '5 minutes ago' ) ) {
@@ -271,6 +267,7 @@
 			}
 		}
 
+		// If cache has just been cleared or didn't exist yet, (re)populate it.
 		if ( !is_readable( $versionCacheFile ) ) {
 			global $swarmInstallDir;
 
@@ -308,6 +305,8 @@
 				$versionCached = $version;
 				return $versionCached;
 			}
+
+		// Get from cache
 		} else {
 			$versionCached = trim( file_get_contents( $versionCacheFile ) );
 			return $versionCached;

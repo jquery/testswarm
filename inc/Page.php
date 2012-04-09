@@ -344,10 +344,9 @@ foreach ( $projects as $project ) {
 
 	final public static function httpStatusHeader( $code ) {
 		$message = self::getHttpStatusMsg( $code );
-		if ( !$message ) {
-			throw new SwarmError( "Unknown http code." );
+		if ( $message ) {
+			header( $_SERVER["SERVER_PROTOCOL"] . " $code $message", true, $code );
 		}
-		header( $_SERVER["SERVER_PROTOCOL"] . " $code $message", true, $code );
 	}
 
 	final public static function getPageClassByName( $pageName ) {
@@ -361,7 +360,7 @@ foreach ( $projects as $project ) {
 		$page = new static();
 		$page->context = $context;
 
-		$page->metaTags[] = array( "name" => "generator", "content" => $context->getConf()->version->testswarm );
+		$page->metaTags[] = array( "name" => "generator", "content" => swarmGetVersion( $context ) );
 
 		return $page;
 	}

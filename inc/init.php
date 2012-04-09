@@ -4,6 +4,15 @@
  * All web requests have to go through here,
  * and do so as early as possible.
  *
+ * This file should NEVER throw exceptions as they can't be
+ * caught in a nice way until either Api or Page is reached.
+ * Instead critical issues with the environment should just
+ * result in a straight death sentence of the proces and
+ * send out a plain text message. Currently:
+ * - phpversion support
+ * - testswarm.ini existance
+ * - cache dir existance and writability
+ *
  * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
@@ -21,7 +30,7 @@ if ( !defined( 'TESTSWARM' ) ) {
 
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
-	echo "TestSwarm requires at least PHP 5.2.3\n";
+	echo "<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.2.3.\n";
 	exit;
 }
 
@@ -48,16 +57,11 @@ $swarmInstallDir = dirname( __DIR__ );
 
 // Verify that the testswarm.ini file exists
 if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
-	echo "testswarm.ini missing!\n";
+	echo "<b>TestSwarm Fatal:</b> testswarm.ini missing!\n";
 	exit;
 }
 
 $swarmConfig = array(
-	// Not included in testswarm-sample.ini, not meant to be overridden,
-	// although users could ammend it to include something like "-foobarPatched".
-	"version" => array(
-		"testswarm" => "", // populated later
-	),
 	"general" => array(
 		"timezone" => "UTC",
 	),
@@ -122,10 +126,13 @@ $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refr
 
 $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
 
-// Caching dir
 $swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
 
-$swarmConfig["version"]["testswarm"] = swarmGetVersion( $swarmConfig["storage"]["cacheDir"] . "/version_testswarm.cache" );
+// Caching directory must exist and be writable
+if ( !is_dir( $swarmConfig["storage"]["cacheDir"] ) || !is_writable( $swarmConfig["storage"]["cacheDir"] ) ) {
+	echo "<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!\n";
+	exit;
+}
 
 // Refresh control
 // (for documentation see testswarm.ini)
