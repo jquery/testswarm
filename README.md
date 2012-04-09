@@ -80,6 +80,11 @@ At the moment TestSwarm only supports Apache and MySQL.
    loaded, make sure `AllowOverride` is set to "`All`" (at least not to
    "`None`") in your Apache configuration.
 
+1. Make sure [storage][cacheDir] is set to an existing writable directory that
+   is not readable from the web. Either set it to a custom path outside the web
+   root in testswarm.ini, or create use the default 'cache' directory protected
+   with htaccess and chmod the directory 777.
+
 1. Copy `./config/robots.txt` to `./robots.txt` (or add similar rules to your
    main `robots.txt` file if TestSwarm is not in the root directory).
 

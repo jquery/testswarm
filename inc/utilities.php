@@ -264,9 +264,11 @@
 		}
 
 		// Cache 5 minutes
-		$versionCacheFileUpdated = filemtime( $versionCacheFile );
-		if ( $versionCacheFileUpdated < strftime( '5 minutes ago' ) ) {
-			unlink( $versionCacheFile );
+		if ( is_readable( $versionCacheFile ) ) {
+			$versionCacheFileUpdated = filemtime( $versionCacheFile );
+			if ( $versionCacheFileUpdated < strftime( '5 minutes ago' ) ) {
+				unlink( $versionCacheFile );
+			}
 		}
 
 		if ( !is_readable( $versionCacheFile ) ) {
@@ -301,7 +303,7 @@
 				$version .= " (" . substr( $gitSHA1, 0, 8 ) . ")";
 				$isWritten = (bool)file_put_contents( $versionCacheFile, $version );
 				if ( !$isWritten ) {
-					throw new SwarmException( "Version cache must be writable." );
+					throw new SwarmException( "Cache directory must exist and be writable by the script." );
 				}
 				$versionCached = $version;
 				return $versionCached;
