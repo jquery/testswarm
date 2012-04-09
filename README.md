@@ -96,7 +96,10 @@ At the moment TestSwarm only supports Apache and MySQL.
 Get involved
 ---------------------
 
-You're welcome to use the GitHub issue tracker to start discussions.
+You're welcome to use the GitHub [issue tracker](https://github.com/jquery/testswarm/issues)
+ to start discussions.
+
+Or post to the [QUnit and Testing forum](https://forum.jquery.com/qunit-and-testing).
 
 Most of us are also on IRC in the
 [#jquery-dev](http://webchat.freenode.net/?channels=jquery-dev) channel at
