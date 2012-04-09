@@ -95,8 +95,6 @@ CREATE TABLE `users` (
   `seed` varchar(40) NOT NULL,
   `password` varchar(40) NOT NULL,
   `auth` varchar(40) NOT NULL,
-  `email` varchar(255) NOT NULL default '',
-  `request` mediumtext NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
