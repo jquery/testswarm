@@ -185,7 +185,7 @@ class WebRequest {
 	/** @return Page|null */
 	public function getPageInstance() {
 		$pageAction = $this->getVal( "action", "home" );
-		// getVal will onlt fallback to "home" if "action" isn't set,
+		// getVal will only fallback to "home" if "action" isn't set,
 		// if it is falsy, also use home (we don't want to instantiate Page
 		// directly if it is an empty string
 		if ( !$pageAction ) {

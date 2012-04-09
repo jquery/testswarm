@@ -19,6 +19,12 @@ header( "X-Robots-Tag: noindex,nofollow", true );
 require_once "inc/init.php";
 
 $action = $swarmContext->getRequest()->getVal( "action", "info" );
+if ( !$action ) {
+	// getVal will only fallback to "info" if "action" isn't set,
+	// if it is falsy, also use infno (we don't want to instantiate Action
+	// directly if it is an empty string
+	$action = "info";
+}
 $format = $swarmContext->getRequest()->getVal( "format", "json" );
 $className = ucfirst( $action ) . "Action";
 $className = class_exists( $className ) ? $className : null;
