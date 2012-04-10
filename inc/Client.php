@@ -53,7 +53,11 @@ class Client {
 
 		// Update its record so that we know that it's still alive
 		$db->query(str_queryf(
-			"UPDATE clients SET updated = %s WHERE id = %u LIMIT 1;",
+			"UPDATE clients
+			SET
+				updated = %s
+			WHERE id = %u
+			LIMIT 1;",
 			$clientRow->updated,
 			$clientRow->id
 		));
@@ -99,7 +103,7 @@ class Client {
 		// If the user doesn't have one, create a new user row for this name
 		if ( !$userRow || !$userRow->id ) {
 			$db->query(str_queryf(
-				"INSERT INTO users (name, created, updated, seed) VALUES(%s, %s, %s, RAND());",
+				"INSERT INTO users (name, updated, created) VALUES(%s, %s, %s);",
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
@@ -112,12 +116,13 @@ class Client {
 
 		// Insert in a new record for the client and get its ID
 		$db->query(str_queryf(
-			"INSERT INTO clients (user_id, useragent_id, useragent, ip, created)
-			VALUES(%u, %s, %s, %s, %s);",
+			"INSERT INTO clients (user_id, useragent_id, useragent, ip, updated, created)
+			VALUES(%u, %s, %s, %s, %s, %s);",
 			$userRow->id,
 			$browserInfo->getSwarmUaID(),
 			$browserInfo->getRawUA(),
 			$request->getIP(),
+			swarmdb_dateformat( SWARM_NOW ),
 			swarmdb_dateformat( SWARM_NOW )
 		));
 

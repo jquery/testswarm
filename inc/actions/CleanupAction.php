@@ -14,8 +14,8 @@ class CleanupAction extends Action {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		// Reset runs that were given to a client,
-		// but haven't been active for over 5 minutes
+		// Get runs that were given to a client (status=1),
+		// but haven't responded with a save (status=2) within 5 minutes.
 		$rows = $db->getRows(str_queryf(
 			"SELECT
 				run_id,
@@ -24,25 +24,29 @@ class CleanupAction extends Action {
 			FROM
 				run_client, clients
 			WHERE run_client.updated < %s
-			AND   clients.id = client_id
+			AND   clients.id = run_client.client_id
 			AND   run_client.status = 1;",
 			swarmdb_dateformat( strtotime( '5 minutes ago' ) )
 		));
 
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
-				// Undo run count
+				// Undo runcount and reset status
 				$db->query(str_queryf(
 					"UPDATE
 						run_useragent
 					SET
-						runs = runs - 1
+						runs = runs - 1,
+						status = 0
 					WHERE run_id = %u
 					AND   useragent_id = %s;",
 					$row->run_id,
 					$row->useragent_id
 				));
-				// Remove run_client entry
+
+				// Remove run_client entry,
+				// after 5 minutes we'll assume the client crashed, refreshed, closed the browser
+				// or something else...
 				$db->query(str_queryf(
 					"DELETE FROM
 						run_client

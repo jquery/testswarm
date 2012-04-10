@@ -42,7 +42,8 @@ class SaverunAction extends Action {
 				fail = %u,
 				error = %u,
 				total = %u,
-				results = %s
+				results = %s,
+				updated = %s
 			WHERE client_id = %u
 			AND   run_id = %u
 			LIMIT 1;",
@@ -50,6 +51,7 @@ class SaverunAction extends Action {
 			$error,
 			$total,
 			$results,
+			swarmdb_dateformat( SWARM_NOW ),
 			$clientID,
 			$runID
 		));
@@ -66,7 +68,7 @@ class SaverunAction extends Action {
 					WHERE run_id = %u
 					AND   client_id != %u
 					AND   (total <= 0 OR error > 0 OR fail > 0)
-					AND   clients.id=client_id
+					AND   clients.id = client_id
 					AND   clients.useragent_id = %s;",
 					$runID,
 					$clientID,
@@ -76,9 +78,10 @@ class SaverunAction extends Action {
 				if ( $rows ) {
 					foreach ( $rows as $row ) {
 						$db->query(str_queryf(
-							"DELETE FROM run_client
-							WHERE run_id=%u
-							AND   client_id=%u;",
+							"DELETE
+							FROM run_client
+							WHERE run_id = %u
+							AND   client_id = %u;",
 							$runID,
 							$row->client_id
 						));
@@ -91,10 +94,12 @@ class SaverunAction extends Action {
 					SET
 						runs = max,
 						completed = completed + 1,
-						status = 2
+						status = 2,
+						updated = %s
 					WHERE useragent_id = %s
 					AND   run_id = %u
 					LIMIT 1;",
+					swarmdb_dateformat( SWARM_NOW ),
 					$browserInfo->getSwarmUaID(),
 					$runID
 				));
@@ -120,7 +125,10 @@ class SaverunAction extends Action {
 
 					foreach ( $rows as $row ) {
 						$db->query(str_queryf(
-							"DELETE FROM run_client WHERE run_id = %u AND client_id = %u;",
+							"DELETE
+							FROM run_client
+							WHERE run_id = %u
+							AND   client_id = %u;",
 							$runID,
 							$row->client_id
 						));
@@ -132,10 +140,12 @@ class SaverunAction extends Action {
 						run_useragent
 					SET
 						completed = completed + 1,
-						status = IF(completed + 1 < max, 1, 2)
+						status = IF(completed + 1 < max, 1, 2),
+						updated = %s
 					WHERE useragent_id = %s
 					AND   run_id = %u
 					LIMIT 1;",
+					swarmdb_dateformat( SWARM_NOW ),
 					$browserInfo->getSwarmUaID(),
 					$runID
 				));

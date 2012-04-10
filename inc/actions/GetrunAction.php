@@ -31,6 +31,8 @@ class GetrunAction extends Action {
 		// Also updates the timestamp so that it shows up on HomePage and UserPage
 		$client = Client::newFromContext( $this->getContext(), $clientID );
 
+		// Get oldest run for this user agent, that isn't on the max yet and isn't
+		// already ran by another client.
 		$runID = $db->getOne(str_queryf(
 			"SELECT
 				run_id
@@ -66,16 +68,27 @@ class GetrunAction extends Action {
 			if ( $row->run_url && $row->job_name && $row->run_name ) {
 				# Mark the run as "in progress" on the useragent
 				$db->query(str_queryf(
-					"UPDATE run_useragent SET runs = runs + 1, status = 1 WHERE run_id = %u AND useragent_id = %s LIMIT 1;",
+					"UPDATE run_useragent
+					SET
+						runs = runs + 1,
+						status = 1,
+						updated = %s
+					WHERE run_id = %u
+					AND   useragent_id = %s
+					LIMIT 1;",
+					swarmdb_dateformat( SWARM_NOW ),
 					$runID,
 					$browserInfo->getSwarmUaID()
 				));
 
 				# Initialize the client run
 				$db->query(str_queryf(
-					"INSERT INTO run_client (run_id, client_id, status, created) VALUES(%u, %u, 1, %s);",
+					"INSERT INTO run_client
+					(run_id, client_id, status, updated, created)
+					VALUES(%u, %u, 1, %s, %s);",
 					$runID,
 					$clientID,
+					swarmdb_dateformat( SWARM_NOW ),
 					swarmdb_dateformat( SWARM_NOW )
 				));
 

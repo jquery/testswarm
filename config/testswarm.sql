@@ -8,8 +8,8 @@ CREATE TABLE `clients` (
   `useragent_id` varchar(40) NOT NULL,
   `useragent` tinytext NOT NULL,
   `ip` varchar(15) NOT NULL default '',
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `updated` binary(14) NOT NULL,
+  `created` binary(14) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -23,8 +23,7 @@ CREATE TABLE `jobs` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -42,8 +41,8 @@ CREATE TABLE `run_client` (
   `error` int(11) NOT NULL default '0',
   `total` int(11) NOT NULL default '0',
   `results` text NOT NULL,
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `updated` binary(14) NOT NULL,
+  `created` binary(14) NOT NULL,
   PRIMARY KEY  (`run_id`,`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -60,8 +59,8 @@ CREATE TABLE `run_useragent` (
   `max` int(11) NOT NULL default '1',
   `completed` int(11) NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `updated` binary(14) NOT NULL,
+  `created` binary(14) NOT NULL,
   PRIMARY KEY  (`run_id`,`useragent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -76,8 +75,7 @@ CREATE TABLE `runs` (
   `job_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `url` tinytext NOT NULL,
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `created` binary(14) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -90,8 +88,8 @@ CREATE TABLE `runs` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
-  `updated` binary(14) NOT NULL default '19700101000000',
-  `created` binary(14) NOT NULL default '19700101000000',
+  `updated` binary(14) NOT NULL,
+  `created` binary(14) NOT NULL,
   `seed` varchar(40) NOT NULL,
   `password` varchar(40) NOT NULL,
   `auth` varchar(40) NOT NULL,

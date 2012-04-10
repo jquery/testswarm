@@ -118,23 +118,28 @@ class UserAction extends Action {
 				// then the worst failure is put in the summary
 				$uaSummary = array();
 
+				$uaNotNew = array();
+				$uaHasIncomplete = array();
+				$uaStrongestStatus = array();
+
 				foreach ( $jobActionData["runs"] as $run ) {
-					$uaNotNew = array();
-					$uaHasIncomplete = array();
-					$uaStrongestStatus = array();
 					foreach ( $run["uaRuns"] as $uaID => $uaRun ) {
-						if ( $uaRun["runStatus"] !== "new" ) {
-							$uaNotNew[$uaID] = true;
+						if ( $uaRun["runStatus"] !== "new" && !in_array( $uaID, $uaNotNew ) ) {
+							$uaNotNew[] = $uaID;
 						}
 						if ( $uaRun["runStatus"] === "new" || $uaRun["runStatus"] === "progress" ) {
-							$uaHasIncomplete[$uaID] = true;
+							if ( !in_array( $uaID, $uaHasIncomplete ) ) {
+								$uaHasIncomplete[] = $uaID;
+							}
 						}
-						if ( !isset( $uaStrongestStatus[$uaID] ) || $uaRunStatusStrength[$uaRun["runStatus"]] > $uaRunStatusStrength[$uaRunStatusStrength[$uaID]] ) {
+						if ( !isset( $uaStrongestStatus[$uaID] )
+							|| $uaRunStatusStrength[$uaRun["runStatus"]] > $uaRunStatusStrength[$uaStrongestStatus[$uaID]]
+						) {
 							$uaStrongestStatus[$uaID] = $uaRun["runStatus"];
 						}
-						$uaSummary[$uaID] = !isset( $uaNotNew[$uaID] )
+						$uaSummary[$uaID] = !in_array( $uaID, $uaNotNew )
 							? "new"
-							: ( isset( $uaHasIncomplete[$uaID] )
+							: ( in_array( $uaID, $uaHasIncomplete )
 								? "progress"
 								: $uaStrongestStatus[$uaID]
 							);

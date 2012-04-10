@@ -148,11 +148,12 @@ class AddjobAction extends Action {
 			// the browerset(s) for this job.
 			foreach ( $uaIDs as $uaID ) {
 				$isInserted = $db->query(str_queryf(
-					"INSERT INTO run_useragent (run_id, useragent_id, max, created)
-					VALUES(%u, %s, %u, %s);",
+					"INSERT INTO run_useragent (run_id, useragent_id, max, updated, created)
+					VALUES(%u, %s, %u, %s, %s);",
 					$newRunId,
 					$uaID,
 					$runMax,
+					swarmdb_dateformat( SWARM_NOW ),
 					swarmdb_dateformat( SWARM_NOW )
 				));
 			}
