@@ -35,10 +35,13 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#115) Implement API, including various new actions (#105, #116).
 * (#139) Create action for getting current status of the swarm.
 * (#143) Refactor useragent storage and detection.
-* (#150) Show current TestSwarm version in InfoAction API and in `<meta>` on Pages.
+* (#150) Expose current TestSwarm version in InfoAction API and in `<meta>` on Pages.
 * (#146) Add noindex rules.
 * (#149) Create action "projects" for listing all accounts that submit jobs.
-* Basic caching for expansive operations in flat files in `./cache/`.
+* Implement basic caching for expansive operations in flat files in `./cache/`.
+* Implement "debug" mode for the API (format=debug)
+* Implement "debug" mode for Database queries. Disabled by default for performance and
+  security reasons, enable by setting [debug][db_log_queries] = 1 in testswarm.ini.
 
 ### User agents
 
