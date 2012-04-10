@@ -28,8 +28,10 @@ class CleanupAction extends Action {
 			AND   run_client.status = 1;",
 			swarmdb_dateformat( strtotime( '5 minutes ago' ) )
 		));
+		$resetTimedoutRuns = 0;
 
 		if ( $rows ) {
+			$resetTimedoutRuns = count( $rows );
 			foreach ( $rows as $row ) {
 				// Undo runcount and reset status
 				$db->query(str_queryf(
@@ -75,8 +77,12 @@ class CleanupAction extends Action {
 				AND   clients.useragent_id = run_useragent.useragent_id
 			);"
 		);
+		$resetRaceConditionDeleted = $db->getAffectedRows();
 
-		$this->setData( "ok" );
+		$this->setData(array(
+			"resetTimedoutRuns" => $resetTimedoutRuns,
+			"resetRaceConditionDeleted" => $resetRaceConditionDeleted,
+		));
 	}
 }
 
