@@ -27,6 +27,11 @@ class SaverunAction extends Action {
 			return;
 		}
 
+		// Create a Client object to verify that the client exists
+		// throws an exception, caught higher up, if it doesn't exist.
+		// Also updates the timestamp so that it shows up on HomePage and UserPage
+		$client = Client::newFromContext( $this->getContext(), $clientID );
+
 		$runID = $request->getInt( "run_id" );
 		$fail = $request->getInt( "fail" );
 		$error = $request->getInt( "error" );
