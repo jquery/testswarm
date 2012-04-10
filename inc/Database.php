@@ -13,6 +13,8 @@ class Database {
 	protected $conn;
 	protected $isOpen = false;
 
+	private $rawQueryHistory = array();
+
 	/**
 	 * Creates a Database object, opens the connection and returns the instance.
 	 *
@@ -101,13 +103,6 @@ class Database {
 		return false;
 	}
 
-	/** @return int */
-	public function getNumRows( $res ) {
-		$n = mysql_num_rows( $res );
-		if ( $this->lastErrNo() ) { throw new SwarmException( 'Error in getNumRows: ' . $this->lastErrMsg() ); }
-		return $n;
-	}
-
 	/**
 	 * Queries other than SELECT, such as DELETE, UPDATE and INSERT.
 	 * @return resource|false
@@ -117,8 +112,20 @@ class Database {
 	}
 
 	/** @return int */
+	public function getNumRows( $res ) {
+		$n = mysql_num_rows( $res );
+		if ( $this->lastErrNo() ) { throw new SwarmException( 'Error in getNumRows: ' . $this->lastErrMsg() ); }
+		return $n;
+	}
+
+	/** @return int */
 	public function getInsertId() {
 		return intval( mysql_insert_id( $this->conn ) );
+	}
+
+	/** @return int */
+	public function getAffectedRows() {
+		return intval( mysql_affected_rows( $this->conn ) );
 	}
 
 	public function lastErrNo() {
@@ -143,12 +150,23 @@ class Database {
 
 	/** @return MySQL resource|false */
 	protected function doQuery( $sql ) {
-		return mysql_query( $sql, $this->conn );
+		$microtimeStart = microtime( /*get_as_float=*/true );
+		$queryResponse = mysql_query( $sql, $this->conn );
+
+		if ( $queryResponse === false || $this->lastErrNo() ) {
+			throw new SwarmException( 'Error in doQuery: ' . $this->lastErrMsg() );
+		}
+
+		$this->logQuery( $sql, $queryResponse, $microtimeStart );
+
+		return $queryResponse;
 	}
 
 	protected function fetchObject( $res ) {
 		$obj = mysql_fetch_object( $res );
-		if ( $this->lastErrNo() ) { throw new SwarmException( 'Error in fetchObject: ' . $this->lastErrMsg() ); }
+		if ( $this->lastErrNo() ) {
+			throw new SwarmException( 'Error in fetchObject: ' . $this->lastErrMsg() );
+		}
 		return $obj;
 	}
 
@@ -161,6 +179,33 @@ class Database {
 		if ( !function_exists( "mysql_connect" ) ) {
 			throw new SwarmException( "MySQL functions missing." );
 		}
+	}
+
+	protected function logQuery( $sql, $queryResponse, $microtimeStart ) {
+		static $doLog;
+		if ( $doLog === null ) {
+			$doLog = $this->context->getConf()->debug->db_log_queries;
+		}
+		if ( $doLog ) {
+			$microtimeEnd = microtime( /*get_as_float=*/true );
+			$backtrace = debug_backtrace( /*include_objects=*/false );
+			// 0:logQuery > 1:doQuery -> 2:(some Database method) -> 3:callee
+			$backtrace = $backtrace[ 3 ];
+			$backtrace = ( $backtrace['class'] ? "{$backtrace['class']}::" : $backtrace['class'] ) . $backtrace['function'];
+			$this->rawQueryHistory[] = array(
+				"sql" => $sql,
+				"caller" => $backtrace,
+				"numRows" => is_resource( $queryResponse ) ? $this->getNumRows( $queryResponse ) : null,
+				"insertId" => $this->getInsertId(),
+				"affectedRows" => $this->getAffectedRows(),
+				"queryTime" => $microtimeEnd - $microtimeStart,
+			);
+		}
+		return $doLog;
+	}
+
+	public function getQueryLog() {
+		return $this->rawQueryHistory;
 	}
 
 	private function __construct() {

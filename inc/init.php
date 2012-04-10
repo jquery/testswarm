@@ -96,6 +96,7 @@ $swarmConfig = array(
 	"debug" => array(
 		"show_exception_details" => "0",
 		"php_error_reporting" => "0",
+		"db_log_queries" => "0",
 	),
 );
 
@@ -113,6 +114,7 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 // Type conversion
 // (parse_ini_file reads everything as strings)
 
+$swarmConfig["debug"]["db_log_queries"] = $swarmConfig["debug"]["db_log_queries"] === "1";
 $swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
 $swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
 

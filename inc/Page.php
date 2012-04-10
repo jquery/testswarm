@@ -293,6 +293,28 @@ foreach ( $projects as $project ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );
 	}
 
+	if ( $this->getContext()->getConf()->debug->db_log_queries ) {
+		$queryLog = $this->getContext()->getDB()->getQueryLog();
+		$queryLogHtml = '<hr><h3>Database query log</h3><div class="well"><ul class="unstyled">';
+		foreach ( $queryLog as $i => $queryInfo ) {
+			if ( $i !== 0 ) {
+				$queryLogHtml .= '<hr>';
+			}
+			$queryLogHtml .= '<li>'
+				. '<pre>' . htmlspecialchars( $queryInfo["sql"] ) . '</pre>'
+				. '<table class="table table-bordered table-condensed"><tbody><tr>'
+				. '<td>Caller: <code>' . htmlspecialchars( $queryInfo["caller"] ) . '</code></td>'
+				. '<td>Num rows: <code>' . htmlspecialchars( $queryInfo["numRows"] ) . '</code></td>'
+				. '<td>Insert ID: <code>' . htmlspecialchars( $queryInfo["insertId"] ) . '</code></td>'
+				. '<td>Affected rows: <code>' . htmlspecialchars( $queryInfo["affectedRows"] ) . '</code></td>'
+				. '<td>Query time: <code>' . htmlspecialchars( substr( $queryInfo["queryTime"], 0, 8 ) ) . '</code></td>'
+				. '</tr></table>'
+				. '</li>';
+		}
+		$queryLogHtml .= '</ul>';
+		echo $queryLogHtml;
+	}
+
 ?>
 </body>
 </html>
