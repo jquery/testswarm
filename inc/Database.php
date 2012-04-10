@@ -114,8 +114,10 @@ class Database {
 	/** @return int */
 	public function getNumRows( $res ) {
 		$n = mysql_num_rows( $res );
-		if ( $this->lastErrNo() ) { throw new SwarmException( 'Error in getNumRows: ' . $this->lastErrMsg() ); }
-		return $n;
+		if ( $this->lastErrNo() ) {
+			throw new SwarmException( 'Error in getNumRows: ' . $this->lastErrMsg() );
+		}
+		return intval( $n );
 	}
 
 	/** @return int */
@@ -199,6 +201,7 @@ class Database {
 			$this->rawQueryHistory[] = array(
 				"sql" => $sql,
 				"caller" => $backtrace,
+				// Only SELECT queries return a resource that getNumRows can use
 				"numRows" => is_resource( $queryResponse ) ? $this->getNumRows( $queryResponse ) : null,
 				"insertId" => $this->getInsertId(),
 				"affectedRows" => $this->getAffectedRows(),
