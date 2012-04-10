@@ -81,7 +81,7 @@ class JobPage extends Page {
 				if ( isset( $run["uaRuns"][$uaID] ) ) {
 					$uaRun = $run["uaRuns"][$uaID];
 					$html .= html_tag_open( "td", array(
-						"class" => "status-" . $uaRun["runStatus"],
+						"class" => "swarm-status swarm-status-" . $uaRun["runStatus"],
 						"data-job-id" => $data["jobInfo"]["id"],
 						"data-run-id" => $run["info"]["id"],
 						"data-run-status" => $uaRun["runStatus"],
@@ -89,16 +89,24 @@ class JobPage extends Page {
 						// Un-ran tests don't have a client id
 						"data-client-id" => isset( $uaRun["clientID"] ) ? $uaRun["clientID"] : "",
 					));
-					if ( isset( $uaRun["runResultsUrl"] ) ) {
-						$html .= html_tag( 'a', array(
-							"rel" => "nofollow",
-							"href" => $uaRun["runResultsUrl"],
-						), $uaRun["runResultsLabel"] );
+					if ( isset( $uaRun["runResultsUrl"] ) && $uaRun["runResultsLabel"] ) {
+						$html .=
+							html_tag_open( 'a', array(
+								"rel" => "nofollow",
+								"href" => $uaRun["runResultsUrl"],
+							) )
+							. $uaRun["runResultsLabel"]
+							. '<i class="icon-list-alt pull-right" title="' . htmlspecialchars(
+								"Open run results for {$data["userAgents"][$uaID]["displaytitle"]}"
+							) . '"></i>'
+							. '</a>';
+					} else {
+						$html .= UserPage::getStatusIconHtml( $uaRun["runStatus"] );
 					}
 					$html .= '</td>';
 				} else {
 					// This run isn't schedules to be ran in this UA
-					$html .= '<td class="status-notscheduled"></td>';
+					$html .= '<td class="swarm-status swarm-status-notscheduled"></td>';
 				}
 			}
 		}

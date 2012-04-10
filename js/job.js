@@ -16,7 +16,7 @@ jQuery(function ( $ ) {
 		if ( refreshTableTimout ) {
 			clearTimeout( refreshTableTimout );
 		}
-		if ( $( "table.swarm-results td.status-new" ).length ) {
+		if ( $( "table.swarm-results td.swarm-status-new" ).length ) {
 			$indicator.stop(true, true).css( 'opacity', 1 );
 			$.get( window.location.href, function ( html ) {
 				var tableHtml, $targetTable;
@@ -28,10 +28,10 @@ jQuery(function ( $ ) {
 				}
 				setTimeout( function () {
 					$indicator.stop(true, true).animate({opacity: 0});
-				}, updateInterval > 500 ? 500 : updateInterval/2 );
+				}, 10 );
 			});
 
-			setTimeout( refreshTable, updateInterval );
+			refreshTableTimout = setTimeout( refreshTable, updateInterval );
 		}
 	}
 

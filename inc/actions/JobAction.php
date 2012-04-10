@@ -92,18 +92,20 @@ class JobAction extends Action {
 				WHERE run_useragent.run_id = %u;",
 				$runRow->run_id
 			));
-			foreach ( $runUaRows as $runUaRow ) {
-				// Create array for this ua run,
-				// If it has been run or is currently running,
-				// this array will be re-created in the loop over $clientRunRows
-				$runUaRuns[$runUaRow->useragent_id] = array(
-					"runStatus" => self::resolveStatusID( (int)$runUaRow->status ),
-				);
+			if ( $runUaRows ) {
+				foreach ( $runUaRows as $runUaRow ) {
+					// Create array for this ua run,
+					// If it has been run or is currently running,
+					// this array will be re-created in the loop over $clientRunRows
+					$runUaRuns[$runUaRow->useragent_id] = array(
+						"runStatus" => self::resolveStatusID( (int)$runUaRow->status ),
+					);
 
-				// Add UA ID to the list. After we've collected
-				// all the UA IDs we'll perform one query for all of them
-				// to gather the info from the useragents table
-				$userAgentIDs[] = $runUaRow->useragent_id;
+					// Add UA ID to the list. After we've collected
+					// all the UA IDs we'll perform one query for all of them
+					// to gather the info from the useragents table
+					$userAgentIDs[] = $runUaRow->useragent_id;
+				}
 			}
 
 			// Get client results for this run
@@ -145,7 +147,7 @@ class JobAction extends Action {
 							? ""
 							: ( $clientRunRow->total < 0
 								// Timeout
-								? "Err"
+								? ""
 								: ( $clientRunRow->error > 0
 										// If there were errors, show number of errors
 										? $clientRunRow->error

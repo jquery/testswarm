@@ -1,3 +1,44 @@
+@-o-keyframes rotate {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+@-ms-keyframes rotate {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .swarm-browseronline {
 	position: relative;
 	text-align: center;
@@ -24,52 +65,109 @@
 	cursor: default;
 }
 
-/* Result table */
+/**
+ * Results table.
+ * The swarm-status colors are now all derived from the following greens:
+ * #DBEFD7 (bg) / #468847 (text). The derived colors are calculated using
+ * HSL, and for clarity I've included those so that it's easy to update the
+ * saturation/lightness later. However due to browser support I the CSS
+ * properties are set to the HEX verions.
+ *
+ * background: hsl(H.., 44%, 89%)
+ *                           color: hsl(H.., 32%, 40%)
+ * -
+ * new:        hsl(0,   0%,  91%) / hsl(0,   0%,  40%)
+ * progress:   hsl(49,  44%, 89%) / hsl(49,  32%, 40%)
+ * passed:     hsl(110, 44%, 89%) / hsl(110, 32%, 40%)
+ * failure, timedout
+ * and error:  hsl(0,   44%, 89%) / hsl(0,   32%, 40%)
+ */
 
-table.swarm-results th,
-table.swarm-results td {
+table.swarm-results thead th,
+table.swarm-results tbody td.swarm-status {
 	text-align: center;
+	background: #fff;
 }
 
-table.swarm-results img.swarm-browsericon {
+table.swarm-results th img.swarm-browsericon {
 	max-height: 28px;
 }
 
-table.swarm-results td.status-new,
-table.swarm-results tr:hover td.status-new {
-	background: #F2F2F2;
+table.swarm-results tbody td.swarm-status {
+	font-weight: bold;
 }
 
-table.swarm-results td.status-progress,
-table.swarm-results tr:hover td.status-progress {
-	background: #FBEED5;
+table.swarm-results tbody td.swarm-status-new {
+	background: #E8E8E8;
+}
+table.swarm-results tbody td.swarm-status-new,
+table.swarm-results tbody td.swarm-status-new a {
+	color: #666);
 }
 
-table.swarm-results td.status-passed,
-table.swarm-results tr:hover td.status-passed {
-	background: #DFF0D8;
+table.swarm-results tbody td.swarm-status-progress {
+	background: #EFEBD7;
 }
 
-table.swarm-results td.status-failed,
-table.swarm-results tr:hover td.status-failed {
-	background: #F2DEDE;
+table.swarm-results tbody td.swarm-status-progress,
+table.swarm-results tbody td.swarm-status-progress a {
+	color: #877B45;
 }
 
-table.swarm-results td.status-timedout,
-table.swarm-results td.status-error,
-table.swarm-results tr:hover td.status-timedout,
-table.swarm-results tr:hover td.status-error {
-	background: #B94A48;
+table.swarm-results tbody td.swarm-status-passed {
+	background: #DBEFD7;
+}
+table.swarm-results tbody td.swarm-status-passed,
+table.swarm-results tbody td.swarm-status-passed a {
+	color: #508745;
 }
 
-table.swarm-results td.status-timedout a,
-table.swarm-results td.status-error a,
-table.swarm-results tr:hover td.status-timedout a,
-table.swarm-results tr:hover td.status-error a {
-	color: black;
+table.swarm-results tbody td.swarm-status-timedout,
+table.swarm-results tbody td.swarm-status-error,
+table.swarm-results tbody td.swarm-status-failed {
+	background: #EFD7D7;
+}
+table.swarm-results tbody td.swarm-status-timedout,
+table.swarm-results tbody td.swarm-status-timedout a,
+table.swarm-results tbody td.swarm-status-error,
+table.swarm-results tbody td.swarm-status-error a,
+table.swarm-results tbody td.swarm-status-failed,
+table.swarm-results tbody td.swarm-status-failed a {
+	color: #874545);
 }
 
-table.swarm-results td.status-notscheduled,
-table.swarm-results tr:hover td.status-notscheduled {
+table.swarm-results tbody td.swarm-status-notscheduled {
 	background: #fff;
+}
+
+.swarm-status-progressicon {
+	-o-animation-name: rotate;
+	-o-animation-direction: normal;
+	-o-animation-duration: 2s;
+	-o-animation-timing-function: linear;
+	-o-animation-iteration-count: infinite;
+
+	-ms-animation-name: rotate;
+	-ms-animation-direction: normal;
+	-ms-animation-duration: 2s;
+	-ms-animation-timing-function: linear;
+	-ms-animation-iteration-count: infinite;
+
+	-moz-animation-name: rotate;
+	-moz-animation-direction: normal;
+	-moz-animation-duration: 2s;
+	-moz-animation-timing-function: linear;
+	-moz-animation-iteration-count: infinite;
+
+	-webkit-animation-name: rotate;
+	-webkit-animation-direction: normal;
+	-webkit-animation-duration: 2s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+
+	animation-name: rotate;
+	animation-direction: normal;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
 }
