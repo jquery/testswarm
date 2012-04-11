@@ -14,7 +14,8 @@ class ApiDebugPage extends Page {
 	protected function initContent() {
 
 		if ( !defined( 'SWARM_ENTRY' ) || SWARM_ENTRY !== 'API' ) {
-			throw new SwarmException( "This page is not viewable outside the scope of the API." );
+			echo "This page is not viewable outside the scope of the API.\n";
+			exit;
 		}
 
 		$this->setTitle( "API Response" );
