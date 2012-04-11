@@ -9,6 +9,9 @@
 
 class JobAction extends Action {
 
+	/**
+	 * @actionParam item int: Job ID.
+	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
@@ -73,7 +76,7 @@ class JobAction extends Action {
 
 		$userAgentIDs = array();
 
-		foreach( $runRows as $runRow ) {
+		foreach ( $runRows as $runRow ) {
 			$runInfo = array(
 				"id" => $runRow->run_id,
 				"name" => $runRow->run_name,

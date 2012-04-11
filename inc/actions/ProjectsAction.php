@@ -9,7 +9,10 @@
 class ProjectsAction extends Action {
 
 	/**
-	 * @requestParam "sort" string: [optional] Defaults to "name".
+	 * @requestParam sort string: [optional] What to sort the results by.
+	 * Must be one of "name", "id", "creation" or "jobcount". Defaults to "name".
+	 * @requestParam sort_order string: [optional]
+	 * Must be one of "asc" (ascending" or "desc" (decending). Defaults to "asc".
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();

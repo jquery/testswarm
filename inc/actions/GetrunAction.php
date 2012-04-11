@@ -9,6 +9,10 @@
 
 class GetrunAction extends Action {
 
+	/**
+	 * @actionMethod POST: Required.
+	 * @actionParam client_id int
+	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
 		$db = $this->getContext()->getDB();

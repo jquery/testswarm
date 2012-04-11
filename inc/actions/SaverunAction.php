@@ -10,6 +10,15 @@
 
 class SaverunAction extends Action {
 
+	/**
+	 * @actionMethod POST: Required.
+	 * @actionParam client_id int
+	 * @actionParam run_id int
+	 * @actionParam fail int
+	 * @actionParam error int
+	 * @actionParam total int
+	 * @actionParam results string: HTML snapshot of the test results page.
+	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
 		$db = $this->getContext()->getDB();

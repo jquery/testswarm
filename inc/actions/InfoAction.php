@@ -9,6 +9,9 @@
 
 class InfoAction extends Action {
 
+	/**
+	 * @actionNote This action takes no parameters.
+	 */
 	public function doAction() {
 		$conf = $this->getContext()->getConf();
 

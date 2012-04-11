@@ -11,7 +11,8 @@
 class SwarmstateAction extends Action {
 
 	/**
-	 * @requestParam "onlyactive" Only include user agents that online clients and/or pending runs.
+	 * @requestParam onlyactive bool: If true, only user agents that
+	 * have online clients and/or pending runs are included.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
@@ -25,7 +26,7 @@ class SwarmstateAction extends Action {
 
 		$uaIndex = BrowserInfo::getSwarmUAIndex();
 
-		foreach( $uaIndex as $uaID => $uaData ) {
+		foreach ( $uaIndex as $uaID => $uaData ) {
 			if ( $uaData->active !== true ) {
 				continue;
 			}

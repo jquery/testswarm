@@ -1,6 +1,9 @@
 <?php
 /**
  * "Addjob" action.
+ * Addjob ignores the current session. Instead it uses tokens, which (although
+ * all registered users have an auth token in the database), only trusted
+ * users know their own token.
  *
  * @author John Resig, 2008-2011
  * @author Timo Tijhof, 2012
@@ -11,9 +14,14 @@
 class AddjobAction extends Action {
 
 	/**
-	 * Addjob ignores the current session.
-	 * Instead it uses tokens, which (although all registered users have an auth token
-	 * in the database), only trusted users know their own token.
+	 * @actionMethod POST: Required.
+	 * @actionParam authUsername string
+	 * @actionParam authToken string
+	 * @actionParam jobName string: May contain HTML.
+	 * @actionParam runMax int
+	 * @actionParam runNames array
+	 * @actionParam runUrls array
+	 * @actionParam browserSets array
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();

@@ -16,7 +16,9 @@
 	function log( htmlMsg ) {
 		$( "#history" ).prepend( "<li><strong>" +
 			new Date().toString().replace( /^\w+ /, "" ).replace( /:[^:]+$/, "" ) +
-			":</strong> " + htmlMsg + "</li>" );
+			":</strong> " + htmlMsg + "</li>"
+		);
+
 		msg( htmlMsg );
 	}
 
@@ -37,6 +39,11 @@
 		}
 	};
 
+	/**
+	 * @param query String|Object: $.ajax "data" option, converted with $.param.
+	 * @param retry Function
+	 * @param ok Function
+	 */
 	function retrySend( query, retry, ok ) {
 		$.ajax({
 			type: "POST",

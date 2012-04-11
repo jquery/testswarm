@@ -142,7 +142,7 @@ class WebRequest {
 	 */
 	private function &fix_magic_quotes( &$arr, $topLevel = true ) {
 		$clean = array();
-		foreach( $arr as $key => $val ) {
+		foreach ( $arr as $key => $val ) {
 			if ( is_array( $val ) ) {
 				$cleanKey = $topLevel ? stripslashes( $key ) : $key;
 				$clean[$cleanKey] = $this->fix_magic_quotes( $arr[$key], false );

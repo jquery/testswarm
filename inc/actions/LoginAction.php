@@ -9,6 +9,11 @@
 
 class LoginAction extends Action {
 
+	/**
+	 * @actionMethod POST: Required.
+	 * @actionParam username string
+	 * @actionParam password string
+	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();

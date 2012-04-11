@@ -10,6 +10,9 @@
 
 class ScoresAction extends Action {
 
+	/**
+	 * @actionNote This action takes no parameters.
+	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 

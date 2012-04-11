@@ -47,7 +47,7 @@ class BrowserInfo {
 			foreach ( $rawIndex as $uaID => $uaItem ) {
 				if ( is_array( $uaItem ) ) {
 					$uaItem2 = $uaItem;
-					foreach( $uaItem2 as $uaDataKey => $uaDataVal ) {
+					foreach ( $uaItem2 as $uaDataKey => $uaDataVal ) {
 						if ( $uaDataKey !== "displaytitle" && $uaDataKey !== "displayicon" ) {
 							$uaItem[$uaDataKey] = (bool)trim( $uaDataVal );
 						} else {

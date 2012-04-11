@@ -1,6 +1,6 @@
 <?php
 /**
- * "Cleanup" action (previously action=wipe)
+ * "Cleanup" action (previously WipeAction)
  *
  * @author John Resig, 2008-2011
  * @since 0.1.0
@@ -9,6 +9,9 @@
 
 class CleanupAction extends Action {
 
+	/**
+	 * @actionNote This action takes no parameters.
+	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
 		$db = $this->getContext()->getDB();

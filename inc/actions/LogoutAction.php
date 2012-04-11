@@ -8,6 +8,9 @@
  */
 class LogoutAction extends Action {
 
+	/**
+	 * @actionNote This action takes no parameters.
+	 */
 	public function doAction() {
 		$request = $this->getContext()->getRequest();
 		$request->setSessionData( "username", null );
