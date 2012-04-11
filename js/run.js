@@ -92,8 +92,14 @@
 	function testTimedout() {
 		cancelTest();
 		retrySend(
-			"action=saverun&fail=-1&total=-1&results=Test%20Timed%20Out.&run_id=" +
-				currRunId + "&client_id=" + SWARM.client_id,
+			{
+				action: "saverun",
+				fail: "-1",
+				total: "-1",
+				results: "Test Timed Out.",
+				run_id: currRunId,
+				client_id: SWARM.client_id
+			}
 			testTimedout,
 			function ( data ) {
 				if ( data.saverun === "ok" ) {
