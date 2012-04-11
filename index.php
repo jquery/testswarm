@@ -11,7 +11,7 @@
  * @package TestSwarm
  */
 // Valid entry point
-define( 'TESTSWARM', basename( __FILE__ ) );
+define( 'SWARM_ENTRY', 'INDEX' );
 
 require_once "inc/init.php";
 

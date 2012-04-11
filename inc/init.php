@@ -24,7 +24,7 @@
  */
 
 // Protect against web entry
-if ( !defined( 'TESTSWARM' ) ) {
+if ( !defined( 'SWARM_ENTRY' ) ) {
 	exit;
 }
 
@@ -40,9 +40,14 @@ if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.
  * Defines
  * @{
  */
+
+// Indicator for time/date functions to interpret argument as 'now',
+// instead of a unix timestamp.
 define( 'SWARM_NOW', 0 );
-define( 'DBCON_DEFAULT', 10 );
-define( 'DBCON_PERSISTENT', 11 );
+
+// Database::open, connection types
+define( 'SWARM_DBCON_DEFAULT', 10 );
+define( 'SWARM_DBCON_PERSISTENT', 11 );
 
 /**@}*/
 

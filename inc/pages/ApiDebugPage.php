@@ -13,7 +13,7 @@ class ApiDebugPage extends Page {
 
 	protected function initContent() {
 
-		if ( !defined( 'TESTSWARM' ) || TESTSWARM !== 'api.php' ) {
+		if ( !defined( 'SWARM_ENTRY' ) || SWARM_ENTRY !== 'API' ) {
 			throw new SwarmException( "This page is not viewable outside the scope of the API." );
 		}
 

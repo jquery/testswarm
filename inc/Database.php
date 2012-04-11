@@ -22,7 +22,7 @@ class Database {
 	 * @param $connType int: [optional]
 	 */
 
-	public static function newFromContext( TestSwarmContext $context, $connType = DBCON_DEFAULT ) {
+	public static function newFromContext( TestSwarmContext $context, $connType = SWARM_DBCON_DEFAULT ) {
 		$dbConf = $context->getConf()->database;
 		$db = new self();
 
@@ -38,16 +38,16 @@ class Database {
 	}
 
 	/**
-	 * @param $connType int: DBCON_DEFAULT or DBCON_PERSISTENT.
+	 * @param $connType int: SWARM_DBCON_DEFAULT or SWARM_DBCON_PERSISTENT.
 	 */
-	public function open( $connType = DBCON_DEFAULT ) {
+	public function open( $connType = SWARM_DBCON_DEFAULT ) {
 		$this->close();
 
 		switch ( $connType ) {
-		case DBCON_DEFAULT:
+		case SWARM_DBCON_DEFAULT:
 			$this->conn = mysql_connect( $this->host, $this->username, $this->password, /*force_new=*/true );
 			break;
-		case DBCON_PERSISTENT:
+		case SWARM_DBCON_PERSISTENT:
 			$this->conn = mysql_pconnect( $this->host, $this->username, $this->password );
 			break;
 		default:

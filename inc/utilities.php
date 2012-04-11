@@ -9,7 +9,7 @@
  */
 
 	// Protect against web entry
-	if ( !defined( 'TESTSWARM' ) ) {
+	if ( !defined( 'SWARM_ENTRY' ) ) {
 		exit;
 	}
 
