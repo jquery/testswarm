@@ -298,8 +298,8 @@
 				}
 
 				$version .= " (" . substr( $gitSHA1, 0, 8 ) . ")";
-				$isWritten = (bool)file_put_contents( $versionCacheFile, $version );
-				if ( !$isWritten ) {
+				$isWritten = file_put_contents( $versionCacheFile, $version );
+				if ( $isWritten === false ) {
 					throw new SwarmException( "Cache directory must exist and be writable by the script." );
 				}
 				$versionCached = $version;
