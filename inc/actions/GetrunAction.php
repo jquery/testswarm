@@ -63,8 +63,8 @@ class GetrunAction extends Action {
 					runs.name as run_name
 				FROM
 					runs, jobs
-				WHERE runs.id=%u
-				AND   jobs.id=runs.job_id
+				WHERE runs.id = %u
+				AND   jobs.id = runs.job_id
 				LIMIT 1;",
 				$runID
 			));

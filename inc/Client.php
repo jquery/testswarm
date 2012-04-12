@@ -103,13 +103,15 @@ class Client {
 		// If the user doesn't have one, create a new user row for this name
 		if ( !$userRow || !$userRow->id ) {
 			$db->query(str_queryf(
+				// This omits some of the required columns but seems to work regardless.
+				// See also github.com/jquery/testswarm/issues/148 which will fix this.
 				"INSERT INTO users (name, updated, created) VALUES(%s, %s, %s);",
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
 			));
 			$userRow = $db->getRow(str_queryf(
-				"SELECT * FROM users WHERE id = %s LIMIT 1;",
+				"SELECT * FROM users WHERE id = %u LIMIT 1;",
 				$db->getInsertId()
 			));
 		}
@@ -127,7 +129,7 @@ class Client {
 		));
 
 		$this->clientRow = $db->getRow(str_queryf(
-			"SELECT * FROM clients WHERE id = %s LIMIT 1;",
+			"SELECT * FROM clients WHERE id = %u LIMIT 1;",
 			$db->getInsertId()
 		));
 		$this->userRow = $userRow;

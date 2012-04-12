@@ -78,15 +78,12 @@ class SaverunAction extends Action {
 				$rows = $db->getRows(str_queryf(
 					"SELECT client_id
 					FROM
-						run_client, clients
+						run_client
 					WHERE run_id = %u
 					AND   client_id != %u
-					AND   (total <= 0 OR error > 0 OR fail > 0)
-					AND   clients.id = client_id
-					AND   clients.useragent_id = %s;",
+					AND   (total <= 0 OR error > 0 OR fail > 0);",
 					$runID,
-					$clientID,
-					$browserInfo->getSwarmUaID()
+					$clientID
 				));
 
 				if ( $rows ) {
@@ -126,26 +123,25 @@ class SaverunAction extends Action {
 						"SELECT
 							client_id
 						FROM
-							run_client, clients
+							run_client
 						WHERE run_id = %u
 						AND   client_id != %u
-						AND   total <= 0
-						AND   clients.id = client_id
-						AND   clients.useragent_id = %s;",
+						AND   total <= 0;",
 						$runID,
-						$clientID,
-						$browserInfo->getSwarmUaID()
+						$clientID
 					));
 
-					foreach ( $rows as $row ) {
-						$db->query(str_queryf(
-							"DELETE
-							FROM run_client
-							WHERE run_id = %u
-							AND   client_id = %u;",
-							$runID,
-							$row->client_id
-						));
+					if ( $rows ) {
+						foreach ( $rows as $row ) {
+							$db->query(str_queryf(
+								"DELETE
+								FROM run_client
+								WHERE run_id = %u
+								AND   client_id = %u;",
+								$runID,
+								$row->client_id
+							));
+						}
 					}
 				}
 

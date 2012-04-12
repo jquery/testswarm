@@ -55,7 +55,7 @@ class WiperunAction extends Action {
 				job_id
 			FROM
 				runs
-			WHERE runs.id=%u;",
+			WHERE runs.id = %u;",
 			$runID
 		));
 		if ( intval( $runJobID ) !== $jobID ) {
@@ -81,10 +81,8 @@ class WiperunAction extends Action {
 			FROM
 				run_client, clients
 			WHERE run_id = %u
-			AND   clients.id = client_id
-			AND   clients.useragent_id = %s;",
-			$runID,
-			$useragentID
+			AND   clients.id = client_id;",
+			$runID
 		));
 		$db->query(str_queryf(
 			"UPDATE

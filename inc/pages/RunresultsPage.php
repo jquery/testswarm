@@ -26,8 +26,8 @@ class RunresultsPage extends Page {
 					results
 				FROM
 					run_client
-				WHERE run_id = %s
-				AND   client_id = %s;",
+				WHERE run_id = %u
+				AND   client_id = %u;",
 				$runID, $clientID
 			));
 

@@ -95,11 +95,12 @@
 			{
 				action: "saverun",
 				fail: "-1",
+				error: "0",
 				total: "-1",
 				results: "Test Timed Out.",
 				run_id: currRunId,
 				client_id: SWARM.client_id
-			}
+			},
 			testTimedout,
 			function ( data ) {
 				if ( data.saverun === "ok" ) {

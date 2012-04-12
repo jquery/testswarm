@@ -32,7 +32,7 @@ class JobAction extends Action {
 			FROM
 				jobs, users
 			WHERE jobs.id = %u
-			AND   users.id=jobs.user_id;",
+			AND   users.id = jobs.user_id;",
 			$jobID
 		));
 
@@ -229,7 +229,7 @@ class JobAction extends Action {
 				return "timedout";
 			}
 			// A total of 0 tests ran is also considered an error
-			if ( $clientRun->error > 0 || $clientRun->total == 1 ) {
+			if ( $clientRun->error > 0 || $clientRun->total == 0 ) {
 				return "error";
 			}
 			// Passed or failed
