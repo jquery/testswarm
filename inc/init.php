@@ -165,6 +165,7 @@ $swarmAutoLoadClasses = array(
 	"BrowserInfo" => "inc/BrowserInfo.php",
 	"Client" => "inc/Client.php",
 	"Database" =>"inc/Database.php",
+	"MaintenanceScript" => "inc/MaintenanceScript.php",
 	"Page" => "inc/Page.php",
 	"TestSwarmContext" => "inc/TestSwarm.php",
 	"WebRequest" => "inc/WebRequest.php",
