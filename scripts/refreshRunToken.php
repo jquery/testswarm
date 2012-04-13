@@ -31,7 +31,7 @@ class RefreshRunTokenScript extends MaintenanceScript {
 				$this->error( "Deletion of cache file failed:\n$cacheFile" );
 			}
 		}
-		$runToken = sha1( mt_rand( 1000000000, 9999999999 ) );
+		$runToken = sha1( mt_rand() );
 		$runTokenHash = sha1( $runToken );
 		$saved = file_put_contents( $cacheFile, $runTokenHash );
 		if ( $saved === false ) {

@@ -113,7 +113,7 @@ abstract class MaintenanceScript {
 			$this->error( "Maintenance scripts require at least PHP 5.3.0." );
 		}
 		if ( !ini_get( "register_argc_argv" ) || ini_get( "register_argc_argv" ) == '0' ) {
-			$this->error( "Maintenace scripts require `register_argc_argv` to be enabled in php.ini." );
+			$this->error( "Maintenance scripts require `register_argc_argv` to be enabled in php.ini." );
 		}
 
 		// General options for all scripts
