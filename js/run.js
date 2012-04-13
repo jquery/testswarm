@@ -77,7 +77,11 @@
 		currRunUrl = false;
 
 		msg( "Querying for tests to run..." );
-		retrySend( "action=getrun&client_id=" + SWARM.client_id, getTests, runTests );
+		retrySend( {
+			action: "getrun",
+			client_id: SWARM.client_id,
+			run_token: SWARM.run_token
+		}, getTests, runTests );
 	}
 
 	function cancelTest() {
@@ -99,7 +103,8 @@
 				total: "-1",
 				results: "Test Timed Out.",
 				run_id: currRunId,
-				client_id: SWARM.client_id
+				client_id: SWARM.client_id,
+				run_token: SWARM.run_token
 			},
 			testTimedout,
 			function ( data ) {
@@ -154,15 +159,18 @@
 				iframe.width = 1000;
 				iframe.height = 600;
 				iframe.className = "test-runner-frame";
-				iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?")
+				iframe.src = currRunUrl + (currRunUrl.indexOf( "?" ) > -1 ? "&" : "?") + $.param({
 					// Cache buster
-					+ "_=" + new Date().getTime()
-					// Homing signal for inject.js so that it can find it's POST target for action=saverun
-					// (only used in the <form> fallback in case postMessage isn't supported)
-					+ "&swarmURL=" + encodeURIComponent(
-						window.location.protocol + "//" + window.location.host + SWARM.conf.web.contextpath
-						+ "index.php?run_id=" + currRunId + "&client_id=" + SWARM.client_id
-					);
+					"_" : new Date().getTime(),
+					// Homing signal for inject.js so that it can find its target for action=saverun
+					"swarmURL" : window.location.protocol + "//" + window.location.host + SWARM.conf.web.contextpath
+						+ "index.php?"
+						+ $.param({
+							run_id: currRunId,
+							client_id: SWARM.client_id,
+							run_token: SWARM.run_token,
+						}),
+				});
 
 				$( "#iframes" ).append( iframe );
 

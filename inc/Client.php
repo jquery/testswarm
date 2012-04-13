@@ -145,10 +145,13 @@ class Client {
 
 	/**
 	 * @param $context TestSwarmContext
+	 * @param $runToken string
 	 * @param $clientID int: [optional] Instead of creating a new client entry,
 	 * create an instance for an existing client entry.
 	 */
-	public static function newFromContext( TestSwarmContext $context, $clientID = null ) {
+	public static function newFromContext( TestSwarmContext $context, $runToken, $clientID = null ) {
+		self::validateRunToken( $context, $runToken );
+
 		$client = new self();
 		$client->context = $context;
 
@@ -157,8 +160,23 @@ class Client {
 		} else {
 			$client->loadNew();
 		}
-
 		return $client;
+	}
+
+	public static function validateRunToken( TestSwarmContext $context, $runToken ) {
+		$conf = $context->getConf();
+		if ( !$conf->client->require_run_token ) {
+			return true;
+		}
+		$cacheFile = $conf->storage->cacheDir . "/run_token_hash.cache";
+		if ( !is_readable( $cacheFile ) ) {
+			throw new SwarmException( "Configuration requires a runToken but none has been configured." );
+		}
+		$runTokenHash = trim( file_get_contents( $cacheFile ) );
+		if ( $runTokenHash === sha1( $runToken ) ) {
+			return true;
+		}
+		throw new SwarmException( "This TestSwarm requires a run token. Either none was entered or it is invalid." );
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead. */

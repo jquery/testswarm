@@ -93,6 +93,7 @@ $swarmConfig = array(
 		"savereq_timeout" => "10",
 		"saveretry_max" => "4",
 		"saveretry_sleep" => "15",
+		"require_run_token" => "0",
 		"refresh_control" => "0",
 	),
 	"storage" => array(
@@ -129,6 +130,7 @@ $swarmConfig["client"]["run_timeout"] = intval( $swarmConfig["client"]["run_time
 $swarmConfig["client"]["savereq_timeout"] = intval( $swarmConfig["client"]["savereq_timeout"] );
 $swarmConfig["client"]["saveretry_max"] = intval( $swarmConfig["client"]["saveretry_max"] );
 $swarmConfig["client"]["saveretry_sleep"] = intval( $swarmConfig["client"]["saveretry_sleep"] );
+$swarmConfig["client"]["require_run_token"] = $swarmConfig["client"]["require_run_token"] === "1";
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
 $swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );

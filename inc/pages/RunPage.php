@@ -11,16 +11,28 @@ class RunPage extends Page {
 
 	protected function initContent() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
+		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
 		$uaItem = $browserInfo->getSwarmUaItem();
 
+		$runToken = null;
+		if ( $conf->client->require_run_token ) {
+			$runToken = $request->getVal( "run_token" );
+			if ( !$runToken ) {
+				throw new SwarmException( "This swarm has restricted access to join the swarm." );
+			}
+		}
+
 		$this->setTitle( "Test runner" );
 		$this->bodyScripts[] = swarmpath( "js/run.js?" . time() );
 
-		$client = Client::newFromContext( $this->getContext() );
+		$client = Client::newFromContext( $this->getContext(), $runToken );
 
-		$html = '<script>window.SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';</script>';
+		$html = '<script>'
+			. 'SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';'
+			. 'SWARM.run_token = ' . json_encode( $runToken ) . ';'
+			. '</script>';
 
 		$html .=
 			'<div class="row">'

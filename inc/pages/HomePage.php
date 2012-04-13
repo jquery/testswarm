@@ -22,6 +22,7 @@ class HomePage extends Page {
 	}
 
 	protected function initContent() {
+		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 		$browserInfo = $this->getContext()->getBrowserInfo();
 
@@ -41,39 +42,47 @@ class HomePage extends Page {
 			. '</div>';
 
 		$html .= '<div class="span5"><div class="well well-small">';
-		if ( $browserInfo->isInSwarmUaIndex() ) {
-				$html .= '<p><strong>' . $siteNameHtml . ' needs your help!</strong><br>'
-				. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
-			if ( !$request->getSessionData( "username" ) ) {
-				$html .= '<form action="' . swarmpath( "" ) . '" method="get" class="form-horizontal">'
-					. '<input type="hidden" name="action" value="run">'
-					. '<label for="form-item">Username:</label>'
-					. ' <input type="text" name="item" id="form-item" placeholder="Enter username..">'
-					. ' <input type="submit" value="Join the swarm" class="btn btn-primary">'
-					. '</form>';
+		if ( !$conf->client->require_run_token ) {
+			if ( $browserInfo->isInSwarmUaIndex() ) {
+					$html .= '<p><strong>' . $siteNameHtml . ' needs your help!</strong><br>'
+					. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
+				if ( !$request->getSessionData( "username" ) ) {
+					$html .= '<form action="' . swarmpath( "" ) . '" method="get" class="form-horizontal">'
+						. '<input type="hidden" name="action" value="run">'
+						. '<label for="form-item">Username:</label>'
+						. ' <input type="text" name="item" id="form-item" placeholder="Enter username..">'
+						. ' <input type="submit" value="Join the swarm" class="btn btn-primary">'
+						. '</form>';
+				} else {
+					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( "username" )}/" )
+					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
+				}
 			} else {
-				$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( "username" )}/" )
-				. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
+				$browscap = $browserInfo->getBrowscap();
+				$html .= '<div class="alert alert-info">'
+					. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
+					. '<p>Please join with one the below browsers.</p></div>'
+					. '<p>If you feel that this may be an error, please report it to the TestSwarm '
+					. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
+					. ' including the following 2 codes:'
+					. '<br><strong><a href="http://browsers.garykeith.com/">browscap</a>:</strong> <code>'
+					. htmlspecialchars( print_r( array(
+							"Platform" => $browscap["Platform"],
+							"Browser" => $browscap["Browser"],
+							"Version" => $browscap["Version"],
+							"MajorVer" => $browscap["MajorVer"],
+							"MinorVer" => $browscap["MinorVer"],
+					), true ) )
+					. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
+					. htmlspecialchars( $browserInfo->getRawUA() )
+					. '</code></p>';
 			}
 		} else {
-			$browscap = $browserInfo->getBrowscap();
-			$html .= '<div class="alert alert-info">'
-				. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
-				. '<p>Please join with one the below browsers.</p></div>'
-				. '<p>If you feel that this may be an error, please report it to the TestSwarm '
-				. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
-				. ' including the following 2 codes:'
-				. '<br><strong><a href="http://browsers.garykeith.com/">browscap</a>:</strong> <code>'
-				. htmlspecialchars( print_r( array(
-						"Platform" => $browscap["Platform"],
-						"Browser" => $browscap["Browser"],
-						"Version" => $browscap["Version"],
-						"MajorVer" => $browscap["MajorVer"],
-						"MinorVer" => $browscap["MinorVer"],
-				), true ) )
-				. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
-				. htmlspecialchars( $browserInfo->getRawUA() )
-				. '</code></p>';
+			$html .= '<div class="alert">'
+				. '<h4 class="alert-heading">Join access restricted</h4>'
+				. '<p>Public joining of the swarm has been disabled.</p>'
+				. '<button type="button" class="btn btn-large disabled" disabled><s>Join the swarm</s></button>'
+				. '</div>';
 		}
 		$html .= '</div></div>';
 		$html .= '</div>';

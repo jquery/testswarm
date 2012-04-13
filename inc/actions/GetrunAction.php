@@ -11,15 +11,23 @@ class GetrunAction extends Action {
 
 	/**
 	 * @actionMethod POST: Required.
+	 * @actionParam run_token string
 	 * @actionParam client_id int
 	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
+		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
 		if ( !$request->wasPosted() ) {
 			$this->setError( "requires-post" );
+			return;
+		}
+
+		$runToken = $request->getVal( "run_token" );
+		if ( $conf->client->require_run_token && !$runToken ) {
+			$this->setError( "invalid-input", "This TestSwarm does not allow unauthorized clients to join the swarm." );
 			return;
 		}
 
@@ -30,10 +38,10 @@ class GetrunAction extends Action {
 			return;
 		}
 
-		// Create a Client object to verify that the client exists
-		// throws an exception, caught higher up, if it doesn't exist.
-		// Also updates the timestamp so that it shows up on HomePage and UserPage
-		$client = Client::newFromContext( $this->getContext(), $clientID );
+		// Create a Client object that verifies client id, user agent and run token.
+		// Also updates the client 'alive' timestamp.
+		// Throws exception (caught higher up) if stuff is invalid.
+		$client = Client::newFromContext( $this->getContext(), $runToken, $clientID );
 
 		// Get oldest run for this user agent, that isn't on the max yet and isn't
 		// already ran by another client.
