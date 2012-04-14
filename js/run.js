@@ -168,8 +168,8 @@
 						+ $.param({
 							run_id: currRunId,
 							client_id: SWARM.client_id,
-							run_token: SWARM.run_token,
-						}),
+							run_token: SWARM.run_token
+						})
 				});
 
 				$( "#iframes" ).append( iframe );
