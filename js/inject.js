@@ -233,7 +233,7 @@
 		},
 
 		// UnitTestJS (Prototype, Scriptaculous)
-		// http://github.com/tobie/unittest_js/tree/master
+		// https://github.com/tobie/unittest_js
 		"UnitTestJS": {
 			detect: function () {
 				return typeof Test !== "undefined" && Test && Test.Unit && Test.Unit.runners;
@@ -278,6 +278,7 @@
 
 		// JSSpec (MooTools)
 		// http://jania.pe.kr/aw/moin.cgi/JSSpec
+		// https://code.google.com/p/jsspec/
 		"JSSpec": {
 			detect: function () {
 				return typeof JSSpec !== "undefined" && JSSpec && JSSpec.Logger;
@@ -393,7 +394,7 @@
 		},
 
 		// Screw.Unit
-		// git://github.com/nathansobo/screw-unit.git
+		// https://github.com/nathansobo/screw-unit
 		"Screw.Unit": {
 			detect: function () {
 				return typeof Screw !== "undefined" && typeof jQuery !== "undefined" && Screw && Screw.Unit;
