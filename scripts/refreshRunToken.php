@@ -21,7 +21,7 @@ class RefreshRunTokenScript extends MaintenanceScript {
 	}
 
 	protected function execute() {
-		$this->wait( 7, 'This script will invalidate any existing token! You can abort now with Control-C. Starting in ' );
+		$this->timeWarningForScriptWill( "invalidate any existing token" );
 
 		$cacheDir = $this->getContext()->getConf()->storage->cacheDir;
 		$cacheFile = $cacheDir . "/run_token_hash.cache";

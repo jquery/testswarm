@@ -122,7 +122,12 @@ abstract class MaintenanceScript {
 		$this->generalArgKeys = array_merge( array_keys( $this->options ), array_keys( $this->flags ) );
 
 		$this->init();
-		$this->name = get_class( $this );
+		$name = get_class( $this );
+		// "class FooBarScript extends .."
+		if ( substr( $name, -6 ) === 'Script' ) {
+			$name = substr( $name, 0, -6 );
+		}
+		$this->name = $name;
 		if ( !isset( $this->description ) ) {
 			$this->error( "{$this->name} is missing a description." );
 		}
@@ -197,6 +202,11 @@ TEXT;
 			}
 		}
 		print "\n";
+	}
+
+	/** @param @action string: Correct grammar "This script will $action!" */
+	protected function timeWarningForScriptWill( $action, $seconds = 10 ) {
+		$this->wait( 10, "WARNING: This script will $action! You can abort now with Control-C. Starting in " );
 	}
 
 	protected function out( $text ) {
