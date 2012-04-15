@@ -27,7 +27,7 @@ Releases will be numbered in the following format:
 
 `<major>.<minor>.<patch>`
 
-The `-pre` suffix is used to indicate unreleased versions in development.
+The `-alpha` suffix is used to indicate unreleased versions in development.
 
 For more information on SemVer, please visit http://semver.org/.
 

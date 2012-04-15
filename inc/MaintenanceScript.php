@@ -134,7 +134,7 @@ abstract class MaintenanceScript {
 		$this->parseCliArguments();
 
 		// Generate header
-		$version = swarmGetVersion( $this->getContext() );
+		$version = $this->getContext()->getVersion( "bypass-cache" );
 		$description = wordwrap( $this->description, 72, "\n", true );
 		$description = explode( "\n", $description );
 		$description[] = str_repeat( "-", 72 );

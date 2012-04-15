@@ -382,7 +382,7 @@ foreach ( $projects as $project ) {
 		$page = new static();
 		$page->context = $context;
 
-		$page->metaTags[] = array( "name" => "generator", "content" => swarmGetVersion( $context ) );
+		$page->metaTags[] = array( "name" => "generator", "content" => $context->getVersion() );
 
 		return $page;
 	}

@@ -13,18 +13,20 @@ class InfoAction extends Action {
 	 * @actionNote This action takes no parameters.
 	 */
 	public function doAction() {
-		$conf = $this->getContext()->getConf();
+		$context = $this->getContext();
+		$conf = $context->getConf();
+		$request = $context->getRequest();
 
 		$info = array(
-			"version" => swarmGetVersion( $this->getContext() ),
+			"version" => $context->getVersion(),
 			"conf" => array(
 				"general" => $conf->general,
 				"web" => $conf->web,
 				"client" => $conf->client,
 			),
 			"session" => array(
-				"username" => $this->getContext()->getRequest()->getSessionData( "username" ),
-				"authenticated" => $this->getContext()->getRequest()->getSessionData( "auth" ) === "yes",
+				"username" => $request->getSessionData( "username" ),
+				"authenticated" => $request->getSessionData( "auth" ) === "yes",
 			),
 		);
 
