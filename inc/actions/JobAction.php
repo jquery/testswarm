@@ -164,6 +164,7 @@ class JobAction extends Action {
 								),
 					);
 				}
+				natcaseksort( $runUaRuns );
 			}
 
 			$respData["runs"][] = array(
@@ -181,6 +182,7 @@ class JobAction extends Action {
 				$respData["userAgents"][$userAgentID] = (array)$swarmUaIndex->$userAgentID;
 			}
 		}
+		natcaseksort( $respData["userAgents"] );
 
 		// Save data
 		$this->setData( $respData );
@@ -233,7 +235,7 @@ class JobAction extends Action {
 				return "error";
 			}
 			// Passed or failed
-			return $clientRun->error > 0 ? "failed" : "passed";
+			return $clientRun->fail > 0 ? "failed" : "passed";
 		} else {
 			throw new SwarmException( "Corrupt useragent run result." );
 		}

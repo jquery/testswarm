@@ -44,6 +44,7 @@ class BrowserInfo {
 			// to an object with boolean values
 			$swarmUaIndex = new stdClass;
 			$rawIndex = parse_ini_file( "$swarmInstallDir/config/useragents.ini", true );
+			natcaseksort( $rawIndex );
 			foreach ( $rawIndex as $uaID => $uaItem ) {
 				if ( is_array( $uaItem ) ) {
 					$uaItem2 = $uaItem;

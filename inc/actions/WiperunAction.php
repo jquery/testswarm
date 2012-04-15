@@ -79,11 +79,12 @@ class WiperunAction extends Action {
 		$db->query(str_queryf(
 			"DELETE run_client
 			FROM
-				run_client
+				run_client, clients
 			WHERE run_id = %u
-			AND   client_id = %u;",
+			AND   clients.id = client_id
+			AND   clients.useragent_id = %s;",
 			$runID,
-			$clientID
+			$useragentID
 		));
 
 		$db->query(str_queryf(

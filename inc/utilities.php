@@ -162,6 +162,29 @@
 		return $sql_query;
 	}
 
+	if ( !function_exists( 'natksort' ) ) {
+		/**
+		 * PHP has natsort() but no natksort().
+		 *
+		 * @source http://stackoverflow.com/a/1186347/319266
+		 * @seealso php.net/uksort, php.net/natsort, php.net/strnatcmp
+		 */
+		 function natksort( &$array ) {
+			uksort( $array, 'strnatcmp' );
+		}
+	}
+	if ( !function_exists( 'natcaseksort' ) ) {
+		/**
+		 * PHP has natcasesort() but no natcaseksort().
+		 *
+		 * @source http://stackoverflow.com/a/1186347/319266
+		 * @seealso php.net/uksort, php.net/natcasesort, php.net/strnatcasecmp
+		 */
+		 function natcaseksort( &$array ) {
+			uksort( $array, 'strnatcasecmp' );
+		}
+	}
+
 	/**
 	 * Convert a date string into a Unix timestamp.
 	 * Interpreteting the date string in GMT context (instead of the time zone currently

@@ -81,17 +81,21 @@ class SaverunAction extends Action {
 		if ( mysql_affected_rows() > 0 ) {
 
 			// If we're 100% passing we don't need any more runs
-			// Clear out old runs that were bad, since we now have a good one
+			// Clear out other entries from other browsers for the same run
+			// that were bad, since we now have a good one.
 			if ( $total > 0 && $fail === 0 && $error === 0 ) {
 				$rows = $db->getRows(str_queryf(
 					"SELECT client_id
 					FROM
-						run_client
+						run_client, clients
 					WHERE run_id = %u
 					AND   client_id != %u
-					AND   (total <= 0 OR error > 0 OR fail > 0);",
+					AND   (total <= 0 OR error > 0 OR fail > 0)
+					AND   clients.id = client_id
+					AND   clients.useragent_id = %s;",
 					$runID,
-					$clientID
+					$clientID,
+					$client->getClientRow()->useragent_id
 				));
 
 				if ( $rows ) {
