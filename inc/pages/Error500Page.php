@@ -1,12 +1,13 @@
 <?php
 /**
  * Error "500" handler.
+ * No database queries should be made from this class, because when
+ * the database is locked it will throw an exception that leads here.
  *
  * @author Timo Tijhof, 2012
  * @since 0.3.0
  * @package TestSwarm
  */
-
 class Error500Page extends Page {
 
 	protected $exceptionObj;

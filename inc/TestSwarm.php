@@ -48,9 +48,41 @@ class TestSwarmContext {
 	 */
 	public function getDB() {
 		if ( $this->db === null ) {
+			// Check if there is a database lock
+			$lock = $this->dbLock();
+			if ( $lock ) {
+				throw new SwarmException(
+					"Database is temporarily locked for maintenance (since: "
+					. strftime( "%c", $lock ) . ")"
+				);
+			}
 			$this->db = Database::newFromContext( $this );
 		}
 		return $this->db;
+	}
+
+	/**
+	 * Get and set the lock status.
+	 * @param $change bool: [optional] Change the lock state.
+	 * @return bool|int Boolean false or a timestamp of when the lock was set.
+	 */
+	public function dbLock( $change = null ) {
+		$dbLockFile = $this->getConf()->storage->cacheDir . "/database.lock";
+		$dbLocktime = false;
+		if ( is_bool( $change ) ) {
+			if ( $change ) {
+				$done = @touch( $dbLockFile );
+			} else {
+				$done = @unlink( $dbLockFile );
+			}
+			if ( !$done ) {
+				throw new SwarmException( "Unable to change database.lock" );
+			}
+		}
+		if ( file_exists( $dbLockFile ) ) {
+			$dbLocktime = @filemtime( $dbLockFile );
+		}
+		return $dbLocktime;
 	}
 
 	/**
