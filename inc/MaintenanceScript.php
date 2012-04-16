@@ -209,12 +209,41 @@ TEXT;
 		$this->wait( 10, "WARNING: This script will $action! You can abort now with Control-C. Starting in " );
 	}
 
+	/** @param $message string: [optional] text before the input */
+	protected function cliInput( $prefix = "> " ) {
+		static $isatty = null;
+		if ( $isatty === null ) {
+			// Both `echo "foo" | php script.php` and `php script.php > foo.txt`
+			// are being prevented.
+			$isatty = posix_isatty( STDIN ) && posix_isatty( STDOUT );
+
+			// No need to re-run this check each time, we abort within the if-null check
+			if ( !$isatty ) {
+				$this->error( "This script requires an interactive terminal for output and input." );
+			}
+		}
+
+		if ( function_exists( "readline" ) ) {
+			// Use readline if available, it's much nicer to work with for the user
+			// (autocompletion of filenames and no weird characters when using arrow keys)
+			return readline( $prefix );
+		} else {
+			// Readline is not available on Windows platforms (php.net/intro.readline)
+			$this->outRaw( $prefix );
+			return rtrim( fgets( STDIN ), "\n" );
+		}
+	}
+
 	protected function out( $text ) {
+		$this->outRaw( "$text\n" );
+	}
+
+	protected function outRaw( $text ) {
 		print $text;
 	}
 
 	protected function error( $msg ) {
-		exit( "TestSwarm Error: $msg\n" );
+		exit( "\nTestSwarm Error: $msg\n" );
 	}
 
 	public static function newFromContext( TestSwarmContext $context ) {

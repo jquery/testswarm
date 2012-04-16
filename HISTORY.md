@@ -42,6 +42,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Implement "debug" mode for the API (format=debug)
 * Implement "debug" mode for Database queries. Disabled by default for performance and
   security reasons, enable by setting [debug][db_log_queries] = 1 in testswarm.ini.
+* (#142) Implement database update script.
+* (#158) Implement database install script.
 
 ### User agents
 

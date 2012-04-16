@@ -29,9 +29,9 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 
 		$clearTables = array( 'run_useragent', 'run_client', 'runs', 'jobs' );
 		foreach ( $clearTables as $clearTable ) {
-			$this->out( "...clearing {$clearTable}\n" );
+			$this->out( "...clearing {$clearTable}" );
 			$db->query( "DELETE FROM $clearTable WHERE 1" );
-			$this->out( "...deleted {$db->getAffectedRows()} rows from $clearTable\n" );
+			$this->out( "...deleted {$db->getAffectedRows()} rows from $clearTable" );
 		}
 		$this->out( "Done!" );
 	}

@@ -38,7 +38,7 @@ class RefreshRunTokenScript extends MaintenanceScript {
 			$this->error( "Saving of cache file failed:\n$cacheFile" );
 		}
 		$this->out(
-			"Run token has been generated and stored in place.\nNew run token: $runToken\n"
+			"Run token has been generated and stored in place.\nNew run token: $runToken"
 		);
 	}
 }

@@ -16,8 +16,6 @@ class SignupAction extends Action {
 	 * @actionParam password string
 	 */
 	public function doAction() {
-
-		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
 		// Already logged in ?
@@ -37,16 +35,32 @@ class SignupAction extends Action {
 		$username = $request->getVal( "username" );
 		$password = $request->getVal( "password" );
 
+		$this->doCreateUser( $username, $password );
+
+		$request->setSessionData( "username", $username );
+		$request->setSessionData( "auth", "yes" );
+	}
+
+	/**
+	 * Creates the actual user, seperated from doAction to allow
+	 * make internal use easier, also use or modify the session.
+	 * @param $username string
+	 * @param $password string
+	 * @return bool
+	 */
+	public function doCreateUser( $username, $password ) {
+		$db = $this->getContext()->getDB();
+
 		if ( !$username || !$password ) {
 			$this->setError( "missing-parameters" );
-			return;
+			return false;
 		}
 
 		// Validate user name (github.com/jquery/testswarm/issues/118)
 		// Only allow lowercase a-z, 0-9 and dashed, must start with a letter
 		if ( !preg_match( "/^[a-z][-a-z0-9]*$/", $username ) ) {
 			$this->setError( "invalid-input", "Username may only contain lowercase a-z, 0-9 and dashes and must start with a letter." );
-			return;
+			return false;
 		}
 
 		// Check if this user name is already taken
@@ -54,7 +68,7 @@ class SignupAction extends Action {
 
 		if ( $row ) {
 			$this->setError( "invalid-input", "Username \"$username\" is already taken." );
-			return;
+			return false;
 		}
 
 		// Random between 1,000,000,000 and 9,999,999,999
@@ -78,15 +92,15 @@ class SignupAction extends Action {
 		$newUserId = $db->getInsertId();
 		if ( !$isInserted || !$newUserId ) {
 			$this->setError( "internal-error", "Insertion of user into database failed." );
-			return;
+			return false;
 		}
-
-		$request->setSessionData( "username", $username );
-		$request->setSessionData( "auth", "yes" );
 
 		$this->setData( array(
 			"status" => "logged-in",
 			"username" => $username,
+			"userID" => $newUserId,
 		) );
+
+		return true;
 	}
 }
