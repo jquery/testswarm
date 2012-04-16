@@ -129,7 +129,7 @@ class TestSwarmContext {
 		$versionCacheFile = $this->getConf()->storage->cacheDir . "/version_testswarm.cache";
 		if ( is_readable( $versionCacheFile ) ) {
 			$versionCacheFileUpdated = filemtime( $versionCacheFile );
-			if ( $versionCacheFileUpdated < strftime( "5 minutes ago" ) ) {
+			if ( $versionCacheFileUpdated < strtotime( "5 minutes ago" ) ) {
 				unlink( $versionCacheFile );
 			}
 		}
@@ -180,14 +180,14 @@ class TestSwarmContext {
 
 			$gitRefFile = "$swarmInstallDir/.git/$gitHead";
 			if ( is_readable( $gitRefFile ) ) {
-				$gitSHA1 = rtrim( file_get_contents( $gitRefFile ) );
+				$gitHeadState = basename( $gitRefFile ) . ':' . substr( rtrim( file_get_contents( $gitRefFile ) ), 0, 8 );
 			} else {
 				// If such refs file doesn't exist, maybe HEAD is detached,
 				// in which case ./.git/HEAD should contain the actual SHA1 already.
-				$gitSHA1 = $gitHead;
+				$gitHeadState = substr( $gitHead, 0, 8);
 			}
 
-			$version .= " (" . substr( $gitSHA1, 0, 8 ) . ")";
+			$version .= " (" . $gitHeadState . ")";
 		}
 
 		return $version;
