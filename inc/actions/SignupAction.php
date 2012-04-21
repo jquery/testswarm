@@ -63,6 +63,11 @@ class SignupAction extends Action {
 			return false;
 		}
 
+		// Verify user name maxlength (otherwise MySQL will crop it)
+		if ( strlen( $username ) > 255 ) {
+			$this->setError( "invalid-input", "User name too long (up to 255 characters)." );
+		}
+
 		// Check if this user name is already taken
 		$row = $db->getRow(str_queryf( "SELECT id FROM users WHERE name = %s;", $username ));
 

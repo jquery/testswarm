@@ -55,6 +55,46 @@ class AddjobAction extends Action {
 			return;
 		}
 
+		$runs = array();
+
+		// Loop through runNames / runUrls to validate them ahead of time,
+		// and filter out empty ones from the AddjobPage.
+		foreach ( $runNames as $runNr => $runName ) {
+			if ( !isset( $runUrls[$runNr] ) ) {
+				$this->setError( "invalid-input", "One or more runs is missing a URL." );
+				return;
+			}
+
+			$runUrl = $runUrls[$runNr];
+
+			// Filter out empty submissions,
+			// AddjobPage may submit more input fields then filled in
+			if ( $runUrl == '' && $runName == '' ) {
+				continue;
+			}
+
+			if ( $runUrl == '' || $runName == '') {
+				$this->setError( "invalid-input", "Run names and urls must be non-empty." );
+				return;
+			}
+
+			if ( strlen( $runName ) > 255 ) {
+				$formRunNr = $runNr + 1; // offset 0
+				$this->setError( "invalid-input", "Run #{$formRunNr} name was too long (up to 255 characters)." );
+				return;
+			}
+
+			$runs[] = array(
+				"name" => $runName,
+				"url" => $runUrl,
+			);
+		}
+
+		if ( count( $runs ) === 0 ) {
+			$this->setError( "missing-parameters", "Job must have atleast 1 run." );
+			return;
+		}
+
 		// Authenticate
 		$authUserId = $db->getOne(str_queryf(
 			"SELECT id
@@ -68,6 +108,12 @@ class AddjobAction extends Action {
 		if ( !$authUserId ) {
 			$this->setError( "invalid-input", "Authentication failed." );
 			return;
+		}
+
+		// Verify job name maxlength (otherwise MySQL will crop it, which might
+		// result in incomplete html, screwing up the JobPage).
+		if ( strlen( $jobName ) > 255 ) {
+			$this->setError( "invalid-input", "Job name too long (up to 255 characters)." );
 		}
 
 		// Create job
@@ -97,14 +143,12 @@ class AddjobAction extends Action {
 		$uaIDs = array();
 
 		foreach ( $swarmUaIndex as $swarmUaID => $swarmUaData ) {
-
 			foreach ( $browserSets as $browserSet ) {
 				if ( $swarmUaData->$browserSet === true ) {
 					$uaIDs[] = $swarmUaID;
 					break;
 				}
 			}
-
 		}
 
 		if ( !count( $uaIDs ) ) {
@@ -112,45 +156,25 @@ class AddjobAction extends Action {
 			return;
 		}
 
-		$createdRuns = 0;
-
 		// Create all runs and schedule them for the wanted browsersets in run_useragent
-		foreach ( $runNames as $runNr => $runName ) {
-
-			if ( !isset( $runUrls[$runNr] ) ) {
-				$this->setError( "invalid-input", "One or more runs is missing a URL." );
-				return;
-			}
-
-			// Filter out empty submissions,
-			// AddjobPage may submit more input fields then filled in
-			if ( $runUrls[$runNr] == '' && $runName == '' ) {
-				continue;
-			}
-
-			if ( $runUrls[$runNr] == '' || $runName == '') {
-				$this->setError( "invalid-input", "Run names and urls must be non-empty." );
-				return;
-			}
-
-			$runUrl = $runUrls[$runNr];
+		foreach ( $runs as $run ) {
 
 			// Create this run
 			$isInserted = $db->query(str_queryf(
 				"INSERT INTO runs (job_id, name, url, created)
 				VALUES(%u, %s, %s, %s);",
 				$newJobId,
-				$runName,
-				$runUrl,
+				$run['name'],
+				$run['url'],
 				swarmdb_dateformat( SWARM_NOW )
 			));
+
 			$newRunId = $db->getInsertId();
+
 			if ( !$isInserted || !$newRunId ) {
 				$this->setError( "internal-error", "Insertion of job into database failed." );
 				return;
 			}
-
-			$createdRuns += 1;
 
 			// Schedule run_useragent entries for all user agents matching
 			// the browerset(s) for this job.
@@ -170,7 +194,7 @@ class AddjobAction extends Action {
 
 		$this->setData(array(
 			"id" => $newJobId,
-			"runTotal" => $createdRuns,
+			"runTotal" => count( $runs ),
 			"uaTotal" => count( $uaIDs ),
 		));
 	}

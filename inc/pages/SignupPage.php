@@ -42,7 +42,7 @@ class SignupPage extends Page {
 
 		$html .= '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )
 			. '">login here</a>.</p>'
-			. '<label>Username: <input type="text" name="username"></label><br>'
+			. '<label>Username: <input type="text" name="username" maxlength="255"></label><br>'
 			. '<label>Password: <input type="password" name="password"></label><br>'
 			. '<input type="submit" value="Signup" class="btn btn-primary">'
 			. '</fieldset></form>';

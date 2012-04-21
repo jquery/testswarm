@@ -78,9 +78,10 @@ class AddjobPage extends Page {
 		<legend>Job information</legend>
 
 		<div class="control-group">
-			<label class="control-label" for="form-jobName">Job name (HTML):</label>
+			<label class="control-label" for="form-jobName">Job name:</label>
 			<div class="controls">
-				<input type="text" name="jobName" id="form-jobName" class="input-xlarge">
+				<input type="text" name="jobName" id="form-jobName" class="input-xlarge" maxlength="255">
+				<span class="help-inline">HTML, up to 255 characters</span>
 			</div>
 		</div>
 		<div class="control-group">
@@ -147,7 +148,7 @@ class AddjobPage extends Page {
 				<legend>Run 1</legend>
 
 				<label for="form-runNames1">Run name:</label>
-				<input type="text" name="runNames[]" id="form-runNames1">
+				<input type="text" name="runNames[]" id="form-runNames1" maxlength="255">
 				<br>
 				<label for="form-runUrls1">Run URL:</label>
 				<input type="text" name="runUrls[]" placeholder="http://" class="input-xlarge"id="form-runUrls1">
@@ -156,7 +157,7 @@ class AddjobPage extends Page {
 				<legend>Run 2</legend>
 
 				<label for="form-runNames2">Run name:</label>
-				<input type="text" name="runNames[]" id="form-runNames2">
+				<input type="text" name="runNames[]" id="form-runNames2" maxlength="255">
 				<br>
 				<label for="form-runUrls2">Run URL:</label>
 				<input type="text" name="runUrls[]" placeholder="http://" class="input-xlarge"id="form-runUrls2">
@@ -165,7 +166,7 @@ class AddjobPage extends Page {
 				<legend>Run 3</legend>
 
 				<label for="form-runNames3">Run name:</label>
-				<input type="text" name="runNames[]" id="form-runNames3">
+				<input type="text" name="runNames[]" id="form-runNames3" maxlength="255">
 				<br>
 				<label for="form-runUrls3">Run URL:</label>
 				<input type="text" name="runUrls[]" placeholder="http://" class="input-xlarge"id="form-runUrls3">
