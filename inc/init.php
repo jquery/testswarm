@@ -60,59 +60,28 @@ require_once "inc/utilities.php";
 
 $swarmInstallDir = dirname( __DIR__ );
 
+$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.ini";
+$localSettingsFile = "$swarmInstallDir/testswarm.ini";
+
 // Verify that the testswarm.ini file exists
-if ( !file_exists( "$swarmInstallDir/testswarm.ini" ) ) {
-	echo "<b>TestSwarm Fatal:</b> testswarm.ini missing!\n";
+if ( !file_exists( $defaultSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> <tt>./config/testswarm-defaults.ini</tt> missing!\n";
 	exit;
 }
-
-$swarmConfig = array(
-	"general" => array(
-		"timezone" => "UTC",
-	),
-	"database" => array(
-		"host" => "localhost",
-		"database" => "testswarm",
-		"username" => "root",
-		"password" => "root",
-	),
-	"custom_msg" => array(
-		"home_intro_html" => "Welcome to $1! More information about what TestSwarm is"
-		. " and how it works can be found on"
-		. " <a href=\"//github.com/jquery/testswarm/wiki\">the TestSwarm wiki</a>.",
-	),
-	"web" => array(
-		"contextpath" => "",
-		"title" => "TestSwarm",
-		"ajax_update_interval" => "5",
-	),
-	"client" => array(
-		"cooldown_sleep" => "2",
-		"nonewruns_sleep" => "30",
-		"run_timeout" => "180",
-		"savereq_timeout" => "10",
-		"saveretry_max" => "4",
-		"saveretry_sleep" => "15",
-		"require_run_token" => "0",
-		"refresh_control" => "0",
-	),
-	"storage" => array(
-		"cacheDir" => "$1/cache",
-	),
-	"debug" => array(
-		"show_exception_details" => "0",
-		"php_error_reporting" => "0",
-		"db_log_queries" => "0",
-	),
-);
+if ( !file_exists( $localSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> <tt>testswarm.ini</tt> missing!\n";
+	exit;
+}
 
 // Read configuration options and let the INI file
 // override default settings.
 $swarmConfig = array_extend(
-	$swarmConfig,
-	parse_ini_file( "$swarmInstallDir/testswarm.ini", true ),
+	parse_ini_file( $defaultSettingsFile, true ),
+	parse_ini_file( $localSettingsFile, true ),
 	array( "overwrite" )
 );
+
+unset( $localSettingsFile, $defaultSettingsFile );
 
 // Timezone
 date_default_timezone_set( $swarmConfig["general"]["timezone"] );
