@@ -21,7 +21,7 @@ class SwarmstateAction extends Action {
 		$showOnlyactive = $request->hasKey( "onlyactive" );
 
 		$data = array(
-			"useragents" => array(),
+			"userAgents" => array(),
 		);
 
 		$uaIndex = BrowserInfo::getSwarmUAIndex();
