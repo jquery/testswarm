@@ -56,7 +56,7 @@ define( 'SWARM_DBCON_PERSISTENT', 11 );
  * @{
  */
 // Generic requirements that we still need globally unconditionally
-require_once "inc/utilities.php";
+require_once __DIR__ . "/utilities.php";
 
 $swarmInstallDir = dirname( __DIR__ );
 

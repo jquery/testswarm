@@ -7,7 +7,7 @@
  * @package TestSwarm
  */
 define( 'SWARM_ENTRY', 'SCRIPT' );
-require_once 'inc/init.php';
+require_once __DIR__ . '/../inc/init.php';
 
 class ClearJobsAndClientsScript extends MaintenanceScript {
 
