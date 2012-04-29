@@ -29,8 +29,8 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 }
 
 // Minimum PHP version
-if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
-	echo "<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.2.3.\n";
+if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.0' ) < 0 ) {
+	echo "<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.0\n";
 	exit;
 }
 

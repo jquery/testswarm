@@ -50,7 +50,7 @@ At the moment TestSwarm only supports Apache and MySQL.
 ### Requirements
 
 * Apache 2.0+
-* PHP 5.2.3+
+* PHP 5.3.0+
 * MySQL 4.0+
 * curl (for the cleanup action; see below)
 
