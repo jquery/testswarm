@@ -37,7 +37,7 @@ class SwarmstateAction extends Action {
 					COUNT(id)
 				FROM clients
 				WHERE useragent_id = %s
-				AND   updated > %u",
+				AND   updated > %s",
 				$uaID,
 				swarmdb_dateformat( strtotime( '1 minute ago' ) )
 			));
