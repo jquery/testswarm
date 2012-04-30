@@ -16,8 +16,8 @@ jQuery(function ( $ ) {
 		if ( refreshTableTimout ) {
 			clearTimeout( refreshTableTimout );
 		}
-		if ( $( "table.swarm-results td.swarm-status-new" ).length ) {
-			$indicator.stop(true, true).css( 'opacity', 1 );
+		if ( $( "table.swarm-results" ).find( "td.swarm-status-new, td.swarm-status-progress" ).length ) {
+			$indicator.stop(true, true).css( "opacity", 1 );
 			$.get( window.location.href, function ( html ) {
 				var tableHtml, $targetTable;
 
@@ -56,7 +56,7 @@ jQuery(function ( $ ) {
 				dataType: "json",
 				success: function ( data ) {
 					if ( data.wiperun && data.wiperun.result === "ok" ) {
-						$el.empty().attr( "class", "" );
+						$el.empty().attr( "class", "swarm-status swarm-status-new" );
 						refreshTable();
 					}
 				}

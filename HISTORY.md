@@ -72,6 +72,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * AddjobPage has been fixed and can now be used again from the browser.
 * Fixed bug in Signup where it would initiate a session for a username, even if the INSERT
   query for the users table failed and the username remains unregistered.
+* (#162) JobPage with no "new" runs but some "in progress" should still ajax refresh.
 
 ### Other changes
 
