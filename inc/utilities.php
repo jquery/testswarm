@@ -17,7 +17,7 @@
 	 * TestSwarm exception
 	 * Just a placeholder for now, can be expanded further in the future.
 	 *
-	 * @since 0.3.0
+	 * @since 1.0.0
 	 */
 	class SwarmException extends Exception {
 
@@ -25,7 +25,7 @@
 
 	/**
 	 * Utility function for formatting HTML.
-	 * @since 0.3.0
+	 * @since 1.0.0
 	 *
 	 * @param $tagName string: HTML tag name
 	 * @param #attribs array: Key/value pairs, unescaped
@@ -195,7 +195,7 @@
 	 * will be incorrectly offset applied. gmstrototime() is only to be used on actual dates
 	 * such as "2012-01-01 15:45:01".
 	 *
-	 * @since 0.3.0
+	 * @since 1.0.0
 	 * @source php.net/strtotime#107773
 	 *
 	 * @param $time string
@@ -218,7 +218,7 @@
 	/**
 	 * Convert Unix timestamp into a 14-digit timestamp (YYYYMMDDHHIISS).
 	 * For usage in the TestSwarm database.
-	 * @since 0.3.0
+	 * @since 1.0.0
 	 *
 	 * @param $timestamp int Unix timestamp, if 0 is given, "now" will be assumed.
 	 */

@@ -5,7 +5,7 @@
  * multiple tabs (=multiple clients) running.
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 class Client {

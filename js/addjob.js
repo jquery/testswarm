@@ -2,7 +2,7 @@
  * JavaScript file for the "addjob" page.
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 jQuery(function ($) {

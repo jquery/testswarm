@@ -5,7 +5,7 @@
  * the database is locked it will throw an exception that leads here.
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 class Error500Page extends Page {

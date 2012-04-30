@@ -3,7 +3,7 @@
  * The Api class manages the response for requests via api.php,
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 class Api {

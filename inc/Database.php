@@ -7,7 +7,7 @@
  * - svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/DatabaseMysql.php?view=markup&pathrev=112598
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 class Database {

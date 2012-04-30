@@ -3,7 +3,7 @@
  * Api Debug handler.
  *
  * @author Timo Tijhof, 2012
- * @since 0.3.0
+ * @since 1.0.0
  * @package TestSwarm
  */
 
