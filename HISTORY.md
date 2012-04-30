@@ -50,6 +50,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#41) Added Opera Mini.
 * Added Android 1.6.
 * Added Android 2.3.
+* Added Firefox 11.
+* Added Firefox 12.
 * Added iPad 3.2.
 * Added iPad 4.3.
 * Added iPad 5.
