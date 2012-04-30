@@ -30,7 +30,7 @@ my $BASE_DIR = "/srv/swarm.jquery.org/htdocs/git/jquery-ui";
 
 # Note: The string {REV} will be replaced with the current
 #       commit number/hash.
-my $JOB_NAME = "jQuery UI Commit <a href=\"http://github.com/jquery/jquery-ui/commit/{FREV}\">#{REV}</a>";
+my $JOB_NAME = "jQuery UI Commit <a href=\"https://github.com/jquery/jquery-ui/commit/{FREV}\">#{REV}</a>";
 
 # The browsers you wish to run against. Options include:
 #  - "all" all available browsers.
