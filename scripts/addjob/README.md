@@ -1,5 +1,5 @@
-These example scripts in this directory serve as example however large parts of
-them are very implementation specific. Below are the fields actually required
+The example scripts in this directory serve as example however large parts of
+them are very implementation specific. Below is documented which fields are required
 from TestSwarms' perspective.
 
 For more information about the fields, view the AddjobPage in your browser.
@@ -81,7 +81,7 @@ Username with a user that will be the owner of this new job.
 ### Browsers
 
 * `browserSets[]=`: One of `current`, `popular`, `gbs`, `beta`, `mobile`.
-   Correspond to the `useragents` table
+   Correspond to the `useragents.ini` file
 * `browserSets[]=` ..
 * `browserSets[]=` ..
 
