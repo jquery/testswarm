@@ -139,7 +139,7 @@ class JobAction extends Action {
 						// new, progress, error, timedout, failed, or passed
 						"runStatus" => self::getStatusFromClientRunRow( $clientRunRow ),
 						// Add link to runresults
-						"runResultsUrl" => swarmpath( "index.php" ) . "?" . http_build_query(array(
+						"runResultsUrl" => swarmpath( "index.php", "fullurl" ) . "?" . http_build_query(array(
 							"action" => "runresults",
 							"run_id" => $runRow->run_id,
 							"client_id" => $clientRunRow->client_id,

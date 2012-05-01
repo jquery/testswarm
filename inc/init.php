@@ -89,9 +89,7 @@ date_default_timezone_set( $swarmConfig["general"]["timezone"] );
 // Type conversion
 // (parse_ini_file reads everything as strings)
 
-$swarmConfig["debug"]["db_log_queries"] = $swarmConfig["debug"]["db_log_queries"] === "1";
-$swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
-$swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
+$swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
 
 $swarmConfig["client"]["cooldown_sleep"] = intval( $swarmConfig["client"]["cooldown_sleep"] );
 $swarmConfig["client"]["nonewruns_sleep"] = intval( $swarmConfig["client"]["nonewruns_sleep"] );
@@ -102,7 +100,23 @@ $swarmConfig["client"]["saveretry_sleep"] = intval( $swarmConfig["client"]["save
 $swarmConfig["client"]["require_run_token"] = $swarmConfig["client"]["require_run_token"] === "1";
 $swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
 
-$swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
+$swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
+$swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
+$swarmConfig["debug"]["db_log_queries"] = $swarmConfig["debug"]["db_log_queries"] === "1";
+
+// Settings that need post-processing
+
+if ( $swarmConfig["web"]["server"] == "0" ) {
+	$server = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
+	if ( isset( $_SERVER["HTTP_HOST"] ) ) {
+		$server .= $_SERVER["HTTP_HOST"];
+	} elseif ( isset( $_SERVER["SERVER_ADDR"] ) ) {
+		$server .= $_SERVER["SERVER_ADDR"];
+	} else {
+		$server .= 'localhost';
+	}
+	$swarmConfig["web"]["server"] = $server;
+}
 
 $swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
 

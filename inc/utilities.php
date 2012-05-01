@@ -231,16 +231,19 @@
 	 * Central function to get paths to files and directories
 	 * @since 0.1.0
 	 *
-	 * @param $rel string Relative path from the testswarm root, without leading slash
+	 * @param $rel string: Relative path from the testswarm root, without leading slash
+	 * @param $options array|string: A string or an array of string. Options: 'fullurl'.
+	 * Any urls outputted through the API should use the 'fullpath' option, or otherwise make
+	 * sure that the url is including protocol and hostname.
 	 * @return string Relative path from the domain root to the specified file or directory
 	 */
-	function swarmpath( $rel ) {
+	function swarmpath( $rel, $options = array() ) {
 		global $swarmContext;
 
 		// Only normalize the contextpath once
-		static $contextpath;
+		static $path;
 
-		if ( is_null( $contextpath ) ) {
+		if ( is_null( $path ) ) {
 			// Add trailing slash if it's missing
 			$path = $swarmContext->getConf()->web->contextpath;
 			if ( substr( $path, -1 ) !== "/" ) {
@@ -258,6 +261,14 @@
 			$swarmContext->getConf()->web->contextpath = $path;
 		}
 
+		// Options
+		$options = (array)$options;
+		if ( in_array( 'fullurl', $options ) ) {
+			$prefix = $swarmContext->getConf()->web->server . $path;
+		} else {
+			$prefix = $path;
+		}
+
 		// Just in case, strip the leading slash
 		// from the requested path (check length, becuase may be an empty string,
 		// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
@@ -265,5 +276,5 @@
 			$rel = substr($rel, 1);
 		}
 
-		return $path . $rel;
+		return $prefix . $rel;
 	}

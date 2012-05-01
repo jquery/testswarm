@@ -149,7 +149,7 @@ class UserAction extends Action {
 				$recentJobs[] = array(
 					"id" => $jobID,
 					"name" => $jobRow->name,
-					"url" => swarmpath( "job/$jobID" ),
+					"url" => swarmpath( "job/$jobID", "fullurl" ),
 					"uaSummary" => $uaSummary,
 				);
 			}
