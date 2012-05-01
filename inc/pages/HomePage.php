@@ -102,8 +102,12 @@ class HomePage extends Page {
 
 		$html = "";
 
-		$desktopHtml = '<h2>Desktop Browsers</h2><div class="row">';
-		$mobileHtml = '<h2>Mobile Browsers</h2><div class="row">';
+		$itemsPerRow = 6;
+
+		$desktopHtml = '<h2>Desktop Browsers</h2>';
+		$desktopItems = 0;
+		$mobileHtml = '<h2>Mobile Browsers</h2>';
+		$mobileItems = 0;
 
 		foreach ( $data["userAgents"] as $uaID => $userAgent ) {
 			$isCurr = $uaID == $browserInfo->getSwarmUaID();
@@ -156,14 +160,37 @@ class HomePage extends Page {
 				. '</div>';
 
 			if ( $userAgent["data"]["mobile"] ) {
+				if ( $mobileItems % $itemsPerRow === 0 ) {
+					$mobileHtml .= '<div class="row">';
+				}
+				$mobileItems += 1;
+
 				$mobileHtml .= $item;
+
+				if ( $mobileItems % $itemsPerRow === 0 ) {
+					$mobileHtml .= '</div><!--/.row -->';
+				}
 			} else {
+				if ( $desktopItems % $itemsPerRow === 0 ) {
+					$desktopHtml .= '<div class="row">';
+				}
+				$desktopItems += 1;
+
 				$desktopHtml .= $item;
+
+				if ( $desktopItems % $itemsPerRow === 0 ) {
+					$desktopHtml .= '</div><!--/.row -->';
+				}
 			}
 		}
 
-		$desktopHtml .= '</div>';
-		$mobileHtml .= '</div>';
+		// Close un-even items rows
+		if ( $mobileItems % $itemsPerRow !== 0 ) {
+			$mobileHtml .= '</div><!--/.row -->';
+		}
+		if ( $desktopItems % $itemsPerRow !== 0 ) {
+			$desktopHtml .= '</div><!--/.row -->';
+		}
 
 		$html .= $desktopHtml . $mobileHtml;
 

@@ -277,6 +277,7 @@ foreach ( $projects as $project ) {
 	echo $this->getContent();
 ?>
 
+	</div>
 	<hr>
 	<footer>
 		<p>Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
