@@ -41,6 +41,7 @@ class SwarmstateAction extends Action {
 				$uaID,
 				swarmdb_dateformat( strtotime( '1 minute ago' ) )
 			));
+			$clients = intval( $clients );
 
 			// Count pending runs for this UA
 			$pendingRuns = $db->getOne(str_queryf(
@@ -51,16 +52,31 @@ class SwarmstateAction extends Action {
 				AND   status = 0;",
 				$uaID
 			));
+			$pendingRuns = intval( $pendingRuns );
 
-			if ( $showOnlyactive && !$clients && !$pendingRuns ) {
+			// Count past runs that can still be re-run to
+			// possibly fix non-passing results
+			$pendingReRuns = $db->getOne(str_queryf(
+				"SELECT
+					COUNT(*)
+				FROM run_useragent
+				WHERE useragent_id = %s
+				AND   runs < max
+				AND   completed > 0;",
+				$uaID
+			));
+			$pendingReRuns = intval( $pendingReRuns );
+
+			if ( $showOnlyactive && !$clients && !$pendingRuns && !$pendingReRuns ) {
 				continue;
 			}
 
 			$data["userAgents"][$uaID] = array(
 				"data" => $uaData,
 				"stats" => array(
-					"onlineClients" => intval( $clients ),
-					"pendingRuns" => intval( $pendingRuns ),
+					"onlineClients" => $clients,
+					"pendingRuns" => $pendingRuns,
+					"pendingReRuns" => $pendingReRuns,
 				),
 			);
 		}
