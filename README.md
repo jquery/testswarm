@@ -52,14 +52,11 @@ At the moment TestSwarm only supports Apache and MySQL.
 * Apache 2.0+
 * PHP 5.3.0+
 * MySQL 4.0+
-* curl (for the cleanup action; see below)
+* Curl (for the cleanup action; see below)
 
 ### Install
 
 1. Create a mysql database and a user who can connect and write to it.
-
-1. Initialize the database:
-   `mysql DBNAME -u USER -p < config/testswarm.sql`
 
 1. Copy `./config/testswarm-sample.ini` to `./testswarm.ini` and change the
    options to correspond to your MySQL database information.
@@ -78,17 +75,20 @@ At the moment TestSwarm only supports Apache and MySQL.
    loaded, make sure `AllowOverride` is set to "`All`" (at least not to
    "`None`") in your Apache configuration.
 
-1. Make sure [storage][cacheDir] is set to an existing writable directory that
+1. Make sure `storage.cacheDir` is set to an existing writable directory that
    is not readable from the web. Either set it to a custom path outside the web
    root in testswarm.ini, or use the default 'cache' directory protected
-   with .htaccess and `chmod 777 cache`.
+   with .htaccess and `chmod 777 ./cache`.
+
+1. Install the TestSwarm database by running:
+   `php ./scripts/dbInstall.php`
 
 1. Copy `./config/robots.txt` to `./robots.txt` (or add similar rules to your
    main `robots.txt` file if TestSwarm is not in the root directory).
 
 1. Create an entry to your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again for testing.
-   `* * * * * curl -s http://example.org/api.php?action=cleanup > /dev/null`
+   `* * * * * curl -s http://swarm.example.org/api.php?action=cleanup > /dev/null`
 
 
 
