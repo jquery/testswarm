@@ -155,6 +155,8 @@ class UserAction extends Action {
 			}
 		}
 
+		natcaseksort( $userAgents );
+
 		$this->setData(array(
 			"userName" => $userName,
 			"activeClients" => $activeClients,
