@@ -146,6 +146,7 @@ class AddjobAction extends Action {
 			foreach ( $browserSets as $browserSet ) {
 				if ( $swarmUaData->$browserSet === true ) {
 					$uaIDs[] = $swarmUaID;
+					// Don't include the same browser more than once
 					break;
 				}
 			}

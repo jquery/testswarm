@@ -27,7 +27,7 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 			$this->timeWarningForScriptWill( "permanently delete all jobs" );
 		}
 
-		$clearTables = array( 'run_useragent', 'run_client', 'runs', 'jobs' );
+		$clearTables = array( 'run_useragent', 'run_client', 'runs', 'clients', 'jobs' );
 		foreach ( $clearTables as $clearTable ) {
 			$this->out( "...clearing {$clearTable}" );
 			$db->query( "DELETE FROM $clearTable WHERE 1" );

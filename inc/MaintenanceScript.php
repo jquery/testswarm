@@ -41,7 +41,7 @@ abstract class MaintenanceScript {
 	 * Register an option, usage any of these 4:
 	 * - php script.php --foo --bar value --quux=value --corge="value"
 	 * @param $name string: at least 2 characters
-	 * @param $type string: one of "boolean", "optional", "required"
+	 * @param $type string: one of "boolean", "value"
 	 * @param $description string
 	 */
 	protected function registerOption( $name, $type, $description ) {
