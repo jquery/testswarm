@@ -100,6 +100,7 @@ Complete list of issues solved in the 1.0.0 milestone:
   for the first time.
 * Better error handling if DB is unavailable.
 * PHP version requirement raised to 5.3.0+.
+* (#165) Expose runs/max in JobAction.
 
 
 ## 0.2.0 / 2012-03-07

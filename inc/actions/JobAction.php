@@ -88,6 +88,8 @@ class JobAction extends Action {
 			// Get list of useragents that this run is scheduled for
 			$runUaRows = $db->getRows(str_queryf(
 				"SELECT
+					runs,
+					max,
 					status,
 					useragent_id
 				FROM
@@ -102,6 +104,8 @@ class JobAction extends Action {
 					// this array will be re-created in the loop over $clientRunRows
 					$runUaRuns[$runUaRow->useragent_id] = array(
 						"runStatus" => self::resolveStatusID( (int)$runUaRow->status ),
+						"runRuns" => (int)$runUaRow->runs,
+						"runMax" => (int)$runUaRow->max,
 					);
 
 					// Add UA ID to the list. After we've collected
@@ -130,7 +134,7 @@ class JobAction extends Action {
 
 			if ( $clientRunRows ) {
 				foreach ( $clientRunRows as $clientRunRow ) {
-					$runUaRuns[$clientRunRow->useragent_id] = array(
+					$runUaRuns[$clientRunRow->useragent_id] = array_merge( $runUaRuns[$clientRunRow->useragent_id], array(
 						"useragentID" => $clientRunRow->useragent_id,
 						"clientID" => $clientRunRow->client_id,
 						"failedTests" => $clientRunRow->fail,
@@ -162,7 +166,7 @@ class JobAction extends Action {
 										)
 									)
 								),
-					);
+					) );
 				}
 				natcaseksort( $runUaRuns );
 			}
