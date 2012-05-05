@@ -52,8 +52,8 @@ class DBInstallScript extends MaintenanceScript {
 				$this->out( "Database already contains tables. If you continue, all tables will be dropped. (Y/N)" );
 				$doDrop = $this->cliInput();
 				if ( $doDrop !== "Y" ) {
-					$this->out( "Installation aborted. Removed database.lock" );
 					$this->getContext()->dbLock( false );
+					$this->out( "Installation aborted. Removed database.lock" );
 					return;
 				}
 			}
