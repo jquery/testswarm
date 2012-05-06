@@ -101,6 +101,9 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Better error handling if DB is unavailable.
 * PHP version requirement raised to 5.3.0+.
 * (#165) Expose runs/max in JobAction.
+* Default settings are now stored in `./config/testswarm-defaults.ini` (instead of in
+  `init.php`). Custom settings are still read from `./testswarm.ini` (based on
+  `./config/testswarm-sample.ini`).
 
 
 ## 0.2.0 / 2012-03-07
