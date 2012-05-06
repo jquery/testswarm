@@ -45,6 +45,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#142) Implement database update script.
 * (#158) Implement database install script.
 * Implement browserset query script.
+* (#172) Use JSON for configuration files.
 
 ### User agents
 
@@ -83,7 +84,6 @@ Complete list of issues solved in the 1.0.0 milestone:
 ### Other changes
 
 * (#121) Update jQuery from 1.3.2 to 1.7.1.
-* `config.ini` has been renamed to `testswarm.ini`.
 * (#70) Link to ScoresPage in the site menu.
 * Drop redundant HTML5 attributes
 * Use protocol-relative urls where possible for urls to third-party domains that support
@@ -104,9 +104,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Better error handling if DB is unavailable.
 * PHP version requirement raised to 5.3.0+.
 * (#165) Expose runs/max in JobAction.
-* Default settings are now stored in `./config/testswarm-defaults.ini` (instead of in
-  `init.php`). Custom settings are still read from `./testswarm.ini` (based on
-  `./config/testswarm-sample.ini`).
+* Default settings are now stored in `./config/testswarm-defaults.json` (instead of in
+  `init.php`). Local settings are read from `./config/testswarm.json`.
 
 
 ## 0.2.0 / 2012-03-07

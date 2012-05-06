@@ -16,14 +16,10 @@ class TestSwarmContext {
 	 * needs to be passed is an array with all setting keys from testswarm.ini
 	 * (including ones commented out in the sample file, it has to contain them all)
 	 * Population of default values of optional settings happens in init.php
-	 * @param $config array
+	 * @param $config
 	 */
-	public function __construct( Array $config ) {
-		$conf = new stdClass;
-		foreach ( $config as $key => $val ) {
-			$conf->$key = is_array( $val ) ? (object)$val : $val;
-		}
-		$this->conf = $conf;
+	public function __construct( stdClass $config ) {
+		$this->conf = $config;
 	}
 
 	public function getBrowserInfo() {
@@ -180,7 +176,7 @@ class TestSwarmContext {
 
 			$gitRefFile = "$swarmInstallDir/.git/$gitHead";
 			if ( is_readable( $gitRefFile ) ) {
-				$gitHeadState = basename( $gitRefFile ) . ':' . substr( rtrim( file_get_contents( $gitRefFile ) ), 0, 8 );
+				$gitHeadState = basename( $gitRefFile ) . '@' . substr( rtrim( file_get_contents( $gitRefFile ) ), 0, 8 );
 			} else {
 				// If such refs file doesn't exist, maybe HEAD is detached,
 				// in which case ./.git/HEAD should contain the actual SHA1 already.

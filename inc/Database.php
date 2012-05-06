@@ -332,7 +332,7 @@ class Database {
 	protected function logQuery( $sql, $queryResponse, $microtimeStart ) {
 		static $doLog;
 		if ( $doLog === null ) {
-			$doLog = $this->context->getConf()->debug->db_log_queries;
+			$doLog = $this->context->getConf()->debug->dbLogQueries;
 		}
 		if ( $doLog ) {
 			$microtimeEnd = microtime( /*get_as_float=*/true );

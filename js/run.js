@@ -48,7 +48,7 @@
 		$.ajax({
 			type: "POST",
 			url: SWARM.conf.web.contextpath + "api.php",
-			timeout: SWARM.conf.client.savereq_timeout * 1000,
+			timeout: SWARM.conf.client.saveReqTimeout * 1000,
 			cache: false,
 			data: query,
 			dataType: "json",
@@ -57,12 +57,12 @@
 				ok.apply( this, arguments );
 			},
 			error: function () {
-				if ( errorOut > SWARM.conf.client.saveretry_max ) {
+				if ( errorOut > SWARM.conf.client.saveRetryMax ) {
 					cmds.reload();
 				} else {
 					errorOut += 1;
 					msg( "Error connecting to server, retrying..." );
-					setTimeout( retry, SWARM.conf.client.saveretry_sleep * 1000 );
+					setTimeout( retry, SWARM.conf.client.saveRetrySleep * 1000 );
 				}
 			}
 		});
@@ -139,7 +139,7 @@
 			if ( data.getrun.confUpdate ) {
 
 				// Refresh control
-				if ( SWARM.conf.client.refresh_control < data.getrun.confUpdate.client.refresh_control ) {
+				if ( SWARM.conf.client.refreshControl < data.getrun.confUpdate.client.refreshControl ) {
 					cmds.reload();
 					return;
 				}
@@ -175,7 +175,7 @@
 				$( "#iframes" ).append( iframe );
 
 				// Timeout after a period of time
-				testTimeout = setTimeout( testTimedout, SWARM.conf.client.run_timeout * 1000 );
+				testTimeout = setTimeout( testTimedout, SWARM.conf.client.runTimeout * 1000 );
 
 				return;
 			}
@@ -193,7 +193,7 @@
 
 		// If we just completed a run, do a cooldown before we fetch the next run (if there is one).
 		// If we just completed a cooldown a no runs where available, nonewruns_sleep instead.
-		timeLeft = currRunUrl ? SWARM.conf.client.cooldown_sleep : SWARM.conf.client.nonewruns_sleep;
+		timeLeft = currRunUrl ? SWARM.conf.client.cooldownSleep : SWARM.conf.client.nonewrunsSleep;
 
 		pauseTimer = setTimeout(function leftTimer() {
 			msg(norun_msg + " Getting more in " + timeLeft + " seconds." );

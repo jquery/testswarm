@@ -6,7 +6,7 @@
  * @package TestSwarm
  */
 jQuery(function ( $ ) {
-	var updateInterval = SWARM.conf.web.ajax_update_interval * 1000,
+	var updateInterval = SWARM.conf.web.ajaxUpdateInterval * 1000,
 		$wipejobErr = $("#swarm-wipejob-error"),
 		refreshTableTimout, $indicator;
 

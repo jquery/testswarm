@@ -32,7 +32,7 @@ class SaverunAction extends Action {
 		}
 
 		$runToken = $request->getVal( "run_token" );
-		if ( $conf->client->require_run_token && !$runToken ) {
+		if ( $conf->client->requireRunToken && !$runToken ) {
 			$this->setError( "invalid-input", "This TestSwarm does not allow unauthorized clients to join the swarm." );
 			return;
 		}

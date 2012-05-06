@@ -17,7 +17,7 @@ class RunPage extends Page {
 		$uaItem = $browserInfo->getSwarmUaItem();
 
 		$runToken = null;
-		if ( $conf->client->require_run_token ) {
+		if ( $conf->client->requireRunToken ) {
 			$runToken = $request->getVal( "run_token" );
 			if ( !$runToken ) {
 				throw new SwarmException( "This swarm has restricted access to join the swarm." );

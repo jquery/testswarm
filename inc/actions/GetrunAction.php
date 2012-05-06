@@ -26,7 +26,7 @@ class GetrunAction extends Action {
 		}
 
 		$runToken = $request->getVal( "run_token" );
-		if ( $conf->client->require_run_token && !$runToken ) {
+		if ( $conf->client->requireRunToken && !$runToken ) {
 			$this->setError( "invalid-input", "This TestSwarm does not allow unauthorized clients to join the swarm." );
 			return;
 		}
@@ -113,7 +113,7 @@ class GetrunAction extends Action {
 		}
 
 		$this->setData( array(
-			"confUpdate" => array( "client" => $this->getContext()->getConf()->client ),
+			"confUpdate" => array( "client" => $conf->client ),
 			"runInfo" => $runInfo,
 		) );
 	}

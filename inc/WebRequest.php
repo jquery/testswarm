@@ -21,7 +21,7 @@ class WebRequest {
 	 * @param $context TestSwarmContext
 	 * @return WebRequest
 	 */
-	function newFromContext( TestSwarmContext $context ) {
+	public static function newFromContext( TestSwarmContext $context ) {
 		$req = new self();
 		$req->context = $context;
 		$req->checkMagicQuotes();
@@ -202,7 +202,7 @@ class WebRequest {
 class DerivativeWebRequest extends WebRequest {
 	protected $derivPosted = false;
 
-	function newFromContext( TestSwarmContext $context ) {
+	public static function newFromContext( TestSwarmContext $context ) {
 		$req = new self();
 		return $req;
 	}

@@ -165,7 +165,7 @@ class Client {
 
 	public static function validateRunToken( TestSwarmContext $context, $runToken ) {
 		$conf = $context->getConf();
-		if ( !$conf->client->require_run_token ) {
+		if ( !$conf->client->requireRunToken ) {
 			return true;
 		}
 		$cacheFile = $conf->storage->cacheDir . "/run_token_hash.cache";

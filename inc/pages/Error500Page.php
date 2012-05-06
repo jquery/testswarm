@@ -26,7 +26,7 @@ class Error500Page extends Page {
 				. ' The following error message was caught:<br><br><strong>'
 				. nl2br( htmlspecialchars( $e->getMessage() ) ) . '</strong></div>';
 
-		if ( $this->getContext()->getConf()->debug->show_exception_details ) {
+		if ( $this->getContext()->getConf()->debug->showExceptionDetails ) {
 			$html .=
 				'<p>Caught in <code>.'
 				. htmlspecialchars( substr( $e->getFile(), strlen( $swarmInstallDir ) ) )

@@ -60,53 +60,39 @@ require_once __DIR__ . "/utilities.php";
 
 $swarmInstallDir = dirname( __DIR__ );
 
-$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.ini";
-$localSettingsFile = "$swarmInstallDir/testswarm.ini";
+$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.json";
+$localSettingsFile = "$swarmInstallDir/config/testswarm.json";
 
-// Verify that the testswarm.ini file exists
-if ( !file_exists( $defaultSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> <tt>./config/testswarm-defaults.ini</tt> missing!\n";
+// Verify that the configuration files exists and are readable
+if ( !is_readable( $defaultSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile\n";
 	exit;
 }
-if ( !file_exists( $localSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> <tt>testswarm.ini</tt> missing!\n";
+if ( !is_readable( $localSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile\n";
 	exit;
 }
 
-// Read configuration options and let the INI file
-// override default settings.
-$swarmConfig = array_extend(
-	parse_ini_file( $defaultSettingsFile, true ),
-	parse_ini_file( $localSettingsFile, true ),
-	array( "overwrite" )
-);
+$defaultSettings = json_decode( file_get_contents( $defaultSettingsFile ) );
+$localSettings = json_decode( file_get_contents( $localSettingsFile ) );
+if ( !$defaultSettings ) {
+	echo "<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.\n";
+	exit;
+}
+if ( !$localSettings ) {
+	echo "<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.\n";
+	exit;
+}
 
-unset( $localSettingsFile, $defaultSettingsFile );
+$swarmConfig = object_merge( $defaultSettings, $localSettings );
+
+unset( $defaultSettingsFile, $localSettingsFile, $defaultSettings, $localSettings );
 
 // Timezone
-date_default_timezone_set( $swarmConfig["general"]["timezone"] );
+date_default_timezone_set( $swarmConfig->general->timezone );
 
-// Type conversion
-// (parse_ini_file reads everything as strings)
-
-$swarmConfig["web"]["ajax_update_interval"] = intval( $swarmConfig["web"]["ajax_update_interval"] );
-
-$swarmConfig["client"]["cooldown_sleep"] = intval( $swarmConfig["client"]["cooldown_sleep"] );
-$swarmConfig["client"]["nonewruns_sleep"] = intval( $swarmConfig["client"]["nonewruns_sleep"] );
-$swarmConfig["client"]["run_timeout"] = intval( $swarmConfig["client"]["run_timeout"] );
-$swarmConfig["client"]["savereq_timeout"] = intval( $swarmConfig["client"]["savereq_timeout"] );
-$swarmConfig["client"]["saveretry_max"] = intval( $swarmConfig["client"]["saveretry_max"] );
-$swarmConfig["client"]["saveretry_sleep"] = intval( $swarmConfig["client"]["saveretry_sleep"] );
-$swarmConfig["client"]["require_run_token"] = $swarmConfig["client"]["require_run_token"] === "1";
-$swarmConfig["client"]["refresh_control"] = intval( $swarmConfig["client"]["refresh_control"] );
-
-$swarmConfig["debug"]["show_exception_details"] = $swarmConfig["debug"]["show_exception_details"] === "1";
-$swarmConfig["debug"]["php_error_reporting"] = $swarmConfig["debug"]["php_error_reporting"] === "1";
-$swarmConfig["debug"]["db_log_queries"] = $swarmConfig["debug"]["db_log_queries"] === "1";
-
-// Settings that need post-processing
-
-if ( $swarmConfig["web"]["server"] == "0" ) {
+// Auto-populate web.server
+if ( $swarmConfig->web->server === null ) {
 	$server = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
 	if ( isset( $_SERVER["HTTP_HOST"] ) ) {
 		$server .= $_SERVER["HTTP_HOST"];
@@ -115,26 +101,24 @@ if ( $swarmConfig["web"]["server"] == "0" ) {
 	} else {
 		$server .= 'localhost';
 	}
-	$swarmConfig["web"]["server"] = $server;
+	$swarmConfig->web->server = $server;
 }
 
-$swarmConfig["storage"]["cacheDir"] = str_replace( "$1", $swarmInstallDir, $swarmConfig["storage"]["cacheDir"] );
+// Magic replacements
+$swarmConfig->storage->cacheDir = str_replace( "$1", $swarmInstallDir, $swarmConfig->storage->cacheDir );
 
 // Caching directory must exist and be writable
-if ( !is_dir( $swarmConfig["storage"]["cacheDir"] ) || !is_writable( $swarmConfig["storage"]["cacheDir"] ) ) {
+if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->storage->cacheDir ) ) {
 	echo "<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!\n";
 	exit;
 }
 
 // Refresh control
-// (for documentation see testswarm.ini)
-// Contrary to the one in testswarm.ini, this one is for internal changes.
-// The one in testswarm.ini is for changes by the local administrator.
-// This may be increased when for example run.js changes significantly.
-
-$refresh_control = 2; // 2012-04-06
-
-$swarmConfig["client"]["refresh_control"] += $refresh_control;
+// The value in settings file is for changes by the local administrator.
+// this one is for internal changes, e.g. to be increased when for example
+// ./js/run.js changes significantly.
+$refresh_control = 3; // 2012-05-07
+$swarmConfig->client->refresh_control += $refresh_control;
 
 
 /**@}*/
@@ -222,7 +206,7 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
  * Custom settings
  * @{
  */
-if ( $swarmContext->getConf()->debug->php_error_reporting ) {
+if ( $swarmContext->getConf()->debug->phpErrorReporting ) {
 	error_reporting( E_ALL );
 	ini_set( "display_errors", 1 );
 }

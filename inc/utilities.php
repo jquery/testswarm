@@ -77,32 +77,33 @@
 	}
 
 	/**
-	 * Utility function to overwrite keys and support multiple levels.
-	 * (array_merge overwrites keys, but isn't recursive. array_merge_recursive
-	 * is recurive but doesn't overwrite deper level's keys..)
+	 * Utility function to overwrite object keys and support multiple levels.
+	 * array_merge() overwrites keys, but isn't recursive.
+	 * array_merge_recursive() is recursive but doesn't overwrite deeper levels,
+	 * and merges by creating arrays, instead of overwriting them.
 	 *
-	 * @since 0.1.0
-	 * @param $arr1 array: Starting point
-	 * @param $arr2 array: Used to extend
+	 * @since 1.0.0
+	 * @param $obj1 object: Starting point
+	 * @param $obj2 object: Values from this object are added
 	 * @param $options array: one or more of 'add', 'overwrite'.
-	 * Defaults to array( 'add', 'overwrite' ); If neither is given, the function
+	 * Defaults to array( 'overwrite' ); If neither option is given, the function
 	 * will effectively be a no-op.
 	 */
-	function array_extend( $arr1, $arr2, $options = null ) {
-		$options = is_array( $options ) ? $options : array( 'add', 'overwrite' );
+	function object_merge( $obj1, $obj2, $options = null ) {
+		$options = is_array( $options ) ? $options : array( 'overwrite' );
 
-		foreach ( $arr2 as $key => $val ) {
-			if ( array_key_exists( $key, $arr1 ) && in_array( 'overwrite', $options ) ) {
-				if ( is_array( $val ) ) {
-					$arr1[$key] = array_extend( $arr1[$key], $arr2[$key], $options );
+		foreach ( $obj2 as $key => $val ) {
+			if ( property_exists( $obj1, $key ) && in_array( 'overwrite', $options ) ) {
+				if ( is_object( $val ) ) {
+					$obj1->$key = object_merge( $obj1->$key, $obj2->$key, $options );
 				} else {
-					$arr1[$key] = $val;
+					$obj1->$key = $val;
 				}
-			} elseif ( !array_key_exists( $key, $arr1 ) && in_array( 'add', $options ) ) {
-					$arr1[$key] = $val;
+			} elseif ( !property_exists( $obj1, $key ) && in_array( 'add', $options ) ) {
+					$obj1->$key = $val;
 			}
 		}
-		return $arr1;
+		return $obj1;
 	}
 
 	/**
