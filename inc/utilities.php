@@ -110,20 +110,6 @@
 	 * @since 0.1.0
 	 * @source php.net/mysql-query#86447
 	 */
-	function mysql_queryf(/* $string, $arg, .. */) {
-		global $swarmContext;
-
-		$args = func_get_args();
-		$sql_query = call_user_func_array( 'str_queryf', $args );
-
-		$result = $swarmContext->getDB()->query( $sql_query );
-		if (!$result) {
-			echo "Invalid query: " . mysql_error();
-			exit;
-		}
-
-		return $result;
-	}
 	function str_queryf($string) {
 		$args = func_get_args();
 		array_shift($args);
