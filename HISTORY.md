@@ -52,11 +52,13 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Added Android 2.3.
 * Added Firefox 11.
 * Added Firefox 12.
+* (#168) Added Firefox 13 beta.
 * Added iPad 3.2.
 * Added iPad 4.3.
 * Added iPad 5.
 * Added iPhone 3.2.
 * Added Opera Mini 2.
+* Added Opera 12 beta.
 * Added Palm Web 2.
 
 ### Bugs fixed
