@@ -19,30 +19,22 @@ class BrowserSetsQueryScript extends MaintenanceScript {
 	}
 
 	protected function execute() {
+		$conf = $this->getContext()->getConf();
 		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
-
-		$browserSets = array();
-		foreach ( $swarmUaIndex as $uaId => $uaData ) {
-			foreach ( $uaData as $propKey => $propVal ) {
-				if ( $propKey !== 'displaytitle' && $propKey !== 'displayicon' && $propVal ) {
-					$browserSets[$propKey][] = $uaData->displaytitle;
-				}
-			}
-		}
 
 		// Output
 		$set = $this->getOption( 'set' );
 		if ( $set ) {
-			if ( isset( $browserSets[$set] ) ) {
-				$this->out( "$set:\n* " . implode( "\n* ", $browserSets[$set] ) );
+			if ( isset( $conf->browserSets->$set ) ) {
+				$this->out( "$set:\n* " . implode( "\n* ", $conf->browserSets->$set ) );
 			} else {
 				$this->error( "Browser set `$set` does not exist." );
 			}
 		} else {
-			natcaseksort($browserSets);
-			foreach ( $browserSets as $set => $browsers ) {
+			foreach ( $conf->browserSets as $set => $browsers ) {
 				$this->out( "\n$set:\n* " . implode( "\n* ", $browsers ) );
 			}
+			$this->out( "\n(everything):\n* " . implode( "\n* ", array_keys( get_object_vars( $swarmUaIndex ) ) ) );
 		}
 	}
 }

@@ -49,7 +49,10 @@ class AddjobPage extends Page {
 	}
 
 	protected function getAddjobFormHtml() {
+		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
+
+		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 
 		$addjobPageUrl = htmlspecialchars( swarmpath( "addjob" ) );
 		$userName = $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes"  ? htmlspecialchars( $request->getSessionData( "username" ) ) : "";
@@ -99,43 +102,33 @@ class AddjobPage extends Page {
 	<fieldset>
 		<legend>Browsers</legend>
 
-		<p>Choose which groups of user agents this job should be ran in. Some of the groups
-		overlap eachother, tests will not be ran twice in the same browser.</p>
+		<p>Choose which groups of user agents this job should be ran in. Some of the groups may
+		overlap each other, TestSwarm will detect and remove duplicate entries in the resulting set.</p>
 
-		<p><strong>Note:</strong> The list of user agents is queried based on an <strong>inclusive</strong> algorithm.
-		For example, not only "beta" (without "mobile") will not exclude all mobile browsers per se (e.g. "beta" includes
-		some mobile browsers).</p>
+HTML;
+		foreach ( $conf->browserSets as $set => $browsers ) {
+			$set = htmlspecialchars( $set );
+			$browsersHtml = '';
+			$last = count( $browsers ) - 1;
+			foreach ( $browsers as $i => $browser ) {
+				if ( $i !== 0 ) {
+					$browsersHtml .= $i === $last ? '<br> and ' : ',<br>';
+				} else {
+					$browsersHtml .= '<br>';
+				}
+				$browsersHtml .= htmlspecialchars( $swarmUaIndex->$browser->displaytitle );
+			}
+			$formHtml .= <<<HTML
+		<div class="control-group">
+			<label class="checkbox" for="form-browserset-$set">
+				<input type="checkbox" name="browserSets[]" value="$set" id="form-browserset-$set">
+				<strong>$set</strong>: $browsersHtml.
+			</label>
+		</div>
+HTML;
+		}
 
-		<div class="control-group">
-			<label class="checkbox" for="form-browserset-current">
-				<input type="checkbox" name="browserSets[]" value="current" id="form-browserset-current">
-				<strong>Current</strong>: The current stable release of all the major browsers (including mobile).
-			</label>
-		</div>
-		<div class="control-group">
-			<label class="checkbox" for="form-browserset-popular">
-				<input type="checkbox" name="browserSets[]" value="popular" id="form-browserset-popular" checked>
-				<strong>Popular</strong>: The most popular browsers (<a href="http://marketshare.hitslink.com/browser-market-share.aspx?qprid=2">99%+ of all browsers in use</a>).
-			</label>
-		</div>
-		<div class="control-group">
-			<label class="checkbox" for="form-browserset-gbs">
-				<input type="checkbox" name="browserSets[]" value="gbs" id="form-browserset-gbs">
-				<strong>GBS</strong>: The browsers currently supported by Yahoo's <a href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support</a>.
-			</label>
-		</div>
-		<div class="control-group">
-			<label class="checkbox" for="form-browserset-beta">
-				<input type="checkbox" name="browserSets[]" value="beta" id="form-browserset-beta">
-				<strong>Beta</strong>: Upcoming beta versions of popular browsers.
-			</label>
-		</div>
-		<div class="control-group">
-			<label class="checkbox" for="form-browserset-mobile">
-				<input type="checkbox" name="browserSets[]" value="mobile" id="form-browserset-mobile">
-				<strong>Mobile</strong>: Popular releases of mobile browsers.
-			</label>
-		</div>
+		$formHtml .= <<<HTML
 	</fieldset>
 
 	<fieldset>

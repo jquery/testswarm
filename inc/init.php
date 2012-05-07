@@ -34,6 +34,8 @@ if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.
 	exit;
 }
 
+$swarmInstallDir = dirname( __DIR__ );
+
 /**@}*/
 
 /**
@@ -48,78 +50,6 @@ define( 'SWARM_NOW', 0 );
 // Database::open, connection types
 define( 'SWARM_DBCON_DEFAULT', 10 );
 define( 'SWARM_DBCON_PERSISTENT', 11 );
-
-/**@}*/
-
-/**
- * Default settings
- * @{
- */
-// Generic requirements that we still need globally unconditionally
-require_once __DIR__ . "/utilities.php";
-
-$swarmInstallDir = dirname( __DIR__ );
-
-$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.json";
-$localSettingsFile = "$swarmInstallDir/config/testswarm.json";
-
-// Verify that the configuration files exists and are readable
-if ( !is_readable( $defaultSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile\n";
-	exit;
-}
-if ( !is_readable( $localSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile\n";
-	exit;
-}
-
-$defaultSettings = json_decode( file_get_contents( $defaultSettingsFile ) );
-$localSettings = json_decode( file_get_contents( $localSettingsFile ) );
-if ( !$defaultSettings ) {
-	echo "<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.\n";
-	exit;
-}
-if ( !$localSettings ) {
-	echo "<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.\n";
-	exit;
-}
-
-$swarmConfig = object_merge( $defaultSettings, $localSettings );
-
-unset( $defaultSettingsFile, $localSettingsFile, $defaultSettings, $localSettings );
-
-// Timezone
-date_default_timezone_set( $swarmConfig->general->timezone );
-
-// Auto-populate web.server
-if ( $swarmConfig->web->server === null ) {
-	$server = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
-	if ( isset( $_SERVER["HTTP_HOST"] ) ) {
-		$server .= $_SERVER["HTTP_HOST"];
-	} elseif ( isset( $_SERVER["SERVER_ADDR"] ) ) {
-		$server .= $_SERVER["SERVER_ADDR"];
-	} else {
-		$server .= 'localhost';
-	}
-	$swarmConfig->web->server = $server;
-}
-
-// Magic replacements
-$swarmConfig->storage->cacheDir = str_replace( "$1", $swarmInstallDir, $swarmConfig->storage->cacheDir );
-
-// Caching directory must exist and be writable
-if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->storage->cacheDir ) ) {
-	echo "<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!\n";
-	exit;
-}
-
-// Refresh control
-// The value in settings file is for changes by the local administrator.
-// this one is for internal changes, e.g. to be increased when for example
-// ./js/run.js changes significantly.
-$refresh_control = 3; // 2012-05-07
-$swarmConfig->client->refresh_control += $refresh_control;
-
 
 /**@}*/
 
@@ -188,7 +118,89 @@ function swarmAutoLoader( $className ) {
 	return true;
 }
 
-spl_autoload_register( "swarmAutoLoader" );
+spl_autoload_register( 'swarmAutoLoader' );
+
+/**@}*/
+
+/**
+ * Load settings
+ * @{
+ */
+// Generic requirements that we still need globally unconditionally
+require_once __DIR__ . "/utilities.php";
+
+$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.json";
+$localSettingsFile = "$swarmInstallDir/config/testswarm.json";
+
+// Verify that the configuration files exists and are readable
+if ( !is_readable( $defaultSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile\n";
+	exit;
+}
+if ( !is_readable( $localSettingsFile ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile\n";
+	exit;
+}
+
+$defaultSettings = json_decode( file_get_contents( $defaultSettingsFile ) );
+$localSettings = json_decode( file_get_contents( $localSettingsFile ) );
+if ( !$defaultSettings ) {
+	echo "<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.\n";
+	exit;
+}
+if ( !$localSettings ) {
+	echo "<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.\n";
+	exit;
+}
+
+$swarmConfig = object_merge( $defaultSettings, $localSettings );
+
+unset( $defaultSettingsFile, $localSettingsFile, $defaultSettings, $localSettings );
+
+// Validate browserSets
+// Must be after AutoLoad
+$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+foreach ( $swarmConfig->browserSets as $set => $browsers ) {
+	foreach ( $browsers as $browser ) {
+		if ( !isset( $swarmUaIndex->$browser ) ) {
+			echo "<b>TestSwarm Fatal</b>: Invalid browser ID \"<code>$browser</code>\" in browser set \"<code>$set</code>\" !\n";
+			exit;
+		}
+	}
+}
+
+// Timezone
+date_default_timezone_set( $swarmConfig->general->timezone );
+
+// Auto-populate web.server
+if ( $swarmConfig->web->server === null ) {
+	$server = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
+	if ( isset( $_SERVER["HTTP_HOST"] ) ) {
+		$server .= $_SERVER["HTTP_HOST"];
+	} elseif ( isset( $_SERVER["SERVER_ADDR"] ) ) {
+		$server .= $_SERVER["SERVER_ADDR"];
+	} else {
+		$server .= 'localhost';
+	}
+	$swarmConfig->web->server = $server;
+}
+
+// Magic replacements
+$swarmConfig->storage->cacheDir = str_replace( "$1", $swarmInstallDir, $swarmConfig->storage->cacheDir );
+
+// Caching directory must exist and be writable
+if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->storage->cacheDir ) ) {
+	echo "<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!\n";
+	exit;
+}
+
+// Refresh control
+// The value in settings file is for changes by the local administrator.
+// this one is for internal changes, e.g. to be increased when for example
+// ./js/run.js changes significantly.
+$refresh_control = 3; // 2012-05-07
+$swarmConfig->client->refresh_control += $refresh_control;
+
 
 /**@}*/
 
