@@ -294,7 +294,7 @@ foreach ( $projects as $project ) {
 		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );
 	}
 
-	if ( $this->getContext()->getConf()->debug->db_log_queries ) {
+	if ( $this->getContext()->getConf()->debug->dbLogQueries ) {
 		$queryLog = $this->getContext()->getDB()->getQueryLog();
 		$queryLogHtml = '<hr><h3>Database query log</h3><div class="well"><ul class="unstyled">';
 		foreach ( $queryLog as $i => $queryInfo ) {

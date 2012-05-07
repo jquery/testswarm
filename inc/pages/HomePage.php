@@ -26,23 +26,23 @@ class HomePage extends Page {
 		$request = $this->getContext()->getRequest();
 		$browserInfo = $this->getContext()->getBrowserInfo();
 
+		$siteNameHtml = htmlspecialchars( $conf->web->title );
+
 		$this->setTitle( "Home" );
 		$this->setRawDisplayTitle(
-			'<div style="text-align: center;">' . htmlspecialchars( $this->getContext()->getConf()->web->title ) . '</div>'
+			'<div style="text-align: center;">' . $siteNameHtml . '</div>'
 		);
-
-		$siteNameHtml = htmlspecialchars( $this->getContext()->getConf()->web->title );
 
 		$html = '<div class="row">'
 			. '<div class="span7">'
 			. '<h3>Distributed Continuous Integration for JavaScript</h3>'
 			. '<blockquote><p>'
-			. str_replace( "$1", $siteNameHtml, $this->getContext()->getConf()->custom_msg->home_intro_html )
+			. str_replace( "$1", $siteNameHtml, $conf->customMsg->homeIntro_html )
 			. '</p></blockquote>'
 			. '</div>';
 
 		$html .= '<div class="span5"><div class="well well-small">';
-		if ( !$conf->client->require_run_token ) {
+		if ( !$conf->client->requireRunToken ) {
 			if ( $browserInfo->isInSwarmUaIndex() ) {
 					$html .= '<p><strong>' . $siteNameHtml . ' needs your help!</strong><br>'
 					. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
