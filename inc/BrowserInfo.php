@@ -19,9 +19,9 @@ class BrowserInfo {
 	protected $rawUserAgent = "";
 
 	/**
-	 * @var $browscap Browscap
+	 * @var $browscapData stdClass object: Object returned by Browscap::getBrowser.
 	 */
-	protected $browscap;
+	protected $browscapData;
 
 	/**
 	 * @var $swarmUaItem stdClass object
@@ -107,11 +107,14 @@ class BrowserInfo {
 		 *     [MinorVer] => 1
 		 * )
 		 */
-		$bs = new Browscap( $browscapCacheDir );
-		$baUa = $bs->getBrowser( $userAgent );
+		$browscapInstance = new Browscap( $browscapCacheDir );
+		// Default cache is 5 days...
+		$browscapInstance->updateInterval = 3600; // 1 hour
+
+		$browscapData = $browscapInstance->getBrowser( $userAgent );
 
 		$this->rawUserAgent = $userAgent;
-		$this->browscap = $baUa;
+		$this->browscapData = $browscapData;
 
 		return $this;
 	}
@@ -124,7 +127,7 @@ class BrowserInfo {
 	/** @return Selective array with Browscap results */
 	public function getBrowscap() {
 		return array_intersect_key(
-			(array)$this->browscap,
+			(array)$this->browscapData,
 			array_flip(array( "Platform", "Browser", "Version", "MajorVer", "MinorVer" ))
 		);
 	}
@@ -135,7 +138,7 @@ class BrowserInfo {
 		// Lazy-init and cache
 		if ( $this->swarmUaItem === null ) {
 			$uaItems = self::getSwarmUAIndex();
-			$browscap = $this->browscap;
+			$browscap = $this->browscapData;
 			$found = false;
 			foreach ( $uaItems as $uaID => $uaItem ) {
 				if ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}|{$browscap->MinorVer}" ) {
