@@ -46,18 +46,19 @@ You may have noticed I specified that the directory is /var/www/testswarm. The f
 
 you will now need to set up your mysql database, I named my database testswarm but you can call yours whatever you want, create a user and give it permissions.
 
-`mysql -u root -p`
-`mysql> grant usage on testswarm.* to cheese@localhost identified by 'lwn89a#87sa9%a8b987s@!';`
-`Query OK, 0 rows affected (0.00 sec)`
+````
+mysql -u root -p
+mysql> grant usage on testswarm.* to cheese@localhost identified by 'lwn89a#87sa9%a8b987s@!';
+Query OK, 0 rows affected (0.00 sec)
 
-`mysql> grant all privileges on testswarm.* to cheese@localhost;`
-`Query OK, 0 rows affected (0.00 sec)`
+mysql> grant all privileges on testswarm.* to cheese@localhost;
+Query OK, 0 rows affected (0.00 sec)
 
-`mysql> flush privileges;`
-`Query OK, 0 rows affected (0.00 sec)`
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
 
-`mysql> quit`
-
+mysql> quit
+````
 
 Note: please don't use this password :) If you do, don't get mad if you have to ride the p0wny all the way to 0wn3d land.
 
