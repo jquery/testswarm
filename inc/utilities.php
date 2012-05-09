@@ -86,11 +86,11 @@
 	 * @param $obj1 object: Starting point
 	 * @param $obj2 object: Values from this object are added
 	 * @param $options array: one or more of 'add', 'overwrite'.
-	 * Defaults to array( 'overwrite' ); If neither option is given, the function
+	 * Defaults to array( 'add', 'overwrite' ); If neither option is given, the function
 	 * will effectively be a no-op.
 	 */
 	function object_merge( $obj1, $obj2, $options = null ) {
-		$options = is_array( $options ) ? $options : array( 'overwrite' );
+		$options = is_array( $options ) ? $options : array( 'add', 'overwrite' );
 
 		foreach ( $obj2 as $key => $val ) {
 			if ( property_exists( $obj1, $key ) && in_array( 'overwrite', $options ) ) {

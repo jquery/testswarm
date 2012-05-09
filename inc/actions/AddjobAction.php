@@ -24,6 +24,7 @@ class AddjobAction extends Action {
 	 * @actionParam browserSets array
 	 */
 	public function doAction() {
+		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
@@ -142,14 +143,12 @@ class AddjobAction extends Action {
 		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 		$uaIDs = array();
 
-		foreach ( $swarmUaIndex as $swarmUaID => $swarmUaData ) {
-			foreach ( $browserSets as $browserSet ) {
-				if ( $swarmUaData->$browserSet === true ) {
-					$uaIDs[] = $swarmUaID;
-					// Don't include the same browser more than once
-					break;
-				}
+		foreach ( $browserSets as $browserSet ) {
+			if ( !isset( $conf->browserSets->$browserSet ) ) {
+				$this->setError( "invalid-input", "Unknown browser set: $browserSet." );
 			}
+			// Merge the arrays, and re-index with unique (also prevents duplicate entries)
+			$uaIDs = array_unique( array_merge( $uaIDs, $conf->browserSets->$browserSet ) );
 		}
 
 		if ( !count( $uaIDs ) ) {

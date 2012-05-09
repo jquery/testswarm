@@ -95,6 +95,7 @@ class HomePage extends Page {
 
 	/** @return bool: Whether the current user was found in the swarm */
 	public function getBrowsersOnlineHtml() {
+		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();
 		$browserInfo = $this->getContext()->getBrowserInfo();
 
@@ -104,12 +105,13 @@ class HomePage extends Page {
 
 		$itemsPerRow = 6;
 
-		$desktopHtml = '<h2>Desktop Browsers</h2>';
-		$desktopItems = 0;
-		$mobileHtml = '<h2>Mobile Browsers</h2>';
-		$mobileItems = 0;
+		$browsersHtml = '<h2>Browsers</h2>';
+		$browserItemCount = 0;
 
 		foreach ( $data["userAgents"] as $uaID => $userAgent ) {
+			if ( !in_array( $uaID, $conf->browserSets->default ) ) {
+				continue;
+			}
 			$isCurr = $uaID == $browserInfo->getSwarmUaID();
 
 			$item = ""
@@ -159,40 +161,23 @@ class HomePage extends Page {
 				. '</div>'
 				. '</div>';
 
-			if ( $userAgent["data"]["mobile"] ) {
-				if ( $mobileItems % $itemsPerRow === 0 ) {
-					$mobileHtml .= '<div class="row">';
-				}
-				$mobileItems += 1;
-
-				$mobileHtml .= $item;
-
-				if ( $mobileItems % $itemsPerRow === 0 ) {
-					$mobileHtml .= '</div><!--/.row -->';
-				}
-			} else {
-				if ( $desktopItems % $itemsPerRow === 0 ) {
-					$desktopHtml .= '<div class="row">';
-				}
-				$desktopItems += 1;
-
-				$desktopHtml .= $item;
-
-				if ( $desktopItems % $itemsPerRow === 0 ) {
-					$desktopHtml .= '</div><!--/.row -->';
-				}
+			// Properly close and start new rows
+			if ( $browserItemCount % $itemsPerRow === 0 ) {
+				$browsersHtml .= '<div class="row">';
+			}
+			$browserItemCount += 1;
+			$browsersHtml .= $item;
+			if ( $browserItemCount % $itemsPerRow === 0 ) {
+				$browsersHtml .= '</div><!--/.row -->';
 			}
 		}
 
 		// Close un-even items rows
-		if ( $mobileItems % $itemsPerRow !== 0 ) {
-			$mobileHtml .= '</div><!--/.row -->';
-		}
-		if ( $desktopItems % $itemsPerRow !== 0 ) {
-			$desktopHtml .= '</div><!--/.row -->';
+		if ( $browserItemCount % $itemsPerRow !== 0 ) {
+			$browsersHtml .= '</div><!--/.row -->';
 		}
 
-		$html .= $desktopHtml . $mobileHtml;
+		$html .= $browsersHtml;
 
 		return $html;
 	}

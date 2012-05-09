@@ -11,14 +11,21 @@
 class SwarmstateAction extends Action {
 
 	/**
+	 * @requestParam browserSet string: Show useragents from a specific
+	 * browserset only.
 	 * @requestParam onlyactive bool: If true, only user agents that
 	 * have online clients and/or pending runs are included.
+	 * If both "browserSet" and "onlyactive" are used, the overlaping
+	 * subset will be output.
 	 */
 	public function doAction() {
+		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
 		$showOnlyactive = $request->hasKey( "onlyactive" );
+
+		$filterBrowserSet = $request->getVal( "browserSet", false );
 
 		$data = array(
 			"userAgents" => array(),
@@ -27,7 +34,9 @@ class SwarmstateAction extends Action {
 		$uaIndex = BrowserInfo::getSwarmUAIndex();
 
 		foreach ( $uaIndex as $uaID => $uaData ) {
-			if ( $uaData->active !== true ) {
+			if ( $filterBrowserSet && isset( $conf->browserSets->$filterBrowserSet )
+					&& !in_array( $uaID, $conf->browserSets->$filterBrowserSet )
+			) {
 				continue;
 			}
 
