@@ -29,9 +29,9 @@ jQuery(function ( $ ) {
 				setTimeout( function () {
 					$indicator.stop(true, true).animate({opacity: 0});
 				}, 10 );
-			});
 
-			refreshTableTimout = setTimeout( refreshTable, updateInterval );
+				refreshTableTimout = setTimeout( refreshTable, updateInterval );
+			});
 		}
 	}
 
