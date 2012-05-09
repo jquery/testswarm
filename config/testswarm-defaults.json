@@ -32,7 +32,8 @@
 	},
 	"browserSets": {
 		"default": [
-			"Chrome",
+			"Chrome|17",
+			"Chrome|18",
 			"Firefox|11",
 			"Firefox|12",
 			"Firefox|13",
@@ -61,7 +62,7 @@
 			"IEMobile|7"
 		],
 		"currentDesktop": [
-			"Chrome",
+			"Chrome|18",
 			"Firefox|12",
 			"IE|9",
 			"Opera|11|60",

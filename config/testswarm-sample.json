@@ -10,11 +10,5 @@
 	},
 	"storage": {
 		"cacheDir": "$1/cache"
-	},
-	"browserSets": {
-		"mySet": [
-			"Firefox|12",
-			"IE|9"
-		]
 	}
 }

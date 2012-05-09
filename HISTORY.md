@@ -49,18 +49,19 @@ Complete list of issues solved in the 1.0.0 milestone:
 
 ### User agents
 
-* (#41) Added Opera Mini.
-* Added Android 1.6.
-* Added Android 2.3.
+* Added Chrome 18.
 * Added Firefox 11.
 * Added Firefox 12.
 * (#168) Added Firefox 13 beta.
+* Added Opera 12 beta.
+* Added Android 1.6.
+* Added Android 2.3.
 * Added iPad 3.2.
 * Added iPad 4.3.
 * Added iPad 5.
 * Added iPhone 3.2.
+* (#41) Added Opera Mini.
 * Added Opera Mini 2.
-* Added Opera 12 beta.
 * Added Palm Web 2.
 
 ### Bugs fixed
@@ -106,6 +107,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#165) Expose runs/max in JobAction.
 * Default settings are now stored in `./config/testswarm-defaults.json` (instead of in
   `init.php`). Local settings are read from `./config/testswarm.json`.
+* (#78) Replace generic "Chrome" user agent ID with regular versioned ones. Google Chrome
+  versions are now testable like any other browser.
 
 
 ## 0.2.0 / 2012-03-07
