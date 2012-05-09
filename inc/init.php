@@ -91,6 +91,7 @@ $swarmAutoLoadClasses = array(
 	"Error404Page" => "inc/pages/Error404Page.php",
 	"Error500Page" => "inc/pages/Error500Page.php",
 	"HomePage" => "inc/pages/HomePage.php",
+	"AboutPage" => "inc/pages/AboutPage.php",
 	"JobPage" => "inc/pages/JobPage.php",
 	"LoginPage" => "inc/pages/LoginPage.php",
 	"LogoutPage" => "inc/pages/LogoutPage.php",

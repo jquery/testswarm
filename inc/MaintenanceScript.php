@@ -134,7 +134,11 @@ abstract class MaintenanceScript {
 		$this->parseCliArguments();
 
 		// Generate header
-		$version = $this->getContext()->getVersion( "bypass-cache" );
+		$version = $this->getContext()->getVersionInfo( 'bypass-cache' );
+		$versionText = $version['TestSwarm'];
+		if ( $version['devInfo'] ) {
+			$versionText .= ' (' . $version['devInfo']['branch'] . ' ' . substr( $version['devInfo']['HEAD'], 0, 7 ) . ')';
+		}
 		$description = wordwrap( $this->description, 72, "\n", true );
 		$description = explode( "\n", $description );
 		$description[] = str_repeat( "-", 72 );
@@ -142,7 +146,7 @@ abstract class MaintenanceScript {
 		$prefix = str_repeat( " ", strlen( $label ) );
 		$description = $label . implode( "\n" . $prefix, $description );
 		print <<<TEXT
-[TestSwarm $version] Maintenance script
+[TestSwarm $versionText] Maintenance script
 
 $description
 

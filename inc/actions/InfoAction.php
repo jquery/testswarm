@@ -18,7 +18,10 @@ class InfoAction extends Action {
 		$request = $context->getRequest();
 
 		$info = array(
-			"version" => $context->getVersion(),
+			"software" => array(
+				"website" => "https://github.com/jquery/testswarm",
+				"versionInfo" => $context->getVersionInfo(),
+			),
 			"conf" => array(
 				"general" => $conf->general,
 				"web" => $conf->web,

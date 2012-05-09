@@ -9,7 +9,7 @@
  * @package TestSwarm
  */
 class TestSwarmContext {
-	protected $browserInfo, $conf, $db, $request, $version;
+	protected $browserInfo, $conf, $db, $request, $versionInfo;
 
 	/**
 	 * The context is self-initializing. The only thing it
@@ -107,22 +107,22 @@ class TestSwarmContext {
 	 * Get the current TestSwarm version (cached for 5 minutes).
 	 *
 	 * @param $options string|array: 'bypass-cache'
-	 * @return string (see also calculateVersion)
+	 * @return array (see also calculateVersionInfo)
 	 */
-	public function getVersion( $options = array() ) {
+	public function getVersionInfo( $options = array() ) {
 		$options = (array)$options;
 
 		if ( in_array( "bypass-cache", $options ) ) {
-			return $this->calculateVersion();
+			return $this->calculateVersionInfo();
 		}
 
 		// Cache within the class, never calculate more than once per request
-		if ( $this->version !== null ) {
-			return $this->version;
+		if ( $this->versionInfo !== null ) {
+			return $this->versionInfo;
 		}
 
 		// Deal with cache expiration
-		$versionCacheFile = $this->getConf()->storage->cacheDir . "/version_testswarm.cache";
+		$versionCacheFile = $this->getConf()->storage->cacheDir . '/version_info.json';
 		if ( is_readable( $versionCacheFile ) ) {
 			$versionCacheFileUpdated = filemtime( $versionCacheFile );
 			if ( $versionCacheFileUpdated < strtotime( "5 minutes ago" ) ) {
@@ -132,18 +132,18 @@ class TestSwarmContext {
 
 		// If cache file (still) exists it means we can use it
 		if ( is_readable( $versionCacheFile ) ) {
-			$this->version = trim( file_get_contents( $versionCacheFile ) );
-			return $this->version;
+			$this->versionInfo = json_decode( file_get_contents( $versionCacheFile ), /*assoc=*/true );
+			return $this->versionInfo;
 		}
 
 		// Calculate it and populate the class cache and file cache
-		$this->version = $this->calculateVersion();
-		$isWritten = file_put_contents( $versionCacheFile, $this->version );
+		$this->versionInfo = $this->calculateVersionInfo();
+		$isWritten = file_put_contents( $versionCacheFile, json_encode( $this->versionInfo ) );
 		if ( $isWritten === false ) {
 			throw new SwarmException( "Writing to cache directory failed." );
 		}
 
-		return $this->version;
+		return $this->versionInfo;
 	}
 
 	/**
@@ -151,17 +151,18 @@ class TestSwarmContext {
 	 * if the installation directory contains a git repository.
 	 * @since 1.0.0
 	 *
-	 * @return string: e.g. "0.2.0" (for installs without a Git repo),
-	 * or something like "1.0.0-dev (749a4af2)" for installs with a Git repo.
+	 * @return array
 	 */
-	protected function calculateVersion() {
+	protected function calculateVersionInfo() {
 		global $swarmInstallDir;
 
 		$baseVersionFile = "$swarmInstallDir/config/version.ini";
 		if ( !is_readable( $baseVersionFile ) ) {
 			throw new SwarmException( "version.ini is missing or unreadable." );
 		}
-		$version = trim( file_get_contents( $baseVersionFile ) );
+
+		$swarmVersion = trim( file_get_contents( $baseVersionFile ) );
+		$devInfo = null;
 
 		// If this is a git repository, get a hold of the HEAD SHA1 hash as well,
 		// and append it to the version.
@@ -176,16 +177,23 @@ class TestSwarmContext {
 
 			$gitRefFile = "$swarmInstallDir/.git/$gitHead";
 			if ( is_readable( $gitRefFile ) ) {
-				$gitHeadState = basename( $gitRefFile ) . '@' . substr( rtrim( file_get_contents( $gitRefFile ) ), 0, 8 );
+				$devInfo = array(
+					'branch' => basename( $gitRefFile ),
+					'HEAD' => trim( file_get_contents( $gitRefFile ) ),
+				);
 			} else {
 				// If such refs file doesn't exist, maybe HEAD is detached,
 				// in which case ./.git/HEAD should contain the actual SHA1 already.
-				$gitHeadState = substr( $gitHead, 0, 8);
+				$devInfo = array(
+					'branch' => '',
+					'HEAD' => $gitHead,
+				);
 			}
-
-			$version .= " (" . $gitHeadState . ")";
 		}
 
-		return $version;
+		return array(
+			'TestSwarm' => $swarmVersion,
+			'devInfo' => $devInfo,
+		);
 	}
 }

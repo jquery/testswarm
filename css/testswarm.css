@@ -171,3 +171,8 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	animation-timing-function: linear;
 	animation-iteration-count: infinite;
 }
+
+.swarm-page-footer {
+	text-align: center;
+	margin-bottom: 18px;
+}

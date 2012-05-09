@@ -46,6 +46,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#158) Implement database install script.
 * Implement browserset query script.
 * (#172) Use JSON for configuration files.
+* Create "About" page. Showing current version info with links to GitHub.
 
 ### User agents
 

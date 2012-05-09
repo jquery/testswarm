@@ -246,6 +246,7 @@ foreach ( $projects as $project ) {
 							</ul>
 						</li>
 						<li><a href="<?php echo swarmpath( "scores" ); ?>">Scores</a></li>
+						<li><a href="<?php echo swarmpath( "about" ); ?>">About</a></li>
 					</ul>
 					<ul class="nav pull-right">
 <?php
@@ -277,16 +278,16 @@ foreach ( $projects as $project ) {
 	echo $this->getContent();
 ?>
 
+		<hr>
+		<footer class="swarm-page-footer">
+			<p>Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
+			<a href="//github.com/jquery/testswarm">Source Code</a>
+			| <a href="//github.com/jquery/testswarm/issues">Issue Tracker</a>
+			| <a href="//github.com/jquery/testswarm/wiki">About</a>
+			| <a href="//twitter.com/testswarm">Twitter</a>
+			</p>
+		</footer>
 	</div>
-	<hr>
-	<footer>
-		<p>Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
-		<a href="//github.com/jquery/testswarm">Source Code</a>
-		| <a href="//github.com/jquery/testswarm/issues">Issue Tracker</a>
-		| <a href="//github.com/jquery/testswarm/wiki">About</a>
-		| <a href="//twitter.com/testswarm">Twitter</a>
-		</p>
-	</footer>
 	<script src="<?php echo swarmpath( "js/pretty.js" ); ?>"></script>
 	<script src="<?php echo swarmpath( "js/testswarm.js" ); ?>"></script><?php
 
@@ -383,7 +384,8 @@ foreach ( $projects as $project ) {
 		$page = new static();
 		$page->context = $context;
 
-		$page->metaTags[] = array( "name" => "generator", "content" => $context->getVersion() );
+		$versionInfo = $context->getVersionInfo();
+		$page->metaTags[] = array( "name" => "generator", "content" => $versionInfo['TestSwarm'] );
 
 		return $page;
 	}
