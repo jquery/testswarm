@@ -24,7 +24,8 @@ For the purposes of this explanation I am assuming:
 
 If your on Ubuntu natty and up you can just grab php5-fpm off apt
 
-If your running Debian you need to add the dotdeb.org repository to your /etc/apt/sources.list [Directions on the site](http://www.dotdeb.org/instructions/). If you have an existing php/mysql install remove them before adding this as it will cause problems. Install all the things from this repo.
+If your running Debian you need to add the dotdeb.org repository to your /etc/apt/sources.list [Directions on the site](http://www.dotdeb.org/instructions/).<br/>
+If you have an existing php/mysql install remove them before adding this as it will cause problems. Install all the things from this repo.
 
 If your running an Centos or another rpm based distro go here [howtoforge article](http://www.howtoforge.com/installing-nginx-with-php5-and-php-fpm-and-mysql-support-on-centos-6.2)
 
