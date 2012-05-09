@@ -59,7 +59,7 @@ you will now need to set up your mysql database, I named my database testswarm b
 `mysql> quit`
 
 
-Note: please don\'t use this password :) If you do, don\'t get mad if you have to ride the p0wny all the way to 0wn3d land.
+Note: please don't use this password :) If you do, don't get mad if you have to ride the p0wny all the way to 0wn3d land.
 
 You now need to go down one directory to /config and set up your testswarm.json file
 
@@ -73,7 +73,7 @@ Ok now set up the database, to the the root directory /var/www/testswarm and run
 
 `php scripts/dbInstall.php`
 
-this will add all the goodies to MySQL and you\'re that much closer to being done.
+this will add all the goodies to MySQL and you're that much closer to being done.
 
 Now make sure that php-fpm is running
 
@@ -84,9 +84,12 @@ if not start it, and now go to your testswarm site, it should be rawkin socks.
 ###Other Notes
 
 In testswarm.json set<br/> 
-`"storage": {
-		"cacheDir": "$1/cache"
-	}` 
+````
+"storage": {
+	"cacheDir": "$1/cache"
+}
+````
+
 to a writable directory that is not readable from the
 web. Either set it to a custom path outside the web document root, or use the
 default `cache` directory.
