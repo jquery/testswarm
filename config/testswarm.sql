@@ -97,7 +97,7 @@ CREATE TABLE `jobs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Used in UserAction.
-CREATE INDEX idx_jobs_user ON clients (user_id, created);
+CREATE INDEX idx_jobs_user ON jobs (user_id, created);
 
 -- Foreign key constrains
 ALTER TABLE jobs
