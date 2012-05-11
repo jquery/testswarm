@@ -87,7 +87,7 @@ class DBInstallScript extends MaintenanceScript {
 		$db = $this->getContext()->getDB();
 
 		// Create new tables
-		$this->outRaw( "Creating new tables... (this may take a few minutes)" );
+		$this->outRaw( "Creating new tables (this may take a few minutes)..." );
 
 		$fullSchemaFile = "$swarmInstallDir/config/testswarm.sql";
 		if ( !is_readable( $fullSchemaFile ) ) {
