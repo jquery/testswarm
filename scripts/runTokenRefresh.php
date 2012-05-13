@@ -15,8 +15,8 @@ class RefreshRunTokenScript extends MaintenanceScript {
 		$this->setDescription(
 			'Sets a (new) run token. Overwrites an existing token if there is one.'
 			. ' Running this script does not change any settings. For the token'
-			. ' requirement to be enforced, make sure you have `require_run_token = 1`'
-			. ' set in the "[client]" section of testswarm.ini.'
+			. ' requirement to be enforced, make sure you have `client.requireRunToken = true`'
+			. ' set in your configuration file.'
 		);
 	}
 

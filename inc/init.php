@@ -10,7 +10,7 @@
  * result in a straight death sentence of the proces and
  * send out a plain text message. Currently:
  * - phpversion support
- * - testswarm.ini existance
+ * - initialize swarm configuration and load local settings
  * - cache dir existance and writability
  *
  * @author Timo Tijhof, 2012

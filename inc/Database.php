@@ -327,7 +327,8 @@ class Database {
 
 	/**
 	 * @return bool Whether or not log info was actually generated and saved,
-	 * false by default for performance reasons, can be enabled in testswarm.ini.
+	 * false by default for performance reasons, can be enabled in the
+	 * configuration file.
 	 */
 	protected function logQuery( $sql, $queryResponse, $microtimeStart ) {
 		static $doLog;

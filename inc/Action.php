@@ -90,7 +90,7 @@ abstract class Action {
 	 * Adds three keys:
 	 * - RawUTC (14-digit timestamp in UTC, as found in the database)
 	 * - ISO (naturally in UTC aka Zulu)
-	 * - Localized format in the timezone as configured in testswarm.ini
+	 * - Localized format according to the swarm configuration.
 	 *
 	 * @param &$target array: The array the keys should be added to, is passed by
 	 * reference, so it will be modified!

@@ -12,10 +12,9 @@ class TestSwarmContext {
 	protected $browserInfo, $conf, $db, $request, $versionInfo;
 
 	/**
-	 * The context is self-initializing. The only thing it
-	 * needs to be passed is an array with all setting keys from testswarm.ini
-	 * (including ones commented out in the sample file, it has to contain them all)
-	 * Population of default values of optional settings happens in init.php
+	 * The context is self-initializing. The only thing it needs to be passed is
+	 * an object with all setting keys from testswarm-defaults.json. Logic for
+	 * loading defaults and overriding with local settings is in inc/init.php
 	 * @param $config
 	 */
 	public function __construct( stdClass $config ) {

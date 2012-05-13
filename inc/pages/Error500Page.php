@@ -36,9 +36,9 @@ class Error500Page extends Page {
 		} else {
 			$html .=
 				'<p><small><strong>To the administrator</strong>:</small>'
-				. '<br><small>Set <tt>show_exception_details = 1;</tt> '
-				. 'in the <tt>[debug]</tt> section at the bottom of '
-				. '<tt>testswarm.ini</tt> to show detailed debugging information.</small></p>';
+				. ' <br><small>To show detailed debugging information, set'
+				. ' <tt>"showExceptionDetails": true</tt> in the <tt>"debug"</tt> section'
+				. ' of the configuration file.</small></p>';
 		}
 
 		return $html;
