@@ -101,10 +101,11 @@ class BrowserInfo {
 		 *
 		 * stdClass Object (
 		 *     [Platform] => MacOSX
-		 *     [Browser] => Safari
-		 *     [Version] => 3.1
-		 *     [MajorVer] => 3
-		 *     [MinorVer] => 1
+		 *     [Browser] => Chrome
+		 *     [Version] => 19.0
+		 *     [MajorVer] => 19
+		 *     [MinorVer] => 0
+		 *     [Beta] => true
 		 * )
 		 */
 		$browscapInstance = new Browscap( $browscapCacheDir );

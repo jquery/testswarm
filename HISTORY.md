@@ -51,12 +51,17 @@ Complete list of issues solved in the 1.0.0 milestone:
 ### User agents
 
 * Added Chrome 18.
+* Added Chrome 19.
 * Added Firefox 11.
 * Added Firefox 12.
-* (#168) Added Firefox 13 beta.
+* (#168) Added Firefox 13.
 * Added Opera 12 beta.
 * Added Android 1.6.
 * Added Android 2.3.
+* Added Fennec 5.
+* Added Fennec 6.
+* Added Fennec 7.
+* Added Fennec 10.
 * Added iPad 3.2.
 * Added iPad 4.3.
 * Added iPad 5.
