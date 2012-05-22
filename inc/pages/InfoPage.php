@@ -1,13 +1,13 @@
 <?php
 /**
- * "About" page.
+ * "Info" page.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0
  * @package TestSwarm
  */
 
-class AboutPage extends Page {
+class InfoPage extends Page {
 
 	public function execute() {
 		$action = InfoAction::newFromContext( $this->getContext() );
@@ -18,7 +18,7 @@ class AboutPage extends Page {
 	}
 
 	protected function initContent() {
-		$this->setTitle( 'About this swarm' );
+		$this->setTitle( 'Software information' );
 
 		$html = '';
 

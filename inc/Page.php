@@ -246,7 +246,7 @@ foreach ( $projects as $project ) {
 							</ul>
 						</li>
 						<li><a href="<?php echo swarmpath( "scores" ); ?>">Scores</a></li>
-						<li><a href="<?php echo swarmpath( "about" ); ?>">About</a></li>
+						<li><a href="<?php echo swarmpath( "info" ); ?>">Info</a></li>
 					</ul>
 					<ul class="nav pull-right">
 <?php
