@@ -64,6 +64,11 @@ class CleanupAction extends Action {
 		}
 
 		// Reset runs that race-condition deleted themselves
+/***
+ * Disabled, this was causing the mysql server to lock on swarm.jquery.org
+ * (see also issue #185). The race-condition that this query is trying to
+ * fix shouldn't happen anymore in TestSwarm 1.0 anyway.
+ * -- krinkle 2012-05-03
 		$db->query(
 			"UPDATE
 				run_useragent
@@ -81,6 +86,9 @@ class CleanupAction extends Action {
 			);"
 		);
 		$resetRaceConditionDeleted = $db->getAffectedRows();
+*/
+		// back compat.
+		$resetRaceConditionDeleted = 0;
 
 		$this->setData(array(
 			"resetTimedoutRuns" => $resetTimedoutRuns,
