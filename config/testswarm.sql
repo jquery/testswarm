@@ -177,8 +177,8 @@ CREATE TABLE `run_useragent` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE UNIQUE INDEX run_useragent_run_useragent ON run_useragent (run_id, useragent_id);
-CREATE INDEX run_useragent_useragent ON run_useragent (useragent_id);
+CREATE UNIQUE INDEX idx_run_useragent_run_useragent ON run_useragent (run_id, useragent_id);
+CREATE INDEX idx_run_useragent_useragent ON run_useragent (useragent_id);
 
 ALTER TABLE run_useragent
 	ADD CONSTRAINT fk_run_useragent_run_id FOREIGN KEY (run_id) REFERENCES runs (id);
@@ -222,7 +222,7 @@ CREATE TABLE `run_client` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE UNIQUE INDEX run_client_run_client ON run_client (run_id, client_id);
+CREATE UNIQUE INDEX idx_run_client_run_client ON run_client (run_id, client_id);
 
 ALTER TABLE run_client
 	ADD CONSTRAINT fk_run_client_run_id FOREIGN KEY (run_id) REFERENCES runs (id);
