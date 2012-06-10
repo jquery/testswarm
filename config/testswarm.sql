@@ -11,15 +11,6 @@ CREATE TABLE `users` (
   -- User name used for display and login prodecure.
   `name` varchar(255) binary NOT NULL default '',
 
-  -- User account details last modified (YYYYMMDDHHMMSS timestamp)
-  -- Right now this is only set during creation, no update statement
-  -- exists yet in TestSwarm, but for consistency with other tables
-  -- it has been created for future use.
-  `updated` binary(14) NOT NULL,
-
-  -- User account originally created (YYYYMMDDHHMMSS timestamp).
-  `created` binary(14) NOT NULL,
-
   -- Password hash salt (SHA1).
   `seed` binary(40) NOT NULL default '',
 
@@ -28,7 +19,16 @@ CREATE TABLE `users` (
 
   -- Authentication token to use in situations where sending passwords
   -- is not an option. Used for the "addjob" API.
-  `auth` binary(40) NOT NULL default ''
+  `auth` binary(40) NOT NULL default '',
+
+  -- User account details last modified (YYYYMMDDHHMMSS timestamp)
+  -- Right now this is only set during creation, no update statement
+  -- exists yet in TestSwarm, but for consistency with other tables
+  -- it has been created for future use.
+  `updated` binary(14) NOT NULL,
+
+  -- User account originally created (YYYYMMDDHHMMSS timestamp).
+  `created` binary(14) NOT NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

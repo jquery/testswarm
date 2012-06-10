@@ -34,6 +34,7 @@ class UserAction extends Action {
 			"SELECT
 				useragent_id,
 				useragent,
+				updated,
 				created
 			FROM
 				clients
@@ -55,6 +56,7 @@ class UserAction extends Action {
 					"uaBrowscap" => $bi->getBrowscap(),
 				);
 				self::addTimestampsTo( $activeClient, $clientRow->created, "connected" );
+				self::addTimestampsTo( $activeClient, $clientRow->updated, "pinged" );
 				$activeClients[] = $activeClient;
 			}
 		}

@@ -100,10 +100,18 @@ class UserPage extends Page {
 					'<div class="span4"><div class="well">'
 					. '<img class="pull-right" src="' . swarmpath( "img/{$diplayicon}.sm.png" ) . '" alt="">'
 					. '<strong class="label">' . htmlspecialchars( $label ) . '</strong>'
-					. '<p><small>Platform: ' . htmlspecialchars( $activeClient["uaBrowscap"]["Platform"] )
-					. '</small><br><small>Connected <span title="'
+					. '<p>'
+					. '<small>Platform: ' . htmlspecialchars( $activeClient["uaBrowscap"]["Platform"] )
+					. '</small>'
+					. '<br>'
+					. '<small>Connected <span title="'
 					. htmlspecialchars( $activeClient["connectedISO"] ) . '" class="pretty">'
-					. htmlspecialchars( $activeClient["connectedLocalFormatted"] ) . '</span></small></p>'
+					. htmlspecialchars( $activeClient["connectedLocalFormatted"] ) . '</span></small>'
+					. '<br>'
+					. '<small>Last pinged <span title="'
+					. htmlspecialchars( $activeClient["pingedISO"] ) . '" class="pretty">'
+					. htmlspecialchars( $activeClient["pingedLocalFormatted"] ) . '</span></small>'
+					. '</p>'
 					. '</div></div>';
 			}
 
