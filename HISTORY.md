@@ -89,6 +89,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#166) natsort user agents in UserAction.
 * (#182) JobPage AJAX needs error handler to fix infinite "Updating..".
 * (#189) Shouldn't distribute runs that are being run already.
+* job.js should keep refreshing even when everything is complete and "reset" happens.
 
 ### Other changes
 
