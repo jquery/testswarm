@@ -40,8 +40,8 @@ class LoginAction extends Action {
 			$res = $db->query(str_queryf(
 				"SELECT id
 				FROM users
-				WHERE	name = %s
-				AND 	password = SHA1(CONCAT(seed, %s))
+				WHERE name = %s
+				AND   password = SHA1(CONCAT(seed, %s))
 				LIMIT 1;",
 				$username,
 				$password

@@ -43,8 +43,9 @@ class GetrunAction extends Action {
 		// Throws exception (caught higher up) if stuff is invalid.
 		$client = Client::newFromContext( $this->getContext(), $runToken, $clientID );
 
-		// Get oldest run for this user agent, that isn't on the max yet and isn't
-		// already ran by another client.
+		// Get oldest run for this user agent. But not runs that are already run
+		// by another client (status=1), or reached maximum number of tries (runs < max).
+		// Note that SaverunAction sets runs=max in case of a run without errors.
 		$runID = $db->getOne(str_queryf(
 			"SELECT
 				run_id
@@ -52,6 +53,7 @@ class GetrunAction extends Action {
 				run_useragent
 			WHERE useragent_id = %s
 			AND   runs < max
+			AND   status != 1
 			AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id = run_id AND client_id = %u)
 			ORDER BY run_id DESC
 			LIMIT 1;",

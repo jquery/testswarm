@@ -18,17 +18,16 @@ class CleanupAction extends Action {
 		$request = $this->getContext()->getRequest();
 
 		// Get runs that were given to a client (status=1),
-		// but haven't responded with a save (status=2) within 5 minutes.
+		// but haven't pinged in over 5 minutes.
 		$rows = $db->getRows(str_queryf(
 			"SELECT
 				run_id,
 				client_id,
 				useragent_id
 			FROM
-				run_client, clients
-			WHERE run_client.updated < %s
-			AND   clients.id = run_client.client_id
-			AND   run_client.status = 1;",
+				run_client
+			WHERE updated < %s
+			AND   status = 1;",
 			swarmdb_dateformat( strtotime( '5 minutes ago' ) )
 		));
 		$resetTimedoutRuns = 0;
