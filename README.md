@@ -44,17 +44,18 @@ tracker](https://github.com/jquery/testswarm/issues)!
 Installation
 -----------
 
+### Environmental compatibility
+
 To run TestSwarm you will need a web server, a database server and PHP.
-At the moment TestSwarm only supports Apache and MySQL.
+At the moment TestSwarm supports the following, but other configurations
+may work as well.
 
-### Requirements
-
-* Apache 2.0+
-* PHP 5.3.0+
+* Apache 2.0+, NGINX 1.2+
+* PHP 5.3.0+ (or PHP-FPM for NGINX)
 * MySQL 4.0+
-* Curl (for the cleanup action; see below)
+* cURL (for the cleanup action; see step 7)
 
-### Install
+### Steps
 
 1. Set up a MySQL database and create a user with read and write access.
 
@@ -62,7 +63,8 @@ At the moment TestSwarm only supports Apache and MySQL.
    update the database settings. For other settings,
    [check the wiki](https://github.com/jquery/testswarm/wiki/Settings).
 
-1. Copy `./config/.htaccess-sample` to `./.htaccess`.<br/>
+1. *For Apache:*<br/>
+   Copy `./config/.htaccess-sample` to `./.htaccess`.<br/>
    Currently the only supported webserver is Apache (which uses a `.htaccess`
    file).<br/>
    To run TestSwarm from a non-root directory, set `web.contextpath` to the
@@ -72,7 +74,20 @@ At the moment TestSwarm only supports Apache and MySQL.
    `.htaccess` is actually being read (e.g. by putting some jibberish into the
    `.htaccess` file, which should result in a HTTP 500 Error). If it doesn't
    get loaded, verify that `AllowOverride` is set to "`All`" (at least not to
-   "`None`") in your Apache configuration.
+   "`None`") in your Apache configuration.<br/>
+   <br/>
+   *For NGINX:*<br/>
+   Copy `./config/nginx-sample.conf` to `/etc/nginx/sites-available`.
+   <br/>The file name should match your domain e.g. for swarm.example.org:<br/>
+   `cp ./config/nginx-sample.conf /etc/nginx/sites-available/swarm.example.org.conf`
+   <br/>Open this conf file in your editor and fill in the correct values for
+   `YOURURL`, and make sure your install is located at `/var/www/testswarm`
+   (otherwise update the file to match your install location).<br/>
+   Now you need to link the `sites-available` config to the `sites-enabled` config:<br/>
+   (replace the "swarm.example.org"  with your own file name):<br/>
+   `ln -s /etc/nginx/sites-available/swarm.example.org.conf /etc/nginx/sites-enabled/swarm.example.org.conf`<br/>
+   Now make sure that php-fpm is running: `/etc/init.d/php-fpm status`<br/>
+   if is not running start it: `/etc/init.d/php-fpm start`
 
 1. Set `storage.cacheDir` to a writable directory that is not readable from the
    web. Either set it to a custom path outside the web document root, or use the
@@ -88,7 +103,6 @@ At the moment TestSwarm only supports Apache and MySQL.
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>
    `* * * * * curl -s http://swarm.example.org/api.php?action=cleanup > /dev/null`
-
 
 
 Get involved
