@@ -9,6 +9,7 @@
 class UserAction extends Action {
 
 	public function doAction() {
+		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
@@ -42,7 +43,7 @@ class UserAction extends Action {
 			AND   updated > %s
 			ORDER BY created DESC;",
 			$userID,
-			swarmdb_dateformat( strtotime( "1 minutes ago" ) )
+			swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) )
 		));
 
 		if ( $clientRows ) {

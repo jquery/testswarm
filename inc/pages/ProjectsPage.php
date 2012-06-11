@@ -18,23 +18,27 @@ class ProjectsPage extends Page {
 	}
 
 	protected function initContent() {
-		$this->setTitle( "Projects" );
+		$this->setTitle( 'Projects' );
 
 		$projects = $this->getAction()->getData();
 
 		$html = '<blockquote><p>Below is an overview of all registered projects,'
 			. ' sorted alphabetically by name.</p></blockquote>'
 			. '<table class="table table-striped">'
-			. '<thead><tr><th>Project name</th><th class="span2">Jobs</th><th class="span4">Creation date</th></tr></thead>'
+			. '<thead><tr>'
+				. '<th>Project name</th>'
+				. '<th class="span2">Jobs</th>'
+				. '<th class="span2">Most recent job</th>'
+				. '<th class="span4">Creation date</th>'
+			. '</tr></thead>'
 			. '<tbody>';
 
 		foreach ( $projects as $project ) {
 			$html .= '<tr>'
-				. '<td><a href="' . htmlspecialchars( swarmpath( "user/{$project["name"]}" ) ) . '">' . htmlspecialchars( $project["name"] ) . '</a></td>'
-				. '<td class="num">' . htmlspecialchars( number_format( $project["jobCount"] ) ) . '</td>'
-				. '<td class="num"><span title="'
-					. htmlspecialchars( $project["createdISO"] ) . '" class="pretty">'
-					. htmlspecialchars( $project["createdLocalFormatted"] ) . '</span></td>'
+				. '<td><a href="' . htmlspecialchars( swarmpath( "user/{$project['name']}" ) ) . '">' . htmlspecialchars( $project['name'] ) . '</a></td>'
+				. '<td class="num">' . htmlspecialchars( number_format( $project['jobCount'] ) ) . '</td>'
+				. '<td><a href="' . htmlspecialchars( swarmpath( "job/{$project['jobLatest']}" ) ) . '">Job #' . htmlspecialchars( $project['jobLatest'] ) . '</a></td>'
+				. '<td class="num">' . self::getPrettyDateHtml( $project, 'created' ) . '</td>'
 				. '</tr>';
 		}
 		$html .= '</tbody></table>';

@@ -77,7 +77,9 @@ $swarmAutoLoadClasses = array(
 	'JobAction' => 'inc/actions/JobAction.php',
 	'LoginAction' => 'inc/actions/LoginAction.php',
 	'LogoutAction' => 'inc/actions/LogoutAction.php',
+	'PingAction' => 'inc/actions/PingAction.php',
 	'ProjectsAction' => 'inc/actions/ProjectsAction.php',
+	'ResultAction' => 'inc/actions/ResultAction.php',
 	'SaverunAction' => 'inc/actions/SaverunAction.php',
 	'ScoresAction' => 'inc/actions/ScoresAction.php',
 	'SignupAction' => 'inc/actions/SignupAction.php',
@@ -96,8 +98,8 @@ $swarmAutoLoadClasses = array(
 	'LoginPage' => 'inc/pages/LoginPage.php',
 	'LogoutPage' => 'inc/pages/LogoutPage.php',
 	'ProjectsPage' => 'inc/pages/ProjectsPage.php',
+	'ResultPage' => 'inc/pages/ResultPage.php',
 	'RunPage' => 'inc/pages/RunPage.php',
-	'RunresultsPage' => 'inc/pages/RunresultsPage.php',
 	'SaverunPage' => 'inc/pages/SaverunPage.php',
 	'ScoresPage' => 'inc/pages/ScoresPage.php',
 	'SignupPage' => 'inc/pages/SignupPage.php',
@@ -199,7 +201,7 @@ if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->s
 // The value in settings file is for changes by the local administrator.
 // this one is for internal changes, e.g. to be increased when for example
 // ./js/run.js changes significantly.
-$refresh_control = 3; // 2012-05-07
+$refresh_control = 4; // 2012-06-11
 $swarmConfig->client->refresh_control += $refresh_control;
 
 

@@ -31,7 +31,8 @@ class DBInstallScript extends MaintenanceScript {
 		$this->getContext()->dbLock( true );
 
 		$dbTables = array(
-			'run_client',
+			'runresults', // New in 1.0.0
+			'run_client', // Removed in 1.0.0
 			'clients',
 			'run_useragent',
 			'useragents', // Removed in 1.0.0

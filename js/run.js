@@ -45,6 +45,17 @@
 	 * @param ok Function
 	 */
 	function retrySend( query, retry, ok ) {
+		function error( errMsg ) {
+				if ( errorOut > SWARM.conf.client.saveRetryMax ) {
+					cmds.reload();
+				} else {
+					errorOut += 1;
+					errMsg = errMsg ? (' (' + errMsg + ')') : '';
+					msg( 'Error connecting to server' + errMsg + ', retrying...' );
+					setTimeout( retry, SWARM.conf.client.saveRetrySleep * 1000 );
+				}
+		}
+
 		$.ajax({
 			type: 'POST',
 			url: SWARM.conf.web.contextpath + 'api.php',
@@ -52,18 +63,16 @@
 			cache: false,
 			data: query,
 			dataType: 'json',
-			success: function () {
-				errorOut = 0;
-				ok.apply( this, arguments );
+			success: function ( data ) {
+				if ( !data || data.error ) {
+					error( data.error.info );
+				} else {
+					errorOut = 0;
+					ok.apply( this, arguments );
+				}
 			},
 			error: function () {
-				if ( errorOut > SWARM.conf.client.saveRetryMax ) {
-					cmds.reload();
-				} else {
-					errorOut += 1;
-					msg( 'Error connecting to server, retrying...' );
-					setTimeout( retry, SWARM.conf.client.saveRetrySleep * 1000 );
-				}
+				error();
 			}
 		});
 	}
@@ -93,20 +102,25 @@
 		$( 'iframe' ).remove();
 	}
 
-	function testTimedout() {
+	function testTimedout( runInfo ) {
 		cancelTest();
 		retrySend(
 			{
 				action: 'saverun',
-				fail: '-1',
-				error: '0',
-				total: '-1',
-				results: 'Test Timed Out.',
+				fail: 0,
+				error: 0,
+				total: 0,
+				status: 3, // ResultAction::STATE_ABORTED
+				report_html: 'Test Timed Out.',
 				run_id: currRunId,
 				client_id: SWARM.client_id,
-				run_token: SWARM.run_token
+				run_token: SWARM.run_token,
+				results_id: runInfo.resultsId,
+				results_store_token: runInfo.resultsStoreToken
 			},
-			testTimedout,
+			function () {
+				testTimedout( runInfo );
+			},
 			function ( data ) {
 				if ( data.saverun === 'ok' ) {
 					SWARM.runDone();
@@ -135,17 +149,6 @@
 		}
 
 		if ( data.getrun ) {
-			// Handle configuration update
-			if ( data.getrun.confUpdate ) {
-
-				// Refresh control
-				if ( SWARM.conf.client.refreshControl < data.getrun.confUpdate.client.refreshControl ) {
-					cmds.reload();
-					return;
-				}
-
-				$.extend( SWARM.conf, data.getrun.confUpdate );
-			}
 
 			// Handle actual retreived tests from runInfo
 			runInfo = data.getrun.runInfo;
@@ -163,19 +166,24 @@
 					// Cache buster
 					'_' : new Date().getTime(),
 					// Homing signal for inject.js so that it can find its target for action=saverun
-					'swarmURL' : window.location.protocol + '//' + window.location.host + SWARM.conf.web.contextpath +
-						'index.php?' +
-						$.param({
+					"swarmURL" : window.location.protocol + "//" + window.location.host + SWARM.conf.web.contextpath
+						+ "index.php?"
+						+ $.param({
+							status: 2, // ResultAction::STATE_FINISHED
 							run_id: currRunId,
 							client_id: SWARM.client_id,
-							run_token: SWARM.run_token
+							run_token: SWARM.run_token,
+							results_id: runInfo.resultsId,
+							results_store_token: runInfo.resultsStoreToken
 						})
 				});
 
 				$( '#iframes' ).append( iframe );
 
 				// Timeout after a period of time
-				testTimeout = setTimeout( testTimedout, SWARM.conf.client.runTimeout * 1000 );
+				testTimeout = setTimeout( function () {
+					testTimedout( runInfo );
+				}, SWARM.conf.client.runTimeout * 1000 );
 
 				return;
 			}
@@ -224,6 +232,35 @@
 		}, SWARM.runDone );
 	}
 
+	function confUpdate() {
+		$.ajax({
+			type: 'POST',
+			url: SWARM.conf.web.contextpath + 'api.php',
+			timeout: SWARM.conf.client.saveReqTimeout * 1000,
+			cache: false,
+			data: {
+				action: 'ping',
+				client_id: SWARM.client_id,
+				run_token: SWARM.run_token
+			},
+			dataType: 'json'
+		}).done( function ( data ) {
+			// Handle configuration update
+			if ( data.ping && data.ping.confUpdate ) {
+				// Refresh control
+				if ( SWARM.conf.client.refreshControl < data.ping.confUpdate.client.refreshControl ) {
+					cmds.reload();
+					return;
+				}
+
+				$.extend( SWARM.conf, data.ping.confUpdate );
+			}
+		}).always( function () {
+			setTimeout( confUpdate, SWARM.conf.client.pingTime * 1000 );
+		});
+	}
+
+
 	/**
 	 * Bind
 	 */
@@ -233,6 +270,9 @@
 		window.attachEvent( 'onmessage', handleMessage );
 	}
 
-	$( document).ready( getTests );
+	$( document).ready( function () {
+		getTests();
+		confUpdate();
+	});
 
 }( jQuery, SWARM ) );

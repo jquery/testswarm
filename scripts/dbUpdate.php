@@ -104,24 +104,28 @@ class DBUpdateScript extends MaintenanceScript {
 
 		$this->out( 'Executing tests on the database to detect where updates are needed...' );
 
-		// 1.0.0: useragents table removed, and many column changes.
-		// If the previous version was before 1.0.0 we won't bother changing a ton of stuff
-		// because most changes in 1.0.0 aren't easily convertable. Instead do a few quick
-		// checks to verify this is in fact a pre 1.0.0 database, ask the user for
-		// confirmation, and instead re-install from scratch, re-importing only the users.
-		$has_useragents = $db->tableExists( 'useragents' );
+		/**
+		 * 1.0.0
+		 * useragents and run_client table removed, many column changes, new runresults table.
+		 */
+		// If the previous version was before 1.0.0 we won't offer an update, because most
+		// changes in 1.0.0 can't be simulated without human intervention. The changes are not
+		// backwards compatible. Instead do a few quick checks to verify this is in fact a
+		// pre-1.0.0 database, then ask the user for a re-install from scratch
+		// (it does mostly migrate the users table).
+		$has_run_client = $db->tableExists( 'run_client' );
 		$has_users_request = $db->fieldExists( 'users', 'request' );
 		$clients_useragent_id = $db->fieldInfo( 'clients', 'useragent_id' );
 		if ( !is_object( $clients_useragent_id ) ) {
 			$this->unknownDatabaseState( 'clients.useragent_id not found' );
 			return;
 		}
-		if ( !$has_useragents
+		if ( !$has_run_client
 			&& !$has_users_request
 			&& !$clients_useragent_id->numeric
 			&& $clients_useragent_id->type === 'string'
 		) {
-			$this->out( '...useragents already dropped' );
+			$this->out( '...run_client already dropped' );
 			$this->out( '...users.request already dropped' );
 			$this->out( '...client.useragent_id is up to date' );
 		} else {
@@ -145,10 +149,11 @@ class DBUpdateScript extends MaintenanceScript {
 			// Drop all known TestSwarm tables in the database
 			// (except users, handled separately)
 			foreach( array(
-				'run_client',
+				'runresults', // New in 1.0.0
+				'run_client', // Removed in 1.0.0
 				'clients',
 				'run_useragent',
-				'useragents',
+				'useragents', // Removed in 1.0.0
 				'runs',
 				'jobs',
 			) as $dropTable ) {

@@ -39,6 +39,14 @@
 	}
 }
 
+.swarm-code-nowrap {
+	white-space: nowrap;
+}
+
+.swarm-toollinks {
+	text-align: right;
+}
+
 .swarm-browseronline {
 	position: relative;
 	text-align: center;

@@ -7,7 +7,6 @@
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class SwarmstateAction extends Action {
 
 	/**
@@ -48,7 +47,7 @@ class SwarmstateAction extends Action {
 				WHERE useragent_id = %s
 				AND   updated > %s",
 				$uaID,
-				swarmdb_dateformat( strtotime( '1 minute ago' ) )
+				swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) )
 			));
 			$clients = intval( $clients );
 
@@ -58,7 +57,8 @@ class SwarmstateAction extends Action {
 					COUNT(*)
 				FROM run_useragent
 				WHERE useragent_id = %s
-				AND   status = 0;",
+				AND   status = 0
+				AND   completed = 0;",
 				$uaID
 			));
 			$pendingRuns = intval( $pendingRuns );
@@ -70,7 +70,7 @@ class SwarmstateAction extends Action {
 					COUNT(*)
 				FROM run_useragent
 				WHERE useragent_id = %s
-				AND   runs < max
+				AND   status = 0
 				AND   completed > 0;",
 				$uaID
 			));

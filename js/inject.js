@@ -111,8 +111,8 @@
 			params.action = 'saverun';
 		}
 
-		if ( !params.results ) {
-			params.results = window.TestSwarm.serialize();
+		if ( !params.report_html ) {
+			params.report_html = window.TestSwarm.serialize();
 		}
 
 		if ( DEBUG ) {

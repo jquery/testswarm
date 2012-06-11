@@ -6,7 +6,6 @@
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class InfoAction extends Action {
 
 	/**
