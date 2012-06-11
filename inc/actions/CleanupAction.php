@@ -23,7 +23,7 @@ class CleanupAction extends Action {
 			"SELECT
 				run_id,
 				client_id,
-				useragent_id
+				(SELECT useragent_id FROM clients WHERE clients.id = client_id LIMIT 1) as useragent_id
 			FROM
 				run_client
 			WHERE updated < %s
@@ -62,36 +62,8 @@ class CleanupAction extends Action {
 			}
 		}
 
-		// Reset runs that race-condition deleted themselves
-/***
- * Disabled, this was causing the mysql server to lock on swarm.jquery.org
- * (see also issue #185). The race-condition that this query is trying to
- * fix shouldn't happen anymore in TestSwarm 1.0 anyway.
- * -- krinkle 2012-05-03
-		$db->query(
-			"UPDATE
-				run_useragent
-			SET
-				runs = 0,
-				completed = 0,
-				status = 0
-			WHERE runs = max
-			AND   NOT EXISTS (
-				SELECT *
-				FROM run_client, clients
-				WHERE run_client.run_id = run_useragent.run_id
-				AND   run_client.client_id = clients.id
-				AND   clients.useragent_id = run_useragent.useragent_id
-			);"
-		);
-		$resetRaceConditionDeleted = $db->getAffectedRows();
-*/
-		// back compat.
-		$resetRaceConditionDeleted = 0;
-
 		$this->setData(array(
 			"resetTimedoutRuns" => $resetTimedoutRuns,
-			"resetRaceConditionDeleted" => $resetRaceConditionDeleted,
 		));
 	}
 }
