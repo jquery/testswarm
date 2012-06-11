@@ -7,7 +7,6 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class AddjobPage extends Page {
 
 	public function execute() {

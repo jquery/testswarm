@@ -23,7 +23,7 @@ class SwarmstateAction extends Action {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$showOnlyactive = $request->hasKey( "onlyactive" );
+		$showOnlyactive = $request->getBool( "onlyactive" );
 
 		$filterBrowserSet = $request->getVal( "browserSet", false );
 

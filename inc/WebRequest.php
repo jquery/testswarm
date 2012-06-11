@@ -64,21 +64,13 @@ class WebRequest {
 	}
 
 	/** @return bool */
-	public function getBool( $key, $default = false ) {
-		return (bool)$this->getVal( $key, $default );
+	public function getBool( $key ) {
+		return !!array_key_exists( $key, $this->raw );
 	}
 
 	/** @return int */
 	public function getInt( $key, $default = 0 ) {
 		return intval( $this->getVal( $key, $default ) );
-	}
-
-	/**
-	 * Is the key is set, whatever the value. Useful when dealing with HTML checkboxes.
-	 * @return bool
-	 */
-	public function hasKey( $key ) {
-		return !array_key_exists( $key, $this->raw ) ? false : true;
 	}
 
 	/**

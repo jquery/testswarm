@@ -10,7 +10,6 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class AddjobAction extends Action {
 
 	/**
@@ -52,7 +51,7 @@ class AddjobAction extends Action {
 		}
 
 		if ( $runMax < 1 || $runMax > 99 ) {
-			$this->setError( "invalid-input", "runMax must be an integer between 1 and 99." );
+			$this->setError( "invalid-input", "runMax must be a number between 1 and 99." );
 			return;
 		}
 
