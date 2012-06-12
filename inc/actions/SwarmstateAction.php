@@ -22,12 +22,12 @@ class SwarmstateAction extends Action {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$showOnlyactive = $request->getBool( "onlyactive" );
+		$showOnlyactive = $request->getBool( 'onlyactive' );
 
-		$filterBrowserSet = $request->getVal( "browserSet", false );
+		$filterBrowserSet = $request->getVal( 'browserSet', false );
 
 		$data = array(
-			"userAgents" => array(),
+			'userAgents' => array(),
 		);
 
 		$uaIndex = BrowserInfo::getSwarmUAIndex();
@@ -41,24 +41,35 @@ class SwarmstateAction extends Action {
 
 			// Count online clients with this UA
 			$clients = $db->getOne(str_queryf(
-				"SELECT
+				'SELECT
 					COUNT(id)
 				FROM clients
 				WHERE useragent_id = %s
-				AND   updated > %s",
+				AND   updated > %s',
 				$uaID,
 				swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) )
 			));
 			$clients = intval( $clients );
 
+			// Count active runs for this UA
+			$activeRuns = $db->getOne(str_queryf(
+				'SELECT
+					COUNT(*)
+				FROM run_useragent
+				WHERE useragent_id = %s
+				AND   status = 1;',
+				$uaID
+			));
+			$activeRuns = intval( $activeRuns );
+
 			// Count pending runs for this UA
 			$pendingRuns = $db->getOne(str_queryf(
-				"SELECT
+				'SELECT
 					COUNT(*)
 				FROM run_useragent
 				WHERE useragent_id = %s
 				AND   status = 0
-				AND   completed = 0;",
+				AND   completed = 0;',
 				$uaID
 			));
 			$pendingRuns = intval( $pendingRuns );
@@ -66,26 +77,27 @@ class SwarmstateAction extends Action {
 			// Count past runs that can still be re-run to
 			// possibly fix non-passing results
 			$pendingReRuns = $db->getOne(str_queryf(
-				"SELECT
+				'SELECT
 					COUNT(*)
 				FROM run_useragent
 				WHERE useragent_id = %s
 				AND   status = 0
-				AND   completed > 0;",
+				AND   completed > 0;',
 				$uaID
 			));
 			$pendingReRuns = intval( $pendingReRuns );
 
-			if ( $showOnlyactive && !$clients && !$pendingRuns && !$pendingReRuns ) {
+			if ( $showOnlyactive && !$clients && !$activeRuns && !$pendingRuns && !$pendingReRuns ) {
 				continue;
 			}
 
-			$data["userAgents"][$uaID] = array(
-				"data" => $uaData,
-				"stats" => array(
-					"onlineClients" => $clients,
-					"pendingRuns" => $pendingRuns,
-					"pendingReRuns" => $pendingReRuns,
+			$data['userAgents'][$uaID] = array(
+				'data' => $uaData,
+				'stats' => array(
+					'onlineClients' => $clients,
+					'activeRuns' => $activeRuns,
+					'pendingRuns' => $pendingRuns,
+					'pendingReRuns' => $pendingReRuns,
 				),
 			);
 		}
