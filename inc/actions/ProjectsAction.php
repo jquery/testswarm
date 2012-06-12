@@ -18,41 +18,41 @@ class ProjectsAction extends Action {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$filterSort = $request->getVal( "sort", "name" );
-		$filterSortOrder = $request->getVal( "sort_order", "asc" );
+		$filterSort = $request->getVal( 'sort', 'name' );
+		$filterSortOrder = $request->getVal( 'sort_order', 'asc' );
 
-		if ( !in_array( $filterSort, array( "name", "id", "creation", "jobcount" ) ) ) {
-			$this->setError( "invalid-input", "Unknown sort `$filterSort`." );
+		if ( !in_array( $filterSort, array( 'name', 'id', 'creation', 'jobcount' ) ) ) {
+			$this->setError( 'invalid-input', "Unknown sort `$filterSort`." );
 			return;
 		}
 
-		if ( !in_array( $filterSortOrder, array( "asc", "desc" ) ) ) {
-			$this->setError( "invalid-input", "Unknown sort order `$filterSortOrder`." );
+		if ( !in_array( $filterSortOrder, array( 'asc', 'desc' ) ) ) {
+			$this->setError( 'invalid-input', "Unknown sort order `$filterSortOrder`." );
 			return;
 		}
 
-		$filterSortOrderQuery = "";
+		$filterSortOrderQuery = '';
 		switch ( $filterSortOrder ) {
-			case "asc":
-				$filterSortOrderQuery = "ASC";
+			case 'asc':
+				$filterSortOrderQuery = 'ASC';
 				break;
-			case "desc":
-				$filterSortOrderQuery = "DESC";
+			case 'desc':
+				$filterSortOrderQuery = 'DESC';
 				break;
 		}
 
-		$filterSortQuery = "";
+		$filterSortQuery = '';
 		switch ( $filterSort ) {
-			case "name":
+			case 'name':
 				$filterSortQuery = "ORDER BY users.name $filterSortOrderQuery";
 				break;
-			case "id":
+			case 'id':
 				$filterSortQuery = "ORDER BY users.id $filterSortOrderQuery";
 				break;
-			case "creation":
+			case 'creation':
 				$filterSortQuery = "ORDER BY users.created $filterSortOrderQuery";
 				break;
-			case "jobcount":
+			case 'jobcount':
 				$filterSortQuery = "ORDER BY job_count $filterSortOrderQuery";
 				break;
 		}
@@ -64,8 +64,7 @@ class ProjectsAction extends Action {
 				users.name as user_name,
 				users.created as user_created,
 				COUNT(jobs.id) as job_count,
-				MAX(jobs.id) as job_latest,
-				MAX(jobs.created) as job_latest_created
+				MAX(jobs.id) as job_latest
 			FROM jobs, users
 			WHERE users.id = jobs.user_id
 			GROUP BY jobs.user_id
@@ -75,13 +74,17 @@ class ProjectsAction extends Action {
 		if ( $projectRows ) {
 			foreach ( $projectRows as $projectRow ) {
 				$project = array(
-					"id" => intval( $projectRow->user_id ),
-					"name" => $projectRow->user_name,
-					"jobCount" => intval( $projectRow->job_count ),
-					"jobLatest" => intval( $projectRow->job_latest ),
+					'id' => intval( $projectRow->user_id ),
+					'name' => $projectRow->user_name,
+					'jobCount' => intval( $projectRow->job_count ),
+					'jobLatest' => intval( $projectRow->job_latest ),
 				);
-				self::addTimestampsTo( $project, $projectRow->user_created, "created" );
-				self::addTimestampsTo( $project, $projectRow->job_latest_created, "jobLatestCreated" );
+				$job_latest_created = $db->getOne(str_queryf(
+					'SELECT created FROM jobs WHERE id=%u;',
+					$projectRow->job_latest
+				));
+				self::addTimestampsTo( $project, $projectRow->user_created, 'created' );
+				self::addTimestampsTo( $project, $job_latest_created, 'jobLatestCreated' );
 				$projects[] = $project;
 			}
 		}
