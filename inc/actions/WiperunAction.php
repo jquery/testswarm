@@ -10,6 +10,12 @@
 
 class WiperunAction extends Action {
 
+	/*
+	 * @actionMethod POST: Required.
+	 * @actionParam int run_id
+	 * @actionParam int client_id
+	 * @actionParam int useragent_id
+	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
@@ -19,13 +25,22 @@ class WiperunAction extends Action {
 			return;
 		}
 
-		$jobID = $request->getInt( "job_id" );
 		$runID = $request->getInt( "run_id" );
 		$clientID = $request->getInt( "client_id" );
 		$useragentID = $request->getVal( "useragent_id" );
 
-		if ( !$jobID || !$runID || !$clientID ) {
+		if ( !$runID || !$clientID ) {
 			$this->setError( "missing-parameters" );
+			return;
+		}
+
+		$jobID = (int)$db->getOne(str_queryf(
+			"SELECT job_id FROM runs WHERE id = %u;",
+			$runID
+		));
+
+		if ( !$jobID ) {
+			$this->setError( "invalid-input", "Run $runID not found." );
 			return;
 		}
 
@@ -50,24 +65,20 @@ class WiperunAction extends Action {
 			return;
 		}
 
-		$runJobID = $db->getOne(str_queryf(
-			"SELECT
-				job_id
-			FROM
-				runs
-			WHERE runs.id = %u;",
+		$runJobID = (int)$db->getOne(str_queryf(
+			"SELECT job_id
+			FROM runs
+			WHERE id = %u;",
 			$runID
 		));
-		if ( intval( $runJobID ) !== $jobID ) {
-			$this->setError( "invalid-input", "Run $runID does not belong to $jobID." );
+		if ( $runJobID !== $jobID ) {
+			$this->setError( "invalid-input", "Run $runID does not belong to job $jobID." );
 			return;
 		}
 
 		$clientUseragentID = $db->getOne(str_queryf(
-			"SELECT
-				useragent_id
-			FROM
-				clients
+			"SELECT useragent_id
+			FROM clients
 			WHERE id = %u;",
 			$clientID
 		));
@@ -77,23 +88,12 @@ class WiperunAction extends Action {
 		}
 
 		$db->query(str_queryf(
-			"DELETE run_client
-			FROM
-				run_client, clients
-			WHERE run_id = %u
-			AND   clients.id = client_id
-			AND   clients.useragent_id = %s;",
-			$runID,
-			$useragentID
-		));
-
-		$db->query(str_queryf(
 			"UPDATE
 				run_useragent
 			SET
 				status = 0,
-				runs = 0,
 				completed = 0,
+				results_id = NULL,
 				updated = %s
 			WHERE run_id = %u
 			AND   useragent_id = %s;",

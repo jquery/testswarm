@@ -47,6 +47,13 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Implement browserset query script.
 * (#172) Use JSON for configuration files.
 * Create "Info" page. Showing current version info with links to GitHub.
+* New "Result" page. Linked to from Job pages, showing the run results inluding
+  navigation links for the run and meta data about the client and the run.
+  Replaces the old Runresults page.
+* Implemented Ping system. Used to keep track of which clients are online, and
+  which may have lost network connection, crashed or else. Also used to keep the
+  client side configuration up to date to allow long-live runner clients that
+  don't run with old configurations.
 
 ### User agents
 
@@ -119,6 +126,7 @@ Complete list of issues solved in the 1.0.0 milestone:
   `init.php`). Local settings are read from `./config/testswarm.json`.
 * (#78) Replace generic "Chrome" user agent ID with regular versioned ones. Google Chrome
   versions are now testable like any other browser.
+* Table `run_client` has been removed in favour of the new `runresults` table.
 
 
 ## 0.2.0 / 2012-03-07

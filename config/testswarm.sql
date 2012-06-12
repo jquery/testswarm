@@ -142,17 +142,13 @@ ALTER TABLE runs
 --
 
 CREATE TABLE `run_useragent` (
+  `id` int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
   -- Key to runs.id field.
   `run_id` int unsigned NOT NULL default 0,
 
   -- Key to useragents.ini section.
   `useragent_id` varchar(255) NOT NULL default '',
-
-  -- Similar to `completed`, except that this one is used by queries
-  -- to figure out whether this run should be (re-)ran. If a run completes
-  -- passing 100%, this will be set to `max` immediately.
-  `runs` int unsigned NOT NULL default 0,
 
   -- Addjob runMax
   `max` int unsigned NOT NULL default 1,
@@ -165,9 +161,15 @@ CREATE TABLE `run_useragent` (
   -- until `max` is reached.
   `completed` int unsigned NOT NULL default 0,
 
-  -- Run status (0 = new, 1 = progress, 2 = complete).
-  -- See also JobAction::resolveStatusID.
-  `status` tinyint(4) NOT NULL default 0,
+  -- Run status
+  -- 0 = idle (awaiting (re-)run)
+  -- 1 = busy (being run by a client)
+  -- 2 = done (passed and/or reached max)
+  `status` tinyint unsigned NOT NULL default 0,
+
+  -- Key to runresults.id field.
+  -- If NULL, it means this run has not been ran yet (or it was wiped / cleaned).
+  `results_id` int unsigned default NULL,
 
   -- YYYYMMDDHHMMSS timestamp.
   `updated` binary(14) NOT NULL,
@@ -186,11 +188,12 @@ ALTER TABLE run_useragent
 -- --------------------------------------------------------
 
 --
--- Table structure for table `run_client`
--- Insertions handled by the GerunAction class. Updates by SaverunAction.
--- Removal from CleanupAction, WipejobAction, and WiperunAction.
+-- Table structure for table `runresults`
+-- Insertions handled by the GetrunAction class. Updates by SaverunAction.
+-- Should never be removed from.
 
-CREATE TABLE `run_client` (
+CREATE TABLE `runresults` (
+  `id` int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
   -- Key to runs.id field.
   `run_id` int unsigned NOT NULL,
@@ -198,21 +201,30 @@ CREATE TABLE `run_client` (
   -- Key to clients.id field.
   `client_id` int unsigned NOT NULL,
 
-  -- Run status (0 = new, 1 = progress, 2 = complete).
-  -- See also JobAction::resolveStatusID and JobAction::getStatusFromClientRunRow.
-  `status` tinyint(4) NOT NULL default 0,
+  -- Client run status
+  -- 1 = busy
+  -- 2 = finished
+  -- 3 = timed-out (maximum execution time exceeded)
+  -- 4 = timed-out (client lost, set from CleanupAction)
+  `status` tinyint unsigned NOT NULL default 0,
 
-  -- Number of failed tests. -1 indicates a time out.
-  `fail` int NOT NULL default 0,
+  -- Total number of tests ran.
+  `total` int unsigned NOT NULL default 0,
+
+  -- Number of failed tests.
+  `fail` int unsigned NOT NULL default 0,
 
   -- Number of errors.
   `error` int unsigned NOT NULL default 0,
 
-  -- Total number of tests ran. -1 indicates a time out.
-  `total` int NOT NULL default 0,
-
   -- HTML snapshot of the test results page.
-  `results` text NOT NULL,
+  `report_html` text NOT NULL default '',
+
+  -- Hash of random-generated token. To use as authentication to be allowed to
+  -- store runresults in this rpw. This protects SaverunAction from bad
+  -- insertions (otherwise the only ID is the auto incrementing ID, which is
+  -- easy to fake).
+  `store_token` binary(40) NOT NULL default '',
 
   -- YYYYMMDDHHMMSS timestamp.
   `updated` binary(14) NOT NULL,
@@ -222,9 +234,8 @@ CREATE TABLE `run_client` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE UNIQUE INDEX idx_run_client_run_client ON run_client (run_id, client_id);
+-- Used in GetrunAction.
+CREATE INDEX idx_runresults_run_client ON runresults (run_id, client_id);
 
-ALTER TABLE run_client
-	ADD CONSTRAINT fk_run_client_run_id FOREIGN KEY (run_id) REFERENCES runs (id);
-ALTER TABLE run_client
-	ADD CONSTRAINT fk_run_client_client_id FOREIGN KEY (client_id) REFERENCES clients (id);
+ALTER TABLE runresults
+	ADD CONSTRAINT fk_runresults_client_id FOREIGN KEY (client_id) REFERENCES clients (id);

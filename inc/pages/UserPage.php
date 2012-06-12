@@ -104,13 +104,9 @@ class UserPage extends Page {
 					. '<small>Platform: ' . htmlspecialchars( $activeClient["uaBrowscap"]["Platform"] )
 					. '</small>'
 					. '<br>'
-					. '<small>Connected <span title="'
-					. htmlspecialchars( $activeClient["connectedISO"] ) . '" class="pretty">'
-					. htmlspecialchars( $activeClient["connectedLocalFormatted"] ) . '</span></small>'
+					. '<small>Connected ' . self::getPrettyDateHtml( $activeClient, 'connected' ) . '</small>'
 					. '<br>'
-					. '<small>Last pinged <span title="'
-					. htmlspecialchars( $activeClient["pingedISO"] ) . '" class="pretty">'
-					. htmlspecialchars( $activeClient["pingedLocalFormatted"] ) . '</span></small>'
+					. '<small>Last ping ' . self::getPrettyDateHtml( $activeClient, 'pinged' ) . '</small>'
 					. '</p>'
 					. '</div></div>';
 			}

@@ -10,8 +10,9 @@
 class WipejobAction extends Action {
 
 	/**
-	 * @requestParam "item" integer: job id
-	 * @requestParam "type" string: one of 'delete', 'reset'
+	 * @actionMethod POST: Required.
+	 * @actionParam int job_id
+	 * @actionParam string type: one of 'delete', 'reset'
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
@@ -58,37 +59,42 @@ class WipejobAction extends Action {
 		}
 
 		$runRows = $db->getRows(str_queryf(
-			"SELECT
-				id
-			FROM
-				runs
-			WHERE runs.job_id = %u;",
+			"SELECT id
+			FROM runs
+			WHERE job_id = %u;",
 			$jobID
 		));
 
-		// Put this outside the if for runRows,
-		// otherwise bogus jobs with 0 runs can't be deleted
+		if ( $runRows ) {
+			foreach ( $runRows as $runRow ) {
+				if ( $wipeType === "delete" ) {
+					$db->query(str_queryf(
+						"DELETE
+						FROM run_useragent
+						WHERE run_id = %u;",
+						$runRow->id
+					));
+				} elseif ( $wipeType === "reset" ) {
+					$db->query(str_queryf(
+						"UPDATE run_useragent
+						SET
+							status = 0,
+							completed = 0,
+							results_id = NULL,
+							updated = %s
+						WHERE run_id = %u;",
+						swarmdb_dateformat( SWARM_NOW ),
+						$runRow->id
+					));
+				}
+			}
+		}
+
+		// This should be outside the if for $runRows, because jobs
+		// can sometimes be created without any runs (by accidently).
+		// Those should be deletable as well, thus this has to be outside the loop.
+		// Also, no  need to do this in a loop, just delete them all in one query.
 		if ( $wipeType === "delete" ) {
-			$db->query(str_queryf(
-				"DELETE
-				FROM run_client
-				WHERE run_id in (
-					SELECT id
-					FROM runs
-					WHERE job_id = %u
-				);",
-				$jobID
-			));
-			$db->query(str_queryf(
-				"DELETE
-				FROM run_useragent
-				WHERE run_id in (
-					SELECT id
-					FROM runs
-					WHERE job_id = %u
-				);",
-				$jobID
-			));
 			$db->query(str_queryf(
 				"DELETE
 				FROM runs
@@ -101,38 +107,6 @@ class WipejobAction extends Action {
 				WHERE id = %u;",
 				$jobID
 			));
-		}
-
-		if ( $runRows ) {
-			foreach ( $runRows as $runRow ) {
-				$db->query(str_queryf(
-					"DELETE
-					FROM run_client
-					WHERE run_id = %u;",
-					$runRow->id
-				));
-
-				if ( $wipeType === "delete" ) {
-					$db->query(str_queryf(
-						"DELETE
-						FROM run_useragent
-						WHERE run_id = %u;",
-						$runRow->id
-					));
-				} elseif ( $wipeType === "reset" ) {
-					$db->query(str_queryf(
-						"UPDATE run_useragent
-						SET
-							runs = 0,
-							completed = 0,
-							status = 0,
-							updated = %s
-						WHERE run_id = %u;",
-						swarmdb_dateformat( SWARM_NOW ),
-						$runRow->id
-					));
-				}
-			}
 		}
 
 		$this->setData( array(

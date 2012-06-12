@@ -55,53 +55,68 @@ class JobPage extends Page {
 				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
 		}
 
-		$html .= '<table class="table table-bordered swarm-results"><thead><tr><th>&nbsp;</th>';
+		$html .= '<table class="table table-bordered swarm-results"><thead>'
+			. self::getUaHtmlHeader( $data['userAgents'] )
+			. '</thead><tbody>'
+			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'] )
+			. '</tbody></table>';
 
-		// Header with user agents
+		return $html;
+	}
 
-		foreach ( $data["userAgents"] as $userAgent ) {
-			$html .= '<th><img src="' . swarmpath( "img/" . $userAgent["displayicon"] )
+	public static function getUaHtmlHeader( $userAgents ) {
+		$html = '<tr><th>&nbsp;</th>';
+
+		foreach ( $userAgents as $userAgent ) {
+			$html .= '<th><img src="' . swarmpath( 'img/' . $userAgent['displayicon'] )
 				. '.sm.png" class="swarm-browsericon '
-				. '" alt="' . htmlspecialchars( $userAgent["displaytitle"] )
-				. '" title="' . htmlspecialchars( $userAgent["displaytitle"] )
+				. '" alt="' . htmlspecialchars( $userAgent['displaytitle'] )
+				. '" title="' . htmlspecialchars( $userAgent['displaytitle'] )
 				. '"><br>'
-				. htmlspecialchars( preg_replace( "/\w+ /", "", $userAgent["displaytitle"] ) )
+				. htmlspecialchars( preg_replace( '/\w+ /', '', $userAgent['displaytitle'] ) )
 				. '</th>';
 		}
 
-		$html .= '</tr></thead><tbody>';
+		$html .= '</tr>';
+		return $html;
+	}
 
-		foreach ( $data["runs"] as $run ) {
-			$html .= '<tr><th><a href="' . htmlspecialchars( $run["info"]["url"] ) . '">'
-				. $run["info"]["name"] . '</a></th>';
+	public static function getUaRunsHtmlRows( $runs, $userAgents ) {
+		$html = '';
 
-			// Looping over $data["userAgents"] instead of $run["uaRuns"],
+		foreach ( $runs as $run ) {
+			$html .= '<tr><th><a href="' . htmlspecialchars( $run['info']['url'] ) . '">'
+				. $run['info']['name'] . '</a></th>';
+
+			// Looping over $userAgents instead of $run["uaRuns"],
 			// to avoid shifts in the table (github.com/jquery/testswarm/issues/13)
-			foreach ( $data["userAgents"] as $uaID => $uaInfo ) {
-				if ( isset( $run["uaRuns"][$uaID] ) ) {
-					$uaRun = $run["uaRuns"][$uaID];
-					$html .= html_tag_open( "td", array(
-						"class" => "swarm-status swarm-status-" . $uaRun["runStatus"],
-						"data-job-id" => $data["jobInfo"]["id"],
-						"data-run-id" => $run["info"]["id"],
-						"data-run-status" => $uaRun["runStatus"],
-						"data-useragent-id" => $uaID,
+			foreach ( $userAgents as $uaID => $uaInfo ) {
+				if ( isset( $run['uaRuns'][$uaID] ) ) {
+					$uaRun = $run['uaRuns'][$uaID];
+					$html .= html_tag_open( 'td', array(
+						'class' => 'swarm-status swarm-status-' . $uaRun['runStatus'],
+						'data-run-id' => $run['info']['id'],
+						'data-run-status' => $uaRun['runStatus'],
+						'data-useragent-id' => $uaID,
 						// Un-ran tests don't have a client id
-						"data-client-id" => isset( $uaRun["clientID"] ) ? $uaRun["clientID"] : "",
+						'data-client-id' => isset( $uaRun['clientID'] ) ? $uaRun['clientID'] : '',
 					));
-					if ( isset( $uaRun["runResultsUrl"] ) && $uaRun["runResultsLabel"] ) {
+					if ( isset( $uaRun['runResultsUrl'] ) && isset( $uaRun['runResultsLabel'] ) ) {
 						$html .=
 							html_tag_open( 'a', array(
-								"rel" => "nofollow",
-								"href" => $uaRun["runResultsUrl"],
+								'rel' => 'nofollow',
+								'href' => $uaRun['runResultsUrl'],
 							) )
-							. $uaRun["runResultsLabel"]
+							. ( $uaRun['runResultsLabel']
+								? $uaRun['runResultsLabel']
+								: UserPage::getStatusIconHtml( $uaRun['runStatus'] )
+							)
 							. '<i class="icon-list-alt pull-right" title="' . htmlspecialchars(
-								"Open run results for {$data["userAgents"][$uaID]["displaytitle"]}"
+								"Open run results for {$userAgents[$uaID]['displaytitle']}"
 							) . '"></i>'
 							. '</a>';
 					} else {
-						$html .= UserPage::getStatusIconHtml( $uaRun["runStatus"] );
+						$html .= UserPage::getStatusIconHtml( $uaRun['runStatus'] );
 					}
 					$html .= '</td>';
 				} else {
@@ -111,7 +126,6 @@ class JobPage extends Page {
 			}
 		}
 
-		$html .= '</tbody></table>';
 		return $html;
 	}
 }

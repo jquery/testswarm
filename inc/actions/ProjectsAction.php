@@ -63,7 +63,9 @@ class ProjectsAction extends Action {
 				DISTINCT(jobs.user_id) as user_id,
 				users.name as user_name,
 				users.created as user_created,
-				COUNT(jobs.id) as job_count
+				COUNT(jobs.id) as job_count,
+				MAX(jobs.id) as job_latest,
+				MAX(jobs.created) as job_latest_created
 			FROM jobs, users
 			WHERE users.id = jobs.user_id
 			GROUP BY jobs.user_id
@@ -76,8 +78,10 @@ class ProjectsAction extends Action {
 					"id" => intval( $projectRow->user_id ),
 					"name" => $projectRow->user_name,
 					"jobCount" => intval( $projectRow->job_count ),
+					"jobLatest" => intval( $projectRow->job_latest ),
 				);
 				self::addTimestampsTo( $project, $projectRow->user_created, "created" );
+				self::addTimestampsTo( $project, $projectRow->job_latest_created, "jobLatestCreated" );
 				$projects[] = $project;
 			}
 		}

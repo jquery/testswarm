@@ -6,7 +6,6 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class GetrunAction extends Action {
 
 	/**
@@ -27,14 +26,14 @@ class GetrunAction extends Action {
 
 		$runToken = $request->getVal( "run_token" );
 		if ( $conf->client->requireRunToken && !$runToken ) {
-			$this->setError( "invalid-input", "This TestSwarm does not allow unauthorized clients to join the swarm." );
+			$this->setError( "missing-parameters", "This TestSwarm does not allow unauthorized clients to join the swarm." );
 			return;
 		}
 
 		$clientID = $request->getInt( "client_id" );
 
 		if ( !$clientID ) {
-			$this->setError( "invalid-input" );
+			$this->setError( "missing-parameters" );
 			return;
 		}
 
@@ -43,20 +42,18 @@ class GetrunAction extends Action {
 		// Throws exception (caught higher up) if stuff is invalid.
 		$client = Client::newFromContext( $this->getContext(), $runToken, $clientID );
 
-		// Get oldest run for this user agent. But not runs that are already run
-		// by another client (status=1), or reached maximum number of tries (runs < max).
-		// Note that SaverunAction sets runs=max in case of a run without errors.
+		// Get oldest run for this user agent. But not runs that are already being run
+		// (status=1), or reached the max or passed (status=2).
 		$runID = $db->getOne(str_queryf(
-			"SELECT
+			'SELECT
 				run_id
 			FROM
 				run_useragent
 			WHERE useragent_id = %s
-			AND   runs < max
-			AND   status != 1
-			AND NOT EXISTS (SELECT 1 FROM run_client WHERE run_useragent.run_id = run_id AND client_id = %u)
+			AND   status = 0
+			AND NOT EXISTS (SELECT 1 FROM runresults WHERE runresults.run_id = run_useragent.run_id AND runresults.client_id = %u)
 			ORDER BY run_id DESC
-			LIMIT 1;",
+			LIMIT 1;',
 			$browserInfo->getSwarmUaID(),
 			$clientID
 		));
@@ -80,43 +77,53 @@ class GetrunAction extends Action {
 			));
 
 			if ( $row->run_url && $row->job_name && $row->run_name ) {
-				# Mark the run as "in progress" on the useragent
-				$db->query(str_queryf(
-					"UPDATE run_useragent
-					SET
-						runs = runs + 1,
-						status = 1,
-						updated = %s
-					WHERE run_id = %u
-					AND   useragent_id = %s
-					LIMIT 1;",
-					swarmdb_dateformat( SWARM_NOW ),
-					$runID,
-					$browserInfo->getSwarmUaID()
-				));
-
-				# Initialize the client run
-				$db->query(str_queryf(
-					"INSERT INTO run_client
-					(run_id, client_id, status, updated, created)
-					VALUES(%u, %u, 1, %s, %s);",
+				// Create stub runresults entry
+				$storeToken = sha1( mt_rand() );
+				$isInserted = $db->query(str_queryf(
+					'INSERT INTO runresults
+					(run_id, client_id, status, store_token, updated, created)
+					VALUES(%u, %u, 1, %s, %s, %s);',
 					$runID,
 					$clientID,
+					sha1( $storeToken ),
 					swarmdb_dateformat( SWARM_NOW ),
 					swarmdb_dateformat( SWARM_NOW )
+				));
+				$runresultsId = $db->getInsertId();
+				if ( !$isInserted || !$runresultsId ) {
+					$this->setError( 'internal-error', 'Creation of runresults database entry failed.' );
+					return false;
+				}
+
+				// Mark as in-progress (status=1), and link runresults entry
+				$db->query(str_queryf(
+					'UPDATE run_useragent
+					SET
+						status = 1,
+						updated = %s,
+						results_id = %u
+					WHERE run_id = %u
+					AND   useragent_id = %s
+					LIMIT 1;',
+					swarmdb_dateformat( SWARM_NOW ),
+					$runresultsId,
+
+					$runID,
+					$browserInfo->getSwarmUaID()
 				));
 
 				$runInfo = array(
 					"id" => $runID,
 					"url" => $row->run_url,
 					"desc" => $row->job_name . ' ' . $row->run_name,
+					'resultsId' => $runresultsId,
+					'resultsStoreToken' => $storeToken,
 				);
 			}
 		}
 
 		$this->setData( array(
-			"confUpdate" => array( "client" => $conf->client ),
-			"runInfo" => $runInfo,
+			'runInfo' => $runInfo,
 		) );
 	}
 }

@@ -6,7 +6,6 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class CleanupAction extends Action {
 
 	/**
@@ -15,49 +14,57 @@ class CleanupAction extends Action {
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();
 		$db = $this->getContext()->getDB();
+		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
 		// Get runs that were given to a client (status=1),
-		// but haven't pinged in over 5 minutes.
+		// but haven't pinged back when they should.
+
+		$maxage = time()
+			// Maximum execution time
+			- $conf->client->runTimeout
+			// Maximum time it may take to save
+			- ( $conf->client->saveRetryMax * ( $conf->client->saveReqTimeout + $conf->client->saveRetrySleep ) );
+
 		$rows = $db->getRows(str_queryf(
 			"SELECT
-				run_id,
-				client_id,
-				(SELECT useragent_id FROM clients WHERE clients.id = client_id LIMIT 1) as useragent_id
+				id,
+				results_id
 			FROM
-				run_client
-			WHERE updated < %s
-			AND   status = 1;",
-			swarmdb_dateformat( strtotime( '5 minutes ago' ) )
+				run_useragent
+			WHERE status = 1
+			AND   updated < %s;",
+			swarmdb_dateformat( $maxage )
 		));
 		$resetTimedoutRuns = 0;
+
+		// For clients that have stopped pinging,
+		// assume disconnection (browser crashed, network lost, closed browser, ..)
+		// @todo: Incorrect, the above query finds runs that have timed out.
+		// Not dead runs from no longer connected clients, both should be checked.
+		// The latter involves 3 cross-checks. Get runresults entry. Get client_id.
+		// Get clients entry. Check updated property against pingTime+pingTimeMargin (see UserAction/SwarmstateAction).
+		// Make 2 arrays of runUaIds and runresultsIds and unique them before the if(). Change if to if-count()
 
 		if ( $rows ) {
 			$resetTimedoutRuns = count( $rows );
 			foreach ( $rows as $row ) {
-				// Undo runcount and reset status
 				$db->query(str_queryf(
-					"UPDATE
-						run_useragent
+					"UPDATE run_useragent
 					SET
-						runs = runs - 1,
-						status = 0
-					WHERE run_id = %u
-					AND   useragent_id = %s;",
-					$row->run_id,
-					$row->useragent_id
+						status = 0,
+						results_id = NULL
+					WHERE id = %u;",
+					$row->id
 				));
 
-				// Remove run_client entry,
-				// after 5 minutes we'll assume the client crashed, refreshed, closed the browser
-				// or something else...
+				// Record runresults status as having timed-out (status=3)
 				$db->query(str_queryf(
-					"DELETE FROM
-						run_client
-					WHERE run_id = %u
-					AND   client_id = %u;",
-					$row->run_id,
-					$row->client_id
+					"UPDATE runresults
+					SET status = %s
+					WHERE id = %u;",
+					ResultAction::$STATE_LOST,
+					$row->results_id
 				));
 			}
 		}

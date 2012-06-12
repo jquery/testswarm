@@ -20,10 +20,12 @@
 	"client": {
 		"cooldownSleep": 2,
 		"nonewrunsSleep": 30,
+		"pingTime": 30,
+		"pingTimeMargin": 10,
 		"runTimeout": 180,
 		"saveReqTimeout": 10,
-		"saveRetryMax": 4,
-		"saveRetrySleep": 15,
+		"saveRetryMax": 3,
+		"saveRetrySleep": 5,
 		"requireRunToken": false,
 		"refreshControl": 0
 	},

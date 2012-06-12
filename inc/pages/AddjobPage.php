@@ -89,7 +89,7 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="control-label" for="form-runMax">Run max:</label>
 			<div class="controls">
-				<input type="number" size="5" name="runMax" id="form-runMax" value="3" min="1" max="99">
+				<input type="number" size="5" name="runMax" id="form-runMax" value="2" min="1" max="99">
 				<p class="help-block">This is the maximum number of times a run is ran in a user agent. If a run passes
 				without failures then it is only ran once. If it does not pass, TestSwarm will re-try the run
 				(up to "Run max" times) for that useragent to avoid error pollution due to time-outs, slow

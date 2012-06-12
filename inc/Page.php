@@ -325,6 +325,39 @@ foreach ( $projects as $project ) {
 	}
 
 	/**
+	 * Small messages
+	 */
+	public function outputMini( $title, $message = null ) {
+?>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<title><?php echo htmlspecialchars(
+		$title
+		. ' - '
+		. $this->getContext()->getConf()->web->title
+	); ?></title>
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.min.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
+</head>
+<body>
+<div class="hero-unit">
+	<h1><?php echo htmlspecialchars( $title ); ?></h1>
+<?php
+	if ( $message ) {
+?>
+	<p><?php echo htmlspecialchars( $message );?></p>
+<?php
+	}
+?>
+</div>
+</body>
+</html>
+<?php
+	}
+
+	/**
 	 * Useful utility function to send a redirect as reponse and close the request.
 	 * @param $target string: Url
 	 * @param $code int: 30x
@@ -336,6 +369,18 @@ foreach ( $projects as $project ) {
 		header( "Location: " . $target );
 
 		exit;
+	}
+
+	/**
+	 * @see Action::addTimestampsTo
+	 * @param array $data
+	 * @param string $propNamePrefix
+	 * @return string: HTML
+	 */
+	protected function getPrettyDateHtml( $data, $propNamePrefix ) {
+		return '<span title="'
+			. htmlspecialchars( $data[$propNamePrefix . 'ISO'] ) . '" class="pretty">'
+			. htmlspecialchars( $data[$propNamePrefix . 'LocalFormatted'] ) . '</span>';
 	}
 
 	protected function setRobots( $value ) {
@@ -350,6 +395,7 @@ foreach ( $projects as $project ) {
 	final public static function getHttpStatusMsg( $code ) {
 		static $httpCodes = array(
 			200 => 'OK',
+			204 => 'No Content',
 			301 => 'Moved Permanently',
 			302 => 'Found',
 			303 => 'See Other',
