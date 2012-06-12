@@ -15,7 +15,7 @@
 /*jshint forin:false, strict:false, loopfunc:true, browser:true, jquery:true*/
 (function (undefined) {
 	var	DEBUG, doPost, search, url, index, submitTimeout, curHeartbeat,
-		beatRate, testFrameworks;
+		beatRate, testFrameworks, onErrorFnPrev;
 
 	DEBUG = false;
 
@@ -170,10 +170,31 @@
 		return false;
 	}
 
-	window.onerror = function ( e ) {
-		document.body.appendChild( document.createTextNode( "ERROR: " + e ));
-		submit({ fail: 0, error: 1, total: 1 });
-		return false;
+	// Preserve other handlers
+	onErrorFnPrev = window.onerror;
+
+	// Cover uncaught exceptions
+	// Returning true will surpress the default browser handler,
+	// returning false will let it run.
+	window.onerror = function ( error, path, linerNr ) {
+		var prevRet = false;
+		if ( onErrorFnPrev ) {
+			prevRet = onErrorFnPrev( error, path, linerNr );
+		}
+
+		// If the other handler returns true, reserve that return value and surpress
+		// our handling and the default browser handler.
+		// Checking not-true instead of false, because some libraries return
+		// undefined or null instead of false.
+		if ( prevRet !== true ) {
+			document.body.appendChild( document.createTextNode( '[TestSwarm] window.onerror: ' + error ) );
+			submit({ fail: 0, error: 1, total: 1 });
+
+			// If its up to us, allow the browser handler to run
+			return false;
+		}
+
+		return true;
 	};
 
 	// Expose the TestSwarm API
