@@ -21,10 +21,10 @@ class RefreshRunTokenScript extends MaintenanceScript {
 	}
 
 	protected function execute() {
-		$this->timeWarningForScriptWill( "invalidate any existing token" );
+		$this->timeWarningForScriptWill( 'invalidate any existing token' );
 
 		$cacheDir = $this->getContext()->getConf()->storage->cacheDir;
-		$cacheFile = $cacheDir . "/run_token_hash.cache";
+		$cacheFile = $cacheDir . '/run_token_hash.cache';
 		if ( file_exists( $cacheFile ) ) {
 			$deleted = unlink( $cacheFile );
 			if ( !$deleted ) {

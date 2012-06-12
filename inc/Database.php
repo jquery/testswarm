@@ -64,11 +64,11 @@ class Database {
 			$this->conn = mysql_pconnect( $this->host, $this->username, $this->password );
 			break;
 		default:
-			throw new SwarmException( "Invalid connection type." );
+			throw new SwarmException( 'Invalid connection type.' );
 		}
 
 		if ( !$this->conn ) {
-			throw new SwarmException( "Connection to {$this->host} failed.\nMySQL Error " . $this->lastErrNo() . ": " . $this->lastErrMsg() );
+			throw new SwarmException( "Connection to {$this->host} failed.\nMySQL Error " . $this->lastErrNo() . ': ' . $this->lastErrMsg() );
 		}
 
 		if ( $this->dbname ) {
@@ -202,7 +202,7 @@ class Database {
 	 */
 	public function batchQueryFromFile( $fullSource ) {
 		$lines = explode( "\n", $fullSource );
-		$sql = "";
+		$sql = '';
 		$realSql = false;
 		foreach ( $lines as $line ) {
 			$line = trim( $line );
@@ -212,8 +212,8 @@ class Database {
 				continue;
 			}
 
-			if ( $sql !== "" ) {
-				$sql .= " ";
+			if ( $sql !== '' ) {
+				$sql .= ' ';
 			}
 
 			$sql .= "$line\n";
@@ -224,7 +224,7 @@ class Database {
 			if ( $lineCopy != $line ) {
 				// Execute what we have so far and reset the sql string
 				$realSql = $sql;
-				$sql = "";
+				$sql = '';
 				$this->query( $realSql );
 			}
 		}
@@ -278,7 +278,7 @@ class Database {
 	}
 
 	public function addIdentifierQuotes( $s ) {
-		return "`" . $this->strEncode( $s ) . "`";
+		return '`' . $this->strEncode( $s ) . '`';
 	}
 
 	/**
@@ -316,7 +316,7 @@ class Database {
 				return true;
 			}
 		}
-		throw new SwarmException( "Unable to free MySQL result" );
+		throw new SwarmException( 'Unable to free MySQL result' );
 	}
 
 	public function ignoreErrors( $setting ) {
@@ -342,13 +342,13 @@ class Database {
 			$backtrace = $backtrace[ 3 ];
 			$backtrace = ( $backtrace['class'] ? "{$backtrace['class']}::" : $backtrace['class'] ) . $backtrace['function'];
 			$this->rawQueryHistory[] = array(
-				"sql" => $sql,
-				"caller" => $backtrace,
+				'sql' => $sql,
+				'caller' => $backtrace,
 				// Only SELECT queries return a resource that getNumRows can use
-				"numRows" => is_resource( $queryResponse ) ? $this->getNumRows( $queryResponse ) : null,
-				"insertId" => $this->getInsertId(),
-				"affectedRows" => $this->getAffectedRows(),
-				"queryTime" => $microtimeEnd - $microtimeStart,
+				'numRows' => is_resource( $queryResponse ) ? $this->getNumRows( $queryResponse ) : null,
+				'insertId' => $this->getInsertId(),
+				'affectedRows' => $this->getAffectedRows(),
+				'queryTime' => $microtimeEnd - $microtimeStart,
 			);
 		}
 		return $doLog;
@@ -359,8 +359,8 @@ class Database {
 	}
 
 	protected function checkEnvironment() {
-		if ( !function_exists( "mysql_connect" ) ) {
-			throw new SwarmException( "MySQL functions missing." );
+		if ( !function_exists( 'mysql_connect' ) ) {
+			throw new SwarmException( 'MySQL functions missing.' );
 		}
 	}
 

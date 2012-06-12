@@ -22,13 +22,13 @@ abstract class Action {
 	protected $error = false;
 
 	protected static $errorCodes = array(
-		// "internal-error" is exclusively for use by the exception handler
-		"internal-error" => "An internal error occurred. Action could not be performed.",
-		"invalid-input" => "One or more input fields were invalid.",
-		"missing-parameters" => "One ore more required fields were not submitted.",
-		"requires-post" => "This action requires a POST request.",
-		"requires-auth" => "You are not authorized to perform this action.",
-		"data-corrupt" => "Data was retreived but was found to be corrupt or incomplete.",
+		// internal-error is exclusively for use by the exception handler
+		'internal-error' => 'An internal error occurred. Action could not be performed.',
+		'invalid-input' => 'One or more input fields were invalid.',
+		'missing-parameters' => 'One ore more required fields were not submitted.',
+		'requires-post' => 'This action requires a POST request.',
+		'requires-auth' => 'You are not authorized to perform this action.',
+		'data-corrupt' => 'Data was retreived but was found to be corrupt or incomplete.',
 	);
 
 	/**
@@ -39,7 +39,7 @@ abstract class Action {
 	/**
 	 * Perform the actual action based on the current context.
 	 * For "item"-based actions, the item value is to be retreived from
-	 * WebRequest::getVal( "item" ); Form-based actions should use
+	 * WebRequest::getVal( 'item' ); Form-based actions should use
 	 * WebRequest::wasPosted() to check wether it is indeed POSTed, and may
 	 * want to redirect after that (PRG <https://en.wikipedia.org/wiki/Post/Redirect/Get>).
 	 */
@@ -54,18 +54,18 @@ abstract class Action {
 	 * @param $param $error array: property "code" and optionally "info".
 	 */
 	final protected function setError( $errorCode, $errorMsg = null ) {
-		if ( is_array( $errorCode ) && isset( $errorCode["code"] ) ) {
-			$errorMsg = isset( $errorCode["info"] ) ? $errorCode["info"] : null;
-			$errorCode = $errorCode["code"];
+		if ( is_array( $errorCode ) && isset( $errorCode['code'] ) ) {
+			$errorMsg = isset( $errorCode['info'] ) ? $errorCode['info'] : null;
+			$errorCode = $errorCode['code'];
 		}
 
 		if ( !isset( $errorCode ) || !isset( self::$errorCodes[$errorCode] ) ) {
-			throw new SwarmException( "Unrecognized error code used." );
+			throw new SwarmException( 'Unrecognized error code used.' );
 		}
 
 		$this->error = array(
-			"code" => $errorCode,
-			"info" => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
+			'code' => $errorCode,
+			'info' => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
 		);
 	}
 
@@ -100,7 +100,7 @@ abstract class Action {
 	 * "rawUTC" or "prefixRawUTC" respectively.
 	 */
 	final protected static function addTimestampsTo( &$target, $tsRawUTC, $prefix = null ) {
-			$tsLocalFormatted = strftime( "%c", gmstrtotime( $tsRawUTC ) );
+			$tsLocalFormatted = strftime( '%c', gmstrtotime( $tsRawUTC ) );
 
 			// PHP's "c" claims to be ISO compatible but prettyDateJS disagrees
 			// ("2004-02-12T15:19:21+00:00" vs. "2004-02-12T15:19:21Z").
@@ -108,11 +108,11 @@ abstract class Action {
 			$tsISO = gmdate( "Y-m-d\TH:i:s\Z", gmstrtotime( $tsRawUTC ) );
 
 			if ( is_array( $target ) ) {
-				$target[( $prefix ? "{$prefix}RawUTC" : "rawUTC" )] = $tsRawUTC;
-				$target[( $prefix ? "{$prefix}ISO" : "ISO" )] = $tsISO;
-				$target[( $prefix ? "{$prefix}LocalFormatted" : "localFormatted" )] = $tsLocalFormatted;
+				$target[( $prefix ? "{$prefix}RawUTC" : 'rawUTC' )] = $tsRawUTC;
+				$target[( $prefix ? "{$prefix}ISO" : 'ISO' )] = $tsISO;
+				$target[( $prefix ? "{$prefix}LocalFormatted" : 'localFormatted' )] = $tsLocalFormatted;
 			} else {
-				throw SwarmException( "Invalid arguments to " . __METHOD__ );
+				throw SwarmException( 'Invalid arguments to ' . __METHOD__ );
 			}
 	}
 

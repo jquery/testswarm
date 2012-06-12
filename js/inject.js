@@ -21,7 +21,7 @@
 
 	doPost = false;
 	search = window.location.search;
-	index = search.indexOf( "swarmURL=" );
+	index = search.indexOf( 'swarmURL=' );
 	submitTimeout = 5;
 	beatRate = 20;
 
@@ -33,7 +33,7 @@
 		url = decodeURIComponent( search.slice( index + 9 ) );
 	}
 
-	if ( !DEBUG && ( !url || url.indexOf( "http" ) !== 0 ) ) {
+	if ( !DEBUG && ( !url || url.indexOf( 'http' ) !== 0 ) ) {
 		return;
 	}
 
@@ -45,15 +45,15 @@
 	/** Utility functions **/
 
 	function debugObj( obj ) {
-		var i, str = "";
+		var i, str = '';
 		for ( i in obj ) {
-			str += ( str ? "\n" : "" ) + i + ":\n\t " + obj[i];
+			str += ( str ? '\n' : '' ) + i + ':\n\t ' + obj[i];
 		}
 		return str;
 	}
 
 	function remove( elem ) {
-		if ( typeof elem === "string" ) {
+		if ( typeof elem === 'string' ) {
 			elem = document.getElementById( elem );
 		}
 
@@ -66,18 +66,18 @@
 		var scripts, root, cur, links, i, href;
 		doc = doc || document;
 
-		scripts = doc.getElementsByTagName( "script" );
+		scripts = doc.getElementsByTagName( 'script' );
 		while ( scripts.length ) {
 			remove( scripts[0] );
 		}
 
-		root = window.location.href.replace( /(https?:\/\/.*?)\/.*/, "$1" );
-		cur = window.location.href.replace( /[^\/]*$/, "" );
+		root = window.location.href.replace( /(https?:\/\/.*?)\/.*/, '$1' );
+		cur = window.location.href.replace( /[^\/]*$/, '' );
 
-		links = doc.getElementsByTagName( "link" );
+		links = doc.getElementsByTagName( 'link' );
 		for ( i = 0; i < links.length; i += 1 ) {
 			href = links[i].href;
-			if ( href.indexOf( "/" ) === 0 ) {
+			if ( href.indexOf( '/' ) === 0 ) {
 				href = root + href;
 			} else if ( !/^https?:\/\//.test( href ) ) {
 				href = cur + href;
@@ -85,8 +85,8 @@
 			links[i].href = href;
 		}
 
-		return ( "<html>" + doc.documentElement.innerHTML + "</html>" )
-			.replace( /\s+/g, " " );
+		return ( '<html>' + doc.documentElement.innerHTML + '</html>' )
+			.replace( /\s+/g, ' ' );
 	}
 
 	function submit( params ) {
@@ -96,11 +96,11 @@
 			clearTimeout( curHeartbeat );
 		}
 
-		paramItems = (url.split( "?" )[1] || "" ).split( "&" );
+		paramItems = (url.split( '?' )[1] || '' ).split( '&' );
 
 		for ( i = 0; i < paramItems.length; i += 1 ) {
 			if ( paramItems[i] ) {
-				parts = paramItems[i].split( "=" );
+				parts = paramItems[i].split( '=' );
 				if ( !params[ parts[0] ] ) {
 					params[ parts[0] ] = parts[1];
 				}
@@ -108,7 +108,7 @@
 		}
 
 		if ( !params.action ) {
-			params.action = "saverun";
+			params.action = 'saverun';
 		}
 
 		if ( !params.results ) {
@@ -121,24 +121,24 @@
 
 		if ( doPost ) {
 			// Build Query String
-			query = "";
+			query = '';
 
 			for ( key in params ) {
-				query += ( query ? "&" : "" ) + key + "=" + encodeURIComponent( params[key] );
+				query += ( query ? '&' : '' ) + key + '=' + encodeURIComponent( params[key] );
 			}
 
 			if ( !DEBUG ) {
-				window.parent.postMessage( query, "*" );
+				window.parent.postMessage( query, '*' );
 			}
 
 		} else {
-			form = document.createElement( "form" );
+			form = document.createElement( 'form' );
 			form.action = url;
-			form.method = "POST";
+			form.method = 'POST';
 
 			for ( i in params ) {
-				input = document.createElement( "input" );
-				input.type = "hidden";
+				input = document.createElement( 'input' );
+				input.type = 'hidden';
 				input.name = i;
 				input.value = params[i];
 				form.appendChild( input );
@@ -176,25 +176,22 @@
 	// Cover uncaught exceptions
 	// Returning true will surpress the default browser handler,
 	// returning false will let it run.
-	window.onerror = function ( error, path, linerNr ) {
-		var prevRet = false;
+	window.onerror = function ( error, filePath, linerNr ) {
+		var ret = false;
 		if ( onErrorFnPrev ) {
-			prevRet = onErrorFnPrev( error, path, linerNr );
+			ret = onErrorFnPrev( error, filePath, linerNr );
 		}
 
-		// If the other handler returns true, reserve that return value and surpress
-		// our handling and the default browser handler.
-		// Checking not-true instead of false, because some libraries return
-		// undefined or null instead of false.
-		if ( prevRet !== true ) {
+		// Treat return value as window.onerror itself does,
+		// Only do our handling if not surpressed.
+		if ( ret !== true ) {
 			document.body.appendChild( document.createTextNode( '[TestSwarm] window.onerror: ' + error ) );
 			submit({ fail: 0, error: 1, total: 1 });
 
-			// If its up to us, allow the browser handler to run
 			return false;
 		}
 
-		return true;
+		return ret;
 	};
 
 	// Expose the TestSwarm API
@@ -217,9 +214,9 @@
 	testFrameworks = {
 		// QUnit (by jQuery)
 		// http://docs.jquery.com/QUnit
-		"QUnit": {
+		'QUnit': {
 			detect: function () {
-				return typeof QUnit !== "undefined";
+				return typeof QUnit !== 'undefined';
 			},
 			install: function () {
 				QUnit.done = function ( results ) {
@@ -237,15 +234,15 @@
 					var ol, i;
 
 					// Clean up the HTML (remove any un-needed test markup)
-					remove( "nothiddendiv" );
-					remove( "loadediframe" );
-					remove( "dl" );
-					remove( "main" );
+					remove( 'nothiddendiv' );
+					remove( 'loadediframe' );
+					remove( 'dl' );
+					remove( 'main' );
 
 					// Show any collapsed results
-					ol = document.getElementsByTagName( "ol" );
+					ol = document.getElementsByTagName( 'ol' );
 					for ( i = 0; i < ol.length; i += 1 ) {
-						ol[i].style.display = "block";
+						ol[i].style.display = 'block';
 					}
 
 					return trimSerialize();
@@ -255,9 +252,9 @@
 
 		// UnitTestJS (Prototype, Scriptaculous)
 		// https://github.com/tobie/unittest_js
-		"UnitTestJS": {
+		'UnitTestJS': {
 			detect: function () {
-				return typeof Test !== "undefined" && Test && Test.Unit && Test.Unit.runners;
+				return typeof Test !== 'undefined' && Test && Test.Unit && Test.Unit.runners;
 			},
 			install: function () {
 				var	total_runners = Test.Unit.runners.length,
@@ -300,9 +297,9 @@
 		// JSSpec (MooTools)
 		// http://jania.pe.kr/aw/moin.cgi/JSSpec
 		// https://code.google.com/p/jsspec/
-		"JSSpec": {
+		'JSSpec': {
 			detect: function () {
-				return typeof JSSpec !== "undefined" && JSSpec && JSSpec.Logger;
+				return typeof JSSpec !== 'undefined' && JSSpec && JSSpec.Logger;
 			},
 			install: function () {
 				var onRunnerEnd = JSSpec.Logger.prototype.onRunnerEnd;
@@ -311,9 +308,9 @@
 					onRunnerEnd.call( this );
 
 					// Show any collapsed results
-					ul = document.getElementsByTagName( "ul" );
+					ul = document.getElementsByTagName( 'ul' );
 					for ( i = 0; i < ul.length; i += 1 ) {
-						ul[i].style.display = "block";
+						ul[i].style.display = 'block';
 					}
 
 					submit({
@@ -326,9 +323,9 @@
 				window.TestSwarm.serialize = function () {
 					var ul, i;
 					// Show any collapsed results
-					ul = document.getElementsByTagName( "ul" );
+					ul = document.getElementsByTagName( 'ul' );
 					for ( i = 0; i < ul.length; i += 1 ) {
-						ul[i].style.display = "block";
+						ul[i].style.display = 'block';
 					}
 
 					return trimSerialize();
@@ -340,9 +337,9 @@
 		// http://www.jsunit.net/
 		// Note: Injection file must be included before the frames
 		// are document.write()d into the page.
-		"JSUnit": {
+		'JSUnit': {
 			detect: function () {
-				return typeof JsUnitTestManager !== "undefined";
+				return typeof JsUnitTestManager !== 'undefined';
 			},
 			install: function () {
 				var _done = JsUnitTestManager.prototype._done;
@@ -357,16 +354,16 @@
 				};
 
 				window.TestSwarm.serialize = function () {
-					return "<pre>" + this.log.join( "\n" ) + "</pre>";
+					return '<pre>' + this.log.join( '\n' ) + '</pre>';
 				};
 			}
 		},
 
 		// Selenium Core
 		// http://seleniumhq.org/projects/core/
-		"Selenium": {
+		'Selenium': {
 			detect: function () {
-				return typeof SeleniumTestResult !== "undefined" && typeof LOG !== "undefined";
+				return typeof SeleniumTestResult !== 'undefined' && typeof LOG !== 'undefined';
 			},
 			install: function () {
 				// Completely overwrite the postback
@@ -382,19 +379,19 @@
 					var results = [], msg;
 					while ( LOG.pendingMessages.length ) {
 						msg = LOG.pendingMessages.shift();
-						results.push( msg.type + ": " + msg.msg );
+						results.push( msg.type + ': ' + msg.msg );
 					}
 
-					return "<pre>" + results.join( "\n" ) + "</pre>";
+					return '<pre>' + results.join( '\n' ) + '</pre>';
 				};
 			}
 		},
 
 		// Dojo Objective Harness
 		// http://docs.dojocampus.org/quickstart/doh
-		"DOH": {
+		'DOH': {
 			detect: function () {
-				return typeof doh !== "undefined" && doh._report;
+				return typeof doh !== 'undefined' && doh._report;
 			},
 			install: function () {
 				var _report = doh._report;
@@ -409,21 +406,21 @@
 				};
 
 				window.TestSwarm.serialize = function () {
-					return "<pre>" + document.getElementById( "logBody" ).innerHTML + "</pre>";
+					return '<pre>' + document.getElementById( 'logBody' ).innerHTML + '</pre>';
 				};
 			}
 		},
 
 		// Screw.Unit
 		// https://github.com/nathansobo/screw-unit
-		"Screw.Unit": {
+		'Screw.Unit': {
 			detect: function () {
-				return typeof Screw !== "undefined" && typeof jQuery !== "undefined" && Screw && Screw.Unit;
+				return typeof Screw !== 'undefined' && typeof jQuery !== 'undefined' && Screw && Screw.Unit;
 			},
 			install: function () {
-				$(Screw).bind( "after", function () {
-					var	passed = $( ".passed" ).length,
-						failed = $( ".failed" ).length;
+				$(Screw).bind( 'after', function () {
+					var	passed = $( '.passed' ).length,
+						failed = $( '.failed' ).length;
 					submit({
 						fail: failed,
 						error: 0,
@@ -431,10 +428,10 @@
 					});
 				});
 
-				$( Screw ).bind( "loaded", function () {
-					$( ".it" )
-						.bind( "passed", window.TestSwarm.heartbeat )
-						.bind( "failed", window.TestSwarm.heartbeat );
+				$( Screw ).bind( 'loaded', function () {
+					$( '.it' )
+						.bind( 'passed', window.TestSwarm.heartbeat )
+						.bind( 'failed', window.TestSwarm.heartbeat );
 					window.TestSwarm.heartbeat();
 				});
 

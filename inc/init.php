@@ -30,7 +30,7 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.0' ) < 0 ) {
-	echo "<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.0\n";
+	echo '<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.0';
 	exit;
 }
 
@@ -59,51 +59,51 @@ define( 'SWARM_DBCON_PERSISTENT', 11 );
  */
 $swarmAutoLoadClasses = array(
 	# Main includes
-	"Action" => "inc/Action.php",
-	"Api" => "inc/Api.php",
-	"BrowserInfo" => "inc/BrowserInfo.php",
-	"Client" => "inc/Client.php",
-	"Database" =>"inc/Database.php",
-	"DerivativeWebRequest" => "inc/WebRequest.php",
-	"MaintenanceScript" => "inc/MaintenanceScript.php",
-	"Page" => "inc/Page.php",
-	"TestSwarmContext" => "inc/TestSwarm.php",
-	"WebRequest" => "inc/WebRequest.php",
+	'Action' => 'inc/Action.php',
+	'Api' => 'inc/Api.php',
+	'BrowserInfo' => 'inc/BrowserInfo.php',
+	'Client' => 'inc/Client.php',
+	'Database' =>'inc/Database.php',
+	'DerivativeWebRequest' => 'inc/WebRequest.php',
+	'MaintenanceScript' => 'inc/MaintenanceScript.php',
+	'Page' => 'inc/Page.php',
+	'TestSwarmContext' => 'inc/TestSwarm.php',
+	'WebRequest' => 'inc/WebRequest.php',
 	# Actions
-	"AddjobAction" => "inc/actions/AddjobAction.php",
-	"CleanupAction" => "inc/actions/CleanupAction.php",
-	"GetrunAction" => "inc/actions/GetrunAction.php",
-	"InfoAction" => "inc/actions/InfoAction.php",
-	"JobAction" => "inc/actions/JobAction.php",
-	"LoginAction" => "inc/actions/LoginAction.php",
-	"LogoutAction" => "inc/actions/LogoutAction.php",
-	"ProjectsAction" => "inc/actions/ProjectsAction.php",
-	"SaverunAction" => "inc/actions/SaverunAction.php",
-	"ScoresAction" => "inc/actions/ScoresAction.php",
-	"SignupAction" => "inc/actions/SignupAction.php",
-	"SwarmstateAction" => "inc/actions/SwarmstateAction.php",
-	"UserAction" => "inc/actions/UserAction.php",
-	"WipejobAction" => "inc/actions/WipejobAction.php",
-	"WiperunAction" => "inc/actions/WiperunAction.php",
+	'AddjobAction' => 'inc/actions/AddjobAction.php',
+	'CleanupAction' => 'inc/actions/CleanupAction.php',
+	'GetrunAction' => 'inc/actions/GetrunAction.php',
+	'InfoAction' => 'inc/actions/InfoAction.php',
+	'JobAction' => 'inc/actions/JobAction.php',
+	'LoginAction' => 'inc/actions/LoginAction.php',
+	'LogoutAction' => 'inc/actions/LogoutAction.php',
+	'ProjectsAction' => 'inc/actions/ProjectsAction.php',
+	'SaverunAction' => 'inc/actions/SaverunAction.php',
+	'ScoresAction' => 'inc/actions/ScoresAction.php',
+	'SignupAction' => 'inc/actions/SignupAction.php',
+	'SwarmstateAction' => 'inc/actions/SwarmstateAction.php',
+	'UserAction' => 'inc/actions/UserAction.php',
+	'WipejobAction' => 'inc/actions/WipejobAction.php',
+	'WiperunAction' => 'inc/actions/WiperunAction.php',
 	# Pages
-	"AddjobPage" => "inc/pages/AddjobPage.php",
-	"ApiDebugPage" => "inc/pages/ApiDebugPage.php",
-	"Error404Page" => "inc/pages/Error404Page.php",
-	"Error500Page" => "inc/pages/Error500Page.php",
-	"HomePage" => "inc/pages/HomePage.php",
-	"InfoPage" => "inc/pages/InfoPage.php",
-	"JobPage" => "inc/pages/JobPage.php",
-	"LoginPage" => "inc/pages/LoginPage.php",
-	"LogoutPage" => "inc/pages/LogoutPage.php",
-	"ProjectsPage" => "inc/pages/ProjectsPage.php",
-	"RunPage" => "inc/pages/RunPage.php",
-	"RunresultsPage" => "inc/pages/RunresultsPage.php",
-	"SaverunPage" => "inc/pages/SaverunPage.php",
-	"ScoresPage" => "inc/pages/ScoresPage.php",
-	"SignupPage" => "inc/pages/SignupPage.php",
-	"UserPage" => "inc/pages/UserPage.php",
+	'AddjobPage' => 'inc/pages/AddjobPage.php',
+	'ApiDebugPage' => 'inc/pages/ApiDebugPage.php',
+	'Error404Page' => 'inc/pages/Error404Page.php',
+	'Error500Page' => 'inc/pages/Error500Page.php',
+	'HomePage' => 'inc/pages/HomePage.php',
+	'InfoPage' => 'inc/pages/InfoPage.php',
+	'JobPage' => 'inc/pages/JobPage.php',
+	'LoginPage' => 'inc/pages/LoginPage.php',
+	'LogoutPage' => 'inc/pages/LogoutPage.php',
+	'ProjectsPage' => 'inc/pages/ProjectsPage.php',
+	'RunPage' => 'inc/pages/RunPage.php',
+	'RunresultsPage' => 'inc/pages/RunresultsPage.php',
+	'SaverunPage' => 'inc/pages/SaverunPage.php',
+	'ScoresPage' => 'inc/pages/ScoresPage.php',
+	'SignupPage' => 'inc/pages/SignupPage.php',
+	'UserPage' => 'inc/pages/UserPage.php',
 	# Libs
-	"Browscap" => "inc/libs/GaretJax-phpbrowscap/browscap/Browscap.php",
+	'Browscap' => 'inc/libs/GaretJax-phpbrowscap/browscap/Browscap.php',
 );
 
 function swarmAutoLoader( $className ) {
@@ -128,29 +128,29 @@ spl_autoload_register( 'swarmAutoLoader' );
  * @{
  */
 // Generic requirements that we still need globally unconditionally
-require_once __DIR__ . "/utilities.php";
+require_once __DIR__ . '/utilities.php';
 
 $defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.json";
 $localSettingsFile = "$swarmInstallDir/config/testswarm.json";
 
 // Verify that the configuration files exists and are readable
 if ( !is_readable( $defaultSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile\n";
+	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile";
 	exit;
 }
 if ( !is_readable( $localSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile\n";
+	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile";
 	exit;
 }
 
 $defaultSettings = json_decode( file_get_contents( $defaultSettingsFile ) );
 $localSettings = json_decode( file_get_contents( $localSettingsFile ) );
 if ( !$defaultSettings ) {
-	echo "<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.\n";
+	echo '<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.';
 	exit;
 }
 if ( !$localSettings ) {
-	echo "<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.\n";
+	echo '<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.';
 	exit;
 }
 
@@ -164,7 +164,7 @@ $swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 foreach ( $swarmConfig->browserSets as $set => $browsers ) {
 	foreach ( $browsers as $browser ) {
 		if ( !isset( $swarmUaIndex->$browser ) ) {
-			echo "<b>TestSwarm Fatal</b>: Invalid browser ID \"<code>$browser</code>\" in browser set \"<code>$set</code>\" !\n";
+			echo "<b>TestSwarm Fatal</b>: Invalid browser ID \"<code>$browser</code>\" in browser set \"<code>$set</code>\"!";
 			exit;
 		}
 	}
@@ -176,10 +176,10 @@ date_default_timezone_set( $swarmConfig->general->timezone );
 // Auto-populate web.server
 if ( $swarmConfig->web->server === null ) {
 	$server = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
-	if ( isset( $_SERVER["HTTP_HOST"] ) ) {
-		$server .= $_SERVER["HTTP_HOST"];
-	} elseif ( isset( $_SERVER["SERVER_ADDR"] ) ) {
-		$server .= $_SERVER["SERVER_ADDR"];
+	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+		$server .= $_SERVER['HTTP_HOST'];
+	} elseif ( isset( $_SERVER['SERVER_ADDR'] ) ) {
+		$server .= $_SERVER['SERVER_ADDR'];
 	} else {
 		$server .= 'localhost';
 	}
@@ -191,7 +191,7 @@ $swarmConfig->storage->cacheDir = str_replace( "$1", $swarmInstallDir, $swarmCon
 
 // Caching directory must exist and be writable
 if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->storage->cacheDir ) ) {
-	echo "<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!\n";
+	echo '<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!';
 	exit;
 }
 
@@ -221,7 +221,7 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
  */
 if ( $swarmContext->getConf()->debug->phpErrorReporting ) {
 	error_reporting( E_ALL );
-	ini_set( "display_errors", 1 );
+	ini_set( 'display_errors', 1 );
 }
 
 // Increase the session timeout to two weeks (3600 * 24 * 14)

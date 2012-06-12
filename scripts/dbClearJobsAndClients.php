@@ -17,14 +17,14 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 			. ' Including related rows in other tables, such as `runs`, `run_client`'
 			. ' and `run_useragent`.'
 		);
-		$this->registerOption( "quick", "boolean", "Skip the countdown warning that allowed aborting the script without damage." );
+		$this->registerOption( 'quick', 'boolean', 'Skip the countdown warning that allowed aborting the script without damage.' );
 	}
 
 	protected function execute() {
 		$db = $this->getContext()->getDB();
 
-		if ( !$this->getOption( "quick" ) ) {
-			$this->timeWarningForScriptWill( "permanently delete all jobs" );
+		if ( !$this->getOption( 'quick' ) ) {
+			$this->timeWarningForScriptWill( 'permanently delete all jobs' );
 		}
 
 		$clearTables = array( 'run_useragent', 'run_client', 'runs', 'clients', 'jobs' );
@@ -33,7 +33,7 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 			$db->query( "DELETE FROM $clearTable WHERE 1" );
 			$this->out( "...deleted {$db->getAffectedRows()} rows from $clearTable" );
 		}
-		$this->out( "Done!" );
+		$this->out( 'Done!' );
 	}
 }
 

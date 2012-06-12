@@ -23,7 +23,7 @@ class TestSwarmContext {
 
 	public function getBrowserInfo() {
 		if ( $this->browserInfo === null ) {
-			$ua = isset( $_SERVER["HTTP_USER_AGENT"] ) ? $_SERVER["HTTP_USER_AGENT"] : "";
+			$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
 			$this->browserInfo = BrowserInfo::newFromContext( $this, $ua );
 		}
 		return $this->browserInfo;
@@ -47,8 +47,8 @@ class TestSwarmContext {
 			$lock = $this->dbLock();
 			if ( $lock ) {
 				throw new SwarmException(
-					"Database is temporarily locked for maintenance (since: "
-					. strftime( "%c", $lock ) . ")"
+					'Database is temporarily locked for maintenance (since: '
+					. strftime( '%c', $lock ) . ')'
 				);
 			}
 			$this->db = Database::newFromContext( $this );
@@ -62,7 +62,7 @@ class TestSwarmContext {
 	 * @return bool|int Boolean false or a timestamp of when the lock was set.
 	 */
 	public function dbLock( $change = null ) {
-		$dbLockFile = $this->getConf()->storage->cacheDir . "/database.lock";
+		$dbLockFile = $this->getConf()->storage->cacheDir . '/database.lock';
 		$dbLocktime = false;
 		if ( is_bool( $change ) ) {
 			if ( $change ) {
@@ -71,7 +71,7 @@ class TestSwarmContext {
 				$done = @unlink( $dbLockFile );
 			}
 			if ( !$done ) {
-				throw new SwarmException( "Unable to change database.lock" );
+				throw new SwarmException( 'Unable to change database.lock' );
 			}
 		}
 		if ( file_exists( $dbLockFile ) ) {
@@ -111,7 +111,7 @@ class TestSwarmContext {
 	public function getVersionInfo( $options = array() ) {
 		$options = (array)$options;
 
-		if ( in_array( "bypass-cache", $options ) ) {
+		if ( in_array( 'bypass-cache', $options ) ) {
 			return $this->calculateVersionInfo();
 		}
 
@@ -124,7 +124,7 @@ class TestSwarmContext {
 		$versionCacheFile = $this->getConf()->storage->cacheDir . '/version_info.json';
 		if ( is_readable( $versionCacheFile ) ) {
 			$versionCacheFileUpdated = filemtime( $versionCacheFile );
-			if ( $versionCacheFileUpdated < strtotime( "5 minutes ago" ) ) {
+			if ( $versionCacheFileUpdated < strtotime( '5 minutes ago' ) ) {
 				unlink( $versionCacheFile );
 			}
 		}
@@ -139,7 +139,7 @@ class TestSwarmContext {
 		$this->versionInfo = $this->calculateVersionInfo();
 		$isWritten = file_put_contents( $versionCacheFile, json_encode( $this->versionInfo ) );
 		if ( $isWritten === false ) {
-			throw new SwarmException( "Writing to cache directory failed." );
+			throw new SwarmException( 'Writing to cache directory failed.' );
 		}
 
 		return $this->versionInfo;
@@ -157,7 +157,7 @@ class TestSwarmContext {
 
 		$baseVersionFile = "$swarmInstallDir/config/version.ini";
 		if ( !is_readable( $baseVersionFile ) ) {
-			throw new SwarmException( "version.ini is missing or unreadable." );
+			throw new SwarmException( 'version.ini is missing or unreadable.' );
 		}
 
 		$swarmVersion = trim( file_get_contents( $baseVersionFile ) );
@@ -168,7 +168,7 @@ class TestSwarmContext {
 		$gitHeadFile = "$swarmInstallDir/.git/HEAD";
 		if ( is_readable( $gitHeadFile ) ) {
 			$gitHead = file_get_contents( $gitHeadFile );
-			if ( preg_match( "/ref: (.*)/", $gitHead, $matches ) ) {
+			if ( preg_match( '/ref: (.*)/', $gitHead, $matches ) ) {
 				$gitHead = rtrim( $matches[1] );
 			} else {
 				$gitHead = trim( $gitHead );

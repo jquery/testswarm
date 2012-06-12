@@ -12,23 +12,23 @@ class Api {
 	 */
 	protected $context;
 
-	protected $format = "format";
+	protected $format = 'format';
 	protected $response = array(
-		"error" => array(
-			"internal-error" => "No response data given.",
+		'error' => array(
+			'internal-error' => 'No response data given.',
 		),
 	);
 
 	protected static $formats = array(
-		"json",
-		"jsonp",
-		"php",
-		"debug",
+		'json',
+		'jsonp',
+		'php',
+		'debug',
 	);
 
 	// These formats will not be executed in a logged-in context
 	protected static $greyFormats = array(
-		"jsonp",
+		'jsonp',
 	);
 
 	public static function isGreyFormat( $format ) {
@@ -49,30 +49,30 @@ class Api {
 
 	public function output() {
 		switch ( $this->format ) {
-			case "json":
-				header( "Content-Type: application/json; charset=utf-8" );
+			case 'json':
+				header( 'Content-Type: application/json; charset=utf-8' );
 				echo json_encode( $this->response );
 				break;
 
 			// http://stackoverflow.com/a/8811412/319266
-			case "jsonp":
-				header( "Content-Type: text/javascript; charset=utf-8" );
-				$callback = $this->context->getRequest()->getVal( "callback", "" );
+			case 'jsonp':
+				header( 'Content-Type: text/javascript; charset=utf-8' );
+				$callback = $this->context->getRequest()->getVal( 'callback', '' );
 				echo
-					preg_replace( "/[^][.\\'\\\"_A-Za-z0-9]/", "", $callback )
-					. "("
+					preg_replace( "/[^][.\\'\\\"_A-Za-z0-9]/", '', $callback )
+					. '('
 					. json_encode( $this->response )
-					. ")";
+					. ')';
 				break;
 
 			// https://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/api/ApiFormatPhp.php?revision=103273&view=markup
-			case "php":
-				header( "Content-Type: application/vnd.php.serialized; charset=utf-8" );
+			case 'php':
+				header( 'Content-Type: application/vnd.php.serialized; charset=utf-8' );
 				echo serialize( $this->response );
 				break;
 
 			// http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/api/ApiFormatDump.php?revision=70727&view=markup
-			case "debug":
+			case 'debug':
 				$debugPage = ApiDebugPage::newFromContext( $this->context );
 				$debugPage->setApiResponse( $this->response );
 				$debugPage->output();

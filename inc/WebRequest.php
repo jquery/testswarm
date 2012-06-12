@@ -158,16 +158,16 @@ class WebRequest {
 		}
 
 		$ip = false;
-		if ( isset( $_SERVER["HTTP_X_FORWARDED_FOR"] ) ) {
-			$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-		} elseif ( isset( $_SERVER["HTTP_CLIENT_IP"] ) ) {
-			$ip = $_SERVER["HTTP_CLIENT_IP"];
-		} elseif ( isset( $_SERVER["REMOTE_ADDR"] ) ) {
-			$ip = $_SERVER["REMOTE_ADDR"];
+		if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} elseif ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip = $_SERVER['REMOTE_ADDR'];
 		}
 
 		if ( !$ip ) {
-			throw new SwarmException( "Could not determine client IP-address." );
+			throw new SwarmException( 'Could not determine client IP-address.' );
 		}
 
 		$this->ip = $ip;
@@ -176,12 +176,12 @@ class WebRequest {
 
 	/** @return Page|null */
 	public function getPageInstance() {
-		$pageAction = $this->getVal( "action", "home" );
+		$pageAction = $this->getVal( 'action', 'home' );
 		// getVal will only fallback to "home" if "action" isn't set,
 		// if it is falsy, also use home (we don't want to instantiate Page
 		// directly if it is an empty string
 		if ( !$pageAction ) {
-			$pageAction = "home";
+			$pageAction = 'home';
 		}
 		$pageClass = Page::getPageClassByName( $pageAction );
 		return $pageClass ? $pageClass::newFromContext( $this->context ) : null;
@@ -203,7 +203,7 @@ class DerivativeWebRequest extends WebRequest {
 		$this->raw = $query;
 	}
 
-	public function setWasPosted( $posted )  {
+	public function setWasPosted( $posted ) {
 		$this->derivPosted = (bool)$posted;
 	}
 

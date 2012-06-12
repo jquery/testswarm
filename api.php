@@ -14,19 +14,19 @@
 // Valid entry point
 define( 'SWARM_ENTRY', 'API' );
 
-header( "X-Robots-Tag: noindex,nofollow", true );
+header( 'X-Robots-Tag: noindex,nofollow', true );
 
-require_once "inc/init.php";
+require_once 'inc/init.php';
 
-$action = $swarmContext->getRequest()->getVal( "action", "info" );
+$action = $swarmContext->getRequest()->getVal( 'action', 'info' );
 if ( !$action ) {
 	// getVal will only fallback to "info" if "action" isn't set,
 	// if it is falsy, also use infno (we don't want to instantiate Action
 	// directly if it is an empty string
-	$action = "info";
+	$action = 'info';
 }
-$format = $swarmContext->getRequest()->getVal( "format", "json" );
-$className = ucfirst( $action ) . "Action";
+$format = $swarmContext->getRequest()->getVal( 'format', 'json' );
+$className = ucfirst( $action ) . 'Action';
 $className = class_exists( $className ) ? $className : null;
 
 if ( !Api::isGreyFormat( $format ) ) {
@@ -40,24 +40,24 @@ if ( $className ) {
 		$response = array();
 
 		if ( $actionObj->getError() ) {
-			$response["error"] = $actionObj->getError();
+			$response['error'] = $actionObj->getError();
 		}
 		if ( $actionObj->getData() ) {
 			$response[$action] = $actionObj->getData();
 		}
 	} catch ( Exception $e ) {
 		$response = array(
-			"error" => array(
-				"code" => "internal-error",
-				"info" => "An internal error occurred. Action could not be performed. Error message:\n" . $e->getMessage(),
+			'error' => array(
+				'code' => 'internal-error',
+				'info' => 'An internal error occurred. Action could not be performed. Error message:' . "\n" . $e->getMessage(),
 			),
 		);
 	}
 } else {
 	$response = array(
-		"error" => array(
-			"code" => "invalid-input",
-			"info" => "Action `$action` does not exist",
+		'error' => array(
+			'code' => 'invalid-input',
+			'info' => "Action `$action` does not exist",
 		),
 	);
 }

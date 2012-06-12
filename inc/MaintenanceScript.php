@@ -27,13 +27,13 @@ abstract class MaintenanceScript {
 	 * @param $description string
 	 */
 	protected function registerFlag( $key, $type, $description ) {
-		static $types = array( "boolean", "value" );
+		static $types = array( 'boolean', 'value' );
 		if ( !is_string( $key ) || strlen ( $key ) !== 1 || !in_array( $type, $types ) ) {
-			$this->error( "Illegal flag registration" );
+			$this->error( 'Illegal flag registration' );
 		}
 		$this->flags[$key] = array(
-			"type" => $type,
-			"description" => $description,
+			'type' => $type,
+			'description' => $description,
 		);
 	}
 
@@ -45,44 +45,44 @@ abstract class MaintenanceScript {
 	 * @param $description string
 	 */
 	protected function registerOption( $name, $type, $description ) {
-		static $types = array( "boolean", "value" );
+		static $types = array( 'boolean', 'value' );
 		if ( !is_string( $name ) || strlen ( $name ) < 2 || !in_array( $type, $types ) ) {
-			$this->error( "Illegal option registration" );
+			$this->error( 'Illegal option registration' );
 		}
 		$this->options[$name] = array(
-			"type" => $type,
-			"description" => $description,
+			'type' => $type,
+			'description' => $description,
 		);
 	}
 
 	protected function parseCliArguments() {
 		// Prepare for getopt(). Note that it supports "require value" for cli args,
 		// but we use our own format instead (see also php.net/getopt).
-		$getoptShort = "";
+		$getoptShort = '';
 		$getoptLong = array();
 		foreach ( $this->flags as $flagKey => $flagInfo ) {
 			switch ( $flagInfo['type'] ) {
-			case "value":
+			case 'value':
 				$getoptShort .= $flagKey . '::';
 				break;
-			case "boolean":
+			case 'boolean':
 				$getoptShort .= $flagKey;
 				break;
 			}
 		}
 		foreach ( $this->options as $optionName => $optionInfo ) {
 			switch ( $optionInfo['type'] ) {
-			case "value":
+			case 'value':
 				$getoptLong[] = $optionName . '::';
 				break;
-			case "boolean":
+			case 'boolean':
 				$getoptLong[] = $optionName;
 				break;
 			}
 		}
 		$parsed = getopt( $getoptShort, $getoptLong );
 		if ( !is_array( $parsed ) ) {
-			$this->error( "Parsing command line arguments failed." );
+			$this->error( 'Parsing command line arguments failed.' );
 		}
 		$this->parsed = $parsed;
 	}
@@ -91,34 +91,34 @@ abstract class MaintenanceScript {
 		if ( !isset( $this->flags[$key] ) || !isset( $this->parsed[$key] ) ) {
 			return false;
 		}
-		return $this->flags[$key]["type"] === "boolean" ? true : $this->parsed[$key];
+		return $this->flags[$key]['type'] === 'boolean' ? true : $this->parsed[$key];
 	}
 
 	protected function getOption( $name ) {
 		if ( !isset( $this->options[$name] ) || !isset( $this->parsed[$name] ) ) {
 			return false;
 		}
-		return $this->options[$name]["type"] === "boolean" ? true :$this->parsed[$name];
+		return $this->options[$name]['type'] === 'boolean' ? true :$this->parsed[$name];
 	}
 
 	public function run() {
 		if ( !defined( 'SWARM_ENTRY' ) || SWARM_ENTRY !== 'SCRIPT' ) {
-			$this->error( "MaintenanceScript instances may only be run as part of a maintenace script." );
+			$this->error( 'MaintenanceScript instances may only be run as part of a maintenace script.' );
 		}
-		if ( php_sapi_name() !== "cli" ) {
-			$this->error( "Maintenance scripts may only be run from the command-line interface." );
+		if ( php_sapi_name() !== 'cli' ) {
+			$this->error( 'Maintenance scripts may only be run from the command-line interface.' );
 		}
 		// Minimum PHP version because of getopt()
 		if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.0' ) < 0 ) {
-			$this->error( "Maintenance scripts require at least PHP 5.3.0." );
+			$this->error( 'Maintenance scripts require at least PHP 5.3.0.' );
 		}
-		if ( !ini_get( "register_argc_argv" ) || ini_get( "register_argc_argv" ) == '0' ) {
-			$this->error( "Maintenance scripts require `register_argc_argv` to be enabled in php.ini." );
+		if ( !ini_get( 'register_argc_argv' ) || ini_get( 'register_argc_argv' ) == '0' ) {
+			$this->error( 'Maintenance scripts require `register_argc_argv` to be enabled in php.ini.' );
 		}
 
 		// General options for all scripts
-		$this->registerFlag( "h", "boolean", "Display this message" );
-		$this->registerOption( "help", "boolean", "Display this message" );
+		$this->registerFlag( 'h', 'boolean', 'Display this message' );
+		$this->registerOption( 'help', 'boolean', 'Display this message' );
 		$this->generalArgKeys = array_merge( array_keys( $this->options ), array_keys( $this->flags ) );
 
 		$this->init();
@@ -141,9 +141,9 @@ abstract class MaintenanceScript {
 		}
 		$description = wordwrap( $this->description, 72, "\n", true );
 		$description = explode( "\n", $description );
-		$description[] = str_repeat( "-", 72 );
+		$description[] = str_repeat( '-', 72 );
 		$label = "{$this->name}: ";
-		$prefix = str_repeat( " ", strlen( $label ) );
+		$prefix = str_repeat( ' ', strlen( $label ) );
 		$description = $label . implode( "\n" . $prefix, $description );
 		print <<<TEXT
 [TestSwarm $versionText] Maintenance script
@@ -153,7 +153,7 @@ $description
 TEXT;
 
 		// Help or continue
-		if ( $this->getOption( "help" ) ) {
+		if ( $this->getOption( 'help' ) ) {
 			$this->displayHelp();
 		} else {
 			$this->execute();
@@ -163,10 +163,10 @@ TEXT;
 	}
 
 	protected function displayHelp() {
-		$helpScript = "";
-		$helpGeneral = "";
+		$helpScript = '';
+		$helpGeneral = '';
 		foreach ( $this->flags as $flagKey => $flagInfo ) {
-			$help = "\n  -{$flagKey}: {$flagInfo["description"]}";
+			$help = "\n  -{$flagKey}: {$flagInfo['description']}";
 			if ( in_array( $flagKey, $this->generalArgKeys ) ) {
 				$helpGeneral .= $help;
 			} else {
@@ -174,20 +174,20 @@ TEXT;
 			}
 		}
 		foreach ( $this->options as $optionName => $optionInfo ) {
-			$help = "\n  --{$optionName}: {$optionInfo["description"]}";
+			$help = "\n  --{$optionName}: {$optionInfo['description']}";
 			if ( in_array( $optionName, $this->generalArgKeys ) ) {
 				$helpGeneral .= $help;
 			} else {
 				$helpScript .= $help;
 			}
 		}
-		print ($helpScript ? "Parameters to this script:$helpScript" : "")
-			. ($helpScript && $helpGeneral ? "\n\n" : "")
-			. ($helpGeneral ? "General parameters:$helpGeneral" : "");
+		print ($helpScript ? "Parameters to this script:$helpScript" : '')
+			. ($helpScript && $helpGeneral ? "\n\n" : '')
+			. ($helpGeneral ? "General parameters:$helpGeneral" : '');
 	}
 
 	/** @param $seconds int */
-	protected function wait( $seconds, $message = "" ) {
+	protected function wait( $seconds, $message = '' ) {
 		print $message;
 		$backspace = chr(8);
 		for ( $i = $seconds; $i >= 0; $i-- ) {
@@ -214,7 +214,7 @@ TEXT;
 	}
 
 	/** @param $message string: [optional] text before the input */
-	protected function cliInput( $prefix = "> " ) {
+	protected function cliInput( $prefix = '> ' ) {
 		static $isatty = null;
 		if ( $isatty === null ) {
 			// Both `echo "foo" | php script.php` and `php script.php > foo.txt`
@@ -223,11 +223,11 @@ TEXT;
 
 			// No need to re-run this check each time, we abort within the if-null check
 			if ( !$isatty ) {
-				$this->error( "This script requires an interactive terminal for output and input." );
+				$this->error( 'This script requires an interactive terminal for output and input.' );
 			}
 		}
 
-		if ( function_exists( "readline" ) ) {
+		if ( function_exists( 'readline' ) ) {
 			// Use readline if available, it's much nicer to work with for the user
 			// (autocompletion of filenames and no weird characters when using arrow keys)
 			return readline( $prefix );

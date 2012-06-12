@@ -24,8 +24,8 @@ abstract class Page {
 
 	/** @var $metaTags array: Attribute-arrays for html_tag() */
 	protected $metaTags = array(
-		array( "charset" => "UTF-8" ),
-		array( "http-equiv" => "X-UA-Compatible", "content" => "IE=edge" ),
+		array( 'charset' => 'UTF-8' ),
+		array( 'http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge' ),
 	);
 
 	/** @var $headScripts array: URLs for <script src> */
@@ -121,7 +121,7 @@ abstract class Page {
 	 * unimplemented and not call it from execute().
 	 */
 	protected function initContent() {
-		return "<!-- " . htmlspecialchars( __CLASS__ ) . " has no content -->";
+		return '<!-- ' . htmlspecialchars( __CLASS__ ) . ' has no content -->';
 	}
 
 	/**
@@ -144,16 +144,16 @@ abstract class Page {
 		$this->execute();
 
 		if ( !$this->getContent() ) {
-			throw new SwarmException( "Page `content` must not be empty." );
+			throw new SwarmException( 'Page `content` must not be empty.' );
 		}
 		if ( !$this->getTitle() ) {
-			throw new SwarmException( "Page `title` must not be empty." );
+			throw new SwarmException( 'Page `title` must not be empty.' );
 		}
 		if ( headers_sent( $filename, $linenum ) ) {
 			throw new SwarmException( "Headers already sent in `$filename` on line $linenum." );
 		}
 
-		header( "Content-Type: text/html; charset=utf-8" );
+		header( 'Content-Type: text/html; charset=utf-8' );
 
 		$request = $this->getContext()->getRequest();
 
@@ -168,9 +168,9 @@ abstract class Page {
 			try {
 				$projectsActionContext = $this->getContext()->createDerivedRequestContext(
 					array(
-						"action" => "projects",
-						"sort" => "name",
-						"sort_oder" => "asc",
+						'action' => 'projects',
+						'sort' => 'name',
+						'sort_oder' => 'asc',
 					)
 				);
 				$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
@@ -190,18 +190,18 @@ abstract class Page {
 <?php
 
 	foreach ( $this->metaTags as $metaTag ) {
-		echo "\t" . html_tag( "meta", $metaTag ) . "\n";
+		echo "\t" . html_tag( 'meta', $metaTag ) . "\n";
 	}
 
 	$subTitleSuffix = $this->getSubTitle() ? ": {$this->getSubTitle()}" : "";
-	$htmlTitle = $this->getTitle() . $subTitleSuffix . " - " . $this->getContext()->getConf()->web->title;
+	$htmlTitle = $this->getTitle() . $subTitleSuffix . ' - ' . $this->getContext()->getConf()->web->title;
 	$displayTitleHtml = $this->getDisplayTitleHtml();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( "css/bootstrap.min.css" ); ?>">
-	<link rel="stylesheet" href="<?php echo swarmpath( "css/testswarm.css" ); ?>">
-	<script src="<?php echo swarmpath( "js/jquery.js" ); ?>"></script>
-	<script src="<?php echo swarmpath( "js/bootstrap-dropdown.js" ); ?>"></script>
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.min.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
+	<script src="<?php echo swarmpath( 'js/jquery.js' ); ?>"></script>
+	<script src="<?php echo swarmpath( 'js/bootstrap-dropdown.js' ); ?>"></script>
 	<script>window.SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
 		$infoAction->doAction();
@@ -209,11 +209,11 @@ abstract class Page {
 	?>;</script><?php
 
 	foreach ( $this->styleSheets as $styleSheet ) {
-		echo "\n\t" . html_tag( "link", array( "rel" => "stylesheet", "href" => $styleSheet ) );
+		echo "\n\t" . html_tag( 'link', array( 'rel' => 'stylesheet', 'href' => $styleSheet ) );
 	}
 
 	foreach ( $this->headScripts as $headScript ) {
-		echo "\n\t" . html_tag( "script", array( "src" => $headScript ) );
+		echo "\n\t" . html_tag( 'script', array( 'src' => $headScript ) );
 	}
 ?>
 </head>
@@ -221,46 +221,46 @@ abstract class Page {
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="<?php echo swarmpath( "" );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
+				<a class="brand" href="<?php echo swarmpath( '' );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
 				<div class="nav-collapse">
 					<ul class="nav">
-						<li><a href="<?php echo swarmpath( "" ); ?>">Home</a></li>
+						<li><a href="<?php echo swarmpath( '' ); ?>">Home</a></li>
 						<li class="dropdown" id="swarm-projectsmenu">
-							<a href="<?php echo swarmpath( "projects" ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
+							<a href="<?php echo swarmpath( 'projects' ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
 								Projects
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="<?php echo swarmpath( "projects" ); ?>">All projects</a></li>
+								<li><a href="<?php echo swarmpath( 'projects' ); ?>">All projects</a></li>
 								<li class="divider"></li>
 								<li class="nav-header">Projects</li>
 <?php
 foreach ( $projects as $project ) {
 ?>
-								<li><a href="<?php echo htmlspecialchars( swarmpath( "user/{$project["name"]}" ) ); ?>"><?php
-									echo htmlspecialchars( $project["name"] );
+								<li><a href="<?php echo htmlspecialchars( swarmpath( "user/{$project['name']}" ) ); ?>"><?php
+									echo htmlspecialchars( $project['name'] );
 								?></a></li>
 <?php
 }
 ?>
 							</ul>
 						</li>
-						<li><a href="<?php echo swarmpath( "scores" ); ?>">Scores</a></li>
-						<li><a href="<?php echo swarmpath( "info" ); ?>">Info</a></li>
+						<li><a href="<?php echo swarmpath( 'scores' ); ?>">Scores</a></li>
+						<li><a href="<?php echo swarmpath( 'info' ); ?>">Info</a></li>
 					</ul>
 					<ul class="nav pull-right">
 <?php
-	if ( $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes" ) {
-		$username = htmlspecialchars( $request->getSessionData( "username" ) );
+	if ( $request->getSessionData( 'username' ) && $request->getSessionData( 'auth' ) == "yes" ) {
+		$username = htmlspecialchars( $request->getSessionData( 'username' ) );
 ?>
 						<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
 						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
-						<li><a href="<?php echo swarmpath( "logout" ); ?>">Logout</a></li>
+						<li><a href="<?php echo swarmpath( 'logout' ); ?>">Logout</a></li>
 <?php
 	} else {
 ?>
-						<li><a href="<?php echo swarmpath( "login" ); ?>">Login</a></li>
-						<li><a href="<?php echo swarmpath( "signup" ); ?>">Signup</a></li>
+						<li><a href="<?php echo swarmpath( 'login' ); ?>">Login</a></li>
+						<li><a href="<?php echo swarmpath( 'signup' ); ?>">Signup</a></li>
 <?php
 	}
 ?>
@@ -288,11 +288,11 @@ foreach ( $projects as $project ) {
 			</p>
 		</footer>
 	</div>
-	<script src="<?php echo swarmpath( "js/pretty.js" ); ?>"></script>
-	<script src="<?php echo swarmpath( "js/testswarm.js" ); ?>"></script><?php
+	<script src="<?php echo swarmpath( 'js/pretty.js' ); ?>"></script>
+	<script src="<?php echo swarmpath( 'js/testswarm.js' ); ?>"></script><?php
 
 	foreach ( $this->bodyScripts as $bodyScript ) {
-		echo "\n\t" . html_tag( "script", array( "src" => $bodyScript ) );
+		echo "\n\t" . html_tag( 'script', array( 'src' => $bodyScript ) );
 	}
 
 	if ( $this->getContext()->getConf()->debug->dbLogQueries ) {
@@ -305,11 +305,11 @@ foreach ( $projects as $project ) {
 			$queryLogHtml .= '<li>'
 				. '<pre>' . htmlspecialchars( $queryInfo["sql"] ) . '</pre>'
 				. '<table class="table table-bordered table-condensed"><tbody><tr>'
-				. '<td>Caller: <code>' . htmlspecialchars( $queryInfo["caller"] ) . '</code></td>'
-				. '<td>Num rows: <code>' . htmlspecialchars( $queryInfo["numRows"] ) . '</code></td>'
-				. '<td>Insert ID: <code>' . htmlspecialchars( $queryInfo["insertId"] ) . '</code></td>'
-				. '<td>Affected rows: <code>' . htmlspecialchars( $queryInfo["affectedRows"] ) . '</code></td>'
-				. '<td>Query time: <code>' . htmlspecialchars( substr( $queryInfo["queryTime"], 0, 8 ) ) . '</code></td>'
+				. '<td>Caller: <code>' . htmlspecialchars( $queryInfo['caller'] ) . '</code></td>'
+				. '<td>Num rows: <code>' . htmlspecialchars( $queryInfo['numRows'] ) . '</code></td>'
+				. '<td>Insert ID: <code>' . htmlspecialchars( $queryInfo['insertId'] ) . '</code></td>'
+				. '<td>Affected rows: <code>' . htmlspecialchars( $queryInfo['affectedRows'] ) . '</code></td>'
+				. '<td>Query time: <code>' . htmlspecialchars( substr( $queryInfo['queryTime'], 0, 8 ) ) . '</code></td>'
 				. '</tr></table>'
 				. '</li>';
 		}
@@ -329,10 +329,10 @@ foreach ( $projects as $project ) {
 	 * @param $target string: Url
 	 * @param $code int: 30x
 	 */
-	protected function redirect( $target = "", $code = 302 ) {
+	protected function redirect( $target = '', $code = 302 ) {
 		session_write_close();
 		self::httpStatusHeader( $code );
-		header( "Content-Type: text/html; charset=utf-8" );
+		header( 'Content-Type: text/html; charset=utf-8' );
 		header( "Location: " . $target );
 
 		exit;
@@ -344,24 +344,24 @@ foreach ( $projects as $project ) {
 		// (such as Api responses and RunresultsPage),
 		// https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
 		header( "X-Robots-Tag: $value", true );
-		$this->metaTags[] = array( "name" => "robots", "content" => $value );
+		$this->metaTags[] = array( 'name' => 'robots', 'content' => $value );
 	}
 
 	final public static function getHttpStatusMsg( $code ) {
 		static $httpCodes = array(
-			200 => "OK",
-			301 => "Moved Permanently",
-			302 => "Found",
-			303 => "See Other",
-			304 => "Not Modified",
-			305 => "Use Proxy",
-			307 => "Temporary Redirect",
-			400 => "Bad Request",
-			401 => "Unauthorized",
-			402 => "Payment Required",
-			403 => "Forbidden",
-			404 => "Not Found",
-			500 => "Internal Server Error",
+			200 => 'OK',
+			301 => 'Moved Permanently',
+			302 => 'Found',
+			303 => 'See Other',
+			304 => 'Not Modified',
+			305 => 'Use Proxy',
+			307 => 'Temporary Redirect',
+			400 => 'Bad Request',
+			401 => 'Unauthorized',
+			402 => 'Payment Required',
+			403 => 'Forbidden',
+			404 => 'Not Found',
+			500 => 'Internal Server Error',
 		);
 		return isset( $httpCodes[$code] ) ? $httpCodes[$code] : null;
 	}
@@ -369,12 +369,12 @@ foreach ( $projects as $project ) {
 	final public static function httpStatusHeader( $code ) {
 		$message = self::getHttpStatusMsg( $code );
 		if ( $message ) {
-			header( $_SERVER["SERVER_PROTOCOL"] . " $code $message", true, $code );
+			header( $_SERVER['SERVER_PROTOCOL'] . " $code $message", true, $code );
 		}
 	}
 
 	final public static function getPageClassByName( $pageName ) {
-		$className = ucfirst( $pageName ) . "Page";
+		$className = ucfirst( $pageName ) . 'Page';
 		return class_exists( $className ) ? $className : null;
 	}
 
@@ -385,7 +385,7 @@ foreach ( $projects as $project ) {
 		$page->context = $context;
 
 		$versionInfo = $context->getVersionInfo();
-		$page->metaTags[] = array( "name" => "generator", "content" => $versionInfo['TestSwarm'] );
+		$page->metaTags[] = array( 'name' => 'generator', 'content' => $versionInfo['TestSwarm'] );
 
 		return $page;
 	}

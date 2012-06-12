@@ -15,19 +15,19 @@ class DBInstallScript extends MaintenanceScript {
 		$this->setDescription(
 			'Install the TestSwarm database. Can also clear a database if it exists.'
 		);
-		$this->registerOption( "force", "boolean", "Skip confirmation for dropping tables." );
+		$this->registerOption( 'force', 'boolean', 'Skip confirmation for dropping tables.' );
 	}
 
 	protected function execute() {
 		global $swarmInstallDir;
 
 		if ( $this->getContext()->dbLock() ) {
-			$this->error( "Database is currently locked, please remove ./cache/database.lock first." );
+			$this->error( 'Database is currently locked, please remove ./cache/database.lock first.' );
 		}
 
 		$db = $this->getContext()->getDB();
 
-		$this->out( "Setting database.lock, other requests may not access the database during installation." );
+		$this->out( 'Setting database.lock, other requests may not access the database during installation.' );
 		$this->getContext()->dbLock( true );
 
 		$dbTables = array(
@@ -48,12 +48,12 @@ class DBInstallScript extends MaintenanceScript {
 			}
 		}
 		if ( $tablesExists ) {
-			if ( !$this->getOption( "force" ) ) {
-				$this->out( "Database already contains tables. If you continue, all tables will be dropped. (Y/N)" );
+			if ( !$this->getOption( 'force' ) ) {
+				$this->out( 'Database already contains tables. If you continue, all tables will be dropped. (Y/N)' );
 				$doDrop = $this->cliInput();
-				if ( $doDrop !== "Y" ) {
+				if ( $doDrop !== 'Y' ) {
 					$this->getContext()->dbLock( false );
-					$this->out( "Installation aborted. Removed database.lock" );
+					$this->out( 'Installation aborted. Removed database.lock' );
 					return;
 				}
 			}
@@ -74,10 +74,10 @@ class DBInstallScript extends MaintenanceScript {
 			$this->outRaw( "Dropping $dbTable table..." );
 			$exists = $db->tableExists( $dbTable );
 			if ( $exists ) {
-				$dropped = $db->query( "DROP TABLE " . $db->addIdentifierQuotes( $dbTable ) );
-				$this->out( " " . ($dropped ? "OK" : "FAILED" ) );
+				$dropped = $db->query( 'DROP TABLE ' . $db->addIdentifierQuotes( $dbTable ) );
+				$this->out( ' ' . ($dropped ? 'OK' : 'FAILED' ) );
 			} else {
-				$this->out( "OK (skipped, didn't exist)" );
+				$this->out( 'OK (skipped, didn\'t exist)' );
 			}
 		}
 	}
@@ -87,18 +87,18 @@ class DBInstallScript extends MaintenanceScript {
 		$db = $this->getContext()->getDB();
 
 		// Create new tables
-		$this->outRaw( "Creating new tables (this may take a few minutes)..." );
+		$this->outRaw( 'Creating new tables (this may take a few minutes)...' );
 
 		$fullSchemaFile = "$swarmInstallDir/config/testswarm.sql";
 		if ( !is_readable( $fullSchemaFile ) ) {
-			$this->error( "Can't read testswarm.sql" );
+			$this->error( 'Can\'t read testswarm.sql' );
 		}
 		$fullSchemaSql = file_get_contents( $fullSchemaFile );
 		$executed = $db->batchQueryFromFile( $fullSchemaSql );
 		if ( !$executed ) {
-			$this->error( "Creating new tables failed" );
+			$this->error( 'Creating new tables failed' );
 		}
-		$this->out( "OK" );
+		$this->out( 'OK' );
 	}
 }
 

@@ -42,10 +42,10 @@
 				"\t" => '&#9;',
 			) ) . '"';
 		}
-		$html .= ">";
+		$html .= '>';
 		return $html;
 	}
-	function html_tag( $tagName, Array $attribs = array(), $content = "" ) {
+	function html_tag( $tagName, Array $attribs = array(), $content = '' ) {
 		static $voidElements = array(
 			'area',
 			'base',
@@ -115,30 +115,30 @@
 		$args = func_get_args();
 		array_shift($args);
 		$len = strlen($string);
-		$sql_query = "";
+		$sql_query = '';
 		$args_i = 0;
 
 		for ( $i = 0; $i < $len; $i++ ) {
-			if ( $string[$i] === "%" ) {
+			if ( $string[$i] === '%' ) {
 				$char = $string[$i + 1];
 				$i++;
 				switch ( $char ) {
-					case "%":
+					case '%':
 						$sql_query .= $char;
 						break;
-					case "u":
+					case 'u':
 						$sql_query .= "'" . intval( $args[$args_i] ) . "'";
 						break;
-					case "s":
+					case 's':
 						$sql_query .= "'" . mysql_real_escape_string( $args[$args_i] ) . "'";
 						break;
-					case "l":
+					case 'l':
 						$rawList = is_array( $args[$args_i] ) ? $args[$args_i] : array( $args[$args_i] );
-						$escapedList = array_map( "mysql_real_escape_string", $rawList );
+						$escapedList = array_map( 'mysql_real_escape_string', $rawList );
 						$sql_query .= "('" . implode( "', '", $escapedList ) . "')";
 						break;
 				}
-				if ($char != "x") {
+				if ($char != 'x') {
 					$args_i++;
 				}
 			} else {
@@ -211,7 +211,7 @@
 	 */
 	function swarmdb_dateformat( $timestamp = 0 ) {
 		$timestamp = $timestamp === 0 ? time() : $timestamp;
-		return gmdate( "YmdHis", $timestamp );
+		return gmdate( 'YmdHis', $timestamp );
 	}
 
 	/*
@@ -233,14 +233,14 @@
 		if ( is_null( $path ) ) {
 			// Add trailing slash if it's missing
 			$path = $swarmContext->getConf()->web->contextpath;
-			if ( substr( $path, -1 ) !== "/" ) {
+			if ( substr( $path, -1 ) !== '/' ) {
 				$path = "$path/";
 			}
 
 			// Make sure path starts absolute.
 			// Either with protocol https?://domain, relative-protocol //domain
 			// or starting at domain root with a slash.
-			if ( substr( $path, 0, 6 ) !== "http:/" && substr( $path, 0, 6 ) !== "https:" && $path[0] !== "/" ) {
+			if ( substr( $path, 0, 6 ) !== 'http:/' && substr( $path, 0, 6 ) !== 'https:' && $path[0] !== '/' ) {
 				$path = "/$path";
 			}
 
@@ -259,7 +259,7 @@
 		// Just in case, strip the leading slash
 		// from the requested path (check length, becuase may be an empty string,
 		// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
-		if ( strlen( $rel ) > 0 && $rel[0] === "/" ) {
+		if ( strlen( $rel ) > 0 && $rel[0] === '/' ) {
 			$rel = substr($rel, 1);
 		}
 
