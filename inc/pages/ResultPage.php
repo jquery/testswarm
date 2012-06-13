@@ -50,35 +50,41 @@ class ResultPage extends Page {
 
 		$this->setSubTitle( '#' . $data['resultInfo']['id'] );
 
-		// @todo
-		// runInfo: (name)
-		// run results:
-		// runresultsLabel/status
-		// approx. run time (created-updated)
 
-		$html = '<p><em>'
-			. html_tag_open( 'a', array( 'href' => $data['job']['url'], 'title' => 'Back to Job #' . $data['job']['id'] ) ) . '&laquo Back to Job #' . $data['job']['id'] . '</a>'
-			. '</em></p>';
+		if ( $data['job'] ) {
+			$html = '<p><em>'
+				. html_tag_open( 'a', array( 'href' => $data['job']['url'], 'title' => 'Back to Job #' . $data['job']['id'] ) ) . '&laquo Back to Job #' . $data['job']['id'] . '</a>'
+				. '</em></p>';
+		} else {
+			$html = '<p><em>Run #' . $data['resultInfo']['runID'] . ' has been deleted. Job info unavailable.</em></p>';
+		}
 
-		$html .= '<table class="table table-bordered swarm-results"><thead>'
-			. JobPage::getUaHtmlHeader( $data['otherRuns']['userAgents'] )
-			. '</thead><tbody>'
-			. JobPage::getUaRunsHtmlRows( $data['otherRuns']['runs'], $data['otherRuns']['userAgents'] )
-			. '</tbody></table>';
+		if ( $data['otherRuns'] ) {
+			$html .= '<table class="table swarm-results"><thead>'
+				. JobPage::getUaHtmlHeader( $data['otherRuns']['userAgents'] )
+				. '</thead><tbody>'
+				. JobPage::getUaRunsHtmlRows( $data['otherRuns']['runs'], $data['otherRuns']['userAgents'] )
+				. '</tbody></table>';
+		}
 
 		$html .= '<h3>Information</h3>'
-			. '<table class="table table-bordered"><tbody>'
-			. '<tr><th class="span2">Run</th><td>'
-				. html_tag( 'a', array( 'href' => $data['job']['url'] ), 'Job #' . $data['job']['id'] )
-				. ' / Run #' . htmlspecialchars( $data['resultInfo']['runID'] )
+			. '<table class="table table-striped">'
+			. '<colgroup><col class="span2"/><col/></colgroup>'
+			. '<tbody>'
+			. '<tr><th>Run</th><td>'
+				. ($data['job']
+					? html_tag( 'a', array( 'href' => $data['job']['url'] ), 'Job #' . $data['job']['id'] ) . ' / '
+					: ''
+				)
+				. 'Run #' . htmlspecialchars( $data['resultInfo']['runID'] )
 			. '</td></tr>'
-			. '<tr><th class="span2">Client</th><td>'
+			. '<tr><th>Client</th><td>'
 				. html_tag( 'a', array( 'href' => $data['client']['userUrl'] ), $data['client']['userName'] )
 				. ' / Client #' . htmlspecialchars( $data['resultInfo']['clientID'] )
 			. '</td></tr>'
 			. '<tr><th>User-Agent</th><td>'
 				. '<code>' . htmlspecialchars( $data['client']['uaID'] ) . '</code><br/>'
-				. 'Raw: <br><code class="swarm-code-nowrap">' . htmlspecialchars( $data['client']['userAgent'] ) . '</code>'
+				. 'Raw: <br><code>' . htmlspecialchars( $data['client']['userAgent'] ) . '</code>'
 			. '</td></tr>'
 			. '<tr><th>Run time</th><td>'
 			. ( isset( $data['resultInfo']['runTime'] )
@@ -101,8 +107,8 @@ class ResultPage extends Page {
 			)
 			. '</tbody></table>';
 
-		$html .= '<h3>Results</h3>';
-		$html .= '<p class="swarm-toollinks">'
+		$html .= '<h3>Results</h3>'
+			. '<p class="swarm-toollinks">'
 			. html_tag( 'a', array(
 				'href' => swarmpath( 'index.php' ) . '?' . http_build_query(array(
 					'action' => 'result',

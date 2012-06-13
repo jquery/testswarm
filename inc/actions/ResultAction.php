@@ -53,6 +53,11 @@ class ResultAction extends Action {
 
 		$data = array();
 
+		// A job can be deleted without nuking the runresults,
+		// this is by design so results stay permanently accessible
+		// under a simple url.
+		// If the job is no longer in existance, properties
+		// 'otherRuns' and 'job' will be set to null.
 		$runRows = $db->getRows(str_queryf(
 			'SELECT
 				id,
@@ -63,18 +68,20 @@ class ResultAction extends Action {
 			WHERE id = %u;',
 			$row->run_id
 		));
+
 		if ( !$runRows || !count( $runRows ) ) {
-			$this->setError( 'data-corrupt' );
-			return;
+			$data['otherRuns'] = null;
+			$data['job'] = null;
+		} else {
+			$data['otherRuns'] = JobAction::getDataFromRunRows( $db, $runRows );
+
+			$jobID = intval( $runRows[0]->job_id );
+
+			$data['job'] = array(
+				'id' => $jobID,
+				'url' => swarmpath( "job/$jobID", "fullurl" ),
+			);
 		}
-		$data['otherRuns'] = JobAction::getDataFromRunRows( $db, $runRows );
-
-		$jobID = intval( $runRows[0]->job_id );
-
-		$data['job'] = array(
-			'id' => $jobID,
-			'url' => swarmpath( "job/$jobID", "fullurl" ),
-		);
 
 		$clientRow = $db->getRow(str_queryf(
 			'SELECT
