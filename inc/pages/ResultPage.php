@@ -60,7 +60,7 @@ class ResultPage extends Page {
 		}
 
 		if ( $data['otherRuns'] ) {
-			$html .= '<table class="table swarm-results"><thead>'
+			$html .= '<table class="table table-bordered swarm-results"><thead>'
 				. JobPage::getUaHtmlHeader( $data['otherRuns']['userAgents'] )
 				. '</thead><tbody>'
 				. JobPage::getUaRunsHtmlRows( $data['otherRuns']['runs'], $data['otherRuns']['userAgents'] )

@@ -28,7 +28,7 @@ class HomePage extends Page {
 
 		$siteNameHtml = htmlspecialchars( $conf->web->title );
 
-		$this->setTitle( "Home" );
+		$this->setTitle( 'Home' );
 		$this->setRawDisplayTitle(
 			'<div style="text-align: center;">' . $siteNameHtml . '</div>'
 		);
@@ -54,7 +54,7 @@ class HomePage extends Page {
 						. ' <input type="submit" value="Join the swarm" class="btn btn-primary">'
 						. '</form>';
 				} else {
-					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( "username" )}/" )
+					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( 'username' )}/" )
 					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 				}
 			} else {
@@ -101,7 +101,7 @@ class HomePage extends Page {
 
 		$data = $this->getAction()->getData();
 
-		$html = "";
+		$html = '';
 
 		$itemsPerRow = 6;
 
@@ -114,7 +114,7 @@ class HomePage extends Page {
 			}
 			$isCurr = $uaID == $browserInfo->getSwarmUaID();
 
-			$item = ""
+			$item = ''
 				. '<div class="span2">'
 				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? " alert-info" : "" ) . '">'
 
@@ -136,7 +136,7 @@ class HomePage extends Page {
 					"class" => "swarm-onlineclients " . (
 						$userAgent["stats"]["onlineClients"] > 0
 						 ? "badge"
-						 : ( $userAgent["stats"]["pendingRuns"] > 0 ? "badge badge-error" : "badge" )
+						 : ( $userAgent['stats']['pendingRuns'] > 0 ? 'badge badge-important' : 'badge' )
 						),
 					"title" => $userAgent["stats"]["onlineClients"] . ' clients online',
 				), $userAgent["stats"]["onlineClients"] )
