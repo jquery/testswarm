@@ -30,7 +30,7 @@ class SignupPage extends Page {
 
 		$this->setTitle( "Signup" );
 
-		$html = '<form action="' . swarmpath( "signup" ) . '" method="post">'
+		$html = '<form action="' . swarmpath( "signup" ) . '" method="post" class="form-horizontal">'
 			. '<fieldset>'
 			. '<legend>Signup</legend>';
 
@@ -40,12 +40,26 @@ class SignupPage extends Page {
 			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
-		$html .= '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )
-			. '">login here</a>.</p>'
-			. '<label>Username: <input type="text" name="username" maxlength="255"></label><br>'
-			. '<label>Password: <input type="password" name="password"></label><br>'
-			. '<input type="submit" value="Signup" class="btn btn-primary">'
-			. '</fieldset></form>';
+		$html .=
+			'<div class="well">'
+				. '<p>Create an account. If you already have an account you may <a href="' . swarmpath( "login" )
+				. '">login here</a>.</p>'
+				. '<div class="control-group">'
+					. '<label class="control-label" for="form-username">Username</label>'
+					. '<div class="controls">'
+						. '<input id="form-username" type="text" name="username" maxlength="255">'
+					. '</div>'
+				. '</div><div class="control-group">'
+					. '<label class="control-label" for="form-password">Password</label>'
+					. '<div class="controls">'
+						. '<input id="form-password" type="password" name="password">'
+					. '</div>'
+				. '</div>'
+			. '</div><div class="form-actions">'
+				. '<input type="submit" value="Signup" class="btn btn-primary">'
+			. '</div>';
+
+		$html .= '</fieldset></form>';
 
 		return $html;
 	}
