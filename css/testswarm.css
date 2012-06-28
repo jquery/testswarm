@@ -99,6 +99,10 @@ h2 + .row {
  * and error:  hsl(0,   44%, 89%) / hsl(0,   32%, 40%)
  */
 
+table.swarm-results {
+	white-space: nowrap;
+}
+
 table.swarm-results thead th,
 table.swarm-results tbody td.swarm-status {
 	text-align: center;
