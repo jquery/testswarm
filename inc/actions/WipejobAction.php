@@ -23,6 +23,8 @@ class WipejobAction extends Action {
 			return;
 		}
 
+		$authUsername = $request->getVal( "authUsername" );
+		$authToken = $request->getVal( "authToken" );
 		$jobID = $request->getInt( "job_id" );
 		$wipeType = $request->getVal( "type" );
 
@@ -51,11 +53,29 @@ class WipejobAction extends Action {
 			$this->setError( "invalid-input" );
 			return;
 		}
-
+		
 		// Check authentication
-		if ( $request->getSessionData( "auth" ) !== "yes" || $request->getSessionData( "username" ) !== $jobOwner ) {
-			$this->setError( "requires-auth" );
-			return;
+		if ( $authUsername && $authToken ) {
+			$authUserName = $db->getOne(str_queryf(
+				"SELECT 
+					users.name as user_name
+				FROM users
+				WHERE name = %s
+				AND   auth = %s;",
+				$authUsername,
+				$authToken
+			));
+	
+			if ( $authUserName !== $jobOwner ) {
+				$this->setError( "requires-auth" );
+				return;
+			}
+		} else {
+			// Check authentication
+			if ( $request->getSessionData( "auth" ) !== "yes" || $request->getSessionData( "username" ) !== $jobOwner ) {
+				$this->setError( "requires-auth" );
+				return;
+			}
 		}
 
 		$runRows = $db->getRows(str_queryf(
