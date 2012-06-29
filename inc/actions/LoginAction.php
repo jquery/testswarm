@@ -36,7 +36,7 @@ class LoginAction extends Action {
 				return;
 			}
 
-			$res = $db->query(str_queryf(
+			$userRow = $db->getRow(str_queryf(
 				"SELECT id
 				FROM users
 				WHERE name = %s
@@ -46,8 +46,8 @@ class LoginAction extends Action {
 				$password
 			));
 
-			if ( $res && $db->getNumRows( $res ) > 0 ) {
-				// Start logged-in session
+			// If the query returned a result, start logged-in session
+			if ( $userRow ) {
 				$request->setSessionData( "username", $username );
 				$request->setSessionData( "auth", "yes" );
 

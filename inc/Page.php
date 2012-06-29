@@ -184,6 +184,7 @@ abstract class Page {
 		// because page output is also used on the Error500Page.
 
 		$projects = array();
+		$user = null;
 
 		if ( !isset( $this->exceptionObj ) ) {
 			try {
@@ -197,6 +198,22 @@ abstract class Page {
 				$projectsAction = ProjectsAction::newFromContext( $projectsActionContext );
 				$projectsAction->doAction();
 				$projects = $projectsAction->getData();
+
+				if ( $request->getSessionData( 'auth' ) === 'yes' ) {
+					$db = $this->getContext()->getDB();
+
+					$userName = $request->getSessionData( 'username' );
+					$userAuthToken = $db->getOne(str_queryf(
+						'SELECT auth
+						FROM users
+						WHERE name = %s',
+						$userName
+					));
+					$user = array(
+						'name' => $userName,
+						'authToken' => $userAuthToken,
+					);
+				}
 			} catch ( Exception $e ) {
 				$pageObj = Error500Page::newFromContext( $this->getContext() );
 				$pageObj->setExceptionObj( $e );
@@ -223,10 +240,12 @@ abstract class Page {
 	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
 	<script src="<?php echo swarmpath( 'js/jquery.js' ); ?>"></script>
 	<script src="<?php echo swarmpath( 'js/bootstrap-dropdown.js' ); ?>"></script>
-	<script>window.SWARM = <?php
+	<script>SWARM = <?php
 		$infoAction = InfoAction::newFromContext( $this->getContext() );
 		$infoAction->doAction();
 		echo json_encode( $infoAction->getData() );
+	?>;SWARM.user = <?php
+		echo json_encode( $user );
 	?>;</script><?php
 
 	foreach ( $this->styleSheets as $styleSheet ) {

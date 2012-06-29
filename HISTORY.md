@@ -54,7 +54,13 @@ Complete list of issues solved in the 1.0.0 milestone:
   which may have lost network connection, crashed or else. Also used to keep the
   client side configuration up to date to allow long-live runner clients that
   don't run with old configurations.
-* (#207) Implement security protection against clickjacking.
+* (#207) Security: Protect against clickjacking attacks. Pages now send proper
+  X-Frame-Options headers.
+* (#209) Security: Fix CRSR vulnerabilities. The API and GUI no longer perform
+  actions on behalf of a user based on cookies/sessions. All actions now require
+  tokens. This is handled transparently between GUI and API. Third party users
+  of the API may have to update their code to send the authToken for requests
+  that previously didn't require it.
 
 ### User agents
 
@@ -100,6 +106,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#189) Shouldn't distribute runs that are being run already.
 * job.js should keep refreshing even when everything is complete and "reset" happens.
 * (#191) Preserve other window.onerror handlers (if there are any).
+* (#210) When not logged in, dblclick for Wiperun on job pages should not make an
+  API request, as it would just respond with "Not authorized".
 
 ### Other changes
 
