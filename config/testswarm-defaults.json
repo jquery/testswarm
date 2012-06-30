@@ -34,8 +34,8 @@
 	},
 	"browserSets": {
 		"default": [
-			"Chrome|18",
 			"Chrome|19",
+			"Chrome|20",
 			"Firefox|11",
 			"Firefox|12",
 			"Firefox|13",
