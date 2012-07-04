@@ -36,6 +36,7 @@
 		"default": [
 			"Chrome|18",
 			"Chrome|19",
+			"Chrome|20",
 			"Firefox|11",
 			"Firefox|12",
 			"Firefox|13",
@@ -64,10 +65,10 @@
 			"IEMobile|7"
 		],
 		"currentDesktop": [
-			"Chrome|19",
-			"Firefox|12",
+			"Chrome|20",
+			"Firefox|13",
 			"IE|9",
-			"Opera|11|60",
+			"Opera|12|0",
 			"Safari|5|1"
 		]
 	},

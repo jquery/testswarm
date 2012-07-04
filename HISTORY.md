@@ -59,10 +59,11 @@ Complete list of issues solved in the 1.0.0 milestone:
 
 * Added Chrome 18.
 * Added Chrome 19.
+* Added Chrome 20.
 * Added Firefox 11.
 * Added Firefox 12.
 * (#168) Added Firefox 13.
-* Added Opera 12 beta.
+* Added Opera 12.
 * Added Android 1.6.
 * Added Android 2.3.
 * Added Fennec 5.
