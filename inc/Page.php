@@ -42,6 +42,8 @@ abstract class Page {
 	protected $subTitle;
 	protected $content;
 
+	protected $frameOptions = 'DENY';
+
 	/**
 	 * The execution method is where a Page invokes the main
 	 * action logic. This logic should be handled by an Action class
@@ -132,6 +134,20 @@ abstract class Page {
 		return $this->content;
 	}
 
+	/** @param bool|string $val
+	 * - false: Allow all framing
+	 * - 'SAMEORIGIN'
+	 * - 'DENY'
+	 */
+	public function setFrameOptions( $val ) {
+		$this->frameOptions = $val;
+	}
+
+	/** @return bool|string */
+	public function getFrameOptions() {
+		return $this->frameOptions;
+	}
+
 	/**
 	 * Be careful to never throw exceptions from here if we're already
 	 * on the Error500Page. e.g. if content of FooPage is empty, this throws
@@ -153,7 +169,12 @@ abstract class Page {
 			throw new SwarmException( "Headers already sent in `$filename` on line $linenum." );
 		}
 
-		header( 'Content-Type: text/html; charset=utf-8' );
+		header( 'Content-Type: text/html; charset=utf-8', true );
+
+		$frameOptions = $this->getFrameOptions();
+		if ( $frameOptions ) {
+			header( 'X-Frame-Options: ' . $frameOptions, true );
+		}
 
 		$request = $this->getContext()->getRequest();
 

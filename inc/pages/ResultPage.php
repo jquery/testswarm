@@ -138,6 +138,11 @@ class ResultPage extends Page {
 
 		$this->setRobots( 'noindex,nofollow' );
 
+		// Override frameoptions to allow framing
+		// Can't use setFrameOptions(), this this page does not
+		// use the Page output layout.
+		header( 'X-Frame-Options: SAMEORIGIN', true );
+
 		$row = $db->getRow(str_queryf(
 			'SELECT
 				status,

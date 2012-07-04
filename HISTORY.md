@@ -54,6 +54,7 @@ Complete list of issues solved in the 1.0.0 milestone:
   which may have lost network connection, crashed or else. Also used to keep the
   client side configuration up to date to allow long-live runner clients that
   don't run with old configurations.
+* (#207) Implement security protection against clickjacking.
 
 ### User agents
 
