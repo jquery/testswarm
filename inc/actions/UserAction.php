@@ -8,6 +8,9 @@
  */
 class UserAction extends Action {
 
+	/**
+	 * @actionParam int item: Username.
+	 */
 	public function doAction() {
 		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();

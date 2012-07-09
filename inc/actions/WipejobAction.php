@@ -12,47 +12,25 @@ class WipejobAction extends Action {
 	/**
 	 * @actionMethod POST: Required.
 	 * @actionParam int job_id
-	 * @actionParam string type: one of 'delete', 'reset'
+	 * @actionParam string type: one of 'delete', 'reset'.
 	 * @actionParam string authUsername
 	 * @actionParam string authToken
+	 * @actionAuth: Yes.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		if ( !$request->wasPosted() ) {
-			$this->setError( 'requires-post' );
-			return;
-		}
-
 		$jobID = $request->getInt( 'job_id' );
 		$wipeType = $request->getVal( 'type' );
-		$authUsername = $request->getVal( 'authUsername' );
-		$authToken = $request->getVal( 'authToken' );
 
-		if ( !$jobID || !$wipeType || !$authUsername || !$authToken ) {
+		if ( !$jobID || !$wipeType ) {
 			$this->setError( 'missing-parameters' );
 			return;
 		}
 
 		if ( !in_array( $wipeType, array( 'delete', 'reset' ) ) ) {
 			$this->setError( 'invalid-input', 'Invalid wipeType' );
-			return;
-		}
-
-		// Check authentication
-		$userRow = $db->getRow(str_queryf(
-			'SELECT
-				users.name as user_name
-			FROM users
-			WHERE name = %s
-			AND   auth = %s;',
-			$authUsername,
-			$authToken
-		));
-
-		if ( !$userRow ) {
-			$this->setError( 'requires-auth' );
 			return;
 		}
 
@@ -71,8 +49,9 @@ class WipejobAction extends Action {
 			return;
 		}
 
-		if ( $authUsername !== $jobOwner ) {
-			$this->setError( 'invalid-input', 'Wipes can only be performed by the owner of the job' );
+		// Check authentication
+		$userId = $this->doRequireAuth( $jobOwner );
+		if ( !$userId ) {
 			return;
 		}
 

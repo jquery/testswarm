@@ -48,16 +48,16 @@ class LoginPage extends Page {
 			. '<div class="control-group">'
 				. '<label class="control-label" for="form-username">Username</label>'
 				. '<div class="controls">'
-					. '<input id="form-password" type="text" name="username" value="' . htmlspecialchars( $request->getVal( "username" ) ) . '">'
+					. '<input type="text" name="username" id="form-username" value="' . htmlspecialchars( $request->getVal( "username" ) ) . '">'
 				. '</div>'
 			. '</div><div class="control-group">'
 				. '<label class="control-label" for="form-password">Password</label>'
 				. '<div class="controls">'
-					. '<input type="password" name="password">'
+					. '<input type="password" name="password" id="form-password">'
 				. '</div>'
 			. '</div>'
 		. '</div><div class="form-actions">'
-			. '<input id="form-password" type="submit" value="Login" class="btn btn-primary">'
+			. '<input type="submit" value="Login" class="btn btn-primary">'
 		. '</div>';
 		$html .= '</fieldset></form>';
 		return $html;

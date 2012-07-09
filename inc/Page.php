@@ -295,7 +295,7 @@ foreach ( $projects as $project ) {
 ?>
 						<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
 						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
-						<li><a href="<?php echo swarmpath( 'logout' ); ?>">Logout</a></li>
+						<li><a href="<?php echo swarmpath( 'logout' ); ?>" class="swarm-logout-link">Logout</a></li>
 <?php
 	} else {
 ?>

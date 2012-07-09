@@ -48,16 +48,29 @@ class AddjobPage extends Page {
 	}
 
 	protected function getAddjobFormHtml() {
+		$db = $this->getContext()->getDB();
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
 		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 
-		$addjobPageUrl = htmlspecialchars( swarmpath( "addjob" ) );
-		$userName = $request->getSessionData( "username" ) && $request->getSessionData( "auth" ) == "yes"  ? htmlspecialchars( $request->getSessionData( "username" ) ) : "";
+		$addjobPageUrlEsc = htmlspecialchars( swarmpath( 'addjob' ) );
+
+		if ( $request->getSessionData( 'auth' ) == 'yes' ) {
+			$userName = $request->getSessionData( 'username' );
+			$userNameEsc = htmlspecialchars( $userName );
+			$userAuthTokenEsc = htmlspecialchars( $db->getOne(str_queryf(
+				'SELECT auth
+				FROM users
+				WHERE name = %s',
+				$userName
+			)) );
+		} else {
+			$userNameEsc = $userAuthTokenEsc = '';
+		}
 
 		$formHtml = <<<HTML
-<form action="$addjobPageUrl" method="post" class="form-horizontal">
+<form action="$addjobPageUrlEsc" method="post" class="form-horizontal">
 
 	<fieldset>
 		<legend>Authentication</legend>
@@ -65,13 +78,13 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="control-label" for="form-authUsername">User name:</label>
 			<div class="controls">
-				<input type="text" name="authUsername" value="$userName" id="form-authUsername">
+				<input type="text" name="authUsername" value="$userNameEsc" id="form-authUsername">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-authToken">Auth token:</label>
 			<div class="controls">
-				<input type="text" name="authToken" id="form-authToken" class="input-xlarge">
+				<input type="text" name="authToken" value="$userAuthTokenEsc" id="form-authToken" class="input-xlarge">
 			</div>
 		</div>
 	</fieldset>

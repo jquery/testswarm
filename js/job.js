@@ -59,7 +59,9 @@ jQuery(function ( $ ) {
 						job_id: $el.data( 'jobId' ),
 						run_id: $el.data( 'runId' ),
 						client_id: $el.data( 'clientId' ),
-						useragent_id: $el.data( 'useragentId' )
+						useragent_id: $el.data( 'useragentId' ),
+						authUsername: SWARM.user.name,
+						authToken: SWARM.user.authToken
 					},
 					dataType: 'json',
 					success: function ( data ) {

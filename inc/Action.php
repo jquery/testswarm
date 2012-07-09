@@ -27,7 +27,7 @@ abstract class Action {
 		'invalid-input' => 'One or more input fields were invalid.',
 		'missing-parameters' => 'One ore more required fields were not submitted.',
 		'requires-post' => 'This action requires a POST request.',
-		'requires-auth' => 'You are not authorized to perform this action.',
+		'unauthorized' => 'This action requires authorization. The token or username may be missing or invalid.',
 		'data-corrupt' => 'Data was retreived but was found to be corrupt or incomplete.',
 	);
 
@@ -67,6 +67,60 @@ abstract class Action {
 			'code' => $errorCode,
 			'info' => $errorMsg === null ? self::$errorCodes[$errorCode] : $errorMsg,
 		);
+	}
+
+	/**
+	 * Enforce user authentication. Centralized logic.
+	 * @param string|int $user [optional] Additionally, verify that the
+	 * user is of a certain ID or username.
+	 * @return false|int: user id
+	 */
+	final protected function doRequireAuth( $user = null ) {
+		$db = $this->getContext()->getDB();
+		$request = $this->getContext()->getRequest();
+
+		if ( !$request->wasPosted() ) {
+			$this->setError( 'requires-post' );
+			return false;
+		}
+
+		$authUsername = $request->getVal( 'authUsername' );
+		$authToken = $request->getVal( 'authToken' );
+
+		if ( !$authUsername || !$authToken ) {
+			$this->setError( 'missing-parameters' );
+			return false;
+		}
+
+		if ( is_string( $user ) && $user !== $authUsername ) {
+			$this->setError( 'unauthorized' );
+			return false;
+		}
+
+		// Check authentication
+		$userRow = $db->getRow(str_queryf(
+			'SELECT
+				id
+			FROM users
+			WHERE name = %s
+			AND   auth = %s;',
+			$authUsername,
+			$authToken
+		));
+
+		if ( !$userRow ) {
+			$this->setError( 'unauthorized' );
+			return false;
+		}
+
+		$userId = (int)$userRow->id;
+
+		if ( is_int( $user ) && $user !== $userId ) {
+			$this->setError( 'unauthorized' );
+			return false;
+		}
+
+		return $userId;
 	}
 
 	final public function getError() {
