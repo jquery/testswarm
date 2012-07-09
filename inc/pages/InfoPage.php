@@ -41,8 +41,8 @@ class InfoPage extends Page {
 					'href' => 'https://github.com/jquery/testswarm/tree/' . $devInfo['branch'],
 				), $devInfo['branch'] )
 				. '. HEAD is at <code>' . html_tag( 'a', array(
-					'href' => 'https://github.com/jquery/testswarm/commit/' . $devInfo['HEAD'],
-				), $devInfo['HEAD'] )
+					'href' => 'https://github.com/jquery/testswarm/commit/' . $devInfo['SHA1'],
+				), $devInfo['SHA1'] )
 				. '</code>.</p>';
 		}
 

@@ -167,27 +167,37 @@ class TestSwarmContext {
 		// and append it to the version.
 		$gitHeadFile = "$swarmInstallDir/.git/HEAD";
 		if ( is_readable( $gitHeadFile ) ) {
-			$gitHead = file_get_contents( $gitHeadFile );
-			if ( preg_match( '/ref: (.*)/', $gitHead, $matches ) ) {
-				$gitHead = rtrim( $matches[1] );
+			// Get HEAD
+			$gitHeadFileCnt = file_get_contents( $gitHeadFile );
+			if ( preg_match( '/ref: (.*)/', $gitHeadFileCnt, $matches ) ) {
+				$gitHead = trim( $matches[1] );
 			} else {
 				$gitHead = trim( $gitHead );
 			}
 
+			// Get current branch
+			if ( $gitHead && preg_match( "#^refs/heads/(.*)$#", $gitHead, $m ) ) {
+				// If it is a simple head, only return the heads name
+				$gitBranch = $m[1];
+			} else {
+				// Otherwise it is something else, for which we'll show the full name
+				$gitBranch = $gitHead;
+			}
+
+			// Get SHA1
 			$gitRefFile = "$swarmInstallDir/.git/$gitHead";
 			if ( is_readable( $gitRefFile ) ) {
-				$devInfo = array(
-					'branch' => basename( $gitRefFile ),
-					'HEAD' => trim( file_get_contents( $gitRefFile ) ),
-				);
+				$gitSHA1 = trim( file_get_contents( $gitRefFile ) );
 			} else {
-				// If such refs file doesn't exist, maybe HEAD is detached,
-				// in which case ./.git/HEAD should contain the actual SHA1 already.
-				$devInfo = array(
-					'branch' => '',
-					'HEAD' => $gitHead,
-				);
+				// If such refs file doesn't exist, HEAD is detached,
+				// in which case ./.git/HEAD contains the SHA1 directly.
+				$gitSHA1 = $gitHead;
 			}
+
+			$devInfo = array(
+				'branch' => $gitBranch,
+				'SHA1' => $gitSHA1,
+			);
 		}
 
 		return array(

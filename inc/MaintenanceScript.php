@@ -137,7 +137,7 @@ abstract class MaintenanceScript {
 		$version = $this->getContext()->getVersionInfo( 'bypass-cache' );
 		$versionText = $version['TestSwarm'];
 		if ( $version['devInfo'] ) {
-			$versionText .= ' (' . $version['devInfo']['branch'] . ' ' . substr( $version['devInfo']['HEAD'], 0, 7 ) . ')';
+			$versionText .= ' (' . $version['devInfo']['branch'] . ' ' . substr( $version['devInfo']['SHA1'], 0, 7 ) . ')';
 		}
 		$description = wordwrap( $this->description, 72, "\n", true );
 		$description = explode( "\n", $description );
