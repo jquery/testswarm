@@ -1,0 +1,29 @@
+John Resig <jeresig@gmail.com>
+Olle Jonsson <olle.jonsson@gmail.com>
+Morgan Allen <morganrallen@gmail.com>
+Ziling Zhao <zilingzhao@gmail.com>
+Mike Taylor <runningtowardsnothing@gmail.com>
+Pieter van de Bruggen <pvande@gmail.com>
+Duke Leto <jonathan@leto.net>
+Jörn Zaefferer <joern.zaefferer@gmail.com>
+Garry Yao <garry.yao@cksource.com>
+Thomas Aylott <oblivious+git@subtlegradient.com>
+Piotr Sarnacki <drogus@gmail.com>
+Timo Tijhof <krinklemail@gmail.com>
+Pascal Bach <pascal.bach@siemens.com>
+K. Adam Christensen <pope@shifteleven.com>
+Eric Blanchette <eric.blanchette@digitalmatrices.com>
+Adam Backstrom <adam@sixohthree.com>
+James Coglan <jcoglan@gmail.com>
+Ashar Voultoiz <hashar@free.fr>
+Brion Vibber <brion@pobox.com>
+Scott González <scott.gonzalez@gmail.com>
+Markus Staab <maggus.staab@googlemail.com>
+Clark Allen <clarka@gmail.com>
+Joel Purra <code+github@joelpurra.se>
+Erkan Yilmaz <erkan77@gmail.com>
+Peter Wagenet <peter.wagenet@gmail.com>
+Jan-Hendrik Peters <hennr@hennr.name>
+Andrew Wilson <drew@geedew.com>
+Levi DeHaan <levi@levidehaan.com>
+Davit Barbakadze <jayarjo@gmail.com>
