@@ -59,7 +59,7 @@ class SaverunAction extends Action {
 		$error = $request->getInt( 'error', 0 );
 		$status = $request->getInt( 'status', 2 );
 		$reportHtml = $request->getVal( 'report_html', '' );
-		$reportJSON = $request->getVal( 'report_json', '' );
+		$reportJSON = $request->getJSON( 'report_json', null );
 
 		if ( !in_array( $status, array( 2, 3 ) ) ) {
 			$this->setError( 'invalid-input', 'Illegal status to be set from the client side in action=saverun.' );
@@ -103,7 +103,7 @@ class SaverunAction extends Action {
 			$fail,
 			$error,
 			gzencode( $reportHtml ),
-			$reportJSON,
+			json_encode( $reportJSON ),
 			swarmdb_dateformat( SWARM_NOW ),
 
 			$resultsID
