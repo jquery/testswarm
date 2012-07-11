@@ -239,13 +239,13 @@
 					});
 				};
 				
-				QUnit.log = function(test) {
+				QUnit.log = function(assertion) {
 					results[moduleCount].tests[testCount].assertions.push({
-						actual: test.actual,
-						expected: test.expected,
-						message: test.message,
-						result: test.result ? 1 : 0, // number is more convenient to handle
-						source: test.source || ''
+						actual: assertion.actual,
+						expected: assertion.expected,
+						message: assertion.message,
+						result: assertion.result ? 1 : 0, // number is more convenient to handle
+						source: assertion.source || ''
 					});
 				
 					window.TestSwarm.heartbeat();
