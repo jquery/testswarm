@@ -219,6 +219,9 @@ CREATE TABLE `runresults` (
 
   -- HTML snapshot of the test results page.
   `report_html` text NOT NULL default '',
+  
+   -- JSON snapshot of detected failures during the test.
+  `report_json` text NOT NULL default '',
 
   -- Hash of random-generated token. To use as authentication to be allowed to
   -- store runresults in this rpw. This protects SaverunAction from bad
