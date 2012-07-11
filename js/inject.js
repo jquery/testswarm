@@ -274,7 +274,7 @@
 				
 				QUnit.done = function (suite) {
 					var report = {
-						suite: document.title || location.href.replace(/^.+?\/([^\?\/]+)\/?\??[^\?]*$/, '$1'),
+						name: document.title || location.href.replace(/^.+?\/([^\?\/]+)\/?\??[^\?]*$/, '$1'),
 						failed: suite.failed,
 						passed: suite.passed,
 						total: suite.total,
