@@ -50,7 +50,7 @@ class ResultAction extends Action {
 		if ( !$row ) {
 			$this->setError( 'invalid-input', 'Runresults ID not found.' );
 			return;
-		}		
+		}
 
 		$data = array();
 
