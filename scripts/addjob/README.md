@@ -6,9 +6,9 @@ For more information about the fields, view the AddjobPage in your browser.
 
 ## Test suite runs
 
-Before you can submit a job you has to have an actual test suite. Presumably you already already have this but there are a few requirements that you need to check and implement as needed. Currently TestSwarm supports the following unit test frameworks:
+Before you can submit a job you has to have an actual test suite. Presumably you already have this but there are a few requirements that you need to check and implement as needed. Currently TestSwarm supports the following unit test frameworks:
 
-* [QUnit](http://docs.jquery.com/QUnit) (jQuery)
+* [QUnit](http://qunitjs.com/) (jQuery)
 * [UnitTestJS](http://github.com/tobie/unittest_js) (Prototype, Scriptaculous)
 * [JSSpec](https://code.google.com/p/jsspec/) (MooTools)
 * [JSUnit](http://www.jsunit.net/)
