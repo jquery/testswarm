@@ -11,8 +11,7 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-/*global jQuery, $, QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw*/
-/*jshint forin:false, strict:false, loopfunc:true, browser:true, jquery:true*/
+/*global QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw */
 (function (undefined) {
 	var DEBUG, doPost, search, url, index, submitTimeout, curHeartbeat,
 		beatRate, testFrameworks, onErrorFnPrev;
@@ -257,7 +256,8 @@
 				return typeof Test !== 'undefined' && Test && Test.Unit && Test.Unit.runners;
 			},
 			install: function () {
-				var	total_runners = Test.Unit.runners.length,
+				/*jshint loopfunc:true */
+				var total_runners = Test.Unit.runners.length,
 					cur_runners = 0,
 					total = 0,
 					fail = 0,
