@@ -111,7 +111,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 
 ### Other changes
 
-* (#121) Update jQuery from 1.3.2 to 1.7.1.
+* (#121) Update jQuery from 1.3.2 to 1.7.2.
 * (#70) Link to ScoresPage in the site menu.
 * Drop redundant HTML5 attributes
 * Use protocol-relative urls where possible for urls to third-party domains that support
