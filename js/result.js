@@ -24,8 +24,8 @@ jQuery(function ( $ ) {
 			'personalbar=no',
 			'status=yes',
 			'resizable=yes',
-			'scrollbars=yes'
-			,'minimizable=yes'
+			'scrollbars=yes',
+			'minimizable=yes'
 		].join(',') );
 		e.preventDefault();
 	});

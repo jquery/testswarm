@@ -166,9 +166,9 @@
 					// Cache buster
 					'_' : new Date().getTime(),
 					// Homing signal for inject.js so that it can find its target for action=saverun
-					"swarmURL" : window.location.protocol + "//" + window.location.host + SWARM.conf.web.contextpath
-						+ "index.php?"
-						+ $.param({
+					'swarmURL' : window.location.protocol + '//' + window.location.host + SWARM.conf.web.contextpath +
+						'index.php?' +
+						$.param({
 							status: 2, // ResultAction::STATE_FINISHED
 							run_id: currRunId,
 							client_id: SWARM.client_id,

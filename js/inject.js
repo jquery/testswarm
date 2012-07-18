@@ -14,7 +14,7 @@
 /*global jQuery, $, QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw*/
 /*jshint forin:false, strict:false, loopfunc:true, browser:true, jquery:true*/
 (function (undefined) {
-	var	DEBUG, doPost, search, url, index, submitTimeout, curHeartbeat,
+	var DEBUG, doPost, search, url, index, submitTimeout, curHeartbeat,
 		beatRate, testFrameworks, onErrorFnPrev;
 
 	DEBUG = false;
@@ -116,7 +116,7 @@
 		}
 
 		if ( DEBUG ) {
-			alert( debugObj( params ) ) ;
+			window.alert( debugObj( params ) ) ;
 		}
 
 		if ( doPost ) {
@@ -145,7 +145,7 @@
 			}
 
 			if ( DEBUG ) {
-				alert( url );
+				window.alert( url );
 
 			} else {
 				// Watch for the result submission timing out

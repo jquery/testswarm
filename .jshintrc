@@ -1,0 +1,21 @@
+{
+	"predef": [
+		"SWARM"
+	],
+
+	"bitwise": true,
+	"curly": true,
+	"eqeqeq": true,
+	"immed": true,
+	"latedef": true,
+	"newcap": true,
+	"noarg": true,
+	"noempty": true,
+	"undef": true,
+	"trailing": true,
+
+	"smarttabs": true,
+
+	"browser": true,
+	"jquery": true
+}
