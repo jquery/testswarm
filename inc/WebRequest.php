@@ -72,7 +72,44 @@ class WebRequest {
 	public function getInt( $key, $default = 0 ) {
 		return intval( $this->getVal( $key, $default ) );
 	}
-
+	
+	/** 
+	 * Interpret a value as JSON string and return a parsed object. Optionally
+	 * throw an exception if value cannot be parsed.
+	 * @param $key string
+	 * @param $default mixed
+	 * @param $throw bool If true will throw an exception, if value cannot be parsed
+	 * @return array|object|mixed JSON string parsed to object or default value
+	 */
+	public function getJSON( $key, $default = null, $throw = false ) {
+		$val = $this->getRawVal( $this->raw, $key, $default );
+		$json = json_decode( $val );
+		if ( is_null( $json ) ) {
+			if ( !$throw_exception ) {
+				return $default;
+			} else {
+				$error = "String cannot be interpreted as JSON";			
+				if ( function_exists( 'json_last_error' ) ) { // PHP 5 >= 5.3.0
+					$errors = array(
+						JSON_ERROR_DEPTH => "Maximum stack depth exceeded",
+						JSON_ERROR_STATE_MISMATCH => "Underflow or the modes mismatch",
+						JSON_ERROR_CTRL_CHAR => "Unexpected control character found",
+						JSON_ERROR_SYNTAX => "Syntax error, malformed JSON",
+						JSON_ERROR_UTF8 => "Malformed UTF-8 characters, possibly incorrectly encoded"
+					);
+					// convert to human readable form
+					$last_error = json_last_error();
+					if ( isset( $errors[$last_error] ) ) {
+						$error = $errors[$last_error];
+					}
+				} 
+				throw new Exception($error);
+			}
+		} else {
+			return $json;
+		}
+	}
+	
 	/**
 	 * @example:
 	 * $request->hasKeys( 'foo', 'bar' );

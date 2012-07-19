@@ -39,6 +39,7 @@ class ResultAction extends Action {
 				run_id,
 				client_id,
 				status,
+				report_json,
 				updated,
 				created
 			FROM runresults
@@ -116,6 +117,7 @@ class ResultAction extends Action {
 			'runID' => $row->run_id,
 			'clientID' => $row->client_id,
 			'status' => self::getStatus( $row->status ),
+			'report' => json_decode( $row->report_json )  
 		);
 
 		// If still busy or if the client was lost, then the last update time is irrelevant

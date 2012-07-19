@@ -159,6 +159,7 @@ class JobAction extends Action {
 							'errors' => $runresultsRow->error,
 
 							'runStatus' => self::getRunresultsStatus( $runresultsRow ),
+							'runResultsID' => $runUaRow->results_id,
 							// Add link to runresults
 							'runResultsUrl' => swarmpath( 'result/' . $runUaRow->results_id ),
 							'runResultsLabel' =>
