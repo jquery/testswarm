@@ -20,7 +20,7 @@ The test suite must run from a publicly accessible URL that serves an HTML docum
 
 ### inject.js
 
-The document must include the TestSwarm `inject.js` file from the target TestSwarm installation. This file detects whcih unit test framework is present on the page and registers a callback for when that framework indicates it is done. The script then extracts the test results and submits them to TestSwarm, using the identification given from the TestSwarm context (run-id, client-id etc.).
+The document must include the TestSwarm `inject.js` file from the target TestSwarm installation. This file detects which unit test framework is present on the page and registers a callback for when that framework indicates it is done. The script then extracts the test results and submits them to TestSwarm, using the identification given from the TestSwarm context (run-id, client-id etc.).
 
 You may unconditionally `inject.js`, it will only act if it detects that it is being run in a TestSwarm environment (so you don't need a seperate version of the test suite "for TestSwarm").
 
