@@ -80,8 +80,7 @@ Username with a user that will be the owner of this new job.
 
 ### Browsers
 
-* `browserSets[]=`: One of `current`, `popular`, `gbs`, `beta`, `mobile`.
-   Correspond to the `useragents.ini` file
+* `browserSets[]=`: Key in the `browserSets` configuration (e.g. `currentDesktop` or a custom browserset defined in your configuration file).
 * `browserSets[]=` ..
 * `browserSets[]=` ..
 
@@ -91,6 +90,5 @@ Run name/url pairs.
 
 * `runNames[]`: Run name (e.g. "module foo")
 * `runUrls[]`: Run URL (absolute url, including http:// or https://)
-
 * `runNames[]`: ..
 * `runUrls[]`: ..
