@@ -1,4 +1,4 @@
-## 1.0.0-pre
+## 1.0.0-alpha
 
 ***NOT A RELEASE YET***
 
@@ -38,13 +38,13 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#150) Expose current TestSwarm version in InfoAction API and in `<meta>` on Pages.
 * (#146) Add noindex rules.
 * (#149) Create action "projects" for listing all accounts that submit jobs.
-* Implement basic caching for expansive operations in flat files in `./cache/`.
+* Implement basic caching for expensive operations in flat files in `./cache/`.
 * Implement "debug" mode for the API (format=debug)
 * Implement "debug" mode for Database queries. Disabled by default for performance and
   security reasons, enable by setting [debug][db_log_queries] = 1 in testswarm.ini.
-* (#142) Implement database update script.
-* (#158) Implement database install script.
-* Implement browserset query script.
+* (#158) New shell script to install the database.
+* (#142) New shell script to update from an old version of the database.
+* New shell script to query the browserset configuration.
 * (#172) Use JSON for configuration files.
 * Create "Info" page. Showing current version info with links to GitHub.
 * New "Result" page. Linked to from Job pages, showing the run results inluding
@@ -52,7 +52,7 @@ Complete list of issues solved in the 1.0.0 milestone:
   Replaces the old Runresults page.
 * Implemented Ping system. Used to keep track of which clients are online, and
   which may have lost network connection, crashed or else. Also used to keep the
-  client side configuration up to date to allow long-live runner clients that
+  client-side configuration up to date to allow long-live runner clients that
   don't run with old configurations.
 * (#207) Security: Protect against clickjacking attacks. Pages now send proper
   X-Frame-Options headers.
