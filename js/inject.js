@@ -19,7 +19,7 @@
 	DEBUG = false;
 
 	doPost = false;
-	search = window.location.search;
+	search = (window.location.search == '' ? window.location.hash : window.location.search); 
 	index = search.indexOf( 'swarmURL=' );
 	submitTimeout = 5;
 	beatRate = 20;
