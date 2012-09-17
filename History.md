@@ -64,26 +64,21 @@ Complete list of issues solved in the 1.0.0 milestone:
 
 ### User agents
 
-* Added Chrome 18.
-* Added Chrome 19.
-* Added Chrome 20.
-* Added Firefox 11.
-* Added Firefox 12.
-* (#168) Added Firefox 13.
-* Added Opera 12.
-* Added Android 1.6.
-* Added Android 2.3.
-* Added Fennec 5.
-* Added Fennec 6.
-* Added Fennec 7.
-* Added Fennec 10.
-* Added iPad 3.2.
-* Added iPad 4.3.
-* Added iPad 5.
-* Added iPhone 3.2.
-* (#41) Added Opera Mini.
-* Added Opera Mini 2.
-* Added Palm Web 2.
+* Added Chrome 18 - 22
+* Added Firefox 11 - 16
+* Added Opera 12
+* Added Safari 6.0
+* Added Android 1.6
+* Added Android 2.3
+* Added Fennec 5 - 7
+* Added Fennec 10
+* Added iPad 3.2
+* Added iPad 4.3
+* Added iPad 5
+* Added iPhone 3.2
+* (#41) Added Opera Mini
+* Added Opera Mini 2
+* Added Palm Web 2
 
 ### Bugs fixed
 
