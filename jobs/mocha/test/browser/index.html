@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+	
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="array.js"></script>
+    <script src="../acceptance/duration.js"></script>
+    <script src="../acceptance/timeout.js"></script>
+	<script type="text/javascript" src="./../../../../js/inject.js"></script>
+    <script>
+		var runner;
+		 
+		onload = function(){
+			runner = mocha.run()
+			runner.globals(['foo', 'bar', 'baz']);
+			runner.on('end', function(test){
+				console.log(console.log('done'));
+			});
+		};
+    </script>
+	
+  </head>
+  <body>
+    <div id="mocha"></div>
+  </body>
+</html>
