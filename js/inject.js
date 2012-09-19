@@ -439,6 +439,42 @@
 					return trimSerialize();
 				};
 			}
+		},
+		
+		// mocha
+		// http://visionmedia.github.com/mocha/ 
+		'Mocha': {
+			detect: function () {
+				return typeof Mocha !== 'undefined';
+			},
+			install: function () { 
+				// Completely overwrite the run
+				var 
+					_run = Mocha.prototype.run,
+					_runner;
+				Mocha.prototype.run = function (fn) { 
+					_runner = _run.call(this, fn); 
+					_runner.on('end', function(test){ 
+						submit({
+							fail: this.failures,
+							total: this.total,
+							error: this.failures
+						});
+					}); 
+					_runner.on('start', window.TestSwarm.heartbeat); 
+					_runner.on('suite', window.TestSwarm.heartbeat); 
+					_runner.on('test end', window.TestSwarm.heartbeat); 
+					_runner.on('pass', window.TestSwarm.heartbeat); 
+					_runner.on('fail', window.TestSwarm.heartbeat);	 
+					return _runner;
+				}; 
+				window.TestSwarm.serialize = function () {
+					var _el = document.getElementsByTagName('pre');
+					// show source code
+					for (var i=0;i<_el.length;i++) _el[i].style.display = 'inline-block';
+					return trimSerialize();
+				};
+			}
 		}
 	};
 
