@@ -76,7 +76,8 @@ Complete list of issues solved in the 1.0.0 milestone:
   to point to somewhere else instead. As being a PHP file, its source won't be
   shown, even if the webserver's Deny rules for /config are misconfigured.
 * (#199) Add a confirmation in interface for Reset job/Delete job.
-* (#222) Add "Reset failed jobs" button
+* (#222) Add "Reset failed jobs" button.
+* (#216) Add support for Mocha.
 
 ### User agents
 
