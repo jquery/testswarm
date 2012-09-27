@@ -35,10 +35,10 @@ class SignupAction extends Action {
 		$username = $request->getVal( "username" );
 		$password = $request->getVal( "password" );
 
-		$this->doCreateUser( $username, $password );
-
-		$request->setSessionData( "username", $username );
-		$request->setSessionData( "auth", "yes" );
+		if ( $this->doCreateUser( $username, $password ) ){
+			$request->setSessionData( "username", $username );
+			$request->setSessionData( "auth", "yes" );
+		}
 	}
 
 	/**
