@@ -64,12 +64,14 @@ CREATE TABLE `clients` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Used on the HomePage and SwarmstateAction.
+-- Usage: HomePage, SwarmstateAction.
 CREATE INDEX idx_clients_useragent_updated ON clients (useragent_id, updated);
 
--- Used for listing in UserAction and ScoresAction.
--- Also used to verify BrowserInfo/Client match.
+-- Usage: UserAction, ScoresAction, BrowserInfo and Client.
 CREATE INDEX idx_clients_user_useragent_updated ON clients (user_id, useragent_id, updated);
+
+-- Usage: CleanupAction.
+CREATE INDEX idx_clients_updated ON clients (updated);
 
 -- Foreign key constrains
 ALTER TABLE clients
@@ -96,7 +98,7 @@ CREATE TABLE `jobs` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Used in UserAction.
+-- Used: UserAction.
 CREATE INDEX idx_jobs_user ON jobs (user_id, created);
 
 -- Foreign key constrains
@@ -127,7 +129,7 @@ CREATE TABLE `runs` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Used in JobAction.
+-- Usage: JobAction.
 CREATE INDEX idx_runs_jobid ON runs (job_id);
 
 ALTER TABLE runs
@@ -180,7 +182,12 @@ CREATE TABLE `run_useragent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE UNIQUE INDEX idx_run_useragent_run_useragent ON run_useragent (run_id, useragent_id);
-CREATE INDEX idx_run_useragent_useragent ON run_useragent (useragent_id);
+
+-- Usage: GetrunAction.
+CREATE INDEX idx_run_useragent_useragent_status_run ON run_useragent (useragent_id, status, run_id);
+
+-- Usage: CleanupAction.
+CREATE INDEX ids_runs_results ON run_useragent (results_id);
 
 ALTER TABLE run_useragent
 	ADD CONSTRAINT fk_run_useragent_run_id FOREIGN KEY (run_id) REFERENCES runs (id);
@@ -234,8 +241,11 @@ CREATE TABLE `runresults` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Used in GetrunAction.
+-- Usage: GetrunAction.
 CREATE INDEX idx_runresults_run_client ON runresults (run_id, client_id);
+
+-- Usage: CleanupAction.
+CREATE INDEX idx_runresults_status_client ON runresults (status, client_id);
 
 ALTER TABLE runresults
 	ADD CONSTRAINT fk_runresults_client_id FOREIGN KEY (client_id) REFERENCES clients (id);

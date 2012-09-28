@@ -43,7 +43,7 @@ class UserAction extends Action {
 			FROM
 				clients
 			WHERE user_id = %u
-			AND   updated > %s
+			AND   updated >= %s
 			ORDER BY created DESC;",
 			$userID,
 			swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) )

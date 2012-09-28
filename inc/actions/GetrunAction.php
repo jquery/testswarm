@@ -42,8 +42,9 @@ class GetrunAction extends Action {
 		// Throws exception (caught higher up) if stuff is invalid.
 		$client = Client::newFromContext( $this->getContext(), $runToken, $clientID );
 
-		// Get oldest run for this user agent. But not runs that are already being run
-		// (status=1), or reached the max or passed (status=2).
+		// Get oldest idle (status=0) run for this user agent.
+		// Except if it was already ran in this client in the past (client_id=%u), because
+		// in that case it must've failed. We don't want it to run in the same client again.
 		$runID = $db->getOne(str_queryf(
 			'SELECT
 				run_id
