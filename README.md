@@ -59,12 +59,12 @@ may work as well.
 
 1. Set up a MySQL database and create a user with read and write access.
 
-1. Copy `config/testswarm-sample.json` to `config/testswarm.json` and
+1. Copy `config/settings-sample.json` to `config/settings.json` and
    update the database settings. For other settings,
    [check the wiki](https://github.com/jquery/testswarm/wiki/Settings).
 
 1. *For Apache:*<br/>
-   Copy `config/.htaccess-sample` to `.htaccess`.<br/>
+   Copy `config/sample-.htaccess` to `.htaccess`.<br/>
    Currently the only supported webserver is Apache (which uses a `.htaccess`
    file).<br/>
    To run TestSwarm from a non-root directory, set `web.contextpath` to the
@@ -77,9 +77,9 @@ may work as well.
    "`None`") in your Apache configuration.<br/>
    <br/>
    *For NGINX:*<br/>
-   Copy `config/nginx-sample.conf` to `/etc/nginx/sites-available`.
+   Copy `config/sample-nginx.conf` to `/etc/nginx/sites-available`.
    <br/>The file name should match your domain e.g. for swarm.example.org:<br/>
-   `cp config/nginx-sample.conf /etc/nginx/sites-available/swarm.example.org.conf`
+   `cp config/sample-nginx.conf /etc/nginx/sites-available/swarm.example.org.conf`
    <br/>Open this conf file in your editor and fill in the correct values for
    `YOURURL`, and make sure your install is located at `/var/www/testswarm`
    (otherwise update the file to match your install location).<br/>
@@ -89,7 +89,7 @@ may work as well.
    Now make sure that php-fpm is running: `/etc/init.d/php-fpm status`<br/>
    if is not running start it: `/etc/init.d/php-fpm start`
 
-1. Copy `config/robots-sample.txt` to `robots.txt` (or add similar rules to your
+1. Copy `config/sample-robots.txt` to `robots.txt` (or add similar rules to your
    main `robots.txt` file if TestSwarm is not in the root directory).
 
 1. Set `storage.cacheDir` to a writable directory that is not readable from the

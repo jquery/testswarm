@@ -132,8 +132,8 @@ spl_autoload_register( 'swarmAutoLoader' );
 // Generic requirements that we still need globally unconditionally
 require_once __DIR__ . '/utilities.php';
 
-$defaultSettingsFile = "$swarmInstallDir/config/testswarm-defaults.json";
-$localSettingsFile = "$swarmInstallDir/config/testswarm.json";
+$defaultSettingsFile = "$swarmInstallDir/config/settings-default.json";
+$localSettingsFile = "$swarmInstallDir/config/settings.json";
 
 // Verify that the configuration files exists and are readable
 if ( !is_readable( $defaultSettingsFile ) ) {

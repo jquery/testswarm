@@ -1,7 +1,7 @@
 # Created while installing/using TestSwarm
 .htaccess
 cache/*
-config/testswarm.json
+config/settings.json
 favicon.ico
 robots.txt
 scripts/*.pl

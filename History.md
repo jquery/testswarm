@@ -2,33 +2,41 @@
 
 ***NOT A RELEASE YET***
 
-This major release features a complete rewrite of the front-end and back-end code base, and
-adds several major features such as a brand new API, automatically synchronized run-client
-settings and a new face using Twitter Bootstrap.
+This major release features a complete rewrite of the frontend and backend code base, and
+adds several major features such as a brand new API, automatically synchronized runclient
+settings and a new interface powered by Twitter Bootstrap.
 
 TestSwarm has also incorporated several optimizations for a continous integration workflow
 where TestSwarm is used with Jenkins and BrowserStack (or similar services) by providing
-detailed information about the swarm's state through "api.php?action=swarmstate". This new API
+detailed information about the swarm's state through `api.php?action=swarmstate`. This new API
 action lists all supported browsers including how many clients are online for each user agent
 and if and how many pending runs there are. This makes it easy to then use this information to
-automatically start or terminate browsers as needed in, for example, using the [BrowserStack
-API](https://github.com/browserstack/api) and
-[node-browserstack](https://github.com/scottgonzalez/node-browserstack). 
+automatically start or terminate browsers as needed with, for example, the [BrowserStack
+API](https://github.com/browserstack/api),
+[node-browserstack](https://github.com/scottgonzalez/node-browserstack) and [testswarm-browserstack](https://github.com/clarkbox/testswarm-browserstack).
 
-The database has remained the same mostly, although there are a few breaking change in some of
-the relationships and column types. You are recommended to start clean as there is no practical
-upgrade path. If needed, you could take note of the authentication token of your main account
-in the "users.auth" column and after re-creating the the accounts on a new 1.0 TestSwarm,
-manipulate the "users.auth" field in the database to match the old value. Other than that, no
-data is to be imported from a pre-1.0 database.
+The database has remained mostly the same, although there are too many breaking changes for
+a clean upgrade. You are recommended to start clean as there is no upgrade path. If you want, it
+is possible to take note of the authentication and password hash of your main account (in the
+`users.auth` column) and re-insert it directly into the database after installing TestSwarm 1.0.
+Other than that, no data is importable from a pre-1.0 installation.
 
 Complete list of issues solved in the 1.0.0 milestone:
 
 * <https://github.com/jquery/testswarm/issues?sort=updated&direction=asc&state=closed&milestone=1>
 
+### Configuration changes
+* PHP version requirement raised to 5.3.0+.
+* Settings are now loaded from `/config/settings.json` (instead of `/testswarm.ini`).
+* The default `cooldownSleep` setting has changed from 15 seconds to 1 second.
+* The default `nonewrunsSleep` setting has changed from 30 seconds to 15 seconds.
+* The database schema has been re-constructed from the ground up. The schema is
+  non-upgradable and will have to be re-created. Use the dbUpdate.php or dbInstall.php script
+  to quickly re-create your database. All data will be lost when upgrading from < 1.0.0!
+
 ### New features
 
-* (#82) Refactor front-end skin, implemented Twitter Bootstrap (#145).
+* (#82) Refactor front-end skin, powered by Twitter Bootstrap (#145).
 * (#107) Implement browser client settings framework.
 * (#127) Refactor backend with no globals into OOP with Context.
 * (#132) Refactor state/content/logic scripts into Page/Action classes.
@@ -38,13 +46,14 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#150) Expose current TestSwarm version in InfoAction API and in `<meta>` on Pages.
 * (#146) Add noindex rules.
 * (#149) Create action "projects" for listing all accounts that submit jobs.
-* Implement basic caching for expensive operations in flat files in `./cache/`.
-* Implement "debug" mode for the API (format=debug)
-* Implement "debug" mode for Database queries. Disabled by default for performance and
-  security reasons, enable by setting [debug][db_log_queries] = 1 in testswarm.ini.
+* Implement basic caching for expensive operations in flat files in `/cache/`.
+* Implement "debug" mode for the API (`format=debug`).
+* Implement "debug" mode for Database queries.
+  Disabled by default for performance and security reasons,
+  enable by setting `debug.dbLogQueries` to `true` in the settings file.
 * (#158) New shell script to install the database.
 * (#142) New shell script to update from an old version of the database.
-* New shell script to query the browserset configuration.
+* New shell script to query the browserSet configuration.
 * (#172) Use JSON for configuration files.
 * Create "Info" page. Showing current version info with links to GitHub.
 * New "Result" page. Linked to from Job pages, showing the run results inluding
@@ -103,35 +112,29 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#191) Preserve other window.onerror handlers (if there are any).
 * (#210) When not logged in, dblclick for Wiperun on job pages should not make an
   API request, as it would just respond with "Not authorized".
+* (#78) Replace generic "Chrome" user agent ID with regular versioned ones. Google Chrome
+  versions are now testable like any other browser.
 
 ### Other changes
 
 * (#121) Update jQuery from 1.3.2 to 1.7.2.
 * (#70) Link to ScoresPage in the site menu.
-* Drop redundant HTML5 attributes
+* Drop redundant HTML5 attributes.
 * Use protocol-relative urls where possible for urls to third-party domains that support
   both HTTP and HTTPS.
 * Add `lang="en" dir="ltr"` to `<html>`.
-* Add debug mode configuration to testswarm.ini.
-* (#141) Old Perl example files in ./scripts/ that were no longer used or maintained have
+* (#141) Old Perl example files in `/scripts/ that were no longer used or maintained have
   been removed from the repository.
-* (#143) Using [phpbrowscap](https://github.com/garetjax/phpbrowscap) as user agent parser
-  (data from <http://browsers.garykeith.com/>).
-* The default `cooldown_sleep` has been lowered from 15 seconds to 2 seconds. The update rest
-  period between points where there are no new tests is still 30 seconds, however.
-* The HomePage now includes all information from the SwarmstateAction regarding the number of
-  pending jobs for each user agent.
-* The main site navigation now includes the projects list in a dropdown menu. This together
-  with the new ProjectsPage has made individual project pages accessible from the HomePage
-  for the first time.
-* Better error handling if DB is unavailable.
-* PHP version requirement raised to 5.3.0+.
+* (#143) Using [phpbrowscap](https://github.com/garetjax/phpbrowscap) as user agent
+  parser (data from <http://browsers.garykeith.com/>).
+* Default settings are now stored in `/config/settings-default.json` (instead of
+  hardcoded in `init.php`).
+* The HomePage now includes all information from the SwarmstateAction (including the number
+  of pending jobs for each user agent).
+* Individual project pages are now accessible from main navigation on the home page (in
+  the Project dropdown menu).
+* Improve error handling for when database connetion can't be established.
 * (#165) Expose runs/max in JobAction.
-* Default settings are now stored in `./config/testswarm-defaults.json` (instead of in
-  `init.php`). Local settings are read from `./config/testswarm.json`.
-* (#78) Replace generic "Chrome" user agent ID with regular versioned ones. Google Chrome
-  versions are now testable like any other browser.
-* Table `run_client` has been removed in favour of the new `runresults` table.
 
 
 ## 0.2.0 / 2012-03-07

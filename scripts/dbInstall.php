@@ -90,9 +90,9 @@ class DBInstallScript extends MaintenanceScript {
 		// Create new tables
 		$this->outRaw( 'Creating new tables (this may take a few minutes)...' );
 
-		$fullSchemaFile = "$swarmInstallDir/config/testswarm.sql";
+		$fullSchemaFile = "$swarmInstallDir/config/tables.sql";
 		if ( !is_readable( $fullSchemaFile ) ) {
-			$this->error( 'Can\'t read testswarm.sql' );
+			$this->error( 'Can\'t read schema file' );
 		}
 		$fullSchemaSql = file_get_contents( $fullSchemaFile );
 		$executed = $db->batchQueryFromFile( $fullSchemaSql );
