@@ -15,7 +15,7 @@ class DBInstallScript extends MaintenanceScript {
 		$this->setDescription(
 			'Install the TestSwarm database. Can also clear a database if it exists.'
 		);
-		$this->registerOption( 'force', 'boolean', 'Skip confirmation for dropping tables.' );
+		$this->registerOption( 'force', 'boolean', 'Skip confirmation for dropping existing tables.' );
 	}
 
 	protected function execute() {

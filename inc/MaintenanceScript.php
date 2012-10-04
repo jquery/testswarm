@@ -117,8 +117,10 @@ abstract class MaintenanceScript {
 		}
 
 		// General options for all scripts
-		$this->registerFlag( 'h', 'boolean', 'Display this message' );
 		$this->registerOption( 'help', 'boolean', 'Display this message' );
+		// E.g. to allow puppet to run a script without it facing "(Y/N)" or something.
+		$this->registerOption( 'quiet', 'boolean', 'Surpress standard output and requests for cli input' );
+
 		$this->generalArgKeys = array_merge( array_keys( $this->options ), array_keys( $this->flags ) );
 
 		$this->init();
@@ -216,6 +218,9 @@ TEXT;
 	/** @param $message string: [optional] text before the input */
 	protected function cliInput( $prefix = '> ' ) {
 		static $isatty = null;
+		if ( $this->getOption( 'quiet' ) ) {
+			return '';
+		}
 		if ( $isatty === null ) {
 			// Both `echo "foo" | php script.php` and `php script.php > foo.txt`
 			// are being prevented.
@@ -247,7 +252,10 @@ TEXT;
 	}
 
 	protected function error( $msg ) {
-		exit( "\nTestSwarm Error: $msg\n" );
+		$msg = "\nTestSwarm Error: $msg\n";
+		print $msg;
+		fwrite( STDERR, $msg );
+		exit( E_ERROR );
 	}
 
 	public static function newFromContext( TestSwarmContext $context ) {
