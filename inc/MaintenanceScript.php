@@ -147,12 +147,10 @@ abstract class MaintenanceScript {
 		$label = "{$this->name}: ";
 		$prefix = str_repeat( ' ', strlen( $label ) );
 		$description = $label . implode( "\n" . $prefix, $description );
-		print <<<TEXT
-[TestSwarm $versionText] Maintenance script
+		$this->out("[TestSwarm $versionText] Maintenance script
 
 $description
-
-TEXT;
+");
 
 		// Help or continue
 		if ( $this->getOption( 'help' ) ) {
@@ -160,7 +158,7 @@ TEXT;
 		} else {
 			$this->execute();
 		}
-		print "\n";
+		$this->out( '' );
 		exit;
 	}
 
@@ -248,7 +246,9 @@ TEXT;
 	}
 
 	protected function outRaw( $text ) {
-		print $text;
+		if ( !$this->getOption( 'quiet' ) ) {
+			print $text;
+		}
 	}
 
 	protected function error( $msg ) {
