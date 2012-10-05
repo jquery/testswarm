@@ -91,7 +91,7 @@ jQuery(function ( $ ) {
 					if ( data.wipejob && data.wipejob.result === 'ok' ) {
 						// Right now the only user authorized to delete a job is the creator,
 						// the below code makes that assumption.
-						window.location.href = SWARM.conf.web.contextpath + 'user/' + SWARM.session.username;
+						window.location.href = SWARM.conf.web.contextpath + 'user/' + SWARM.user.name;
 						return;
 					}
 					wipejobFail( data );
