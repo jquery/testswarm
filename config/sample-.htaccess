@@ -1,3 +1,6 @@
+# testswarm.ini isn't used anymore.
+# But we're being nice for when it was kept during an upgrade
+# (as it may contain sensitive data).
 <Files ~ "\.ini$">
 Order allow,deny
 Deny from all

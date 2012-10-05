@@ -132,33 +132,33 @@ spl_autoload_register( 'swarmAutoLoader' );
 // Generic requirements that we still need globally unconditionally
 require_once __DIR__ . '/utilities.php';
 
-$defaultSettingsFile = "$swarmInstallDir/config/settings-default.json";
-$localSettingsFile = "$swarmInstallDir/config/settings.json";
+$defaultSettingsJSON = "$swarmInstallDir/config/defaultSettings.json";
+$localSettingsPHP = "$swarmInstallDir/config/localSettings.php";
 
 // Verify that the configuration files exists and are readable
-if ( !is_readable( $defaultSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsFile";
+if ( !is_readable( $defaultSettingsJSON ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsJSON";
 	exit;
 }
-if ( !is_readable( $localSettingsFile ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsFile";
+if ( !is_readable( $localSettingsPHP ) ) {
+	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsPHP";
 	exit;
 }
 
-$defaultSettings = json_decode( file_get_contents( $defaultSettingsFile ) );
-$localSettings = json_decode( file_get_contents( $localSettingsFile ) );
+$defaultSettings = json_decode( file_get_contents( $defaultSettingsJSON ) );
+$localSettings = require $localSettingsPHP;
 if ( !$defaultSettings ) {
 	echo '<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.';
 	exit;
 }
-if ( !$localSettings ) {
-	echo '<b>TestSwarm Fatal:</b> Local settings file contains invalid JSON.';
-	exit;
+if ( !is_object( $localSettings ) ) {
+	error_log( 'Invalid return value for local settings (type: ' . gettype( $localSettings ) . ').' );
+	$localSettings = array();
 }
 
 $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
-unset( $defaultSettingsFile, $localSettingsFile, $defaultSettings, $localSettings );
+unset( $defaultSettingsJSON, $localSettingsPHP, $defaultSettings, $localSettings );
 
 // Validate browserSets
 // Must be after AutoLoad

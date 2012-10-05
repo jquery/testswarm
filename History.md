@@ -27,7 +27,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 
 ### Configuration changes
 * PHP version requirement raised to 5.3.0+.
-* Settings are now loaded from `/config/settings.json` (instead of `/testswarm.ini`).
+* Settings are now loaded from `/config/localSettings.json` (instead of `/testswarm.ini`).
 * The default `cooldownSleep` setting has changed from 15 seconds to 1 second.
 * The default `nonewrunsSleep` setting has changed from 30 seconds to 15 seconds.
 * The database schema has been re-constructed from the ground up. The schema is
@@ -70,6 +70,11 @@ Complete list of issues solved in the 1.0.0 milestone:
   tokens. This is handled transparently between GUI and API. Third party users
   of the API may have to update their code to send the authToken for requests
   that previously didn't require it.
+# (#232) Security: Allow settings file to be stored outside docroot.
+  Though settings are still loaded from `config/localSettings.json` by default,
+  there is now a small PHP-file serving as intermediary which can be modified
+  to point to somewhere else instead. As being a PHP file, its source won't be
+  shown, even if the webserver's Deny rules for /config are misconfigured.
 
 ### User agents
 

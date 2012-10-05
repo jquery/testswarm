@@ -59,9 +59,10 @@ may work as well.
 
 1. Set up a MySQL database and create a user with read and write access.
 
-1. Copy `config/settings-sample.json` to `config/settings.json` and
-   update the database settings. For other settings,
-   [check the wiki](https://github.com/jquery/testswarm/wiki/Settings).
+1. Copy `config/sample-localSettings.php` to `config/localSettings.php`<br/>
+   Copy `config/sample-localSettings.json` to `config/localSettings.json`.<br/>
+   Edit `localSettings.json` and replace the sample settings with your own.<br/>
+   For more settings, [see the wiki](https://github.com/jquery/testswarm/wiki/Settings).
 
 1. *For Apache:*<br/>
    Copy `config/sample-.htaccess` to `.htaccess`.<br/>
@@ -89,8 +90,8 @@ may work as well.
    Now make sure that php-fpm is running: `/etc/init.d/php-fpm status`<br/>
    if is not running start it: `/etc/init.d/php-fpm start`
 
-1. Copy `config/sample-robots.txt` to `robots.txt` (or add similar rules to your
-   main `robots.txt` file if TestSwarm is not in the root directory).
+1. Copy `config/sample-robots.txt` to `robots.txt`<br/>
+   Or, if TestSwarm is not in the root directory, add similar rules to your own `robots.txt`.
 
 1. Set `storage.cacheDir` to a writable directory that is not readable from the
    web. Either set it to a custom path outside the web document root, or use the
