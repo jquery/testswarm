@@ -247,5 +247,8 @@ CREATE INDEX idx_runresults_run_client ON runresults (run_id, client_id);
 -- Usage: CleanupAction.
 CREATE INDEX idx_runresults_status_client ON runresults (status, client_id);
 
+-- Usage: ScoresAction.
+CREATE INDEX idx_runresults_client_total ON runresults (client_id, total);
+
 ALTER TABLE runresults
 	ADD CONSTRAINT fk_runresults_client_id FOREIGN KEY (client_id) REFERENCES clients (id);

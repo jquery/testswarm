@@ -21,7 +21,7 @@ class ScoresAction extends Action {
 				users.name as user_name,
 				SUM(runresults.total) as score
 			FROM
-				clients, runresults, users
+				users, clients, runresults
 			WHERE clients.id = runresults.client_id
 			AND   clients.user_id = users.id
 			GROUP BY clients.user_id
