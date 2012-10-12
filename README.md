@@ -81,9 +81,9 @@ may work as well.
    Copy `config/sample-nginx.conf` to `/etc/nginx/sites-available`.
    <br/>The file name should match your domain e.g. for swarm.example.org:<br/>
    `cp config/sample-nginx.conf /etc/nginx/sites-available/swarm.example.org.conf`
-   <br/>Open this conf file in your editor and fill in the correct values for
-   `YOURURL`, and make sure your install is located at `/var/www/testswarm`
-   (otherwise update the file to match your install location).<br/>
+   <br/>Open this conf file in your editor and replace the "example" values with the correct values.
+   <br/>Make sure your install is located at `/var/www/testswarm`
+   (otherwise update the file to match the correct location).<br/>
    Now you need to link the `sites-available` config to the `sites-enabled` config:<br/>
    (replace the "swarm.example.org"  with your own file name):<br/>
    `ln -s /etc/nginx/sites-available/swarm.example.org.conf /etc/nginx/sites-enabled/swarm.example.org.conf`<br/>
