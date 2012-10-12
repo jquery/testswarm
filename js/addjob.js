@@ -5,7 +5,7 @@
  * @since 1.0.0
  * @package TestSwarm
  */
-jQuery(function ($) {
+jQuery(function ( $ ) {
 	var $runsContainer, $addRunBtn, $runFieldsetClean, cnt;
 
 	$runsContainer = $('#runs-container');
@@ -15,12 +15,12 @@ jQuery(function ($) {
 	$addRunBtn = $('<button>')
 		.text('+ Run')
 		.addClass('btn')
-		.click(function (e) {
+		.click(function ( e ) {
 			e.preventDefault();
 
 			cnt += 1;
 
-			function fixNum(i, val) {
+			function fixNum( i, val ) {
 				return val.replace( '1', cnt );
 			}
 

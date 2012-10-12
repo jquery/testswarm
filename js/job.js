@@ -8,40 +8,58 @@
 jQuery(function ( $ ) {
 	var updateInterval = SWARM.conf.web.ajaxUpdateInterval * 1000,
 		$wipejobErr = $( '#swarm-wipejob-error' ),
-		refreshTableTimout, $indicator;
+		refreshTableTimout, indicatorText, $indicator;
 
-	$indicator = $( '<span class="btn pull-right disabled">updating <i class="icon-refresh"></i></span>' ).css( 'opacity', 0 );
+	indicatorText = document.createTextNode( 'updating' );
+	$indicator = $( '<span class="btn pull-right disabled"> <i class="icon-refresh"></i></span>' )
+		.prepend( indicatorText )
+		.css( 'opacity', 0 );
 
-	function refreshTable() {
+	function indicateAction( label ) {
+		// Make sure any scheduled action is dequeued, we're doing something now.
 		if ( refreshTableTimout ) {
 			clearTimeout( refreshTableTimout );
 		}
-		$indicator.stop(true, true).css( 'opacity', 1 );
-		$.get( window.location.href )
-		.done( function ( html ) {
-			var tableHtml, $targetTable;
-
-			tableHtml = $( html ).find( 'table.swarm-results' ).html();
-			$targetTable = $( 'table.swarm-results' );
-			if ( tableHtml !== $targetTable.html() ) {
-				$targetTable.html( tableHtml );
-			}
-		})
-		.complete( function () {
-			// Wether done or failed: Clean up and schedule next update
-			setTimeout( function () {
-				$indicator.stop(true, true).animate({opacity: 0});
-			}, 10 );
-
-			refreshTableTimout = setTimeout( refreshTable, updateInterval );
-		});
+		// $.text() is a getter
+		// $.fn.text() does empty/append, which means the reference is no meaningless
+		indicatorText.nodeValue = label;
+		$indicator.stop( true, true ).css( 'opacity', 1 );
 	}
+
+	function actionComplete() {
+		setTimeout( function () {
+			$indicator.stop(true, true).animate({
+				opacity: 0
+			});
+		}, 10 );
+	}
+
+	function refreshTable() {
+		indicateAction( 'updating' );
+
+		$.get( window.location.href )
+			.done( function ( html ) {
+				var tableHtml, $targetTable;
+
+				tableHtml = $( html ).find( 'table.swarm-results' ).html();
+				$targetTable = $( 'table.swarm-results' );
+				if ( tableHtml !== $targetTable.html() ) {
+					$targetTable.html( tableHtml );
+				}
+			})
+			.complete( function () {
+				// Wether done or failed: Clean up and schedule next update
+				actionComplete();
+				refreshTableTimout = setTimeout( refreshTable, updateInterval );
+			});
+	}
+
+	// Schedule first update
+	refreshTableTimout = setTimeout( refreshTable, updateInterval );
 
 	function wipejobFail( data ) {
 		$wipejobErr.hide().text( data.error && data.error.info || 'Action failed.' ).slideDown();
 	}
-
-	refreshTableTimout = setTimeout( refreshTable, updateInterval );
 
 	$( 'table.swarm-results' ).prev().before( $indicator );
 
@@ -75,7 +93,12 @@ jQuery(function ( $ ) {
 		});
 
 		$( '#swarm-job-delete' ).click( function () {
+			if ( !window.confirm( 'Are you sure you want to delete this job?' ) ) {
+				return;
+			}
 			$wipejobErr.hide();
+			indicateAction( 'deleting' );
+
 			$.ajax({
 				url: SWARM.conf.web.contextpath + 'api.php',
 				type: 'POST',
@@ -94,14 +117,20 @@ jQuery(function ( $ ) {
 						window.location.href = SWARM.conf.web.contextpath + 'user/' + SWARM.user.name;
 						return;
 					}
+					actionComplete();
 					wipejobFail( data );
 				},
-				error: wipejobFail
+				error: function ( error ) {
+					actionComplete();
+					wipejobFail( error );
+				}
 			});
 		} );
 
 		$( '#swarm-job-reset' ).click( function () {
 			$wipejobErr.hide();
+			indicateAction( 'resetting' );
+
 			$.ajax({
 				url: SWARM.conf.web.contextpath + 'api.php',
 				type: 'POST',
@@ -114,13 +143,17 @@ jQuery(function ( $ ) {
 				},
 				dataType: 'json',
 				success: function ( data ) {
+					actionComplete();
 					if ( data.wipejob && data.wipejob.result === 'ok' ) {
 						refreshTable();
 						return;
 					}
 					wipejobFail( data );
 				},
-				error: wipejobFail
+				error: function ( error ) {
+					actionComplete();
+					wipejobFail( error );
+				}
 			});
 		} );
 	}

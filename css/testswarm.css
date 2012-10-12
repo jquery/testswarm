@@ -192,6 +192,10 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	animation-iteration-count: infinite;
 }
 
+.swarm-item-actions {
+	text-align: right;
+}
+
 .swarm-page-footer {
 	text-align: center;
 	margin-bottom: 18px;

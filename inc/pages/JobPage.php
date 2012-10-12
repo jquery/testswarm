@@ -46,20 +46,20 @@ class JobPage extends Page {
 			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )
 			. ' (UTC)' . '</em>.</p>';
 
-		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
-			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
-				. '<div class="form-actions">'
-				. ' <button id="swarm-job-delete" class="btn btn-danger">Delete job</button>'
-				. ' <button id="swarm-job-reset" class="btn btn-info">Reset job</button>'
-				. '</div>'
-				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
-		}
-
 		$html .= '<table class="table table-bordered swarm-results"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )
 			. '</thead><tbody>'
 			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'] )
 			. '</tbody></table>';
+
+		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
+			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
+				. '<div class="form-actions swarm-item-actions">'
+				. ' <button id="swarm-job-reset" class="btn btn-info">Reset job</button>'
+				. ' <button id="swarm-job-delete" class="btn btn-danger">Delete job</button>'
+				. '</div>'
+				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
+		}
 
 		return $html;
 	}

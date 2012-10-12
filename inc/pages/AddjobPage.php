@@ -78,13 +78,13 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="control-label" for="form-authUsername">User name:</label>
 			<div class="controls">
-				<input type="text" name="authUsername" value="$userNameEsc" id="form-authUsername">
+				<input type="text" name="authUsername" required value="$userNameEsc" id="form-authUsername">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-authToken">Auth token:</label>
 			<div class="controls">
-				<input type="text" name="authToken" value="$userAuthTokenEsc" id="form-authToken" class="input-xlarge">
+				<input type="text" name="authToken" required value="$userAuthTokenEsc" id="form-authToken" class="input-xlarge">
 			</div>
 		</div>
 	</fieldset>
@@ -95,14 +95,14 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="control-label" for="form-jobName">Job name:</label>
 			<div class="controls">
-				<input type="text" name="jobName" id="form-jobName" class="input-xlarge" maxlength="255">
+				<input type="text" name="jobName" required maxlength="255" id="form-jobName" class="input-xlarge">
 				<span class="help-inline">HTML, up to 255 characters</span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-runMax">Run max:</label>
 			<div class="controls">
-				<input type="number" size="5" name="runMax" id="form-runMax" value="2" min="1" max="99">
+				<input type="number" name="runMax" required min="1" max="99" value="2" id="form-runMax" size="5">
 				<p class="help-block">This is the maximum number of times a run is ran in a user agent. If a run passes
 				without failures then it is only ran once. If it does not pass, TestSwarm will re-try the run
 				(up to "Run max" times) for that useragent to avoid error pollution due to time-outs, slow
