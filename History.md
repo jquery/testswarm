@@ -70,11 +70,12 @@ Complete list of issues solved in the 1.0.0 milestone:
   tokens. This is handled transparently between GUI and API. Third party users
   of the API may have to update their code to send the authToken for requests
   that previously didn't require it.
-# (#232) Security: Allow settings file to be stored outside docroot.
+* (#232) Security: Allow settings file to be stored outside docroot.
   Though settings are still loaded from `config/localSettings.json` by default,
   there is now a small PHP-file serving as intermediary which can be modified
   to point to somewhere else instead. As being a PHP file, its source won't be
   shown, even if the webserver's Deny rules for /config are misconfigured.
+* (#199) Add a confirmation in interface for Reset job/Delete job.
 
 ### User agents
 

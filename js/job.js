@@ -128,6 +128,9 @@ jQuery(function ( $ ) {
 		} );
 
 		$( '#swarm-job-reset' ).click( function () {
+			if ( !window.confirm( 'Are you sure you want to reset this job?' ) ) {
+				return;
+			}
 			$wipejobErr.hide();
 			indicateAction( 'resetting' );
 
