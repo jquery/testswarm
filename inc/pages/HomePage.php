@@ -58,20 +58,20 @@ class HomePage extends Page {
 					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 				}
 			} else {
-				$browscap = $browserInfo->getBrowscap();
+				$uaParser = $browserInfo->getUAParser();
 				$html .= '<div class="alert alert-info">'
 					. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
 					. '<p>Please join with one the below browsers.</p></div>'
 					. '<p>If you feel that this may be an error, please report it to the TestSwarm '
 					. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
 					. ' including the following 2 codes:'
-					. '<br><strong><a href="http://browsers.garykeith.com/">browscap</a>:</strong> <code>'
+					. '<br><strong><a href="https://github.com/tobie/ua-parser">ua-parser</a>:</strong> <code>'
 					. htmlspecialchars( print_r( array(
-							"Platform" => $browscap["Platform"],
-							"Browser" => $browscap["Browser"],
-							"Version" => $browscap["Version"],
-							"MajorVer" => $browscap["MajorVer"],
-							"MinorVer" => $browscap["MinorVer"],
+							"Platform" => $uaParser["os"],
+							"Browser" => $uaParser["browser"],
+							"Version" => $uaParser["version"],
+							"MajorVer" => $uaParser["major"],
+							"MinorVer" => $uaParser["minor"],
 					), true ) )
 					. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
 					. htmlspecialchars( $browserInfo->getRawUA() )
