@@ -61,9 +61,7 @@ jQuery(function ( $ ) {
 		$wipejobErr.hide().text( data.error && data.error.info || 'Action failed.' ).slideDown();
 	}
 
-	function resetJob( jobs ) {
-		var $el;
-		$el = $( this );
+	function resetJob( $el ) {
 		if ( $el.data( 'runStatus' ) !== 'new' ) {
 			$.ajax({
 				url: SWARM.conf.web.contextpath + 'api.php',
@@ -97,7 +95,7 @@ jQuery(function ( $ ) {
 		});
 
 		$( document ).on ( 'click' , '#swarm-job-reset-failed', function () {
-			$('td[data-run-status="failed"], td[data-run-status="timeout"]').each( function () {
+			$('td[data-run-status="failed"], td[data-run-status="timedout"]').each( function () {
 				resetJob($(this));
 			});
 		});
