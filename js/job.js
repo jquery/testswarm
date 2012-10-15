@@ -7,7 +7,8 @@
  */
 jQuery(function ( $ ) {
 	var updateInterval = SWARM.conf.web.ajaxUpdateInterval * 1000,
-		$wipejobErr = $( '#swarm-wipejob-error' ),
+		$wipejobErr = $( '.swarm-wipejob-error' ),
+		$targetTable = $( 'table.swarm-results' ),
 		refreshTableTimout, indicatorText, $indicator;
 
 	indicatorText = document.createTextNode( 'updating' );
@@ -39,10 +40,9 @@ jQuery(function ( $ ) {
 
 		$.get( window.location.href )
 			.done( function ( html ) {
-				var tableHtml, $targetTable;
+				var tableHtml;
 
 				tableHtml = $( html ).find( 'table.swarm-results' ).html();
-				$targetTable = $( 'table.swarm-results' );
 				if ( tableHtml !== $targetTable.html() ) {
 					$targetTable.html( tableHtml );
 				}
@@ -61,38 +61,50 @@ jQuery(function ( $ ) {
 		$wipejobErr.hide().text( data.error && data.error.info || 'Action failed.' ).slideDown();
 	}
 
+	function resetRun( $el ) {
+		if ( $el.data( 'runStatus' ) !== 'new' ) {
+			$.ajax({
+				url: SWARM.conf.web.contextpath + 'api.php',
+				type: 'POST',
+				data: {
+					action: 'wiperun',
+					job_id: $el.data( 'jobId' ),
+					run_id: $el.data( 'runId' ),
+					client_id: $el.data( 'clientId' ),
+					useragent_id: $el.data( 'useragentId' ),
+					authUsername: SWARM.user.name,
+					authToken: SWARM.user.authToken
+				},
+				dataType: 'json',
+				success: function ( data ) {
+					if ( data.wiperun && data.wiperun.result === 'ok' ) {
+						$el.empty().attr( 'class', 'swarm-status swarm-status-new' );
+						refreshTable();
+					}
+				}
+			});
+		}
+	}
+
 	$( 'table.swarm-results' ).prev().before( $indicator );
 
 	if ( SWARM.user ) {
 
-		$( document ).on( 'dblclick', 'table.swarm-results td', function () {
-			var $el;
-			$el = $( this );
-			if ( $el.data( 'runStatus' ) !== 'new' ) {
-				$.ajax({
-					url: SWARM.conf.web.contextpath + 'api.php',
-					type: 'POST',
-					data: {
-						action: 'wiperun',
-						job_id: $el.data( 'jobId' ),
-						run_id: $el.data( 'runId' ),
-						client_id: $el.data( 'clientId' ),
-						useragent_id: $el.data( 'useragentId' ),
-						authUsername: SWARM.user.name,
-						authToken: SWARM.user.authToken
-					},
-					dataType: 'json',
-					success: function ( data ) {
-						if ( data.wiperun && data.wiperun.result === 'ok' ) {
-							$el.empty().attr( 'class', 'swarm-status swarm-status-new' );
-							refreshTable();
-						}
-					}
-				});
-			}
+		// This needs to bound as a delegate, because the table auto-refreshes.
+		$targetTable.on( 'click', '.swarm-reset-run-single', function () {
+			resetRun( $( this ).closest( 'td' ) );
 		});
 
-		$( '#swarm-job-delete' ).click( function () {
+		$( '.swarm-reset-runs-failed' ).on( 'click', function () {
+			var $els = $( 'td[data-run-status="failed"], td[data-run-status="error"], td[data-run-status="timedout"]' );
+			if ( !$els.length || !window.confirm( 'Are you sure you want to reset all failed runs?' ) ) {
+				return;
+			}
+			$els.each( function () {
+				resetRun( $( this ) );
+			});
+		});
+		$( '.swarm-delete-job' ).click( function () {
 			if ( !window.confirm( 'Are you sure you want to delete this job?' ) ) {
 				return;
 			}
@@ -127,7 +139,7 @@ jQuery(function ( $ ) {
 			});
 		} );
 
-		$( '#swarm-job-reset' ).click( function () {
+		$( '.swarm-reset-runs' ).click( function () {
 			if ( !window.confirm( 'Are you sure you want to reset this job?' ) ) {
 				return;
 			}
@@ -159,6 +171,7 @@ jQuery(function ( $ ) {
 				}
 			});
 		} );
+
 	}
 
 });

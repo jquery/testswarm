@@ -117,6 +117,16 @@ table.swarm-results tbody td.swarm-status {
 	font-weight: bold;
 }
 
+table.swarm-results tbody td.swarm-status [class*=" icon-"] {
+	opacity: .3;
+	margin-left: 7px;
+}
+
+table.swarm-results tbody td.swarm-status:hover [class*=" icon-"] {
+	opacity: 1;
+	cursor: pointer;
+}
+
 table.swarm-results tbody td.swarm-status-new {
 	background: #E8E8E8;
 }

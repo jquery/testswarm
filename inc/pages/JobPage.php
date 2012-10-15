@@ -39,6 +39,8 @@ class JobPage extends Page {
 
 		$this->setSubTitle( '#' . $data["jobInfo"]["id"] );
 
+		$isAuth = $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" );
+
 		$html .=
 			'<h2>' . $data["jobInfo"]["name"] .'</h2>'
 			. '<p><em>Submitted by '
@@ -46,20 +48,26 @@ class JobPage extends Page {
 			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )
 			. ' (UTC)' . '</em>.</p>';
 
+		if ( $isAuth ) {
+			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>';
+			$action_bar = '<div class="form-actions swarm-item-actions">'
+				. ' <button class="swarm-reset-runs-failed btn btn-info">Reset failed runs</button>'
+				. ' <button class="swarm-reset-runs btn btn-info">Reset all runs</button>'
+				. ' <button class="swarm-delete-job btn btn-danger">Delete job</button>'
+				. '</div>'
+				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
+		} else {
+			$action_bar = '';
+		}
+
+		$html .= $action_bar;
 		$html .= '<table class="table table-bordered swarm-results"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )
 			. '</thead><tbody>'
-			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'] )
+			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'], $isAuth )
 			. '</tbody></table>';
 
-		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
-			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
-				. '<div class="form-actions swarm-item-actions">'
-				. ' <button id="swarm-job-reset" class="btn btn-info">Reset job</button>'
-				. ' <button id="swarm-job-delete" class="btn btn-danger">Delete job</button>'
-				. '</div>'
-				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
-		}
+		$html .= $action_bar;
 
 		return $html;
 	}
@@ -81,7 +89,13 @@ class JobPage extends Page {
 		return $html;
 	}
 
-	public static function getUaRunsHtmlRows( $runs, $userAgents ) {
+	/**
+	 * @param Array $runs
+	 * @param Array $userAgents
+	 * @param bool $showResetRun: Whether to show the reset buttons for individual runs.
+	 *  This does not check authororisation or load related javascript for the buttons.
+	 */
+	public static function getUaRunsHtmlRows( $runs, $userAgents, $showResetRun = false ) {
 		$html = '';
 
 		foreach ( $runs as $run ) {
@@ -102,19 +116,31 @@ class JobPage extends Page {
 						'data-client-id' => isset( $uaRun['clientID'] ) ? $uaRun['clientID'] : '',
 					));
 					if ( isset( $uaRun['runResultsUrl'] ) && isset( $uaRun['runResultsLabel'] ) ) {
+						$runResultsTooltip = "Open run results for {$userAgents[$uaID]['displaytitle']}";
+						$runResultsTagOpen = html_tag_open( 'a', array(
+							'rel' => 'nofollow',
+							'href' => $uaRun['runResultsUrl'],
+							'title' => $runResultsTooltip,
+						) );
 						$html .=
-							html_tag_open( 'a', array(
-								'rel' => 'nofollow',
-								'href' => $uaRun['runResultsUrl'],
-							) )
+							$runResultsTagOpen
 							. ( $uaRun['runResultsLabel']
 								? $uaRun['runResultsLabel']
 								: UserPage::getStatusIconHtml( $uaRun['runStatus'] )
-							)
-							. '<i class="icon-list-alt pull-right" title="' . htmlspecialchars(
-								"Open run results for {$userAgents[$uaID]['displaytitle']}"
-							) . '"></i>'
-							. '</a>';
+							). '</a>'
+							. $runResultsTagOpen
+							. html_tag( 'i', array(
+								'class' => 'swarm-show-results icon-list-alt pull-right',
+								'title' => $runResultsTooltip,
+							) )
+							. '</a>'
+							. ( $showResetRun ?
+								html_tag( 'i', array(
+									'class' => 'swarm-reset-run-single icon-remove-circle pull-right',
+									'title' => "Re-schedule run for {$userAgents[$uaID]['displaytitle']}",
+								) )
+								: ''
+							);
 					} else {
 						$html .= UserPage::getStatusIconHtml( $uaRun['runStatus'] );
 					}
