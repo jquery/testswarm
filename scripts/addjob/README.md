@@ -15,6 +15,7 @@ Before you can submit a job you has to have an actual test suite. Presumably you
 * [Selenium Core](http://seleniumhq.org/projects/core/)
 * [Dojo Objective Harness](http://docs.dojocampus.org/quickstart/doh)
 * [Screw.Unit](https://github.com/nathansobo/screw-unit)
+* [Jasmine](http://pivotal.github.com/jasmine/)
 
 The test suite must run from a publicly accessible URL that serves an HTML document (may be generated from e.g. PHP or a static file, extension doesn't matter) and needs to support being run in an `<iframe>` (e.g. no `X-IFrame-Options` headers that disallow embedding from a different origin, or javascript that forces being in the `top` window context).
 
@@ -25,6 +26,32 @@ The document must include the TestSwarm `inject.js` file from the target TestSwa
 You may unconditionally `inject.js`, it will only act if it detects that it is being run in a TestSwarm environment (so you don't need a seperate version of the test suite "for TestSwarm").
 
 The `inject.js` file should be included in the `<head>` **after** the unit test framework of choice (as it needs to register a hook), but **before** the test suite starts.
+
+You can also conditionally include the `inject.js` file. The snippet below will detect the required url params and add the `inject.js` script to the page.  
+
+```javascript
+(function() {
+	var idx, injectURL, swarmURL, searchParts, part;
+
+	searchParts = window.location.search.split("&");
+
+	for (idx = 0; idx < searchParts.length; idx++ ) {
+		part = searchParts[idx].split("=");
+		
+		if ( part[0] === "swarmURL"  ) {
+			swarmURL = decodeURIComponent(part[1]);
+		} else if ( part[0] === "injectURL" ) {
+			injectURL = decodeURIComponent(part[1]);
+		}
+	}
+
+	if ( !swarmURL || swarmURL.indexOf("http") !== 0 || !injectURL || injectURL.indexOf("http") !== 0) {
+		return;
+	}
+	
+	document.write("<scr" + "ipt src='"+injectURL+"?" + (new Date).getTime() + "'></scr" + "ipt>");
+})();
+```
 
 ### Example (QUnit)
 
@@ -56,6 +83,68 @@ Note that any QUnit specific details here may out of date. Pay attention to the 
 		<div id="qunit"></div>
 		<div id="qunit-fixture"></div>
 	</body>
+</html>
+```
+
+### Example (Jasmine)
+
+Note that any Jasmine specific details here may out of date. Pay attention to the `inject.js` inclusion.
+
+```html
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.2.0/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
+  <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="spec/SpecHelper.js"></script>
+  <script type="text/javascript" src="spec/PlayerSpec.js"></script>
+
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="src/Player.js"></script>
+  <script type="text/javascript" src="src/Song.js"></script>
+
+  <!-- TestSwarm link --> 
+  <script src="http://example.org/testswarm/js/inject.js">
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
 </html>
 ```
 
@@ -92,3 +181,26 @@ Run name/url pairs.
 * `runUrls[]`: Run URL (absolute url, including http:// or https://)
 * `runNames[]`: ..
 * `runUrls[]`: ..
+
+## Submitting a job using NodeJS
+
+You can also submit a job using NodeJS using [node-testswarm](https://github.com/jzaefferer/node-testswarm/).
+
+```javascript
+var testswarm = require( "testswarm" );
+
+testswarm({
+	url: "http://example.com/testswarm",
+	pollInterval: 10000,
+	timeout: 1000 * 60 * 30,
+	done: function() {console.log('Tests Complete');}
+}, {
+	authUsername: "admin",
+	authToken: "*********************",
+	jobName: "MyTestJob",
+	runMax: 3,
+	"runNames[]": ['specs'],
+	"runUrls[]": ["http://myDomain.local/Runner.html"],
+	"browserSets[]": ["default"]
+});
+```
