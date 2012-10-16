@@ -1,0 +1,6 @@
+node_modules
+.DS*
+TAGS
+dist
+cabal-dev
+
