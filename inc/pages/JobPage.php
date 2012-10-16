@@ -121,6 +121,10 @@ class JobPage extends Page {
 								"Open run results for {$userAgents[$uaID]['displaytitle']}"
 							) . '"></i>'
 							. '</a>';
+							$html .=
+							html_tag_open( 'i', array('class' => 'hover-only swarm-job-reset-single icon-trash pull-right', 'title' => htmlspecialchars(
+								"Delete results for {$userAgents[$uaID]['displaytitle']}"
+							) ) ) . '</i>';
 					} else {
 						$html .= UserPage::getStatusIconHtml( $uaRun['runStatus'] );
 					}

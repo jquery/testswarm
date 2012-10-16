@@ -90,13 +90,16 @@ jQuery(function ( $ ) {
 
 	if ( SWARM.user ) {
 
-		$( document ).on( 'click', 'table.swarm-results td', function () {
-			resetJob($(this));
+		$( document ).on( 'click', '.swarm-job-reset-single', function () {
+			if ( !window.confirm( 'Are you sure you want to delete this test run?' ) ) {
+				return;
+			}
+			resetJob( $( this ).parent( 'td' ) );
 		});
 
-		$( document ).on ( 'click' , '.swarm-job-reset-failed', function () {
+		$( document ).on( 'click', '.swarm-job-reset-failed', function () {
 			$('td[data-run-status="failed"], td[data-run-status="timedout"]').each( function () {
-				resetJob($(this));
+				resetJob( $( this ) );
 			});
 		});
 
