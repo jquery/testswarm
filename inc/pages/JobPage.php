@@ -46,6 +46,17 @@ class JobPage extends Page {
 			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )
 			. ' (UTC)' . '</em>.</p>';
 
+		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
+			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>';
+			$action_bar = '<div class="form-actions swarm-item-actions">'
+				. ' <button class="swarm-job-reset-failed btn btn-info">Reset Failed jobs</button>'
+				. ' <button class="swarm-job-reset btn btn-info">Reset job</button>'
+				. ' <button class="swarm-job-delete btn btn-danger">Delete job</button>'
+				. '</div>'
+				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
+			$html .= $action_bar;
+		}
+
 		$html .= '<table class="table table-bordered swarm-results"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )
 			. '</thead><tbody>'
@@ -53,12 +64,7 @@ class JobPage extends Page {
 			. '</tbody></table>';
 
 		if ( $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" ) ) {
-			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>'
-				. '<div class="form-actions swarm-item-actions">'
-				. ' <button id="swarm-job-reset" class="btn btn-info">Reset job</button>'
-				. ' <button id="swarm-job-delete" class="btn btn-danger">Delete job</button>'
-				. '</div>'
-				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
+			$html .= $action_bar;
 		}
 
 		return $html;
@@ -115,6 +121,10 @@ class JobPage extends Page {
 								"Open run results for {$userAgents[$uaID]['displaytitle']}"
 							) . '"></i>'
 							. '</a>';
+							$html .=
+							html_tag_open( 'i', array('class' => 'hover-only swarm-job-reset-single icon-trash pull-right', 'title' => htmlspecialchars(
+								"Delete results for {$userAgents[$uaID]['displaytitle']}"
+							) ) ) . '</i>';
 					} else {
 						$html .= UserPage::getStatusIconHtml( $uaRun['runStatus'] );
 					}

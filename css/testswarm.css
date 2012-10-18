@@ -117,6 +117,14 @@ table.swarm-results tbody td.swarm-status {
 	font-weight: bold;
 }
 
+table.swarm-results tbody td.swarm-status .hover-only {
+	visibility: hidden;
+}
+
+table.swarm-results tbody td.swarm-status:hover .hover-only {
+	visibility: visible;
+}
+
 table.swarm-results tbody td.swarm-status-new {
 	background: #E8E8E8;
 }
@@ -158,6 +166,10 @@ table.swarm-results tbody td.swarm-status-failed a {
 
 table.swarm-results tbody td.swarm-status-notscheduled {
 	background: #fff;
+}
+
+table.swarm-results tbody td.swarm-status .swarm-job-reset-single {
+	cursor: pointer;
 }
 
 .swarm-status-progressicon {
