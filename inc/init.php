@@ -105,7 +105,7 @@ $swarmAutoLoadClasses = array(
 	'SignupPage' => 'inc/pages/SignupPage.php',
 	'UserPage' => 'inc/pages/UserPage.php',
 	# Libs
-	'Browscap' => 'inc/libs/GaretJax-phpbrowscap/browscap/Browscap.php',
+	'UA' => 'inc/libs/ua-parser/php/UAParser.php'
 );
 
 function swarmAutoLoader( $className ) {

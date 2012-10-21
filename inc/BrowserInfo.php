@@ -19,9 +19,9 @@ class BrowserInfo {
 	protected $rawUserAgent = "";
 
 	/**
-	 * @var $browscapData stdClass object: Object returned by Browscap::getBrowser.
+	 * @var $uaparserData stdClass object: Object returned by UA::parse.
 	 */
-	protected $browscapData;
+	protected $uaparserData;
 
 	/**
 	 * @var $swarmUaItem stdClass object
@@ -29,13 +29,12 @@ class BrowserInfo {
 	protected $swarmUaItem;
 
 	/**
-	 * @var $swarmUaIndex stdClass object: Cached object of parsed useragents.ini
+	 * @var $swarmUaIndex stdClass object: Cached object of parsed defaultSettings.json browserSets
 	 */
 	protected static $swarmUaIndex;
 
 	/** @return object */
 	public static function getSwarmUAIndex() {
-
 		// Lazy-init and cache
 		if ( self::$swarmUaIndex === null ) {
 			global $swarmInstallDir;
@@ -43,29 +42,28 @@ class BrowserInfo {
 			// Convert from array with string values
 			// to an object with boolean values
 			$swarmUaIndex = new stdClass;
-			$rawIndex = parse_ini_file( "$swarmInstallDir/config/useragents.ini", true );
-			foreach ( $rawIndex as $uaID => $uaItem ) {
-				if ( is_array( $uaItem ) ) {
-					$uaItem2 = $uaItem;
-					foreach ( $uaItem2 as $uaDataKey => $uaDataVal ) {
-						if ( $uaDataKey !== "displaytitle" && $uaDataKey !== "displayicon" ) {
-							$uaItem[$uaDataKey] = (bool)trim( $uaDataVal );
-						} else {
-							$uaItem[$uaDataKey] = trim( $uaDataVal );
-						}
-					}
-					if ( !isset( $uaItem["displaytitle"] ) || !$uaItem["displaytitle"] ) {
-						throw new SwarmException( "User agent `$uaID` is missing a displaytitle property." );
-					}
-					if ( !isset( $uaItem["displayicon"] ) || !$uaItem["displayicon"] ) {
-						throw new SwarmException( "User agent `$uaID` is missing a displayicon property." );
-					}
-					$swarmUaIndex->$uaID = (object)$uaItem;
+			$swarmInstallDir = dirname( __DIR__ );
+			$defaultSettingsJSON = "$swarmInstallDir/config/defaultSettings.json";
+			$defaultSettings = json_decode( file_get_contents( $defaultSettingsJSON ) );
+			$browserSets = $defaultSettings->browserSets;
+			foreach ( $browserSets as $browserSetName => $browserSet ) {
+				foreach ( $browserSet as $browserSetIndex => $uaID ) {
+
+					$splitNameAndVersion = preg_replace( '/\|/', ' ', $uaID, 1);
+					$displaytitle = str_replace( '|', '.', $splitNameAndVersion );
+
+					list($browserName) = explode("|", $uaID);
+					$displayicon = strtolower( str_replace( ' ', '_', $browserName ) );
+
+					$newUa->displaytitle = $displaytitle;
+					$newUa->displayicon = $displayicon;
+
+					$swarmUaIndex->$uaID = (object)$newUa;
+
 				}
 			}
 			self::$swarmUaIndex = $swarmUaIndex;
 		}
-
 		return self::$swarmUaIndex;
 	}
 
@@ -88,34 +86,42 @@ class BrowserInfo {
 	 * @param $userAgent string
 	 */
 	protected function parseUserAgent( $userAgent ) {
-		$browscapCacheDir = $this->context->getConf()->storage->cacheDir . '/phpbrowscap';
-		if ( !is_dir( $browscapCacheDir ) ) {
-			if ( !mkdir( $browscapCacheDir, 755 ) ) {
-				throw new SwarmException( "Cache directory must be writable." );
-			}
-		}
 
 		/**
-		 * A Browscap object looks like this (simplified version of the actual object)
-		 * @source https://github.com/GaretJax/phpbrowscap/wiki/QuickStart
+		 * A ua-parser object looks like this (simplified version of the actual object)
+		 * @source https://github.com/tobie/ua-parser
 		 *
 		 * stdClass Object (
-		 *     [Platform] => MacOSX
-		 *     [Browser] => Chrome
-		 *     [Version] => 19.0
-		 *     [MajorVer] => 19
-		 *     [MinorVer] => 0
-		 *     [Beta] => true
-		 * )
+		 *		[isMobileDevice] =>
+		 *		[isMobile] =>
+		 *		[isSpider] =>
+		 *		[isTablet] =>
+		 *		[isComputer] => 1
+		 *		[major] => 14
+		 *		[minor] => 0
+		 *		[build] => 1
+		 *		[patch] => 1
+		 *		[browser] => Firefox
+		 *		[family] => Firefox
+		 *		[version] => 14.0.1
+		 *		[browserFull] => Firefox 14.0.1
+		 *		[isUIWebview] =>
+		 *		[osMajor] => 10
+		 *		[osMinor] => 8
+		 *		[os] => Mac OS X
+		 *		[osVersion] => 10.8
+		 *		[osFull] => Mac OS X 10.8
+		 *		[full] => Firefox 14.0.1/Mac OS X 10.8
+		 *		[uaOriginal] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:14.0) Gecko/20100101 Firefox/14.0.1
+		 *		)
 		 */
-		$browscapInstance = new Browscap( $browscapCacheDir );
-		// Default cache is 5 days...
-		$browscapInstance->updateInterval = 3600; // 1 hour
 
-		$browscapData = $browscapInstance->getBrowser( $userAgent );
+		$UAParserInstance = new UA;
+
+		$uaparserData = $UAParserInstance->parse( $userAgent );
 
 		$this->rawUserAgent = $userAgent;
-		$this->browscapData = $browscapData;
+		$this->uaparserData = $uaparserData;
 
 		return $this;
 	}
@@ -125,12 +131,31 @@ class BrowserInfo {
 		return $this->rawUserAgent;
 	}
 
-	/** @return Selective array with Browscap results */
-	public function getBrowscap() {
+	/** @return Selective array with UAParser results */
+	public function getUAParser() {
 		return array_intersect_key(
-			(array)$this->browscapData,
-			array_flip(array( "Platform", "Browser", "Version", "MajorVer", "MinorVer" ))
+			(array)$this->uaparserData,
+			array_flip(array( "os", "browser", "version", "major", "minor" ))
 		);
+	}
+
+	/** @return string */
+	public function formatBrowserName( $name ) {
+		return strtolower( str_replace( ' ', '_', $name ) );
+	}
+
+	/** @return string */
+	public function formatDisplayTitle( $name ) {
+		$splitNameAndVersion = preg_replace( '/\|/', ' ', $name, 1);
+		return str_replace( '|', '.', $splitNameAndVersion );
+	}
+
+	/** @return string */
+	public function formatUA( $displayicon, $displaytitle, $id ) {
+		$newUa->displayicon = $this->formatBrowserName( $displayicon );
+		$newUa->displaytitle = $this->formatDisplayTitle( $displaytitle );
+		$newUa->id = $id;
+		return $newUa;
 	}
 
 	/** @return object|false */
@@ -138,28 +163,26 @@ class BrowserInfo {
 
 		// Lazy-init and cache
 		if ( $this->swarmUaItem === null ) {
-			$uaItems = self::getSwarmUAIndex();
-			$browscap = $this->browscapData;
+			$browserSets = $this->context->getConf()->browserSets;
+			$uaParserData = $this->getUAParser();
 			$found = false;
-			foreach ( $uaItems as $uaID => $uaItem ) {
-				if ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}|{$browscap->MinorVer}" ) {
-					$found = $uaItem;
-					$found->id = $uaID;
-					break;
-				} elseif ( $uaID === "{$browscap->Browser}|{$browscap->MajorVer}" ) {
-					$found = $uaItem;
-					$found->id = $uaID;
-					break;
-				} elseif ( $uaID === $browscap->Browser ) {
-					$found = $uaItem;
-					$found->id = $uaID;
-					break;
+			foreach ( $browserSets as $browserSetName => $browserSet ) {
+				foreach ( $browserSet as $browserSetIndex => $uaID ) {
+					if ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}|{$uaParserData['minor']}" ) {
+						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						break;
+					} elseif ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}" ) {
+						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						break;
+					} elseif ( $uaID === $uaParserData['browser'] ) {
+						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						break;
+					}
 				}
 			}
 
 			$this->swarmUaItem = $found;
 		}
-
 		return $this->swarmUaItem;
 	}
 

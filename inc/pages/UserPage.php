@@ -101,7 +101,7 @@ class UserPage extends Page {
 					. '<img class="pull-right" src="' . swarmpath( "img/{$diplayicon}.sm.png" ) . '" alt="">'
 					. '<strong class="label">' . htmlspecialchars( $label ) . '</strong>'
 					. '<p>'
-					. '<small>Platform: ' . htmlspecialchars( $activeClient["uaBrowscap"]["Platform"] )
+					. '<small>Platform: ' . htmlspecialchars( $activeClient["uaUAParser"]["os"] )
 					. '</small>'
 					. '<br>'
 					. '<small>Connected ' . self::getPrettyDateHtml( $activeClient, 'connected' ) . '</small>'
@@ -123,7 +123,7 @@ class UserPage extends Page {
 			$html .= '<thead><tr><td></td>';
 			foreach ( $data["uasInJobs"] as $uaID => $uaData ) {
 				$html .= '<th>' .
-					'<img src="' . swarmpath( "img/{$uaData["displayicon"]}.sm.png" )  .
+					'<img src="' . swarmpath( "img/{$uaData["displayicon"]}.sm.png" ) .
 					'" class="swarm-browsericon' .
 					'" alt="' . htmlspecialchars( $uaData["displaytitle"] ) .
 					'" title="' . htmlspecialchars( $uaData["displaytitle"] ) .
