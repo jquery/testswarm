@@ -50,7 +50,7 @@ class BrowserInfo {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
 
 					$swarmUaIndex->$uaID = new stdClass();
-          $swarmUaIndex->$uaID->displaytitle = str_replace( '|', '.', preg_replace( '/\|/', ' ', $uaID, 1) );
+					$swarmUaIndex->$uaID->displaytitle = self::formatDisplayTitle( $uaID );
 
 					list($browserName) = explode("|", $uaID);
 					$swarmUaIndex->$uaID->displayicon = strtolower( str_replace( ' ', '_', $browserName ) );
@@ -111,7 +111,7 @@ class BrowserInfo {
 		 *		)
 		 */
 
-		$UAParserInstance = new UA;
+		$UAParserInstance = new UA();
 
 		$uaparserData = $UAParserInstance->parse( $userAgent );
 
@@ -135,20 +135,20 @@ class BrowserInfo {
 	}
 
 	/** @return string */
-	public function formatBrowserName( $name ) {
+	public static function formatBrowserName( $name ) {
 		return strtolower( str_replace( ' ', '_', $name ) );
 	}
 
 	/** @return string */
-	public function formatDisplayTitle( $name ) {
+	public static function formatDisplayTitle( $name ) {
 		$splitNameAndVersion = preg_replace( '/\|/', ' ', $name, 1);
 		return str_replace( '|', '.', $splitNameAndVersion );
 	}
 
 	/** @return string */
-	public function formatUA( $displayicon, $displaytitle, $id ) {
-		$newUa->displayicon = $this->formatBrowserName( $displayicon );
-		$newUa->displaytitle = $this->formatDisplayTitle( $displaytitle );
+	public static function formatUA( $displayicon, $displaytitle, $id ) {}
+		$newUa->displayicon = self::formatBrowserName( $displayicon );
+		$newUa->displaytitle = self::formatDisplayTitle( $displaytitle );
 		$newUa->id = $id;
 		return $newUa;
 	}
@@ -164,13 +164,13 @@ class BrowserInfo {
 			foreach ( $browserSets as $browserSetName => $browserSet ) {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
 					if ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}|{$uaParserData['minor']}" ) {
-						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
 						break;
 					} elseif ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}" ) {
-						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
 						break;
 					} elseif ( $uaID === $uaParserData['browser'] ) {
-						$found = $this->formatUA( $uaParserData['browser'] , $uaID, $uaID);
+						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
 						break;
 					}
 				}
