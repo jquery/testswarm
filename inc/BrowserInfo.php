@@ -49,16 +49,11 @@ class BrowserInfo {
 			foreach ( $browserSets as $browserSetName => $browserSet ) {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
 
-					$splitNameAndVersion = preg_replace( '/\|/', ' ', $uaID, 1);
-					$displaytitle = str_replace( '|', '.', $splitNameAndVersion );
+					$swarmUaIndex->$uaID = new stdClass();
+          $swarmUaIndex->$uaID->displaytitle = str_replace( '|', '.', preg_replace( '/\|/', ' ', $uaID, 1) );
 
 					list($browserName) = explode("|", $uaID);
-					$displayicon = strtolower( str_replace( ' ', '_', $browserName ) );
-
-					$newUa->displaytitle = $displaytitle;
-					$newUa->displayicon = $displayicon;
-
-					$swarmUaIndex->$uaID = (object)$newUa;
+					$swarmUaIndex->$uaID->displayicon = strtolower( str_replace( ' ', '_', $browserName ) );
 
 				}
 			}
