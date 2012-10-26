@@ -160,18 +160,6 @@ $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
 unset( $defaultSettingsJSON, $localSettingsPHP, $defaultSettings, $localSettings );
 
-// Validate browserSets
-// Must be after AutoLoad
-$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
-foreach ( $swarmConfig->browserSets as $set => $browsers ) {
-	foreach ( $browsers as $browser ) {
-		if ( !isset( $swarmUaIndex->$browser ) ) {
-			echo "<b>TestSwarm Fatal</b>: Invalid browser ID \"<code>$browser</code>\" in browser set \"<code>$set</code>\"!";
-			exit;
-		}
-	}
-}
-
 // Timezone
 date_default_timezone_set( $swarmConfig->general->timezone );
 

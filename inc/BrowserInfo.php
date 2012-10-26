@@ -38,14 +38,12 @@ class BrowserInfo {
 		// Lazy-init and cache
 		if ( self::$swarmUaIndex === null ) {
 			global $swarmInstallDir;
+      global $swarmContext;
 
 			// Convert from array with string values
 			// to an object with boolean values
-			$swarmUaIndex = new stdClass;
-			$swarmInstallDir = dirname( __DIR__ );
-			$defaultSettingsJSON = "$swarmInstallDir/config/defaultSettings.json";
-			$defaultSettings = json_decode( file_get_contents( $defaultSettingsJSON ) );
-			$browserSets = $defaultSettings->browserSets;
+        $swarmUaIndex = new stdClass;
+        $browserSets = $swarmContext->getConf()->browserSets;
 			foreach ( $browserSets as $browserSetName => $browserSet ) {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
 
@@ -146,7 +144,7 @@ class BrowserInfo {
 	}
 
 	/** @return string */
-	public static function formatUA( $displayicon, $displaytitle, $id ) {}
+	public static function formatUA( $displayicon, $displaytitle, $id ) {
 		$newUa->displayicon = self::formatBrowserName( $displayicon );
 		$newUa->displaytitle = self::formatDisplayTitle( $displaytitle );
 		$newUa->id = $id;
