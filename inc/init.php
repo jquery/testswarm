@@ -105,7 +105,7 @@ $swarmAutoLoadClasses = array(
 	'SignupPage' => 'inc/pages/SignupPage.php',
 	'UserPage' => 'inc/pages/UserPage.php',
 	# Libs
-	'Browscap' => 'inc/libs/GaretJax-phpbrowscap/browscap/Browscap.php',
+	'UA' => 'inc/libs/ua-parser/php/UAParser.php'
 );
 
 function swarmAutoLoader( $className ) {
@@ -159,18 +159,6 @@ if ( !is_object( $localSettings ) ) {
 $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
 unset( $defaultSettingsJSON, $localSettingsPHP, $defaultSettings, $localSettings );
-
-// Validate browserSets
-// Must be after AutoLoad
-$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
-foreach ( $swarmConfig->browserSets as $set => $browsers ) {
-	foreach ( $browsers as $browser ) {
-		if ( !isset( $swarmUaIndex->$browser ) ) {
-			echo "<b>TestSwarm Fatal</b>: Invalid browser ID \"<code>$browser</code>\" in browser set \"<code>$set</code>\"!";
-			exit;
-		}
-	}
-}
 
 // Timezone
 date_default_timezone_set( $swarmConfig->general->timezone );
