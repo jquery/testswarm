@@ -166,8 +166,8 @@
 				iframe.src = currRunUrl + (currRunUrl.indexOf( '?' ) > -1 ? '&' : '?') + $.param({
 					// Cache buster
 					'_' : new Date().getTime(),
-					//location of the inject.js file
-					'injectURL': swarmBaseURL + 'js/inject.js',
+					// location of the inject.js file
+					'swarmInjectURL': swarmBaseURL + 'js/inject.js',
 					// Homing signal for inject.js so that it can find its target for action=saverun
 					'swarmURL' : swarmBaseURL +
 						'index.php?' +
