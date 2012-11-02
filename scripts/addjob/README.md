@@ -40,7 +40,7 @@ You can also conditionally include the `inject.js` file. The snippet below will 
 		
 		if ( part[0] === "swarmURL"  ) {
 			swarmURL = decodeURIComponent(part[1]);
-		} else if ( part[0] === "injectURL" ) {
+		} else if ( part[0] === "swarmInjectURL" ) {
 			injectURL = decodeURIComponent(part[1]);
 		}
 	}
