@@ -26,7 +26,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * <https://github.com/jquery/testswarm/issues?sort=updated&direction=asc&state=closed&milestone=1>
 
 ### Configuration changes
-* PHP version requirement raised to 5.3.0+.
+* PHP version requirement raised to 5.3.2+.
 * Settings are now loaded from `/config/localSettings.json` (instead of `/testswarm.ini`).
 * The default `cooldownSleep` setting has changed from 15 seconds to 1 second.
 * The default `nonewrunsSleep` setting has changed from 30 seconds to 15 seconds.
@@ -79,24 +79,6 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#222) Add "Reset failed jobs" button.
 * (#216) Add support for Mocha.
 
-### User agents
-
-* Added Chrome 18 - 22
-* Added Firefox 11 - 16
-* Added Opera 12
-* Added Safari 6.0
-* Added Android 1.6
-* Added Android 2.3
-* Added Fennec 5 - 7
-* Added Fennec 10
-* Added iPad 3.2
-* Added iPad 4.3
-* Added iPad 5
-* Added iPhone 3.2
-* (#41) Added Opera Mini
-* Added Opera Mini 2
-* Added Palm Web 2
-
 ### Bugs fixed
 
 * (#99) state=getrun should protect against broken/incomplete `runs` database entries.
@@ -133,8 +115,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Add `lang="en" dir="ltr"` to `<html>`.
 * (#141) Old Perl example files in `/scripts/ that were no longer used or maintained have
   been removed from the repository.
-* (#143) Using [phpbrowscap](https://github.com/garetjax/phpbrowscap) as user agent
-  parser (data from <http://browsers.garykeith.com/>).
+* (#187) Using [ua-parser](https://github.com/tobie/ua-parser) as user agent parser.
 * Default settings are now stored in `/config/settings-default.json` (instead of
   hardcoded in `init.php`).
 * The HomePage now includes all information from the SwarmstateAction (including the number

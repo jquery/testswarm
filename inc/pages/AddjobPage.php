@@ -128,7 +128,7 @@ HTML;
 				} else {
 					$browsersHtml .= '<br>';
 				}
-				$browsersHtml .= htmlspecialchars( $swarmUaIndex->$browser->displaytitle );
+				$browsersHtml .= htmlspecialchars( $swarmUaIndex->$browser->browserFull );
 			}
 			$formHtml .= <<<HTML
 		<div class="control-group">

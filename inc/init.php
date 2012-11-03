@@ -29,8 +29,8 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 }
 
 // Minimum PHP version
-if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.0' ) < 0 ) {
-	echo '<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.0';
+if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.2' ) < 0 ) {
+	echo '<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.2';
 	exit;
 }
 
@@ -122,6 +122,11 @@ function swarmAutoLoader( $className ) {
 }
 
 spl_autoload_register( 'swarmAutoLoader' );
+
+if ( !is_readable( $swarmAutoLoadClasses['UA'] ) ) {
+	echo "<b>TestSwarm Fatal:</b> Submodule missing: inc/libs/ua-parser.";
+	exit;
+}
 
 /**@}*/
 

@@ -58,7 +58,7 @@ class HomePage extends Page {
 					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 				}
 			} else {
-				$uaParser = $browserInfo->getUAParser();
+				$uaData = $browserInfo->getUaData();
 				$html .= '<div class="alert alert-info">'
 					. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
 					. '<p>Please join with one the below browsers.</p></div>'
@@ -66,13 +66,7 @@ class HomePage extends Page {
 					. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
 					. ' including the following 2 codes:'
 					. '<br><strong><a href="https://github.com/tobie/ua-parser">ua-parser</a>:</strong> <code>'
-					. htmlspecialchars( print_r( array(
-							"Platform" => $uaParser["os"],
-							"Browser" => $uaParser["browser"],
-							"Version" => $uaParser["version"],
-							"MajorVer" => $uaParser["major"],
-							"MinorVer" => $uaParser["minor"],
-					), true ) )
+					. htmlspecialchars( print_r(  $uaData, true ) )
 					. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
 					. htmlspecialchars( $browserInfo->getRawUA() )
 					. '</code></p>';
@@ -108,32 +102,29 @@ class HomePage extends Page {
 		$browsersHtml = '<h2>Browsers</h2>';
 		$browserItemCount = 0;
 
-		foreach ( $data["userAgents"] as $uaID => $userAgent ) {
-			if ( !in_array( $uaID, $conf->browserSets->default ) ) {
-				continue;
-			}
+		foreach ( $data['userAgents'] as $uaID => $userAgent ) {
 			$isCurr = $uaID == $browserInfo->getSwarmUaID();
 
 			$item = ''
 				. '<div class="span2">'
-				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? " alert-info" : "" ) . '">'
+				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? ' alert-info' : '' ) . '">'
 
-				. html_tag( "img", array(
-					"src" => swarmpath( "img/" . $userAgent["data"]["displayicon"] . ".sm.png" ),
-					"class" => "swarm-browsericon",
-					"alt" => "",
-					"title" => $userAgent["data"]["displaytitle"],
+				. html_tag( 'img', array(
+					'src' => swarmpath( 'img/' . $userAgent['data']['swarmClass'] . '.sm.png' ),
+					'class' => 'swarm-browsericon',
+					'alt' => '',
+					'title' => $userAgent['data']['browserFull'],
 				) )
 				. '<br>'
 
-				. html_tag( "span", array(
-					"class" => "badge swarm-browsername",
-				), $userAgent["data"]["displaytitle"] )
+				. html_tag( 'span', array(
+					'class' => 'badge swarm-browsername',
+				), $userAgent['data']['browserFull'] )
 
 				. '<br>'
 
-				. html_tag( "span", array(
-					"class" => "swarm-onlineclients " . (
+				. html_tag( 'span', array(
+					'class' => 'swarm-onlineclients ' . (
 						$userAgent["stats"]["onlineClients"] > 0
 						 ? "badge"
 						 : ( $userAgent['stats']['pendingRuns'] > 0 ? 'badge badge-important' : 'badge' )

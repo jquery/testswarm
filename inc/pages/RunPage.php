@@ -14,7 +14,7 @@ class RunPage extends Page {
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
-		$uaItem = $browserInfo->getSwarmUaItem();
+		$uaData = $browserInfo->getSwarmUaItem();
 
 		$runToken = null;
 		if ( $conf->client->requireRunToken ) {
@@ -38,11 +38,11 @@ class RunPage extends Page {
 			'<div class="row">'
 				. '<div class="span2">'
 					. '<div class="well pagination-centered thumbnail">'
-					. '<img src="' . swarmpath( "img/{$uaItem->displayicon}.sm.png" )
+					. '<img src="' . swarmpath( "img/{$uaData->swarmClass}.sm.png" )
 						. '" class="swarm-browsericon '
-						. '" alt="' . htmlspecialchars( $uaItem->displaytitle )
-						. '" title="' . htmlspecialchars( $uaItem->displaytitle ) . '">'
-					. '<span class="label">' . htmlspecialchars( $uaItem->displaytitle ) . '</span>'
+						. '" alt="' . htmlspecialchars( $uaData->browserFull )
+						. '" title="' . htmlspecialchars( $uaData->browserFull ) . '">'
+					. '<span class="label">' . htmlspecialchars( $uaData->browserFull ) . '</span>'
 					. '</div>'
 				. '</div>'
 				. '<div class="span7">'

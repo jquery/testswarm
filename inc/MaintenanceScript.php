@@ -108,10 +108,6 @@ abstract class MaintenanceScript {
 		if ( php_sapi_name() !== 'cli' ) {
 			$this->error( 'Maintenance scripts may only be run from the command-line interface.' );
 		}
-		// Minimum PHP version because of getopt()
-		if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.0' ) < 0 ) {
-			$this->error( 'Maintenance scripts require at least PHP 5.3.0.' );
-		}
 		if ( !ini_get( 'register_argc_argv' ) || ini_get( 'register_argc_argv' ) == '0' ) {
 			$this->error( 'Maintenance scripts require `register_argc_argv` to be enabled in php.ini.' );
 		}

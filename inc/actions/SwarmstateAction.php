@@ -102,6 +102,9 @@ class SwarmstateAction extends Action {
 			);
 		}
 
+		// Make sure they are sorted.
+		natksort( $data['userAgents']);
+
 		$this->setData( $data );
 	}
 }
