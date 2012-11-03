@@ -19,9 +19,9 @@ class BrowserInfo {
 	protected $rawUserAgent = "";
 
 	/**
-	 * @var $uaparserData stdClass object: Object returned by UA::parse.
+	 * @var $uaData stdClass object: Object returned by UA::parse.
 	 */
-	protected $uaparserData;
+	protected $uaData;
 
 	/**
 	 * @var $swarmUaItem stdClass object
@@ -42,17 +42,11 @@ class BrowserInfo {
 
 			// Convert from array with string values
 			// to an object with boolean values
-        $swarmUaIndex = new stdClass;
+        $swarmUaIndex = new stdClass();
         $browserSets = $swarmContext->getConf()->browserSets;
 			foreach ( $browserSets as $browserSetName => $browserSet ) {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
-
-					$swarmUaIndex->$uaID = new stdClass();
-					$swarmUaIndex->$uaID->displaytitle = self::formatDisplayTitle( $uaID );
-
-					list($browserName) = explode("|", $uaID);
-					$swarmUaIndex->$uaID->displayicon = strtolower( str_replace( ' ', '_', $browserName ) );
-
+					$swarmUaIndex->$uaID = self::fakeUaData( $uaID );
 				}
 			}
 			self::$swarmUaIndex = $swarmUaIndex;
@@ -85,36 +79,37 @@ class BrowserInfo {
 		 * @source https://github.com/tobie/ua-parser
 		 *
 		 * stdClass Object (
-		 *		[isMobileDevice] =>
-		 *		[isMobile] =>
-		 *		[isSpider] =>
-		 *		[isTablet] =>
-		 *		[isComputer] => 1
+		 *		[browser] => Firefox
 		 *		[major] => 14
 		 *		[minor] => 0
-		 *		[build] => 1
 		 *		[patch] => 1
-		 *		[browser] => Firefox
-		 *		[family] => Firefox
 		 *		[version] => 14.0.1
 		 *		[browserFull] => Firefox 14.0.1
-		 *		[isUIWebview] =>
+		 *		[os] => Mac OS X
 		 *		[osMajor] => 10
 		 *		[osMinor] => 8
-		 *		[os] => Mac OS X
 		 *		[osVersion] => 10.8
 		 *		[osFull] => Mac OS X 10.8
 		 *		[full] => Firefox 14.0.1/Mac OS X 10.8
+		 *		[device] =>
 		 *		[uaOriginal] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:14.0) Gecko/20100101 Firefox/14.0.1
-		 *		)
+		 * )
 		 */
 
 		$UAParserInstance = new UA();
 
 		$uaparserData = $UAParserInstance->parse( $userAgent );
 
+		$uaData = new stdClass();
+		$uaData->osFull = $uaparserData->osFull;
+		$uaData->browserName = $uaparserData->browser;
+		$uaData->browserVersion = $uaparserData->version;
+		$uaData->browserFull = $uaparserData->browserFull;
+
+		$uaData->swarmClass = strtolower( str_replace( ' ', '_', $uaData->browserName ) );
+
 		$this->rawUserAgent = $userAgent;
-		$this->uaparserData = $uaparserData;
+		$this->uaData = $uaData;
 
 		return $this;
 	}
@@ -124,51 +119,55 @@ class BrowserInfo {
 		return $this->rawUserAgent;
 	}
 
-	/** @return Selective array with UAParser results */
-	public function getUAParser() {
-		return array_intersect_key(
-			(array)$this->uaparserData,
-			array_flip(array( "os", "browser", "version", "major", "minor" ))
-		);
+	/** @return object */
+	public function getUaData() {
+		return $this->uaData;
 	}
 
-	/** @return string */
-	public static function formatBrowserName( $name ) {
-		return strtolower( str_replace( ' ', '_', $name ) );
+	/**
+	 * This method makes sure that the properties we need
+	 * on display pages are present. The reason we have to calculate these manually
+	 * is because on the HomePage, JobPage, UserPage etc. we only have the uaID,
+	 * not the user agent, so we need to engineer the rest.
+	 * @return object{ }
+	 */
+	protected static function fakeUaData( $uaID ) {
+		$parts = explode( '|', $uaID , 2 );
+
+		$uaData = new stdClass();
+		$uaData->osFull = '';
+		$uaData->browserName = $parts[0];
+		$uaData->browserVersion = $parts[1];
+		$uaData->browserFull = "$parts[0] $parts[1]";
+
+		$uaData->swarmClass = strtolower( str_replace( ' ', '_', $uaData->browserName ) );
+		$uaData->id = $uaID;
+
+		return $uaData;
 	}
 
-	/** @return string */
-	public static function formatDisplayTitle( $name ) {
-		$splitNameAndVersion = preg_replace( '/\|/', ' ', $name, 1);
-		return str_replace( '|', '.', $splitNameAndVersion );
-	}
-
-	/** @return string */
-	public static function formatUA( $displayicon, $displaytitle, $id ) {
-		$newUa->displayicon = self::formatBrowserName( $displayicon );
-		$newUa->displaytitle = self::formatDisplayTitle( $displaytitle );
-		$newUa->id = $id;
-		return $newUa;
-	}
-
-	/** @return object|false */
+	/**
+	 * Find the uaID as configured in browserSets that best matches the
+	 * current user-agent.
+	 * A browserSet is an array of uaIDs. Format:
+	 * @var {object} uaID: '<browserName>|<browserVersion>'.
+	 * The version numbers can be as many digets as desired (e.g. Foo|9, Foo|9.5, Foo 9.52 etc.)
+	 * @return object|false
+	 */
 	public function getSwarmUaItem() {
 
 		// Lazy-init and cache
 		if ( $this->swarmUaItem === null ) {
 			$browserSets = $this->context->getConf()->browserSets;
-			$uaParserData = $this->getUAParser();
+			$uaData = $this->getUaData();
 			$found = false;
+			$precision = 0;
 			foreach ( $browserSets as $browserSetName => $browserSet ) {
 				foreach ( $browserSet as $browserSetIndex => $uaID ) {
-					if ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}|{$uaParserData['minor']}" ) {
-						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
-						break;
-					} elseif ( $uaID === "{$uaParserData['browser']}|{$uaParserData['major']}" ) {
-						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
-						break;
-					} elseif ( $uaID === $uaParserData['browser'] ) {
-						$found = self::formatUA( $uaParserData['browser'] , $uaID, $uaID);
+					if ( strpos( "{$uaData->browserName}|{$uaData->browserVersion}", $uaID ) === 0 && strlen( $uaID ) > $precision ) {
+						$found = $uaData;
+						$found->id = $uaID;
+						$precision = strlen( $uaID );
 						break;
 					}
 				}
@@ -186,7 +185,8 @@ class BrowserInfo {
 
 	/** @return string|null */
 	public function getSwarmUaID() {
-		return $this->getSwarmUaItem() ? $this->getSwarmUaItem()->id : null;
+		$uaData = $this->getSwarmUaItem();
+		return $uaData ? $uaData->id : null;
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead */

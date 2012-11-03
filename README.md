@@ -12,9 +12,7 @@ The main instance monitoring jQuery core and related projects runs at
 Quick start
 ----------
 
-Clone the repo, `git clone git://github.com/jquery/testswarm.git`, or
-[download the latest
-release](https://github.com/jquery/testswarm/zipball/master).
+Clone the repo, `git clone --recursive git://github.com/jquery/testswarm.git`.
 
 
 
@@ -51,9 +49,9 @@ At the moment TestSwarm supports the following, but other configurations
 may work as well.
 
 * Apache 2.0+, NGINX 1.2+
-* PHP 5.3.0+ (or PHP-FPM for NGINX)
+* PHP 5.3.2+ (or PHP-FPM for NGINX)
 * MySQL 4.0+
-* cURL (for the cleanup action; see step 7)
+* cURL (for the cleanup action; see step 8)
 
 ### Steps
 
@@ -100,6 +98,12 @@ may work as well.
 
 1. Install the TestSwarm database by running:
    `php scripts/dbInstall.php`
+
+1. Fetch the latest user-agent information:
+   `php inc/libs/ua-parser/php/UAParser.php -get`<br/>
+   Note that ua-parser is based on patterns, so you don't need to re-run this
+   after every browser release to be able to detect this, however it is recommmended
+   to periodically run this to stay up to date (once a week is enough).
 
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>

@@ -33,46 +33,12 @@
 		"cacheDir": "$1/cache"
 	},
 	"browserSets": {
-		"default": [
-			"Chrome|19",
-			"Chrome|20",
-			"Chrome|21",
-			"Chrome|22",
-			"Firefox|13",
-			"Firefox|14",
-			"Firefox|15",
-			"Firefox|16",
-			"IE|6",
-			"IE|7",
-			"IE|8",
-			"IE|9",
-			"IE|10",
-			"Opera|11|50",
-			"Opera|11|60",
-			"Opera|12|0",
-			"Safari|5|0",
-			"Safari|5|1",
-			"Safari|6|0",
-			"Android|2|2",
-			"Android|2|3",
-			"Fennec|4",
-			"iPhone|4|3",
-			"iPhone|5",
-			"iPad|3|2",
-			"iPad|4|3",
-			"iPad|5",
-			"Opera Mobile",
-			"Opera Mini|2",
-			"Palm Web|1",
-			"Palm Web|2",
-			"IEMobile|7"
-		],
 		"currentDesktop": [
 			"Chrome|22",
-			"Firefox|15",
+			"Firefox|16",
 			"IE|9",
-			"Opera|12|0",
-			"Safari|6|0"
+			"Opera|12.0",
+			"Safari|6.0"
 		]
 	},
 	"debug": {

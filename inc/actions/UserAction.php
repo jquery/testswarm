@@ -56,8 +56,7 @@ class UserAction extends Action {
 				$activeClient = array(
 					"uaID" => $clientRow->useragent_id,
 					"uaRaw" => $bi->getRawUA(),
-					"uaData" => $bi->getSwarmUaItem(),
-					"uaUAParser" => $bi->getUAParser(),
+					"uaData" => $bi->getSwarmUaItem()
 				);
 				self::addTimestampsTo( $activeClient, $clientRow->created, "connected" );
 				self::addTimestampsTo( $activeClient, $clientRow->updated, "pinged" );
@@ -116,7 +115,7 @@ class UserAction extends Action {
 				// Add user agents array of this job to the overal user agents list.
 				// php array+ automatically fixes clashing keys. The values are always the same
 				// so it doesn't matter whether or not it overwrites.
-				$userAgents += $jobActionData["userAgents"];
+				$userAgents += $jobActionData['userAgents'];
 
 				// The summerized status for each user agent run
 				// of this job. e.g. if all are new except one,
