@@ -159,8 +159,8 @@
 				log( 'Running ' + ( runInfo.desc || '' ) + ' tests...' );
 
 				iframe = document.createElement( 'iframe' );
-				iframe.width = 1000;
-				iframe.height = 600;
+				iframe.style.width = '100%';
+				iframe.height = 100;
 				iframe.className = 'test-runner-frame';
 				iframe.src = currRunUrl + (currRunUrl.indexOf( '?' ) > -1 ? '&' : '?') + $.param({
 					// Cache buster
