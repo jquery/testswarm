@@ -66,8 +66,6 @@ may work as well.
 
 1. *For Apache:*<br/>
    Copy `config/sample-.htaccess` to `.htaccess`.<br/>
-   Currently the only supported webserver is Apache (which uses a `.htaccess`
-   file).<br/>
    To run TestSwarm from a non-root directory, set `web.contextpath` to the
    correct path from the web root and update RewriteBase in `.htaccess`.
    Verify that `.htaccess` is working properly by opening a page (e.g.
