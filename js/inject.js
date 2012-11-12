@@ -445,7 +445,7 @@
 		// http://visionmedia.github.com/mocha/
 		'Mocha': {
 			detect: function () {
-				return typeof Mocha !== 'undefined' && typeof mocha !== 'undefined';
+				return typeof Mocha !== 'undefined' || typeof mocha !== 'undefined';
 			},
 			install: function () {
 				// Tab into the run method to install our hooks.
