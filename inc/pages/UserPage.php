@@ -90,20 +90,21 @@ class UserPage extends Page {
 
 			foreach ( $data['activeClients'] as $activeClient ) {
 				if ( $activeClient['uaData'] ) {
-					$filename = $activeClient['uaData']['swarmClass'];
-					$label = $activeClient['uaData']['browserFull'];
+					$displayInfo = $activeClient['uaData']['displayInfo'];
 				} else {
-					$filename = 'unknown';
-					$label = "Unrecognized [{$activeClient['uaID']}]";
+					$displayInfo = array(
+						'title' => "Unrecognized [{$activeClient['uaID']}]",
+						'class' => 'swarm-browser',
+					);
 				}
 				$html .=
 					'<div class="span4"><div class="well">'
-					. '<img class="pull-right" src="' . swarmpath( "img/{$filename}.sm.png" ) . '" alt="">'
-					. '<strong class="label">' . htmlspecialchars( $label ) . '</strong>'
+					. html_tag( 'div', array(
+						'class' => $displayInfo['class'] . ' pull-right',
+						'title' => $displayInfo['title'],
+					) )
+					. '<strong class="label">' . htmlspecialchars( $displayInfo['title'] ) . '</strong>'
 					. '<p>'
-					. '<small>Platform: ' . htmlspecialchars( $activeClient['uaData']['osFull'] )
-					. '</small>'
-					. '<br>'
 					. '<small>Connected ' . self::getPrettyDateHtml( $activeClient, 'connected' ) . '</small>'
 					. '<br>'
 					. '<small>Last ping ' . self::getPrettyDateHtml( $activeClient, 'pinged' ) . '</small>'
@@ -120,18 +121,9 @@ class UserPage extends Page {
 			$html .= '<h2>Recent jobs</h2><table class="table table-bordered swarm-results">';
 
 			// Build table header
-			$html .= '<thead><tr><td></td>';
-			foreach ( $data['uasInJobs'] as $uaID => $uaData ) {
-				$html .= '<th>' .
-					'<img src="' . swarmpath( "img/{$uaData['swarmClass']}.sm.png" ) .
-					'" class="swarm-browsericon' .
-					'" alt="' . htmlspecialchars( $uaData['browserFull'] ) .
-					'" title="' . htmlspecialchars( $uaData['browserFull'] ) .
-					'"><br>' .
-					htmlspecialchars( $uaData['browserVersion'] ) .
-					'</th>';
-			}
-			$html .= '</tr></thead><tbody>';
+			$html .= '<thead>';
+			$html .= JobPage::getUaHtmlHeader( $data['uasInJobs'] );
+			$html .= '</thead><tbody>';
 
 			foreach ( $data['recentJobs'] as $job ) {
 

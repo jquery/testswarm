@@ -101,7 +101,6 @@ class AddjobAction extends Action {
 			return;
 		}
 
-		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
 		$uaIDs = array();
 
 		foreach ( $browserSets as $browserSet ) {
@@ -109,8 +108,8 @@ class AddjobAction extends Action {
 				$this->setError( "invalid-input", "Unknown browser set: $browserSet." );
 				return;
 			}
-			// Merge the arrays, and re-index with unique (also prevents duplicate entries)
-			$uaIDs = array_unique( array_merge( $uaIDs, $conf->browserSets->$browserSet ) );
+			// Merge the arrays, and re-index with unique (prevents duplicate entries)
+			$uaIDs = array_unique( array_merge( $uaIDs, array_keys((array)$conf->browserSets->$browserSet) ) );
 		}
 
 		if ( !count( $uaIDs ) ) {

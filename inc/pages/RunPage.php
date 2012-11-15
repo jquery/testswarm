@@ -28,6 +28,7 @@ class RunPage extends Page {
 		$this->bodyScripts[] = swarmpath( "js/run.js?" . time() );
 
 		$client = Client::newFromContext( $this->getContext(), $runToken );
+		$displayInfo = $uaData->displayInfo;
 
 		$html = '<script>'
 			. 'SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';'
@@ -38,11 +39,14 @@ class RunPage extends Page {
 			'<div class="row">'
 				. '<div class="span2">'
 					. '<div class="well pagination-centered thumbnail">'
-					. '<img src="' . swarmpath( "img/{$uaData->swarmClass}.sm.png" )
-						. '" class="swarm-browsericon '
-						. '" alt="' . htmlspecialchars( $uaData->browserFull )
-						. '" title="' . htmlspecialchars( $uaData->browserFull ) . '">'
-					. '<span class="label">' . htmlspecialchars( $uaData->browserFull ) . '</span>'
+					. html_tag( 'div', array(
+						'class' => $displayInfo['class'],
+						'title' => $displayInfo['title'],
+					) )
+					. '<br>'
+					. html_tag( 'span', array(
+						'class' => 'badge swarm-browsername',
+					), $displayInfo['title'] )
 					. '</div>'
 				. '</div>'
 				. '<div class="span7">'

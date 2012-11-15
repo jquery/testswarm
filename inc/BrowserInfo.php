@@ -9,54 +9,64 @@
 class BrowserInfo {
 
 	/**
-	 * @var $context TestSwarmContext
+	 * @var TestSwarmContext
 	 */
 	private $context;
 
 	/**
-	 * @var $rawUserAgent string
+	 * @var string
 	 */
-	protected $rawUserAgent = "";
+	protected $rawUserAgent = '';
 
 	/**
-	 * @var $uaData stdClass object: Object returned by UA::parse.
+	 * @var stdClass: Object returned by UA::parse.
 	 */
 	protected $uaData;
 
 	/**
-	 * @var $swarmUaItem stdClass object
+	 * @var stdClass
 	 */
 	protected $swarmUaItem;
 
 	/**
-	 * @var $swarmUaIndex stdClass object: Cached object of parsed defaultSettings.json browserSets
+	 * @var stdClass: Cache for getBrowserIndex()
 	 */
-	protected static $swarmUaIndex;
+	protected static $browserIndex;
 
 	/** @return object */
-	public static function getSwarmUAIndex() {
+	public static function getBrowserIndex() {
 		// Lazy-init and cache
-		if ( self::$swarmUaIndex === null ) {
-			global $swarmInstallDir;
-      global $swarmContext;
+		if ( self::$browserIndex === null ) {
+			global $swarmInstallDir, $swarmContext;
 
 			// Convert from array with string values
 			// to an object with boolean values
-        $swarmUaIndex = new stdClass();
-        $browserSets = $swarmContext->getConf()->browserSets;
-			foreach ( $browserSets as $browserSetName => $browserSet ) {
-				foreach ( $browserSet as $browserSetIndex => $uaID ) {
-					$swarmUaIndex->$uaID = self::fakeUaData( $uaID );
+			$browserIndex = new stdClass();
+			$browserSets = $swarmContext->getConf()->browserSets;
+			foreach ( $browserSets as $browserSet => $browsers ) {
+				foreach ( $browsers as $uaID => $uaData ) {
+					$keys = array_keys(get_object_vars(
+						BrowserInfo::newFromContext( $swarmContext, '-' )->getUaData()
+					));
+					$data = new stdClass();
+					// Filter out unwanted properties, and set missing properties.
+					// (browserSets can be very precise or very generic).
+					foreach ( $keys as $key ) {
+						$data->$key = isset( $uaData->$key ) ? $uaData->$key : '';
+					}
+					$data->displayInfo = self::getDisplayInfo( $data );
+
+					$browserIndex->$uaID = $data;
 				}
 			}
-			self::$swarmUaIndex = $swarmUaIndex;
+			self::$browserIndex = $browserIndex;
 		}
-		return self::$swarmUaIndex;
+		return self::$browserIndex;
 	}
 
 	/**
-	 * @param $context TestSwarmContext
-	 * @param $userAgent string
+	 * @param TestSwarmContext $context
+	 * @param string $userAgent
 	 * @return BrowserInfo
 	 */
 	public static function newFromContext( TestSwarmContext $context, $userAgent ) {
@@ -70,7 +80,7 @@ class BrowserInfo {
 	 * Create a new BrowserInfo object for the given user agent string.
 	 *
 	 * Instances may not be created directly, use the static newFromUA method instead
-	 * @param $userAgent string
+	 * @param string $userAgent
 	 */
 	protected function parseUserAgent( $userAgent ) {
 
@@ -79,7 +89,7 @@ class BrowserInfo {
 		 * @source https://github.com/tobie/ua-parser
 		 *
 		 * stdClass Object (
-		 *		[browser] => Firefox
+		 *		[family] => Firefox
 		 *		[major] => 14
 		 *		[minor] => 0
 		 *		[patch] => 1
@@ -88,11 +98,14 @@ class BrowserInfo {
 		 *		[os] => Mac OS X
 		 *		[osMajor] => 10
 		 *		[osMinor] => 8
-		 *		[osVersion] => 10.8
-		 *		[osFull] => Mac OS X 10.8
-		 *		[full] => Firefox 14.0.1/Mac OS X 10.8
+		 *		[osPatch] => 2
+		 *		[osVersion] => 10.8.2
+		 *		[osFull] => Mac OS X 10.8.2
+		 *		[full] => Firefox 14.0.1/Mac OS X 10.8.2
 		 *		[device] =>
-		 *		[uaOriginal] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:14.0) Gecko/20100101 Firefox/14.0.1
+		 *		[deviceMajor] =>
+		 *		[deviceMinor] =>
+		 *		[uaOriginal] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8.2; rv:14.0) Gecko/20100101 Firefox/14.0.1
 		 * )
 		 */
 
@@ -101,17 +114,75 @@ class BrowserInfo {
 		$uaparserData = $UAParserInstance->parse( $userAgent );
 
 		$uaData = new stdClass();
-		$uaData->osFull = $uaparserData->osFull;
-		$uaData->browserName = $uaparserData->browser;
-		$uaData->browserVersion = $uaparserData->version;
-		$uaData->browserFull = $uaparserData->browserFull;
 
-		$uaData->swarmClass = strtolower( str_replace( ' ', '_', $uaData->browserName ) );
+		$uaData->browserFamily = $uaparserData->family;
+		$uaData->browserMajor = $uaparserData->major;
+		$uaData->browserMinor = $uaparserData->minor;
+		$uaData->browserPatch = $uaparserData->patch;
+
+		$uaData->osFamily = $uaparserData->os;
+		$uaData->osMajor = $uaparserData->osMajor;
+		$uaData->osMinor = $uaparserData->osMinor;
+		$uaData->osPatch = $uaparserData->osPatch;
+
+		$uaData->deviceFamily = $uaparserData->device;
+		$uaData->deviceMajor = $uaparserData->deviceMajor;
+		$uaData->deviceMinor = $uaparserData->deviceMinor;
+
+		$uaData->displayInfo = self::getDisplayInfo( $uaData );
 
 		$this->rawUserAgent = $userAgent;
 		$this->uaData = $uaData;
 
 		return $this;
+	}
+
+	/**
+	 * @param array|object $uaData
+	 * @param string $prefix: Prefix for CSS classes.
+	 * @return array
+	 */
+	protected static function getDisplayInfo( $uaData, $prefix = 'swarm-' ) {
+		$uaData = (object) $uaData;
+		$classes = array();
+		$classes[] = $prefix . 'browser';
+		if ( $uaData->browserFamily ) {
+			$browserFamily = strtolower( str_replace( ' ', '_', $uaData->browserFamily ) );
+			$classes[] = $prefix . 'browser-' . $browserFamily;
+			if ( $uaData->browserMajor ) {
+				$classes[] = $prefix . 'browser-' . $browserFamily . '-' . intval( $uaData->browserMajor );
+			}
+		}
+		if ( $uaData->osFamily ) {
+			$classes[] = $prefix . 'os';
+			$osFamily = strtolower( str_replace( ' ', '_', $uaData->osFamily ) );
+			$classes[] = $prefix . 'os-' . $osFamily;
+			if ( $uaData->osMajor ) {
+				$classes[] = $prefix . 'os-' . $osFamily . '-' . intval( $uaData->osMajor );
+			}
+		}
+		if ( $uaData->deviceFamily ) {
+			$classes[] = $prefix . 'device';
+			$deviceFamily = strtolower( str_replace( ' ', '_', $uaData->deviceFamily ) );
+			$classes[] = $prefix . 'device-' . $deviceFamily;
+			if ( $uaData->deviceMajor ) {
+				$classes[] = $prefix . 'device-' . $deviceFamily . '-' . intval( $uaData->deviceMajor );
+			}
+		}
+		$title = array();
+		if ( $uaData->browserFamily ) {
+			$title[] = rtrim("$uaData->browserFamily $uaData->browserMajor.$uaData->browserMinor.$uaData->browserPatch", '. ');
+		}
+		if ( $uaData->osFamily ) {
+			$title[] = rtrim("$uaData->osFamily $uaData->osMajor.$uaData->osMinor.$uaData->osPatch", '. ');
+		}
+		if ( $uaData->deviceFamily ) {
+			$title[] = rtrim("$uaData->deviceFamily $uaData->deviceMajor.$uaData->deviceMinor", '. ');
+		}
+		return array(
+			'class' => implode( ' ', $classes ),
+			'title' => implode( '/', $title ),
+		);
 	}
 
 	/** @return string */
@@ -125,51 +196,26 @@ class BrowserInfo {
 	}
 
 	/**
-	 * This method makes sure that the properties we need
-	 * on display pages are present. The reason we have to calculate these manually
-	 * is because on the HomePage, JobPage, UserPage etc. we only have the uaID,
-	 * not the user agent, so we need to engineer the rest.
-	 * @return object{ }
-	 */
-	protected static function fakeUaData( $uaID ) {
-		$parts = explode( '|', $uaID , 2 );
-
-		$uaData = new stdClass();
-		$uaData->osFull = '';
-		$uaData->browserName = $parts[0];
-		$uaData->browserVersion = $parts[1];
-		$uaData->browserFull = "$parts[0] $parts[1]";
-
-		$uaData->swarmClass = strtolower( str_replace( ' ', '_', $uaData->browserName ) );
-		$uaData->id = $uaID;
-
-		return $uaData;
-	}
-
-	/**
 	 * Find the uaID as configured in browserSets that best matches the
-	 * current user-agent.
-	 * A browserSet is an array of uaIDs. Format:
-	 * @var {object} uaID: '<browserName>|<browserVersion>'.
-	 * The version numbers can be as many digets as desired (e.g. Foo|9, Foo|9.5, Foo 9.52 etc.)
-	 * @return object|false
+	 * current user-agent and return the uaData from the browser index.
+	 * @return object: Object from browserindex (with additional 'id' property).
 	 */
 	public function getSwarmUaItem() {
 
 		// Lazy-init and cache
 		if ( $this->swarmUaItem === null ) {
-			$browserSets = $this->context->getConf()->browserSets;
-			$uaData = $this->getUaData();
+			$browserIndex = self::getBrowserIndex();
+			$myUaData = $this->getUaData();
+			$foundPrecision = 0;
 			$found = false;
-			$precision = 0;
-			foreach ( $browserSets as $browserSetName => $browserSet ) {
-				foreach ( $browserSet as $browserSetIndex => $uaID ) {
-					if ( strpos( "{$uaData->browserName}|{$uaData->browserVersion}", $uaID ) === 0 && strlen( $uaID ) > $precision ) {
-						$found = $uaData;
-						$found->id = $uaID;
-						$precision = strlen( $uaID );
-						break;
-					}
+			foreach ( $browserIndex as $uaID => $uaData ) {
+				$diff = array_diff_assoc( (array)$uaData, (array)$myUaData );
+				unset( $diff['displayInfo'] );
+				$precision = count( (array)$uaData ) - count( array_values( $diff ) );
+				if ( implode( '', array_values( $diff ) ) === '' && $precision > $foundPrecision ) {
+					$found = $uaData;
+					$found->id = $uaID;
+					$foundPrecision = $precision;
 				}
 			}
 

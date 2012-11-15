@@ -59,8 +59,9 @@ class HomePage extends Page {
 				}
 			} else {
 				$uaData = $browserInfo->getUaData();
+				unset($uaData->displayInfo);
 				$html .= '<div class="alert alert-info">'
-					. '<h4 class="alert-heading">TestSwarm does not recognize your browser.</h4>'
+					. '<h4 class="alert-heading">Your browser is not needed by this swarm.</h4>'
 					. '<p>Please join with one the below browsers.</p></div>'
 					. '<p>If you feel that this may be an error, please report it to the TestSwarm '
 					. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
@@ -105,21 +106,21 @@ class HomePage extends Page {
 		foreach ( $data['userAgents'] as $uaID => $userAgent ) {
 			$isCurr = $uaID == $browserInfo->getSwarmUaID();
 
+			$displayInfo = $userAgent['data']['displayInfo'];
+
 			$item = ''
 				. '<div class="span2">'
 				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? ' alert-info' : '' ) . '">'
 
-				. html_tag( 'img', array(
-					'src' => swarmpath( 'img/' . $userAgent['data']['swarmClass'] . '.sm.png' ),
-					'class' => 'swarm-browsericon',
-					'alt' => '',
-					'title' => $userAgent['data']['browserFull'],
+				. html_tag( 'div', array(
+					'class' => $displayInfo['class'],
+					'title' => $displayInfo['title'],
 				) )
 				. '<br>'
 
 				. html_tag( 'span', array(
 					'class' => 'badge swarm-browsername',
-				), $userAgent['data']['browserFull'] )
+				), $displayInfo['title'] )
 
 				. '<br>'
 
