@@ -67,8 +67,7 @@ h2 + .row {
 	line-height: normal;
 }
 
-.swarm-browseronline .swarm-browsericon {
-	height: 48px;
+.swarm-browseronline .swarm-browser {
 	margin: 10px 0;
 }
 
@@ -105,11 +104,12 @@ table.swarm-results {
 
 table.swarm-results thead th,
 table.swarm-results tbody td.swarm-status {
+	vertical-align: top;
 	text-align: center;
 	background: #fff;
 }
 
-table.swarm-results th img.swarm-browsericon {
+table.swarm-results th .swarm-browser {
 	max-height: 28px;
 }
 
@@ -209,4 +209,80 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 .swarm-page-footer {
 	text-align: center;
 	margin-bottom: 18px;
+}
+
+/**
+ * UA icons
+ */
+.swarm-browser {
+	position: relative;
+	display: inline-block;
+	width: 48px;
+	height: 48px;
+	background: url(../img/unknown.sm.png) 50% 50% no-repeat;
+	background-size: contain;
+}
+
+.swarm-browser-chrome {
+	background-image: url(../img/chrome.sm.png);
+}
+
+.swarm-browser-firefox {
+	background-image: url(../img/firefox.sm.png);
+}
+
+.swarm-browser-ie {
+	background-image: url(../img/ie.sm.png);
+}
+
+.swarm-browser-opera,
+.swarm-browser-opera_mini,
+.swarm-browser-opera_mobile {
+	background-image: url(../img/opera.sm.png);
+}
+
+.swarm-browser-safari,
+.swarm-browser-mobile_safari {
+	background-image: url(../img/safari.sm.png);
+}
+
+.swarm-os::after {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	content: "";
+	display: inline-block;
+	width: 50%;
+	height: 50%;
+	background: transparent 50% 50% no-repeat;
+	background-size: contain;
+	-webkit-filter: drop-shadow(0 0 12px #fff);
+	-moz-filter: drop-shadow(0 0 12px #fff);
+	filter: drop-shadow(0 0 12px #fff);
+}
+
+.swarm-os-android::after {
+	background-image: url(../img/os-android.png);
+}
+
+.swarm-os-ios::after {
+	background-image: url(../img/os-ios.png);
+}
+
+.swarm-os-mac_os_x::after {
+	background-image: url(../img/os-macosx.png);
+}
+
+.swarm-os-windows::after,
+.swarm-os-windows_xp::after {
+	background-image: url(../img/os-winxp.png);
+}
+
+.swarm-os-windows_vista::after,
+.swarm-os-windows_7::after {
+	background-image: url(../img/os-win7.png);
+}
+
+.swarm-os-windows_8::after {
+	background-image: url(../img/os-win8.png);
 }

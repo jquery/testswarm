@@ -30,12 +30,10 @@ class SwarmstateAction extends Action {
 			'userAgents' => array(),
 		);
 
-		$uaIndex = BrowserInfo::getSwarmUAIndex();
+		$browserIndex = BrowserInfo::getBrowserIndex();
 
-		foreach ( $uaIndex as $uaID => $uaData ) {
-			if ( $filterBrowserSet && isset( $conf->browserSets->$filterBrowserSet )
-					&& !in_array( $uaID, $conf->browserSets->$filterBrowserSet )
-			) {
+		foreach ( $browserIndex as $uaID => $uaData ) {
+			if ( $filterBrowserSet && isset( $conf->browserSets->$filterBrowserSet->$uaID ) ) {
 				continue;
 			}
 

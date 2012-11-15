@@ -29,8 +29,6 @@ class UserAction extends Action {
 			return;
 		}
 
-		$uaIndex = BrowserInfo::getSwarmUAIndex();
-
 		// Active clients
 		$activeClients = array();
 

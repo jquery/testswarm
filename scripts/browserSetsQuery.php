@@ -20,21 +20,21 @@ class BrowserSetsQueryScript extends MaintenanceScript {
 
 	protected function execute() {
 		$conf = $this->getContext()->getConf();
-		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+		$browserIndex = BrowserInfo::getBrowserIndex();
 
 		// Output
 		$set = $this->getOption( 'set' );
 		if ( $set ) {
 			if ( isset( $conf->browserSets->$set ) ) {
-				$this->out( "$set:\n* " . implode( "\n* ", $conf->browserSets->$set ) );
+				$this->out( "$set:\n* " . implode( "\n* ", array_keys( (array)$conf->browserSets->$set ) ) );
 			} else {
 				$this->error( "Browser set `$set` does not exist." );
 			}
 		} else {
 			foreach ( $conf->browserSets as $set => $browsers ) {
-				$this->out( "\n$set:\n* " . implode( "\n* ", $browsers ) );
+				$this->out( "\n$set:\n* " . implode( "\n* ", array_keys( (array)$browsers ) ) );
 			}
-			$this->out( "\n(everything):\n* " . implode( "\n* ", array_keys( get_object_vars( $swarmUaIndex ) ) ) );
+			$this->out( "\n(everything):\n* " . implode( "\n* ", array_keys( (array)$browserIndex ) ) );
 		}
 	}
 }

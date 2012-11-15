@@ -74,14 +74,17 @@ class JobPage extends Page {
 
 	public static function getUaHtmlHeader( $userAgents ) {
 		$html = '<tr><th>&nbsp;</th>';
-
 		foreach ( $userAgents as $userAgent ) {
-			$html .= '<th><img src="' . swarmpath( 'img/' . $userAgent['swarmClass'] )
-				. '.sm.png" class="swarm-browsericon '
-				. '" alt="' . htmlspecialchars( $userAgent['browserFull'] )
-				. '" title="' . htmlspecialchars( $userAgent['browserFull'] )
-				. '"><br>'
-				. $userAgent['browserVersion']
+			$displayInfo = $userAgent['displayInfo'];
+			$html .= '<th>'
+				. html_tag( 'div', array(
+					'class' => $displayInfo['class'],
+					'title' => $displayInfo['title'],
+				) )
+				. '<br>'
+				. html_tag( 'span', array(
+					'class' => 'label swarm-browsername',
+				), $displayInfo['title'] )
 				. '</th>';
 		}
 
@@ -116,7 +119,8 @@ class JobPage extends Page {
 						'data-client-id' => isset( $uaRun['clientID'] ) ? $uaRun['clientID'] : '',
 					));
 					if ( isset( $uaRun['runResultsUrl'] ) && isset( $uaRun['runResultsLabel'] ) ) {
-						$runResultsTooltip = "Open run results for {$userAgents[$uaID]['browserFull']}";
+						$title = $userAgents[$uaID]['displayInfo']['title'];
+						$runResultsTooltip = "Open run results for $title";
 						$runResultsTagOpen = html_tag_open( 'a', array(
 							'rel' => 'nofollow',
 							'href' => $uaRun['runResultsUrl'],
@@ -137,7 +141,7 @@ class JobPage extends Page {
 							. ( $showResetRun ?
 								html_tag( 'i', array(
 									'class' => 'swarm-reset-run-single icon-remove-circle pull-right',
-									'title' => "Re-schedule run for {$userAgents[$uaID]['browserFull']}",
+									'title' => "Re-schedule run for $title",
 								) )
 								: ''
 							);

@@ -45,6 +45,10 @@ class Database {
 		return $db;
 	}
 
+	public function getContext() {
+		return $this->context;
+	}
+
 	/** @return string: current DB name */
 	public function getDBname() {
 		return $this->dbname;

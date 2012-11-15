@@ -26,17 +26,17 @@ class Client {
 
 		// Verify that the client exists.
 		$clientRow = $db->getRow(str_queryf(
-			"SELECT
+			'SELECT
 				*
 			FROM
 				clients
 			WHERE id = %u
-			LIMIT 1;",
+			LIMIT 1;',
 			$clientID
 		));
 
 		if ( !$clientRow || !$clientRow->id ) {
-			throw new SwarmException( "Invalid client ID." );
+			throw new SwarmException( 'Invalid client ID.' );
 		}
 
 		// Although we can't completely prevent fraudulent submissions
@@ -53,22 +53,22 @@ class Client {
 
 		// Update its record so that we know that it's still alive
 		$db->query(str_queryf(
-			"UPDATE clients
+			'UPDATE clients
 			SET
 				updated = %s
 			WHERE id = %u
-			LIMIT 1;",
+			LIMIT 1;',
 			$clientRow->updated,
 			$clientRow->id
 		));
 
 		$userRow = $db->getRow(str_queryf(
-			"SELECT
+			'SELECT
 				*
 			FROM
 				users
 			WHERE id = %u
-			LIMIT 1;",
+			LIMIT 1;',
 			$clientRow->user_id
 		));
 
@@ -84,19 +84,18 @@ class Client {
 
 		// If the useragent isn't known, abort with an error message
 		if ( !$browserInfo->isInSwarmUaIndex() ) {
-			throw new SwarmException( "Your browser is not suported in this TestSwarm "
-				. "(useragent string: {$browserInfo->getRawUA()})." );
+			throw new SwarmException( 'Your browser is not needed by this swarm.' );
 		}
 
 		// Running a client doesn't require being logged in
-		$username = $request->getSessionData( "username", $request->getVal( "item" ) );
+		$username = $request->getSessionData( 'username', $request->getVal( 'item' ) );
 		if ( !$username ) {
-			throw new SwarmException( "Username required." );
+			throw new SwarmException( 'Username required.' );
 		}
 
 		// Figure out what the user's ID number is
 		$userRow = $db->getRow(str_queryf(
-			"SELECT * FROM users WHERE name = %s LIMIT 1;",
+			'SELECT * FROM users WHERE name = %s LIMIT 1;',
 			$username
 		));
 
@@ -105,21 +104,21 @@ class Client {
 			$db->query(str_queryf(
 				// This omits some of the required columns but seems to work regardless.
 				// See also github.com/jquery/testswarm/issues/148 which will fix this.
-				"INSERT INTO users (name, updated, created) VALUES(%s, %s, %s);",
+				'INSERT INTO users (name, updated, created) VALUES(%s, %s, %s);',
 				$username,
 				swarmdb_dateformat( SWARM_NOW ),
 				swarmdb_dateformat( SWARM_NOW )
 			));
 			$userRow = $db->getRow(str_queryf(
-				"SELECT * FROM users WHERE id = %u LIMIT 1;",
+				'SELECT * FROM users WHERE id = %u LIMIT 1;',
 				$db->getInsertId()
 			));
 		}
 
 		// Insert in a new record for the client and get its ID
 		$db->query(str_queryf(
-			"INSERT INTO clients (user_id, useragent_id, useragent, ip, updated, created)
-			VALUES(%u, %s, %s, %s, %s, %s);",
+			'INSERT INTO clients (user_id, useragent_id, useragent, ip, updated, created)
+			VALUES(%u, %s, %s, %s, %s, %s);',
 			$userRow->id,
 			$browserInfo->getSwarmUaID(),
 			$browserInfo->getRawUA(),
@@ -129,7 +128,7 @@ class Client {
 		));
 
 		$this->clientRow = $db->getRow(str_queryf(
-			"SELECT * FROM clients WHERE id = %u LIMIT 1;",
+			'SELECT * FROM clients WHERE id = %u LIMIT 1;',
 			$db->getInsertId()
 		));
 		$this->userRow = $userRow;
@@ -168,15 +167,15 @@ class Client {
 		if ( !$conf->client->requireRunToken ) {
 			return true;
 		}
-		$cacheFile = $conf->storage->cacheDir . "/run_token_hash.cache";
+		$cacheFile = $conf->storage->cacheDir . '/run_token_hash.cache';
 		if ( !is_readable( $cacheFile ) ) {
-			throw new SwarmException( "Configuration requires a runToken but none has been configured." );
+			throw new SwarmException( 'Configuration requires a runToken but none has been configured.' );
 		}
 		$runTokenHash = trim( file_get_contents( $cacheFile ) );
 		if ( $runTokenHash === sha1( $runToken ) ) {
 			return true;
 		}
-		throw new SwarmException( "This TestSwarm requires a run token. Either none was entered or it is invalid." );
+		throw new SwarmException( 'This TestSwarm requires a run token. Either none was entered or it is invalid.' );
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead. */

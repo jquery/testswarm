@@ -38,19 +38,19 @@ Note that any QUnit specific details here may out of date. Pay attention to the 
 		<title>QUnit Test Suite</title>
 		<!-- Third-pary libraries -->
 		<link rel="stylesheet" href="libs/jquery.qunit/qunit.css">
-		<script src="libs/jquery/jquery.js">
-		<script src="libs/jquery.qunit/jquery.qunit.js">
+		<script src="libs/jquery/jquery.js"></script>
+		<script src="libs/jquery.qunit/jquery.qunit.js"></script>
 
 		<!-- TestSwarm link -->
-		<script src="http://example.org/testswarm/js/inject.js">
+		<script src="http://example.org/testswarm/js/inject.js"></script>
 
 		<!-- Your application scripts -->
-		<script src="src/foo.js">
-		<script src="src/bar.js">
+		<script src="src/foo.js"></script>
+		<script src="src/bar.js"></script>
 
 		<!-- Your application test suites -->
-		<script src="tests/foo.test.js">
-		<script src="tests/bar.test.js">
+		<script src="tests/foo.test.js"></script>
+		<script src="tests/bar.test.js"></script>
 	</head>
 	<body>
 		<div id="qunit"></div>

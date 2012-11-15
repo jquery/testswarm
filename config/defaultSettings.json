@@ -33,13 +33,30 @@
 		"cacheDir": "$1/cache"
 	},
 	"browserSets": {
-		"currentDesktop": [
-			"Chrome|22",
-			"Firefox|16",
-			"IE|9",
-			"Opera|12.0",
-			"Safari|6.0"
-		]
+		"currentDesktop": {
+			"Chrome|23": {
+				"browserFamily": "Chrome",
+				"browserMajor": "23"
+			},
+			"Firefox|16": {
+				"browserFamily": "Firefox",
+				"browserMajor": "16"
+			},
+			"IE|10": {
+				"browserFamily": "IE",
+				"browserMajor": "10"
+			},
+			"Opera|12.0": {
+				"browserFamily": "Opera",
+				"browserMajor": "12",
+				"browserMinor": "0"
+			},
+			"Safari|6.0": {
+				"browserFamily": "Safari",
+				"browserMajor": "6",
+				"osFamily": "Mac OS X"
+			}
+		}
 	},
 	"debug": {
 		"showExceptionDetails": false,

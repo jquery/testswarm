@@ -52,7 +52,7 @@ class AddjobPage extends Page {
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
-		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+		$browserIndex = BrowserInfo::getBrowserIndex();
 
 		$addjobPageUrlEsc = htmlspecialchars( swarmpath( 'addjob' ) );
 
@@ -118,17 +118,22 @@ class AddjobPage extends Page {
 		overlap each other, TestSwarm will detect and remove duplicate entries in the resulting set.</p>
 
 HTML;
-		foreach ( $conf->browserSets as $set => $browsers ) {
-			$set = htmlspecialchars( $set );
+		foreach ( $conf->browserSets as $browserSet => $browsers ) {
+			$set = htmlspecialchars( $browserSet );
 			$browsersHtml = '';
-			$last = count( $browsers ) - 1;
-			foreach ( $browsers as $i => $browser ) {
-				if ( $i !== 0 ) {
-					$browsersHtml .= $i === $last ? '<br> and ' : ',<br>';
-				} else {
+			reset( $browsers );
+			$first = key( $browsers );
+			end( $browsers );
+			$last = key( $browsers );
+			foreach ( $browsers as $uaID => $uaData ) {
+				if ( $uaID === $first ) {
 					$browsersHtml .= '<br>';
+				} elseif ( $uaID === $last ) {
+					$browsersHtml .= '<br> and ';
+				} else {
+					$browsersHtml .= ',<br>';
 				}
-				$browsersHtml .= htmlspecialchars( $swarmUaIndex->$browser->browserFull );
+				$browsersHtml .= htmlspecialchars( $browserIndex->$uaID->displayInfo['title'] );
 			}
 			$formHtml .= <<<HTML
 		<div class="control-group">

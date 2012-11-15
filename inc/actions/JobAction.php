@@ -190,13 +190,16 @@ class JobAction extends Action {
 		}
 
 		// Get information for all encounted useragents
-		$swarmUaIndex = BrowserInfo::getSwarmUAIndex();
+		$browserIndex = BrowserInfo::getBrowserIndex();
 		$userAgents = array();
-		foreach ( $userAgentIDs as $userAgentID ) {
-			if ( !isset( $swarmUaIndex->$userAgentID ) ) {
-				throw new SwarmException( "Job $jobID has runs for unknown brower ID `$userAgentID`." );
+		foreach ( $userAgentIDs as $uaID ) {
+			if ( !isset( $browserIndex->$uaID ) ) {
+				// If it isn't in the index anymore, it means it has been removed from the browserSets
+				// configuration. Use a generic fallback object;
+				$userAgents[$uaID] = BrowserInfo::newFromContext( $db->getContext(), '-' )->getUaData();
+				$userAgents[$uaID]->displayInfo['title'] = $uaID;
 			} else {
-				$userAgents[$userAgentID] = (array)$swarmUaIndex->$userAgentID;
+				$userAgents[$uaID] = (array)$browserIndex->$uaID;
 			}
 		}
 		natcaseksort( $userAgents );

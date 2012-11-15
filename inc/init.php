@@ -105,7 +105,8 @@ $swarmAutoLoadClasses = array(
 	'SignupPage' => 'inc/pages/SignupPage.php',
 	'UserPage' => 'inc/pages/UserPage.php',
 	# Libs
-	'UA' => 'inc/libs/ua-parser/php/UAParser.php'
+	//'UA' => 'inc/libs/ua-parser/php/UAParser.php',
+	'UA' => '../../Krinkle/ua-parser/php/UAParser.php',
 );
 
 function swarmAutoLoader( $className ) {
@@ -161,6 +162,12 @@ if ( !is_object( $localSettings ) ) {
 	$localSettings = array();
 }
 
+// Ignore the defaults if there are local ones,
+// this avoids polution of the browser matrix with old or unwanted
+// browsers from the default settings.
+if ( isset( $localSettings->browserSets ) ) {
+	unset( $defaultSettings->browserSets );
+}
 $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
 unset( $defaultSettingsJSON, $localSettingsPHP, $defaultSettings, $localSettings );
@@ -215,7 +222,7 @@ $swarmContext = new TestSwarmContext( $swarmConfig );
  * @{
  */
 if ( $swarmContext->getConf()->debug->phpErrorReporting ) {
-	error_reporting( E_ALL );
+	error_reporting( -1 );
 	ini_set( 'display_errors', 1 );
 }
 
