@@ -32,8 +32,15 @@ class SwarmstateAction extends Action {
 
 		$browserIndex = BrowserInfo::getBrowserIndex();
 
+		$browserSetByUaId = array();
+		foreach ( $conf->browserSets as $browserSet => $browsers ) {
+			foreach ( $browsers as $browser ) {
+				$browserSetByUaId[$browser] = $browserSet;
+			}
+		}
+
 		foreach ( $browserIndex as $uaID => $uaData ) {
-			if ( $filterBrowserSet && in_array( $uaID, $conf->browserSets->$filterBrowserSet ) ) {
+			if ( $filterBrowserSet && $browserSetByUaId[$uaID] !== $filterBrowserSet ) {
 				continue;
 			}
 
@@ -85,8 +92,10 @@ class SwarmstateAction extends Action {
 			));
 			$pendingReRuns = intval( $pendingReRuns );
 
-			if ( $showOnlyactive && !$clients && !$activeRuns && !$pendingRuns && !$pendingReRuns ) {
-				continue;
+			if ( !$clients && !$activeRuns && !$pendingRuns && !$pendingReRuns ) {
+				if ( $showOnlyactive || !isset( $browserSetByUaId[$uaID] ) ) {
+					continue;
+				}
 			}
 
 			$data['userAgents'][$uaID] = array(
