@@ -171,9 +171,9 @@ abstract class Action {
 	}
 
 	final public static function newFromContext( TestSwarmContext $context ) {
-		$page = new static();
-		$page->context = $context;
-		return $page;
+		$action = new static();
+		$action->context = $context;
+		return $action;
 	}
 
 	final protected function getContext() {

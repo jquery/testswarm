@@ -37,17 +37,17 @@ class HomePage extends Page {
 			. '<div class="span7">'
 			. '<h3>Distributed Continuous Integration for JavaScript</h3>'
 			. '<blockquote><p>'
-			. str_replace( "$1", $siteNameHtml, $conf->customMsg->homeIntro_html )
+			. str_replace( '$1', $siteNameHtml, $conf->customMsg->homeIntro_html )
 			. '</p></blockquote>'
 			. '</div>';
 
 		$html .= '<div class="span5"><div class="well well-small">';
 		if ( !$conf->client->requireRunToken ) {
 			if ( $browserInfo->isInSwarmUaIndex() ) {
-					$html .= '<p><strong>' . $siteNameHtml . ' needs your help!</strong><br>'
+					$html .= '<p><strong>Join ' . $siteNameHtml . '!</strong><br>'
 					. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
-				if ( !$request->getSessionData( "username" ) ) {
-					$html .= '<form action="' . swarmpath( "" ) . '" method="get" class="form-horizontal">'
+				if ( !$request->getSessionData( 'username' ) ) {
+					$html .= '<form action="' . swarmpath( '' ) . '" method="get" class="form-horizontal">'
 						. '<input type="hidden" name="action" value="run">'
 						. '<label for="form-item">Username:</label>'
 						. ' <input type="text" name="item" id="form-item" placeholder="Enter username..">'
@@ -59,7 +59,7 @@ class HomePage extends Page {
 				}
 			} else {
 				$uaData = $browserInfo->getUaData();
-				unset($uaData->displayInfo);
+				unset( $uaData->displayInfo );
 				$html .= '<div class="alert alert-info">'
 					. '<h4 class="alert-heading">Your browser is not needed by this swarm.</h4>'
 					. '<p>Please join with one the below browsers.</p></div>'
@@ -100,7 +100,7 @@ class HomePage extends Page {
 
 		$itemsPerRow = 6;
 
-		$browsersHtml = '<h2>Browsers</h2>';
+		$browsersHtml = '<h2>State of the Swarm</h2>';
 		$browserItemCount = 0;
 
 		foreach ( $data['userAgents'] as $uaID => $userAgent ) {
@@ -167,6 +167,10 @@ class HomePage extends Page {
 		// Close un-even items rows
 		if ( $browserItemCount % $itemsPerRow !== 0 ) {
 			$browsersHtml .= '</div><!--/.row -->';
+		}
+
+		if ( $browserItemCount !== 0 ) {
+			$browsersHtml .= '<p><em>This swarm is empty!</em></p>';
 		}
 
 		$html .= $browsersHtml;

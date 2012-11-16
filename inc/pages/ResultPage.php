@@ -82,9 +82,10 @@ class ResultPage extends Page {
 				. html_tag( 'a', array( 'href' => $data['client']['userUrl'] ), $data['client']['userName'] )
 				. ' / Client #' . htmlspecialchars( $data['resultInfo']['clientID'] )
 			. '</td></tr>'
+			. '<tr><th>UA ID</th><td>'
+				. '<code>' . htmlspecialchars( $data['client']['uaID'] ) . '</code>'
 			. '<tr><th>User-Agent</th><td>'
-				. '<code>' . htmlspecialchars( $data['client']['uaID'] ) . '</code><br/>'
-				. 'Raw: <br><code>' . htmlspecialchars( $data['client']['userAgent'] ) . '</code>'
+				. '<code>' . htmlspecialchars( $data['client']['userAgent'] ) . '</code>'
 			. '</td></tr>'
 			. '<tr><th>Run time</th><td>'
 			. ( isset( $data['resultInfo']['runTime'] )
