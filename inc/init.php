@@ -105,8 +105,7 @@ $swarmAutoLoadClasses = array(
 	'SignupPage' => 'inc/pages/SignupPage.php',
 	'UserPage' => 'inc/pages/UserPage.php',
 	# Libs
-	//'UA' => 'inc/libs/ua-parser/php/UAParser.php',
-	'UA' => '../../Krinkle/ua-parser/php/UAParser.php',
+	'UA' => 'inc/libs/ua-parser/php/UAParser.php',
 );
 
 function swarmAutoLoader( $className ) {
