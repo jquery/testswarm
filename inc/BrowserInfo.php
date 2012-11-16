@@ -196,6 +196,47 @@ class BrowserInfo {
 	}
 
 	/**
+	 * Process the wildcard syntax allowed at the end
+	 * of uaData property values.
+	 * This was originally created to handle the different
+	 * pseudo-patch releases from Opera. Opera 11.62 for instance
+	 * some people want to treat it like 11.6.2 because BrowserStack
+	 * has 11.60 and 11.62 mixed up under the id "11.6". So we can
+	 * use "browserMinor: 6*" in the browserSets configuration,
+	 * which will tolerate anything. Use carfully though,
+	 * theotically this means it will match X.6, X.60 and X.600,
+	 * X.6foo, X.61-alpha etc.
+	 * NB: Wildcards are only allowed at the end of values. And because
+	 * it doesn't make sense to have more than one in that case, it
+	 * only looks for one.
+	 * NB: Pass the objects as copied arrays to this function, they will
+	 * be mutated otherwise.
+	 *
+	 * @param Array $uaData: browserSet configuration item
+	 * @param Array $myUaData: parsed ua-browser object
+	 * @return number|bool: If they match, how precise it is (higher is better),
+	 * or boolean false.
+	 */
+	private function compareUaData( Array $uaData, Array $myUaData ) {
+		unset( $uaData['displayInfo'], $myUaData['displayInfo'] );
+
+		foreach ( $uaData as $key => $value ) {
+			if ( preg_match( '/(Major|Minor|Patch)$/', $key ) && substr( $value, -1 ) === '*' ) {
+				$uaData[$key] = substr( $value, 0, -1 );
+				// Shorten myUaData's value to just before the
+				// position of the wildcard in uaData's value.
+				$myUaData[$key] = substr( $myUaData[$key], 0, strlen( $uaData[$key] ) );
+			}
+		}
+		$diff = array_diff_assoc( $uaData, $myUaData );
+		$precision = count( $uaData ) - count( array_values( $diff ) );
+		if ( implode( '', array_values( $diff ) ) === '' ) {
+			return $precision;
+		}
+		return false;
+	}
+
+	/**
 	 * Find the uaID as configured in browserSets that best matches the
 	 * current user-agent and return the uaData from the browser index.
 	 * @return object: Object from browserindex (with additional 'id' property).
@@ -209,10 +250,8 @@ class BrowserInfo {
 			$foundPrecision = 0;
 			$found = false;
 			foreach ( $browserIndex as $uaID => $uaData ) {
-				$diff = array_diff_assoc( (array)$uaData, (array)$myUaData );
-				unset( $diff['displayInfo'] );
-				$precision = count( (array)$uaData ) - count( array_values( $diff ) );
-				if ( implode( '', array_values( $diff ) ) === '' && $precision > $foundPrecision ) {
+				$precision = $this->compareUaData( (array)$uaData, (array)$myUaData );
+				if ( $precision !== false && $precision > $foundPrecision ) {
 					$found = $uaData;
 					$found->id = $uaID;
 					$foundPrecision = $precision;

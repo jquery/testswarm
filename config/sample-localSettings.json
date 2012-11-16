@@ -18,6 +18,11 @@
 				"browserFamily": "IE",
 				"browserMajor": "10"
 			},
+			"Opera|11|6": {
+				"browserFamily": "Opera",
+				"browserMajor": "11",
+				"browserMinor": "6*"
+			},
 			"Safari5Win": {
 				"browserFamily": "Safari",
 				"browserMajor": "5",
