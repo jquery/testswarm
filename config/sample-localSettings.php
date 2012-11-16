@@ -7,5 +7,5 @@
 $settingsFile = __DIR__ . '/localSettings.json';
 
 if ( is_readable( $settingsFile ) ) {
-	return json_decode( file_get_contents( $settingsFile ) );
+	return json_decode( file_get_contents( $settingsFile ) ) or error_log( 'TestSwarm Warning: Unable to parse localSettings.json.' );
 }
