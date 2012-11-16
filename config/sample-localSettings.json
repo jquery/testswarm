@@ -8,53 +8,62 @@
 	"web": {
 		"contextpath": "/testswarm"
 	},
-	"browserSets": {
-		"example": {
-			"Chrome23": {
-				"browserFamily": "Chrome",
-				"browserMajor": "23"
-			},
-			"IE10": {
-				"browserFamily": "IE",
-				"browserMajor": "10"
-			},
-			"Opera|11|6": {
-				"browserFamily": "Opera",
-				"browserMajor": "11",
-				"browserMinor": "6*"
-			},
-			"Safari5Win": {
-				"browserFamily": "Safari",
-				"browserMajor": "5",
-				"browserMinor": "1",
-				"osFamily": "Windows XP"
-			},
-			"Safari6Mac": {
-				"browserFamily": "Safari",
-				"browserMajor": "6",
-				"osFamily": "Mac OS X"
-			},
-			"Android2.3": {
-				"osFamily": "Android",
-				"osMajor": "2",
-				"osMinor": "3"
-			},
-			"Android4.1": {
-				"osFamily": "Android",
-				"osMajor": "4",
-				"osMinor": "1"
-			},
-			"iOS5.1": {
-				"osFamily": "iOS",
-				"osMajor": "5",
-				"osMinor": "1"
-			},
-			"iOS6/iPad": {
-				"deviceFamily": "iPad",
-				"osFamily": "iOS",
-				"osMajor": "6"
-			}
+	"userAgents": {
+		"Chrome22": {
+			"browserFamily": "Chrome",
+			"browserMajor": "22"
+		},
+		"Chrome23": {
+			"browserFamily": "Chrome",
+			"browserMajor": "23"
+		},
+		"IE10": {
+			"browserFamily": "IE",
+			"browserMajor": "10"
+		},
+		"Opera12.0": {
+			"browserFamily": "Opera",
+			"browserMajor": "12",
+			"browserMinor": "0*"
+		},
+		"Safari5Win": {
+			"browserFamily": "Safari",
+			"browserMajor": "5",
+			"browserMinor": "1",
+			"osFamily": "Windows XP"
+		},
+		"Safari6Mac": {
+			"browserFamily": "Safari",
+			"browserMajor": "6",
+			"osFamily": "Mac OS X"
+		},
+		"Android2.3": {
+			"osFamily": "Android",
+			"osMajor": "2",
+			"osMinor": "3"
+		},
+		"iOS5.1": {
+			"osFamily": "iOS",
+			"osMajor": "5",
+			"osMinor": "1"
+		},
+		"iOS6/iPad": {
+			"deviceFamily": "iPad",
+			"osFamily": "iOS",
+			"osMajor": "6"
 		}
+	},
+	"browserSets": {
+		"example": [
+			"Chrome23",
+			"IE10",
+			"Opera12.0",
+			"Safari5Win",
+			"Safari6Mac",
+			"Android2.3",
+			"iOS5.1",
+			"iOS6/iPad"
+		]
 	},
 	"storage": {
 		"cacheDir": "$1/cache"

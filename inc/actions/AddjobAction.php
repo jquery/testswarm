@@ -109,7 +109,7 @@ class AddjobAction extends Action {
 				return;
 			}
 			// Merge the arrays, and re-index with unique (prevents duplicate entries)
-			$uaIDs = array_unique( array_merge( $uaIDs, array_keys((array)$conf->browserSets->$browserSet) ) );
+			$uaIDs = array_unique( array_merge( $uaIDs, $conf->browserSets->$browserSet ) );
 		}
 
 		if ( !count( $uaIDs ) ) {

@@ -42,22 +42,19 @@ class BrowserInfo {
 			// Convert from array with string values
 			// to an object with boolean values
 			$browserIndex = new stdClass();
-			$browserSets = $swarmContext->getConf()->browserSets;
-			foreach ( $browserSets as $browserSet => $browsers ) {
-				foreach ( $browsers as $uaID => $uaData ) {
-					$keys = array_keys(get_object_vars(
-						BrowserInfo::newFromContext( $swarmContext, '-' )->getUaData()
-					));
-					$data = new stdClass();
-					// Filter out unwanted properties, and set missing properties.
-					// (browserSets can be very precise or very generic).
-					foreach ( $keys as $key ) {
-						$data->$key = isset( $uaData->$key ) ? $uaData->$key : '';
-					}
-					$data->displayInfo = self::getDisplayInfo( $data );
-
-					$browserIndex->$uaID = $data;
+			$userAgents = $swarmContext->getConf()->userAgents;
+			foreach ( $userAgents as $uaID => $uaData ) {
+				$keys = array_keys(get_object_vars(
+					$swarmContext->getBrowserInfo()->getUaData()
+				));
+				$data = new stdClass();
+				// Filter out unwanted properties, and set missing properties.
+				foreach ( $keys as $key ) {
+					$data->$key = isset( $uaData->$key ) ? $uaData->$key : '';
 				}
+				$data->displayInfo = self::getDisplayInfo( $data );
+
+				$browserIndex->$uaID = $data;
 			}
 			self::$browserIndex = $browserIndex;
 		}
@@ -202,7 +199,7 @@ class BrowserInfo {
 	 * pseudo-patch releases from Opera. Opera 11.62 for instance
 	 * some people want to treat it like 11.6.2 because BrowserStack
 	 * has 11.60 and 11.62 mixed up under the id "11.6". So we can
-	 * use "browserMinor: 6*" in the browserSets configuration,
+	 * use "browserMinor: 6*" in the userAgents configuration,
 	 * which will tolerate anything. Use carfully though,
 	 * theotically this means it will match X.6, X.60 and X.600,
 	 * X.6foo, X.61-alpha etc.
@@ -237,8 +234,8 @@ class BrowserInfo {
 	}
 
 	/**
-	 * Find the uaID as configured in browserSets that best matches the
-	 * current user-agent and return the uaData from the browser index.
+	 * Find the uaID in browserIndex that best matches the current
+	 * user-agent and return the uaData from the browser index.
 	 * @return object: Object from browserindex (with additional 'id' property).
 	 */
 	public function getSwarmUaItem() {

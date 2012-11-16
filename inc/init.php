@@ -157,19 +157,25 @@ if ( !$defaultSettings ) {
 	exit;
 }
 if ( !is_object( $localSettings ) ) {
-	error_log( 'Invalid return value for local settings (type: ' . gettype( $localSettings ) . ').' );
+	error_log( 'TestSwarm Warning: Invalid return value for local settings (type: ' . gettype( $localSettings ) . ').' );
 	$localSettings = array();
 }
 
-// Ignore the defaults if there are local ones,
-// this avoids polution of the browser matrix with old or unwanted
-// browsers from the default settings.
-if ( isset( $localSettings->browserSets ) ) {
-	unset( $defaultSettings->browserSets );
-}
 $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
 unset( $defaultSettingsJSON, $localSettingsPHP, $defaultSettings, $localSettings );
+
+// Verify browserSets are valid.
+foreach ( $swarmConfig->browserSets as $browserSet => $browsers ) {
+	foreach ( $browsers as $i => $uaID ) {
+		if ( !isset( $swarmConfig->userAgents->$uaID ) ) {
+			error_log( 'TestSwarm Warning: Unregistered browserSet entry "' . $uaID . '" in "' . $browserSet . '".' );
+			unset( $browsers[$i] );
+		}
+	}
+	// Re-index as straight numerical array (in case some indexes were unset above)
+	$swarmConfig->browserSets->$browserSet = array_values( array_unique( $browsers ) );
+}
 
 // Timezone
 date_default_timezone_set( $swarmConfig->general->timezone );

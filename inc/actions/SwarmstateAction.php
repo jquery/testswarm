@@ -33,7 +33,7 @@ class SwarmstateAction extends Action {
 		$browserIndex = BrowserInfo::getBrowserIndex();
 
 		foreach ( $browserIndex as $uaID => $uaData ) {
-			if ( $filterBrowserSet && isset( $conf->browserSets->$filterBrowserSet->$uaID ) ) {
+			if ( $filterBrowserSet && in_array( $uaID, $conf->browserSets->$filterBrowserSet ) ) {
 				continue;
 			}
 

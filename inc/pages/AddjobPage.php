@@ -121,19 +121,17 @@ HTML;
 		foreach ( $conf->browserSets as $browserSet => $browsers ) {
 			$set = htmlspecialchars( $browserSet );
 			$browsersHtml = '';
-			reset( $browsers );
-			$first = key( $browsers );
-			end( $browsers );
-			$last = key( $browsers );
-			foreach ( $browsers as $uaID => $uaData ) {
-				if ( $uaID === $first ) {
+			$last = count( $browsers ) -1;
+			foreach ( $browsers as $i => $uaID ) {
+				$uaData = $browserIndex->$uaID;
+				if ( $i === 0 ) {
 					$browsersHtml .= '<br>';
-				} elseif ( $uaID === $last ) {
+				} elseif ( $i === $last ) {
 					$browsersHtml .= '<br> and ';
 				} else {
 					$browsersHtml .= ',<br>';
 				}
-				$browsersHtml .= htmlspecialchars( $browserIndex->$uaID->displayInfo['title'] );
+				$browsersHtml .= htmlspecialchars( $uaData->displayInfo['title'] );
 			}
 			$formHtml .= <<<HTML
 		<div class="control-group">
