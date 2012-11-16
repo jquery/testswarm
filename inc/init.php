@@ -28,10 +28,13 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 	exit;
 }
 
+// Use dirname since __DIR__ is PHP 5.3+ and we're going to use it to
+// display an error to older PHP versions.
+require_once( dirname( __FILE__ ) . '/initError.php' );
+
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.2' ) < 0 ) {
-	echo '<b>TestSwarm Fatal:</b> TestSwarm requires at least PHP 5.3.2';
-	exit;
+	swarmInitError( 'TestSwarm requires at least PHP 5.3.2' );
 }
 
 $swarmInstallDir = dirname( __DIR__ );
@@ -124,8 +127,7 @@ function swarmAutoLoader( $className ) {
 spl_autoload_register( 'swarmAutoLoader' );
 
 if ( !is_readable( $swarmAutoLoadClasses['UA'] ) ) {
-	echo "<b>TestSwarm Fatal:</b> Submodule missing: inc/libs/ua-parser.";
-	exit;
+	swarmInitError( 'Submodule "inc/libs/ua-parser" missing.' );
 }
 
 /**@}*/
@@ -134,30 +136,24 @@ if ( !is_readable( $swarmAutoLoadClasses['UA'] ) ) {
  * Load settings
  * @{
  */
-// Generic requirements that we still need globally unconditionally
+// Generic utilities that we still need globally unconditionally
 require_once __DIR__ . '/utilities.php';
 
 $defaultSettingsJSON = "$swarmInstallDir/config/defaultSettings.json";
 $localSettingsPHP = "$swarmInstallDir/config/localSettings.php";
 
 // Verify that the configuration files exists and are readable
-if ( !is_readable( $defaultSettingsJSON ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $defaultSettingsJSON";
-	exit;
-}
-if ( !is_readable( $localSettingsPHP ) ) {
-	echo "<b>TestSwarm Fatal:</b> Not readable: $localSettingsPHP";
-	exit;
+if ( !is_readable( $defaultSettingsJSON ) || !is_readable( $localSettingsPHP ) ) {
+	swarmInitError( 'One or more configuration files were not readable by the server.' );
 }
 
 $defaultSettings = json_decode( file_get_contents( $defaultSettingsJSON ) );
 $localSettings = require $localSettingsPHP;
 if ( !$defaultSettings ) {
-	echo '<b>TestSwarm Fatal:</b> Default settings file contains invalid JSON.';
-	exit;
+	swarmInitError( 'Unable to parse defaultSettings.json' );
 }
 if ( !is_object( $localSettings ) ) {
-	error_log( 'TestSwarm Warning: Invalid return value for local settings (type: ' . gettype( $localSettings ) . ').' );
+	error_log( 'TestSwarm Warning: Invalid return value for local settings. Type: ' . gettype( $localSettings ) . '.' );
 	$localSettings = array();
 }
 
@@ -198,8 +194,7 @@ $swarmConfig->storage->cacheDir = str_replace( "$1", $swarmInstallDir, $swarmCon
 
 // Caching directory must exist and be writable
 if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->storage->cacheDir ) ) {
-	echo '<b>TestSwarm Fatal</b>: Caching directory must exist and be writable by the script!';
-	exit;
+	swarmInitError( 'Caching directory must exist and be writable by the webserver.' );
 }
 
 // Refresh control
@@ -208,7 +203,6 @@ if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->s
 // ./js/run.js changes significantly.
 $refresh_control = 4; // 2012-06-11
 $swarmConfig->client->refresh_control += $refresh_control;
-
 
 /**@}*/
 

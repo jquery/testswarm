@@ -222,7 +222,7 @@ $description
 
 			// No need to re-run this check each time, we abort within the if-null check
 			if ( !$isatty ) {
-				$this->error( 'This script requires an interactive terminal for output and input.' );
+				$this->error( 'This script requires an interactive terminal for output and input. Use --quiet to skip input requests.' );
 			}
 		}
 
@@ -248,7 +248,7 @@ $description
 	}
 
 	protected function error( $msg ) {
-		$msg = "\nTestSwarm Error: $msg\n";
+		$msg = "\nFatal error: $msg\n";
 		print $msg;
 		fwrite( STDERR, $msg );
 		exit( E_ERROR );

@@ -169,7 +169,7 @@ abstract class Page {
 			throw new SwarmException( "Headers already sent in `$filename` on line $linenum." );
 		}
 
-		header( 'Content-Type: text/html; charset=utf-8', true );
+		header( 'Content-Type: text/html; charset=utf-8' );
 
 		$frameOptions = $this->getFrameOptions();
 		if ( $frameOptions ) {
@@ -406,7 +406,7 @@ foreach ( $projects as $project ) {
 		session_write_close();
 		self::httpStatusHeader( $code );
 		header( 'Content-Type: text/html; charset=utf-8' );
-		header( "Location: " . $target );
+		header( 'Location: ' . $target );
 
 		exit;
 	}

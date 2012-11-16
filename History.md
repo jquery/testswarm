@@ -78,6 +78,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#199) Add a confirmation in interface for Reset job/Delete job.
 * (#222) Add "Reset failed jobs" button.
 * (#216) Add support for Mocha.
+* Init: Implement simple error pages with status 500 for early fatal exits.
 
 ### Bugs fixed
 
