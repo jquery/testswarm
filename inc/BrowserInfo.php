@@ -74,9 +74,35 @@ class BrowserInfo {
 	}
 
 	/**
+	 * Utility to build a blank uaData object. Used when dealing with outdated
+	 * or malformed uaIDs.
+	 */
+	public static function makeGenericUaData( $id = '-' ) {
+		$uaData = new stdClass();
+
+		$uaData->browserFamily =
+		$uaData->browserMajor =
+		$uaData->browserMinor =
+		$uaData->browserPatch =
+		$uaData->osFamily =
+		$uaData->osMajor =
+		$uaData->osMinor =
+		$uaData->osPatch =
+		$uaData->deviceFamily =
+		$uaData->deviceMajor =
+		$uaData->deviceMinor = '';
+
+		$uaData->displayInfo = self::getDisplayInfo( $uaData );
+
+		$uaData->displayInfo['title'] = "[ $id ]";
+
+		return $uaData;
+	}
+
+	/**
 	 * Create a new BrowserInfo object for the given user agent string.
+	 * Instances may not be created directly, use the static newFromContext method instead.
 	 *
-	 * Instances may not be created directly, use the static newFromUA method instead
 	 * @param string $userAgent
 	 */
 	protected function parseUserAgent( $userAgent ) {
@@ -102,7 +128,6 @@ class BrowserInfo {
 		 *		[device] =>
 		 *		[deviceMajor] =>
 		 *		[deviceMinor] =>
-		 *		[uaOriginal] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8.2; rv:14.0) Gecko/20100101 Firefox/14.0.1
 		 * )
 		 */
 

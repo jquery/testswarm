@@ -89,14 +89,7 @@ class UserPage extends Page {
 			$html .= '<h2>Active clients</h2><div class="row">';
 
 			foreach ( $data['activeClients'] as $activeClient ) {
-				if ( $activeClient['uaData'] ) {
-					$displayInfo = $activeClient['uaData']['displayInfo'];
-				} else {
-					$displayInfo = array(
-						'title' => "Unrecognized [{$activeClient['uaID']}]",
-						'class' => 'swarm-browser',
-					);
-				}
+				$displayInfo = $activeClient['uaData']['displayInfo'];
 				$html .=
 					'<div class="span4"><div class="well">'
 					. html_tag( 'div', array(

@@ -42,7 +42,7 @@ class JobAction extends Action {
 			$jobID
 		));
 
-		$data = self::getDataFromRunRows( $db, $runRows );
+		$data = self::getDataFromRunRows( $this->getContext(), $runRows );
 
 		// Start of response data
 		$respData = array(
@@ -91,11 +91,12 @@ class JobAction extends Action {
 	}
 
 	/**
-	 * @param Database $db
+	 * @param TestSwarmContext $context
 	 * @param array $runRows: one or more rows from the `runs` table.
 	 * @return array with properties 'runs' and 'userAgents'
 	 */
-	public static function getDataFromRunRows( Database $db, $runRows ) {
+	public static function getDataFromRunRows( TestSwarmContext $context, $runRows ) {
+		$db = $context->getDB();
 		$userAgentIDs = array();
 		$runs = array();
 
@@ -196,8 +197,7 @@ class JobAction extends Action {
 			if ( !isset( $browserIndex->$uaID ) ) {
 				// If it isn't in the index anymore, it means it has been removed from the browserSets
 				// configuration. Use a generic fallback object;
-				$userAgents[$uaID] = BrowserInfo::newFromContext( $db->getContext(), '-' )->getUaData();
-				$userAgents[$uaID]->displayInfo['title'] = $uaID;
+				$userAgents[$uaID] = BrowserInfo::makeGenericUaData( $uaID );
 			} else {
 				$userAgents[$uaID] = (array)$browserIndex->$uaID;
 			}

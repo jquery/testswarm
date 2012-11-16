@@ -45,7 +45,7 @@ class Database {
 		return $db;
 	}
 
-	public function getContext() {
+	final protected function getContext() {
 		return $this->context;
 	}
 

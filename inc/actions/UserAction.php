@@ -52,9 +52,9 @@ class UserAction extends Action {
 				$bi = BrowserInfo::newFromContext( $this->getContext(), $clientRow->useragent );
 
 				$activeClient = array(
-					"uaID" => $clientRow->useragent_id,
-					"uaRaw" => $bi->getRawUA(),
-					"uaData" => $bi->getSwarmUaItem()
+					'uaID' => $bi->getSwarmUaID(),
+					'uaRaw' => $bi->getRawUA(),
+					'uaData' => $bi->getUaData()
 				);
 				self::addTimestampsTo( $activeClient, $clientRow->created, "connected" );
 				self::addTimestampsTo( $activeClient, $clientRow->updated, "pinged" );

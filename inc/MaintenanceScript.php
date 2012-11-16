@@ -260,7 +260,7 @@ $description
 		return $script;
 	}
 
-	protected function getContext() {
+	final protected function getContext() {
 		return $this->context;
 	}
 

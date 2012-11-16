@@ -23,7 +23,7 @@ class TestSwarmContext {
 
 	public function getBrowserInfo() {
 		if ( $this->browserInfo === null ) {
-			$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+			$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '-';
 			$this->browserInfo = BrowserInfo::newFromContext( $this, $ua );
 		}
 		return $this->browserInfo;

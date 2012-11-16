@@ -73,7 +73,7 @@ class ResultAction extends Action {
 			$data['otherRuns'] = null;
 			$data['job'] = null;
 		} else {
-			$data['otherRuns'] = JobAction::getDataFromRunRows( $db, $runRows );
+			$data['otherRuns'] = JobAction::getDataFromRunRows( $context, $runRows );
 
 			$jobID = intval( $runRows[0]->job_id );
 
