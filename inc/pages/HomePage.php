@@ -169,7 +169,7 @@ class HomePage extends Page {
 			$browsersHtml .= '</div><!--/.row -->';
 		}
 
-		if ( $browserItemCount !== 0 ) {
+		if ( $browserItemCount === 0 ) {
 			$browsersHtml .= '<p><em>This swarm is empty!</em></p>';
 		}
 
