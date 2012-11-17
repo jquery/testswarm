@@ -51,9 +51,9 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Implement "debug" mode for Database queries.
   Disabled by default for performance and security reasons,
   enable by setting `debug.dbLogQueries` to `true` in the settings file.
-* (#158) New shell script to install the database.
-* (#142) New shell script to update from an old version of the database.
-* New shell script to query the browserSet configuration.
+* (#158) New maintenance script to install the database.
+* (#142) New maintenance script to update from an old version of the database.
+* New maintenance script to query the browserSet configuration.
 * (#172) Use JSON for configuration files.
 * Create "Info" page. Showing current version info with links to GitHub.
 * New "Result" page. Linked to from Job pages, showing the run results inluding
@@ -79,6 +79,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * (#222) Add "Reset failed jobs" button.
 * (#216) Add support for Mocha.
 * Init: Implement simple error pages with status 500 for early fatal exits.
+* New maintenance script to migrate user agent IDs.
 
 ### Bugs fixed
 
