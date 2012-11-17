@@ -9,7 +9,11 @@
  */
 abstract class MaintenanceScript {
 	private $context, $name, $description;
-	private $flags = array(), $options = array(), $generalArgKeys = array(), $parsed = array();
+	private $flags = array();
+	private $options = array();
+	private $generalArgKeys = array();
+	private $requiredKeys = array();
+	private $parsed = array();
 
 	abstract protected function init();
 
@@ -22,9 +26,9 @@ abstract class MaintenanceScript {
 	/**
 	 * Register a flag, usage any of these 4:
 	 * - php script.php -a -b value -c "value" -d="value"
-	 * @param $key string: one single character.
-	 * @param $type string: one of "boolean", "value"
-	 * @param $description string
+	 * @param string $key: one single character.
+	 * @param string $type: one of "boolean", "value"
+	 * @param string $description
 	 */
 	protected function registerFlag( $key, $type, $description ) {
 		static $types = array( 'boolean', 'value' );
@@ -39,12 +43,13 @@ abstract class MaintenanceScript {
 
 	/**
 	 * Register an option, usage any of these 4:
-	 * - php script.php --foo --bar value --quux=value --corge="value"
-	 * @param $name string: at least 2 characters
-	 * @param $type string: one of "boolean", "value"
-	 * @param $description string
+	 * - php script.php --foo --bar=value --quux="value"
+	 * @param string $name: at least 2 characters
+	 * @param string $type: one of "boolean", "value"
+	 * @param string $description
+	 * @param bool $required
 	 */
-	protected function registerOption( $name, $type, $description ) {
+	protected function registerOption( $name, $type, $description, $required = false ) {
 		static $types = array( 'boolean', 'value' );
 		if ( !is_string( $name ) || strlen ( $name ) < 2 || !in_array( $type, $types ) ) {
 			$this->error( 'Illegal option registration' );
@@ -52,6 +57,7 @@ abstract class MaintenanceScript {
 		$this->options[$name] = array(
 			'type' => $type,
 			'description' => $description,
+			'required' => (bool) $required
 		);
 	}
 
@@ -60,6 +66,7 @@ abstract class MaintenanceScript {
 		// but we use our own format instead (see also php.net/getopt).
 		$getoptShort = '';
 		$getoptLong = array();
+		$requiredKeys = array();
 		foreach ( $this->flags as $flagKey => $flagInfo ) {
 			switch ( $flagInfo['type'] ) {
 			case 'value':
@@ -71,6 +78,9 @@ abstract class MaintenanceScript {
 			}
 		}
 		foreach ( $this->options as $optionName => $optionInfo ) {
+			if ( $optionInfo['required'] ) {
+				$requiredKeys[] = $optionName;
+			}
 			switch ( $optionInfo['type'] ) {
 			case 'value':
 				$getoptLong[] = $optionName . '::';
@@ -85,6 +95,14 @@ abstract class MaintenanceScript {
 			$this->error( 'Parsing command line arguments failed.' );
 		}
 		$this->parsed = $parsed;
+
+		if ( !$this->getOption( 'help' ) ) {
+			foreach ( $requiredKeys as $requiredKey ) {
+				if ( !isset( $parsed[$requiredKey] ) || !$parsed[$requiredKey] ) {
+					$this->error( 'Option "' . $requiredKey  . '" is required.' );
+				}
+			}
+		}
 	}
 
 	protected function getFlag( $key ) {
@@ -161,8 +179,12 @@ $description
 	protected function displayHelp() {
 		$helpScript = '';
 		$helpGeneral = '';
+		$placeholder = array(
+			'boolean' => '',
+			'value' => ' <value>',
+		);
 		foreach ( $this->flags as $flagKey => $flagInfo ) {
-			$help = "\n  -{$flagKey}: {$flagInfo['description']}";
+			$help = "\n  -{$flagKey}" . $placeholder[$flagInfo['type']] . ": {$flagInfo['description']}";
 			if ( in_array( $flagKey, $this->generalArgKeys ) ) {
 				$helpGeneral .= $help;
 			} else {
@@ -170,7 +192,7 @@ $description
 			}
 		}
 		foreach ( $this->options as $optionName => $optionInfo ) {
-			$help = "\n  --{$optionName}: {$optionInfo['description']}";
+			$help = "\n  --{$optionName}" . $placeholder[$optionInfo['type']] . ": {$optionInfo['description']}";
 			if ( in_array( $optionName, $this->generalArgKeys ) ) {
 				$helpGeneral .= $help;
 			} else {
@@ -204,12 +226,16 @@ $description
 		print "\n";
 	}
 
-	/** @param @action string: Correct grammar "This script will $action!" */
+	/**
+	 * @param string $action: Correct grammar "This script will $action!"
+	 */
 	protected function timeWarningForScriptWill( $action, $seconds = 10 ) {
 		$this->wait( 10, "WARNING: This script will $action! You can abort now with Control-C. Starting in " );
 	}
 
-	/** @param $message string: [optional] text before the input */
+	/**
+	 * @param string $message: [optional] text before the input.
+	 */
 	protected function cliInput( $prefix = '> ' ) {
 		static $isatty = null;
 		if ( $this->getOption( 'quiet' ) ) {
@@ -248,8 +274,7 @@ $description
 	}
 
 	protected function error( $msg ) {
-		$msg = "\nFatal error: $msg\n";
-		print $msg;
+		$msg = "Error: $msg\n";
 		fwrite( STDERR, $msg );
 		exit( E_ERROR );
 	}
