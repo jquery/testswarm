@@ -109,8 +109,10 @@ class SwarmstateAction extends Action {
 			);
 		}
 
-		// Make sure they are sorted.
-		natksort( $data['userAgents']);
+		// Make sure they are sorted nicely
+		uasort( $data['userAgents'], function ( $a, $b ) {
+			return strnatcasecmp( $a['data']->displayInfo['title'], $b['data']->displayInfo['title'] );
+		} );
 
 		$this->setData( $data );
 	}

@@ -158,7 +158,7 @@ class UserAction extends Action {
 			}
 		}
 
-		natcaseksort( $userAgents );
+		uasort( $userAgents, 'BrowserInfo::sortUaData' );
 
 		$this->setData(array(
 			"userName" => $userName,

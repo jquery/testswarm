@@ -181,7 +181,7 @@ class JobAction extends Action {
 					}
 				}
 
-				natcaseksort( $runUaRuns );
+				uksort( $runUaRuns, array( $context->getBrowserInfo(), 'sortUaId' ) );
 
 				$runs[] = array(
 					'info' => $runInfo,
@@ -202,7 +202,7 @@ class JobAction extends Action {
 				$userAgents[$uaID] = (array)$browserIndex->$uaID;
 			}
 		}
-		natcaseksort( $userAgents );
+		uasort( $userAgents, 'BrowserInfo::sortUaData' );
 
 		return array(
 			'runs' => $runs,

@@ -99,6 +99,20 @@ class BrowserInfo {
 		return $uaData;
 	}
 
+	public static function sortUaData( $a, $b ) {
+		$a = is_array( $a ) ? (object)$a : $a;
+		$b = is_array( $b ) ? (object)$b : $b;
+		return strnatcasecmp( $a->displayInfo['title'], $b->displayInfo['title'] );
+	}
+
+	public function sortUaId( $a, $b ) {
+		$browserIndex = $this->getBrowserIndex();
+		return self::sortUaData(
+			isset( $browserIndex->$a ) ? $browserIndex->$a : self::makeGenericUaData( $a ),
+			isset( $browserIndex->$b ) ? $browserIndex->$b : self::makeGenericUaData( $a )
+		);
+	}
+
 	/**
 	 * Create a new BrowserInfo object for the given user agent string.
 	 * Instances may not be created directly, use the static newFromContext method instead.
