@@ -110,7 +110,7 @@ table.swarm-results tbody td.swarm-status {
 }
 
 table.swarm-results th .swarm-browser {
-	max-height: 28px;
+	max-height: 36px;
 }
 
 table.swarm-results tbody td.swarm-status {
@@ -217,33 +217,49 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 .swarm-browser {
 	position: relative;
 	display: inline-block;
-	width: 48px;
-	height: 48px;
-	background: url(../img/unknown.sm.png) 50% 50% no-repeat;
+	width: 56px;
+	height: 56px;
+	background: url(../img/browser-unknown.png) 50% 50% no-repeat;
 	background-size: contain;
 }
 
 .swarm-browser-chrome {
-	background-image: url(../img/chrome.sm.png);
+	background-image: url(../img/browser-chrome.png);
+}
+
+.swarm-browser-chromium {
+	background-image: url(../img/browser-chromium.png);
 }
 
 .swarm-browser-firefox {
-	background-image: url(../img/firefox.sm.png);
+	background-image: url(../img/browser-firefox.png);
+}
+
+.swarm-browser-firefox_mobile {
+	background-image: url(../img/browser-firefox_mobile.png);
 }
 
 .swarm-browser-ie {
-	background-image: url(../img/ie.sm.png);
+	background-image: url(../img/browser-ie.png);
+}
+
+.swarm-browser-ie-8 {
+	background-image: url(../img/browser-ie-8.png);
 }
 
 .swarm-browser-opera,
 .swarm-browser-opera_mini,
 .swarm-browser-opera_mobile {
-	background-image: url(../img/opera.sm.png);
+	background-image: url(../img/browser-opera.png);
+}
+
+.swarm-browser-webkit_nightly {
+	background-image: url(../img/browser-webkit.png);
 }
 
 .swarm-browser-safari,
 .swarm-browser-mobile_safari {
-	background-image: url(../img/safari.sm.png);
+	background-image: url(../img/browser-safari.png);
 }
 
 .swarm-os::after {
@@ -252,9 +268,9 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	right: 0;
 	content: "";
 	display: inline-block;
-	width: 50%;
+	width: 48%;
 	height: 50%;
-	background: transparent 50% 50% no-repeat;
+	background: transparent 100% 100% no-repeat;
 	background-size: contain;
 	-webkit-filter: drop-shadow(0 0 12px #fff);
 	-moz-filter: drop-shadow(0 0 12px #fff);
@@ -286,3 +302,28 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 .swarm-os-windows_8::after {
 	background-image: url(../img/os-win8.png);
 }
+
+
+.swarm-device::before {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	content: "";
+	display: inline-block;
+	width: 48%;
+	height: 100%;
+	background: transparent 100% 0 no-repeat;
+	background-size: cover;
+	-webkit-filter: drop-shadow(0 0 12px #fff);
+	-moz-filter: drop-shadow(0 0 12px #fff);
+	filter: drop-shadow(0 0 12px #fff);
+}
+
+.swarm-device-ipad::before {
+	background-image: url(../img/device-ipad.png);
+}
+
+.swarm-device-iphone::before {
+	background-image: url(../img/device-iphone.png);
+}
+
