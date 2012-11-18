@@ -126,7 +126,7 @@ function swarmAutoLoader( $className ) {
 
 spl_autoload_register( 'swarmAutoLoader' );
 
-if ( !is_readable( $swarmAutoLoadClasses['UA'] ) ) {
+if ( !is_readable( $swarmInstallDir . '/' . $swarmAutoLoadClasses['UA'] ) ) {
 	swarmInitError( 'Submodule "inc/libs/ua-parser" missing.' );
 }
 
