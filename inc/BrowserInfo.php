@@ -159,11 +159,11 @@ class BrowserInfo {
 		$uaData->osFamily = $uaparserData->os;
 		$uaData->osMajor = $uaparserData->osMajor;
 		$uaData->osMinor = $uaparserData->osMinor;
-		$uaData->osPatch = $uaparserData->osPatch;
+		$uaData->osPatch = isset($uaparserData->osPatch) ? $uaparserData->osPatch : false;
 
-		$uaData->deviceFamily = $uaparserData->device;
-		$uaData->deviceMajor = $uaparserData->deviceMajor;
-		$uaData->deviceMinor = $uaparserData->deviceMinor;
+		$uaData->deviceFamily = isset($uaparserData->device) ? $uaparserData->device : false;
+		$uaData->deviceMajor = isset($uaparserData->deviceMajor) ? $uaparserData->deviceMajor : false;
+		$uaData->deviceMinor = isset($uaparserData->deviceMinor) ? $uaparserData->deviceMinor : false;
 
 		$uaData->displayInfo = self::getDisplayInfo( $uaData );
 
