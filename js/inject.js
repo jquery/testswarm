@@ -176,7 +176,7 @@
 	// Returning true will surpress the default browser handler,
 	// returning false will let it run.
 	window.onerror = function ( error, filePath, linerNr ) {
-		var ret = false;
+		var ret = false, report;
 		if ( onErrorFnPrev ) {
 			ret = onErrorFnPrev( error, filePath, linerNr );
 		}
@@ -184,7 +184,12 @@
 		// Treat return value as window.onerror itself does,
 		// Only do our handling if not surpressed.
 		if ( ret !== true ) {
-			document.body.appendChild( document.createTextNode( '[TestSwarm] window.onerror: ' + error ) );
+			report = document.createElement( 'div' );
+			report.innerHTML = '<hr/><b>[TestSwarm] window.onerror:</b><br/>';
+			report.appendChild( document.createTextNode( error ) );
+			report.appendChild( document.createElement( 'br' ) );
+			report.appendChild( document.createTextNode( 'in ' + filePath + ' on line ' + linerNr ) );
+			document.body.appendChild( report );
 			submit({ fail: 0, error: 1, total: 1 });
 
 			return false;
