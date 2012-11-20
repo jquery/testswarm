@@ -239,10 +239,17 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	background-image: url(../img/browser-firefox_mobile.png);
 }
 
+/* IE9+ */
 .swarm-browser-ie {
 	background-image: url(../img/browser-ie.png);
 }
 
+.swarm-browser-ie-6 {
+	background-image: url(../img/browser-ie-6.png);
+}
+
+/* IE7/IE8 have the same logo */
+.swarm-browser-ie-7,
 .swarm-browser-ie-8 {
 	background-image: url(../img/browser-ie-8.png);
 }
@@ -253,13 +260,13 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	background-image: url(../img/browser-opera.png);
 }
 
-.swarm-browser-webkit_nightly {
-	background-image: url(../img/browser-webkit.png);
-}
-
 .swarm-browser-safari,
 .swarm-browser-mobile_safari {
 	background-image: url(../img/browser-safari.png);
+}
+
+.swarm-browser-webkit_nightly {
+	background-image: url(../img/browser-webkit.png);
 }
 
 .swarm-os::after {
