@@ -110,6 +110,7 @@ table.swarm-results tbody td.swarm-status {
 }
 
 table.swarm-results th .swarm-browser {
+	max-width: 36px;
 	max-height: 36px;
 }
 
