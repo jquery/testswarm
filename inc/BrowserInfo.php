@@ -218,6 +218,8 @@ class BrowserInfo {
 		return array(
 			'class' => implode( ' ', $classes ),
 			'title' => implode( '/', $title ),
+			'labelText' => implode( "\n", $title ),
+			'labelHtml' => implode( '<br/>', array_map( 'htmlspecialchars', $title ) ),
 		);
 	}
 

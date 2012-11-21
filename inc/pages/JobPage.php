@@ -82,9 +82,9 @@ class JobPage extends Page {
 					'title' => $displayInfo['title'],
 				) )
 				. '<br>'
-				. html_tag( 'span', array(
+				. html_tag_open( 'span', array(
 					'class' => 'label swarm-browsername',
-				), $displayInfo['title'] )
+				) ) . $displayInfo['labelHtml'] . '</span>'
 				. '</th>';
 		}
 

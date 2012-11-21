@@ -118,9 +118,9 @@ class HomePage extends Page {
 				) )
 				. '<br>'
 
-				. html_tag( 'span', array(
+				. html_tag_open( 'span', array(
 					'class' => 'badge swarm-browsername',
-				), $displayInfo['title'] )
+				) ) . $displayInfo['labelHtml'] . '</span>'
 
 				. '<br>'
 

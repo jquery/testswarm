@@ -67,17 +67,18 @@ h2 + .row {
 	line-height: normal;
 }
 
-.swarm-browseronline .swarm-browser {
-	margin: 10px 0;
+.well > .swarm-browser {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.swarm-browseronline .swarm-onlineclients,
-.swarm-browseronline .swarm-browsername {
-	font-size: 11px;
-}
-
-.swarm-browseronline .swarm-browsername:hover {
+.swarm-browsername:hover {
 	cursor: default;
+}
+
+.swarm-browsername {
+	/* Inline bubble with line breaks */
+	display: inline-block;
 }
 
 /**
