@@ -22,8 +22,8 @@ class UserPage extends Page {
 			"progress" => '<i class="icon-repeat swarm-status-progressicon" title="In progress.."></i>',
 			"passed" => '<i class="icon-ok" title="Passed!"></i>',
 			"failed" => '<i class="icon-remove" title="Completed with failures"></i>',
-			"timedout" => '<i class="icon-warning-sign" title="Maximum execution time exceeded"></i>',
-			"error" => '<i class="icon-flag" title="Aborted by an error"></i>',
+			"timedout" => '<i class="icon-flag" title="Maximum execution time exceeded"></i>',
+			"error" => '<i class="icon-warning-sign" title="Aborted by an error"></i>',
 		);
 		return isset( $icons[$status] ) ? $icons[$status] : '';
 	}
