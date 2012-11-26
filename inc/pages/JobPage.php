@@ -78,7 +78,7 @@ class JobPage extends Page {
 			$displayInfo = $userAgent['displayInfo'];
 			$html .= '<th>'
 				. html_tag( 'div', array(
-					'class' => $displayInfo['class'],
+					'class' => $displayInfo['class'] . ' swarm-icon-small',
 					'title' => $displayInfo['title'],
 				) )
 				. '<br>'

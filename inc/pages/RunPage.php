@@ -14,7 +14,7 @@ class RunPage extends Page {
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
-		$uaData = $browserInfo->getSwarmUaItem();
+		$uaData = $browserInfo->getUaData();
 
 		$runToken = null;
 		if ( $conf->client->requireRunToken ) {
@@ -38,7 +38,7 @@ class RunPage extends Page {
 		$html .=
 			'<div class="row">'
 				. '<div class="span2">'
-					. '<div class="well pagination-centered thumbnail">'
+					. '<div class="well well-swarm-icon">'
 					. html_tag( 'div', array(
 						'class' => $displayInfo['class'],
 						'title' => $displayInfo['title'],

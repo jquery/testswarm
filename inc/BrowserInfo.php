@@ -181,8 +181,10 @@ class BrowserInfo {
 	protected static function getDisplayInfo( $uaData, $prefix = 'swarm-' ) {
 		$uaData = (object) $uaData;
 		$classes = array();
-		$classes[] = $prefix . 'browser';
+		$classes[] = $prefix . 'icon';
+
 		if ( $uaData->browserFamily ) {
+			$classes[] = $prefix . 'browser';
 			$browserFamily = strtolower( str_replace( ' ', '_', $uaData->browserFamily ) );
 			$classes[] = $prefix . 'browser-' . $browserFamily;
 			if ( $uaData->browserMajor ) {
@@ -206,14 +208,17 @@ class BrowserInfo {
 			}
 		}
 		$title = array();
+		// "Smart" way of concatenating the parts, and trimming off empty parts
+		// (Trim trailing dots or spaces indicate two adjacent empty parts).
+		// Also remove the wildcard from the interface label (only relevant to the backend)
 		if ( $uaData->browserFamily ) {
-			$title[] = rtrim("$uaData->browserFamily $uaData->browserMajor.$uaData->browserMinor.$uaData->browserPatch", '. ');
+			$title[] = rtrim("$uaData->browserFamily $uaData->browserMajor.$uaData->browserMinor.$uaData->browserPatch", '. *');
 		}
 		if ( $uaData->osFamily ) {
-			$title[] = rtrim("$uaData->osFamily $uaData->osMajor.$uaData->osMinor.$uaData->osPatch", '. ');
+			$title[] = rtrim("$uaData->osFamily $uaData->osMajor.$uaData->osMinor.$uaData->osPatch", '. *');
 		}
 		if ( $uaData->deviceFamily ) {
-			$title[] = rtrim("$uaData->deviceFamily $uaData->deviceMajor.$uaData->deviceMinor", '. ');
+			$title[] = rtrim("$uaData->deviceFamily $uaData->deviceMajor.$uaData->deviceMinor", '. *');
 		}
 		return array(
 			'class' => implode( ' ', $classes ),

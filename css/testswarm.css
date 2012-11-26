@@ -55,21 +55,22 @@ h2 + .row {
 	text-align: right;
 }
 
-.swarm-browseronline {
+.well-swarm-icon {
 	position: relative;
+	padding: 9px;
 	text-align: center;
 }
 
-.swarm-browseronline .swarm-onlineclients {
+.well-swarm-icon .swarm-onlineclients {
 	position: absolute;
 	top: 5px;
 	right: 5px;
 	line-height: normal;
 }
 
-.well > .swarm-browser {
+.well-swarm-icon .swarm-icon {
 	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 7px;
 }
 
 .swarm-browsername:hover {
@@ -108,11 +109,6 @@ table.swarm-results tbody td.swarm-status {
 	vertical-align: top;
 	text-align: center;
 	background: #fff;
-}
-
-table.swarm-results th .swarm-browser {
-	max-width: 36px;
-	max-height: 36px;
 }
 
 table.swarm-results tbody td.swarm-status {
@@ -214,13 +210,15 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 }
 
 /**
- * UA icons
+ * UA icons.
+ * Display device or browser, and os.
  */
-.swarm-browser {
+
+.swarm-icon {
 	position: relative;
 	display: inline-block;
-	width: 56px;
-	height: 56px;
+	width: 80px;
+	height: 80px;
 	background: url(../img/browser-unknown.png) 50% 50% no-repeat;
 	background-size: contain;
 }
@@ -271,19 +269,27 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	background-image: url(../img/browser-webkit.png);
 }
 
+.swarm-device-ipad {
+	background-image: url(../img/device-ipad.png);
+}
+
+.swarm-device-iphone {
+	background-image: url(../img/device-iphone.png);
+}
+
 .swarm-os::after {
 	position: absolute;
-	bottom: 0;
-	right: 0;
+	bottom: -1px;
+	right: -1px;
 	content: "";
-	display: inline-block;
-	width: 48%;
+	display: block;
+	width: 50%;
 	height: 50%;
-	background: transparent 100% 100% no-repeat;
+	border-radius: 50%;
+	box-sizing: border-box;
+	border: 7px solid transparent;
+	background: rgba(255, 255, 255, 0.85) 49% 50% no-repeat;
 	background-size: contain;
-	-webkit-filter: drop-shadow(0 0 12px #fff);
-	-moz-filter: drop-shadow(0 0 12px #fff);
-	filter: drop-shadow(0 0 12px #fff);
 }
 
 .swarm-os-android::after {
@@ -312,27 +318,10 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	background-image: url(../img/os-win8.png);
 }
 
-
-.swarm-device::before {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	content: "";
-	display: inline-block;
-	width: 48%;
-	height: 100%;
-	background: transparent 100% 0 no-repeat;
-	background-size: cover;
-	-webkit-filter: drop-shadow(0 0 12px #fff);
-	-moz-filter: drop-shadow(0 0 12px #fff);
-	filter: drop-shadow(0 0 12px #fff);
+.swarm-icon-small {
+	max-width: 48px;
+	max-height: 48px;
 }
-
-.swarm-device-ipad::before {
-	background-image: url(../img/device-ipad.png);
+.swarm-icon-small.swarm-os::after {
+	border-width: 3px;
 }
-
-.swarm-device-iphone::before {
-	background-image: url(../img/device-iphone.png);
-}
-

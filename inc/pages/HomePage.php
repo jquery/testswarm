@@ -110,7 +110,7 @@ class HomePage extends Page {
 
 			$item = ''
 				. '<div class="span2">'
-				. '<div class="well well-small swarm-browseronline' . ( $isCurr ? ' alert-info' : '' ) . '">'
+				. '<div class="well well-swarm-icon' . ( $isCurr ? ' alert-info' : '' ) . '">'
 
 				. html_tag( 'div', array(
 					'class' => $displayInfo['class'],
@@ -119,7 +119,7 @@ class HomePage extends Page {
 				. '<br>'
 
 				. html_tag_open( 'span', array(
-					'class' => 'badge swarm-browsername',
+					'class' => 'label swarm-browsername',
 				) ) . $displayInfo['labelHtml'] . '</span>'
 
 				. '<br>'
@@ -136,17 +136,17 @@ class HomePage extends Page {
 				. html_tag( "span", array(
 					"class" => "swarm-pendingruns " . (
 						$userAgent["stats"]["pendingRuns"] > 0
-						 ? ( $userAgent["stats"]["onlineClients"] > 0 ? "label label-info" : "label label-warning" )
-						 : "label label-success"
+						 ? ( $userAgent["stats"]["onlineClients"] > 0 ? "badge badge-info" : "badge badge-warning" )
+						 : "badge badge-success"
 						)
-				), $userAgent["stats"]["pendingRuns"] . ' pending runs' )
+				), $userAgent["stats"]["pendingRuns"] . ' runs' )
 
 				. ( $userAgent["stats"]["pendingReRuns"] > 0
-					? '<br>' . html_tag( "span", array(
+					? ' ' . html_tag( "span", array(
 						"class" => "swarm-pendingreruns " . (
-							$userAgent["stats"]["onlineClients"] > 0 ? "label label-info" : "label label-warning"
+							$userAgent["stats"]["onlineClients"] > 0 ? "badge badge-info" : "badge badge-warning"
 							)
-						), $userAgent["stats"]["pendingReRuns"] . ' pending re-runs' )
+						), $userAgent["stats"]["pendingReRuns"] . ' re-runs' )
 					: ""
 				)
 

@@ -91,7 +91,7 @@ class UserPage extends Page {
 			foreach ( $data['activeClients'] as $activeClient ) {
 				$displayInfo = $activeClient['uaData']['displayInfo'];
 				$html .=
-					'<div class="span4"><div class="well">'
+					'<div class="span4"><div class="well clearfix">'
 					. html_tag( 'div', array(
 						'class' => $displayInfo['class'] . ' pull-right',
 						'title' => $displayInfo['title'],
