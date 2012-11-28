@@ -67,12 +67,10 @@ may work as well.
    To run TestSwarm from a non-root directory, set `web.contextpath` to the
    correct path from the web root and update RewriteBase in `.htaccess`.
    Verify that `.htaccess` is working properly by opening a page (e.g.
-   `/testswarm/projects`) in your browser. If it doesn't work, make sure your
-   `.htaccess` is actually being read (e.g. by putting some jibberish into the
-   `.htaccess` file, which should result in a HTTP 500 Error). If it doesn't
-   get loaded, verify that `AllowOverride` is set to "`All`" (at least not to
-   "`None`") in your Apache configuration.<br/>
-   <br/>
+   `/testswarm/projects`) in your browser.<br/>Required Apache configuration:<br/>
+   * `AllowOverride` is set to `All` (or ensure `FileInfo` is included).
+   * `mod_rewrite` installed and loaded.
+
    *For NGINX:*<br/>
    Copy `config/sample-nginx.conf` to `/etc/nginx/sites-available`.
    <br/>The file name should match your domain e.g. for swarm.example.org:<br/>
