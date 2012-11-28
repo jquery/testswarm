@@ -28,8 +28,8 @@ Complete list of issues solved in the 1.0.0 milestone:
 ### Configuration changes
 * PHP version requirement raised to 5.3.2+.
 * Settings are now loaded from `/config/localSettings.json` (instead of `/testswarm.ini`).
-* The default `cooldownSleep` setting has changed from 15 seconds to 1 second.
-* The default `nonewrunsSleep` setting has changed from 30 seconds to 15 seconds.
+* The default `cooldownSleep` setting has changed from 15 seconds to 0 seconds.
+* The default `nonewrunsSleep` setting has changed from 30 seconds to 10 seconds.
 * The database schema has been re-constructed from the ground up. The schema is
   non-upgradable and will have to be re-created. Use the dbUpdate.php or dbInstall.php script
   to quickly re-create your database. All data will be lost when upgrading from < 1.0.0!

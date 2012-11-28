@@ -18,7 +18,7 @@
 		"ajaxUpdateInterval": 5
 	},
 	"client": {
-		"cooldownSleep": 1,
+		"cooldownSleep": 0,
 		"nonewrunsSleep": 10,
 		"pingTime": 30,
 		"pingTimeMargin": 10,
