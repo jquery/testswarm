@@ -41,7 +41,7 @@ class HomePage extends Page {
 			. '</p></blockquote>'
 			. '</div>';
 
-		$html .= '<div class="span5"><div class="well well-small">';
+		$html .= '<div class="span5"><div class="well">';
 		if ( !$conf->client->requireRunToken ) {
 			if ( $browserInfo->isInSwarmUaIndex() ) {
 					$html .= '<p><strong>Join ' . $siteNameHtml . '!</strong><br>'
@@ -49,9 +49,11 @@ class HomePage extends Page {
 				if ( !$request->getSessionData( 'username' ) ) {
 					$html .= '<form action="' . swarmpath( '' ) . '" method="get" class="form-horizontal">'
 						. '<input type="hidden" name="action" value="run">'
+						. '<div class="input-append">'
 						. '<label for="form-item">Username:</label>'
-						. ' <input type="text" name="item" id="form-item" placeholder="Enter username..">'
-						. ' <input type="submit" value="Join the swarm" class="btn btn-primary">'
+						. '<input type="text" name="item" id="form-item" placeholder="Enter username..">'
+						. '<input type="submit" value="Join the swarm" class="btn btn-primary">'
+						. '</div>'
 						. '</form>';
 				} else {
 					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( 'username' )}/" )

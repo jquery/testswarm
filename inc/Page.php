@@ -148,6 +148,32 @@ abstract class Page {
 		return $this->frameOptions;
 	}
 
+	protected function getSelfPath() {
+		$className = strtolower( get_class( $this ) );
+		if ( substr( $className, -4 ) === 'page' ) {
+			$path = substr( $className, 0, -4 );
+		} else {
+			$path = $className;
+		}
+		$item = $this->getContext()->getRequest()->getVal( 'item' );
+		if ( $item ) {
+			$path .= "/$item";
+		}
+		return $path;
+	}
+
+	protected function getPageLink( $path, $label ) {
+		return
+			html_tag_open( 'li', array(
+				'class' => $this->getSelfPath() === $path ? 'active' : null,
+			) )
+			.  html_tag( 'a', array(
+				'href' => swarmpath( $path === 'home' ? '' : $path )
+			), $label
+			)
+			. '</li>' . "\n";
+	}
+
 	/**
 	 * Be careful to never throw exceptions from here if we're already
 	 * on the Error500Page. e.g. if content of FooPage is empty, this throws
@@ -236,7 +262,8 @@ abstract class Page {
 	$displayTitleHtml = $this->getDisplayTitleHtml();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.min.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap-responsive.css' ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
 	<script src="<?php echo swarmpath( 'js/jquery.js' ); ?>"></script>
 	<script src="<?php echo swarmpath( 'js/bootstrap-dropdown.js' ); ?>"></script>
@@ -262,50 +289,42 @@ abstract class Page {
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="brand" href="<?php echo swarmpath( '' );?>"><?php echo htmlspecialchars( $this->getContext()->getConf()->web->title ); ?></a>
-				<div class="nav-collapse">
-					<ul class="nav">
-						<li><a href="<?php echo swarmpath( '' ); ?>">Home</a></li>
-						<li class="dropdown" id="swarm-projectsmenu">
-							<a href="<?php echo swarmpath( 'projects' ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
-								Projects
-								<b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="<?php echo swarmpath( 'projects' ); ?>">All projects</a></li>
-								<li class="divider"></li>
-								<li class="nav-header">Projects</li>
+				<ul class="nav">
+					<?php echo $this->getPageLink( 'home', 'Home' ); ?>
+					<li class="dropdown" id="swarm-projectsmenu">
+						<a href="<?php echo swarmpath( 'projects' ); ?>" class="dropdown-toggle" data-toggle="dropdown" data-target="#swarm-projectsmenu">
+							Projects
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<?php echo $this->getPageLink( 'projects', 'All projects' ); ?>
+							<li class="divider"></li>
+							<li class="nav-header">Projects</li>
 <?php
 foreach ( $projects as $project ) {
-?>
-								<li><a href="<?php echo htmlspecialchars( swarmpath( "user/{$project['name']}" ) ); ?>"><?php
-									echo htmlspecialchars( $project['name'] );
-								?></a></li>
-<?php
+	echo $this->getPageLink( "user/{$project['name']}", $project['name'] );
 }
 ?>
-							</ul>
-						</li>
-						<li><a href="<?php echo swarmpath( 'scores' ); ?>">Scores</a></li>
-						<li><a href="<?php echo swarmpath( 'info' ); ?>">Info</a></li>
-					</ul>
-					<ul class="nav pull-right">
+						</ul>
+					</li>
+					<?php echo $this->getPageLink( 'scores', 'Scores' ); ?>
+					<?php echo $this->getPageLink( 'info', 'Info' ); ?>
+				</ul>
+				<ul class="nav pull-right">
 <?php
-	if ( $request->getSessionData( 'username' ) && $request->getSessionData( 'auth' ) == "yes" ) {
-		$username = htmlspecialchars( $request->getSessionData( 'username' ) );
+if ( $request->getSessionData( 'username' ) && $request->getSessionData( 'auth' ) == "yes" ) {
+	$username = htmlspecialchars( $request->getSessionData( 'username' ) );
 ?>
-						<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
-						<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
-						<li><a href="<?php echo swarmpath( 'logout' ); ?>" class="swarm-logout-link">Logout</a></li>
+					<li><a href="<?php echo swarmpath( "user/$username" ); ?>">Hello, <?php echo $username;?>!</a></li>
+					<li><a href="<?php echo swarmpath( "run/$username" );?>">Join the Swarm</a></li>
+					<li><a href="<?php echo swarmpath( 'logout' ); ?>" class="swarm-logout-link">Logout</a></li>
 <?php
-	} else {
+} else {
+	echo $this->getPageLink( 'login', 'Login' );
+	echo $this->getPageLink( 'signup', 'Sign up' );
+}
 ?>
-						<li><a href="<?php echo swarmpath( 'login' ); ?>">Login</a></li>
-						<li><a href="<?php echo swarmpath( 'signup' ); ?>">Signup</a></li>
-<?php
-	}
-?>
-					</ul>
-				</div><!--/.nav-collapse -->
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -378,7 +397,7 @@ foreach ( $projects as $project ) {
 		. ' - '
 		. $this->getContext()->getConf()->web->title
 	); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.min.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/bootstrap.css' ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
 </head>
 <body>

@@ -27,13 +27,16 @@
 	 * Utility function for formatting HTML.
 	 * @since 1.0.0
 	 *
-	 * @param $tagName string: HTML tag name
-	 * @param #attribs array: Key/value pairs, unescaped
+	 * @param $tagName string: The HTML tag name.
+	 * @param $attribs array: Key/value pairs to be escaped (keys with null/false values are skipped).
 	 * @param $content string|null: [optional] Text content, to be escaped.
 	 */
 	function html_tag_open( $tagName, Array $attribs = array() ) {
 		$html = "<$tagName";
 		foreach ( $attribs as $key => $value ) {
+			if ( $value === null || $value === false ) {
+				continue;
+			}
 			$html .= ' ' . strtolower( $key ) . '="' . strtr( $value, array(
 				'&' => '&amp;',
 				'"' => '&quot;',

@@ -28,7 +28,7 @@ class SignupPage extends Page {
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
 
-		$this->setTitle( "Signup" );
+		$this->setTitle( "Sign up" );
 
 		$html = '<form action="' . swarmpath( "signup" ) . '" method="post" class="form-horizontal">'
 			. '<fieldset>'
