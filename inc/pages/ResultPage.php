@@ -158,7 +158,7 @@ class ResultPage extends Page {
 			// If it finished or was aborted, there should be
 			// a (at least partial) html report.
 			if ( $status === ResultAction::$STATE_FINISHED || $status === ResultAction::$STATE_ABORTED ) {
-				if ( $row->report_html ) {
+				if ( $row->report_html !== '' && $row->report_html !== null ) {
 					header( 'Content-Encoding: gzip' );
 					echo $row->report_html;
 				} else {

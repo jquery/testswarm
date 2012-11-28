@@ -225,13 +225,13 @@ CREATE TABLE `runresults` (
   `error` int unsigned NOT NULL default 0,
 
   -- HTML snapshot of the test results page - gzipped.
-  `report_html` blob NOT NULL default '',
+  `report_html` blob NULL,
 
   -- Hash of random-generated token. To use as authentication to be allowed to
-  -- store runresults in this rpw. This protects SaverunAction from bad
+  -- store runresults in this row. This protects SaverunAction from bad
   -- insertions (otherwise the only ID is the auto incrementing ID, which is
   -- easy to fake).
-  `store_token` binary(40) NOT NULL default '',
+  `store_token` binary(40) NOT NULL,
 
   -- YYYYMMDDHHMMSS timestamp.
   `updated` binary(14) NOT NULL,
