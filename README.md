@@ -8,12 +8,10 @@ The main instance monitoring jQuery core and related projects runs at
 [swarm.jquery.org](http://swarm.jquery.org/).
 
 
-
 Quick start
 ----------
 
 Clone the repo, `git clone --recursive git://github.com/jquery/testswarm.git`.
-
 
 
 Versioning
@@ -30,13 +28,11 @@ The `-alpha` suffix is used to indicate unreleased versions in development.
 For more information on SemVer, please visit http://semver.org/.
 
 
-
 Bug tracker
 -----------
 
 Found a bug? Please report it using our [issue
 tracker](https://github.com/jquery/testswarm/issues)!
-
 
 
 Installation
@@ -60,13 +56,13 @@ may work as well.
 1. Copy `config/sample-localSettings.php` to `config/localSettings.php`<br/>
    Copy `config/sample-localSettings.json` to `config/localSettings.json`.<br/>
    Edit `localSettings.json` and replace the sample settings with your own.<br/>
-   For more settings, [see the wiki](https://github.com/jquery/testswarm/wiki/Settings).
+   Refer to the [Settings page](https://github.com/jquery/testswarm/wiki/Settings) for more information.
 
 1. *For Apache:*<br/>
    Copy `config/sample-.htaccess` to `.htaccess`.<br/>
    To run TestSwarm from a non-root directory, set `web.contextpath` to the
    correct path from the web root and update RewriteBase in `.htaccess`.
-   Verify that `.htaccess` is working properly by opening a page (e.g.
+   Verify that `.htaccess` is working properly by opening a page other than the HomePage (e.g.
    `/testswarm/projects`) in your browser.<br/>Required Apache configuration:<br/>
    * `AllowOverride` is set to `All` (or ensure `FileInfo` is included).
    * `mod_rewrite` installed and loaded.
@@ -85,10 +81,10 @@ may work as well.
    if is not running start it: `/etc/init.d/php-fpm start`
 
 1. Copy `config/sample-robots.txt` to `robots.txt`<br/>
-   Or, if TestSwarm is not in the root directory, add similar rules to your own `robots.txt`.
+   Or, if TestSwarm is not in the root directory, add similar rules to your root `robots.txt`.
 
 1. Set `storage.cacheDir` to a writable directory that is not readable from the
-   web. Either set it to a custom path outside the web document root, or use the
+   web. Either set it to a custom path outside the document root, or use the
    default `cache` directory (protected with .htaccess).<br/>Chmod it:
    `chmod 777 cache`.
 
@@ -99,7 +95,7 @@ may work as well.
    `php inc/libs/ua-parser/php/uaparser-cli.php -g`<br/>
    Note that ua-parser is based on patterns, so you don't need to re-run this
    after every browser release to be able to detect this, however it is recommmended
-   to periodically run this to stay up to date (once a month shoudl be enough).
+   to periodically run this to stay up to date (once a month should be enough).
 
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>
@@ -131,13 +127,11 @@ Documentation
 * _[more wiki pages](https://github.com/jquery/testswarm/wiki/_pages)_
 
 
-
 Copyright and license
 ---------------------
 
 See
 [MIT-LICENSE](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE).
-
 
 
 History
