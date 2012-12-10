@@ -56,7 +56,7 @@ class HomePage extends Page {
 						. '</div>'
 						. '</form>';
 				} else {
-					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( 'username' )}/" )
+					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( 'username' )}" )
 					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
 				}
 			} else {
