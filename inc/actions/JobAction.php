@@ -136,6 +136,7 @@ class JobAction extends Action {
 					} else {
 						$runresultsRow = $db->getRow(str_queryf(
 							'SELECT
+								id,
 								client_id,
 								status,
 								total,
@@ -230,6 +231,10 @@ class JobAction extends Action {
 		if ( $status === 3 ) {
 			return 'timedout';
 		}
-		throw new SwarmException( 'Corrupt useragent run result.' );
+		// If status is 4 (ResultAction::$STATE_LOST) it means a CleanupAction
+		// was aborted between to queries. This is no longer possible, but old
+		// data may still be corrupted. Run fixRunresultCorruption.php to fix
+		// these entries.
+		throw new SwarmException( 'Corrupt run result #' . $row->id );
 	}
 }

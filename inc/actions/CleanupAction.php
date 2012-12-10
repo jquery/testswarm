@@ -37,10 +37,9 @@ class CleanupAction extends Action {
 		));
 
 		if ($rows) {
-			$resetTimedoutRuns = count($rows);
 			foreach ($rows as $row) {
 				// Reset the run
-				$db->query(str_queryf(
+				$ret = $db->query(str_queryf(
 					"UPDATE run_useragent
 					SET
 						status = 0,
@@ -49,14 +48,24 @@ class CleanupAction extends Action {
 					$row->id
 				));
 
-				// Update status of the result
-				$db->query(str_queryf(
-					"UPDATE runresults
-					SET status = %s
-					WHERE id = %u;",
-					ResultAction::$STATE_LOST,
-					$row->id
-				));
+				// If the previous UPDATE query failed for whatever
+				// reason, don't do the below query as that will lead
+				// to data corruption (results with state LOST must never
+				// be referenced from run_useragent.results_id).
+				if ( $ret ) {
+					// Update status of the result
+					$ret = $db->query(str_queryf(
+						"UPDATE runresults
+						SET status = %s
+						WHERE id = %u;",
+						ResultAction::$STATE_LOST,
+						$row->id
+					));
+				}
+
+				if ( $ret ) {
+					$resetTimedoutRuns++;
+				}
 			}
 		}
 
