@@ -96,10 +96,10 @@ may work as well.
    `php scripts/dbInstall.php`
 
 1. Fetch the latest user-agent information:
-   `php inc/libs/ua-parser/php/UAParser.php -get`<br/>
+   `php inc/libs/ua-parser/php/uaparser-cli.php -g`<br/>
    Note that ua-parser is based on patterns, so you don't need to re-run this
    after every browser release to be able to detect this, however it is recommmended
-   to periodically run this to stay up to date (once a week is enough).
+   to periodically run this to stay up to date (once a month shoudl be enough).
 
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>

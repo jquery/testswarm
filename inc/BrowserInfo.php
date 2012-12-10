@@ -142,6 +142,8 @@ class BrowserInfo {
 		 *		[device] =>
 		 *		[deviceMajor] =>
 		 *		[deviceMinor] =>
+		 *		[deviceVersion] =>
+		 *		[deviceFull] =>
 		 * )
 		 */
 
