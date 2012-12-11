@@ -237,12 +237,6 @@
 				window.TestSwarm.serialize = function () {
 					var ol, i;
 
-					// Clean up the HTML (remove any un-needed test markup)
-					remove( 'nothiddendiv' );
-					remove( 'loadediframe' );
-					remove( 'dl' );
-					remove( 'main' );
-
 					// Show any collapsed results
 					ol = document.getElementsByTagName( 'ol' );
 					for ( i = 0; i < ol.length; i += 1 ) {
