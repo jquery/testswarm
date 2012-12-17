@@ -13,7 +13,7 @@
 // Valid entry point
 define( 'SWARM_ENTRY', 'INDEX' );
 
-require_once 'inc/init.php';
+require_once '../inc/init.php';
 
 session_start();
 

@@ -16,7 +16,7 @@ define( 'SWARM_ENTRY', 'API' );
 
 header( 'X-Robots-Tag: noindex,nofollow', true );
 
-require_once 'inc/init.php';
+require_once '../inc/init.php';
 
 $action = $swarmContext->getRequest()->getVal( 'action', 'info' );
 if ( !$action ) {

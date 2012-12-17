@@ -219,62 +219,62 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 	display: inline-block;
 	width: 80px;
 	height: 80px;
-	background: url(../img/browser-unknown.png) 50% 50% no-repeat;
+	background: url(../htdocs/img/browser-unknown.png) 50% 50% no-repeat;
 	background-size: contain;
 }
 
 .swarm-browser-chrome {
-	background-image: url(../img/browser-chrome.png);
+	background-image: url(../htdocs/img/browser-chrome.png);
 }
 
 .swarm-browser-chromium {
-	background-image: url(../img/browser-chromium.png);
+	background-image: url(../htdocs/img/browser-chromium.png);
 }
 
 .swarm-browser-firefox {
-	background-image: url(../img/browser-firefox.png);
+	background-image: url(../htdocs/img/browser-firefox.png);
 }
 
 .swarm-browser-firefox_mobile {
-	background-image: url(../img/browser-firefox_mobile.png);
+	background-image: url(../htdocs/img/browser-firefox_mobile.png);
 }
 
 /* IE9+ */
 .swarm-browser-ie {
-	background-image: url(../img/browser-ie.png);
+	background-image: url(../htdocs/img/browser-ie.png);
 }
 
 .swarm-browser-ie-6 {
-	background-image: url(../img/browser-ie-6.png);
+	background-image: url(../htdocs/img/browser-ie-6.png);
 }
 
 /* IE7/IE8 have the same logo */
 .swarm-browser-ie-7,
 .swarm-browser-ie-8 {
-	background-image: url(../img/browser-ie-8.png);
+	background-image: url(../htdocs/img/browser-ie-8.png);
 }
 
 .swarm-browser-opera,
 .swarm-browser-opera_mini,
 .swarm-browser-opera_mobile {
-	background-image: url(../img/browser-opera.png);
+	background-image: url(../htdocs/img/browser-opera.png);
 }
 
 .swarm-browser-safari,
 .swarm-browser-mobile_safari {
-	background-image: url(../img/browser-safari.png);
+	background-image: url(../htdocs/img/browser-safari.png);
 }
 
 .swarm-browser-webkit_nightly {
-	background-image: url(../img/browser-webkit.png);
+	background-image: url(../htdocs/img/browser-webkit.png);
 }
 
 .swarm-device-ipad {
-	background-image: url(../img/device-ipad.png);
+	background-image: url(../htdocs/img/device-ipad.png);
 }
 
 .swarm-device-iphone {
-	background-image: url(../img/device-iphone.png);
+	background-image: url(../htdocs/img/device-iphone.png);
 }
 
 .swarm-os::after {
@@ -293,29 +293,29 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 }
 
 .swarm-os-android::after {
-	background-image: url(../img/os-android.png);
+	background-image: url(../htdocs/img/os-android.png);
 }
 
 .swarm-os-ios::after {
-	background-image: url(../img/os-ios.png);
+	background-image: url(../htdocs/img/os-ios.png);
 }
 
 .swarm-os-mac_os_x::after {
-	background-image: url(../img/os-macosx.png);
+	background-image: url(../htdocs/img/os-macosx.png);
 }
 
 .swarm-os-windows::after,
 .swarm-os-windows_xp::after {
-	background-image: url(../img/os-winxp.png);
+	background-image: url(../htdocs/img/os-winxp.png);
 }
 
 .swarm-os-windows_vista::after,
 .swarm-os-windows_7::after {
-	background-image: url(../img/os-win7.png);
+	background-image: url(../htdocs/img/os-win7.png);
 }
 
 .swarm-os-windows_8::after {
-	background-image: url(../img/os-win8.png);
+	background-image: url(../htdocs/img/os-win8.png);
 }
 
 .swarm-icon-small {
