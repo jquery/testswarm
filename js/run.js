@@ -135,7 +135,7 @@
 	 * @param data Object: Reponse from api.php?action=getrun
 	 */
 	function runTests( data ) {
-		var norun_msg, timeLeft, runInfo, params, iframe;
+		var norun_msg, timeLeft, runInfo, params, iframe, swarmBaseURL;
 
 		if ( !$.isPlainObject( data ) || data.error ) {
 			// Handle session timeout, where server sends back "Username required."
@@ -153,6 +153,7 @@
 			// Handle actual retreived tests from runInfo
 			runInfo = data.getrun.runInfo;
 			if ( runInfo ) {
+				swarmBaseURL = window.location.protocol+ '//' + window.location.host + SWARM.conf.web.contextpath;
 				currRunId = runInfo.id;
 				currRunUrl = runInfo.url;
 
@@ -165,8 +166,10 @@
 				iframe.src = currRunUrl + (currRunUrl.indexOf( '?' ) > -1 ? '&' : '?') + $.param({
 					// Cache buster
 					'_' : new Date().getTime(),
+					// location of the inject.js file
+					'swarmInjectURL': swarmBaseURL + 'js/inject.js',
 					// Homing signal for inject.js so that it can find its target for action=saverun
-					'swarmURL' : window.location.protocol + '//' + window.location.host + SWARM.conf.web.contextpath +
+					'swarmURL' : swarmBaseURL +
 						'index.php?' +
 						$.param({
 							status: 2, // ResultAction::STATE_FINISHED
