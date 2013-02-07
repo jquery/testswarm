@@ -15,6 +15,7 @@ Before you can submit a job you has to have an actual test suite. Presumably you
 * [Selenium Core](http://seleniumhq.org/projects/core/)
 * [Dojo Objective Harness](http://docs.dojocampus.org/quickstart/doh)
 * [Screw.Unit](https://github.com/nathansobo/screw-unit)
+* [Mocha](https://github.com/visionmedia/mocha)
 
 The test suite must run from a publicly accessible URL that serves an HTML document (may be generated from e.g. PHP or a static file, extension doesn't matter) and needs to support being run in an `<iframe>` (e.g. no `X-IFrame-Options` headers that disallow embedding from a different origin, or javascript that forces being in the `top` window context).
 
