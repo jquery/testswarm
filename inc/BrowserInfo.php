@@ -125,47 +125,37 @@ class BrowserInfo {
 		 * A ua-parser object looks like this (simplified version of the actual object)
 		 * @source https://github.com/tobie/ua-parser
 		 *
-		 * stdClass Object (
-		 *		[family] => Firefox
-		 *		[major] => 14
-		 *		[minor] => 0
-		 *		[patch] => 1
-		 *		[version] => 14.0.1
-		 *		[browserFull] => Firefox 14.0.1
-		 *		[os] => Mac OS X
-		 *		[osMajor] => 10
-		 *		[osMinor] => 8
-		 *		[osPatch] => 2
-		 *		[osVersion] => 10.8.2
-		 *		[osFull] => Mac OS X 10.8.2
-		 *		[full] => Firefox 14.0.1/Mac OS X 10.8.2
-		 *		[device] =>
-		 *		[deviceMajor] =>
-		 *		[deviceMinor] =>
-		 *		[deviceVersion] =>
-		 *		[deviceFull] =>
-		 * )
+		 *     ua->family: Chrome
+		 *     ua->major: 24
+		 *     ua->minor: 0
+		 *     ua->patch: 1312
+		 *     os->family: Mac OS X
+		 *     os->major: 10
+		 *     os->minor: 8
+		 *     os->patch: 2
+		 *     device->family:
+		 *     toFullString: Chrome 24.0.1312/Mac OS X 10.8.2
 		 */
 
-		$UAParserInstance = new UA();
+		$UAParserInstance = new UAParser();
 
-		$uaparserData = $UAParserInstance->parse( $userAgent );
+		$parsed = $UAParserInstance->parse( $userAgent );
 
 		$uaData = new stdClass();
 
-		$uaData->browserFamily = $uaparserData->family;
-		$uaData->browserMajor = $uaparserData->major;
-		$uaData->browserMinor = $uaparserData->minor;
-		$uaData->browserPatch = $uaparserData->patch;
+		$uaData->browserFamily = $parsed->ua->family;
+		$uaData->browserMajor = $parsed->ua->major;
+		$uaData->browserMinor = $parsed->ua->minor;
+		$uaData->browserPatch = $parsed->ua->patch;
 
-		$uaData->osFamily = $uaparserData->os;
-		$uaData->osMajor = $uaparserData->osMajor;
-		$uaData->osMinor = $uaparserData->osMinor;
-		$uaData->osPatch = $uaparserData->osPatch;
+		$uaData->osFamily = $parsed->os->family;
+		$uaData->osMajor = $parsed->os->major;
+		$uaData->osMinor = $parsed->os->minor;
+		$uaData->osPatch = $parsed->os->patch;
 
-		$uaData->deviceFamily = $uaparserData->device;
-		$uaData->deviceMajor = $uaparserData->deviceMajor;
-		$uaData->deviceMinor = $uaparserData->deviceMinor;
+		$uaData->deviceFamily = $parsed->device->family;
+		$uaData->deviceMajor = null; // deprecated
+		$uaData->deviceMinor = null; // deprecated
 
 		$uaData->displayInfo = self::getDisplayInfo( $uaData );
 
