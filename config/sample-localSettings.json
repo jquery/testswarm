@@ -8,6 +8,9 @@
 	"web": {
 		"contextpath": "/testswarm"
 	},
+	"storage": {
+		"cacheDir": "$1/cache"
+	},
 	"userAgents": {
 		"Chrome22": {
 			"browserFamily": "Chrome",
@@ -17,14 +20,13 @@
 			"browserFamily": "Chrome",
 			"browserMajor": "23"
 		},
+		"Firefox18": {
+			"browserFamily": "Firefox",
+			"browserMajor": "18"
+		},
 		"IE10": {
 			"browserFamily": "IE",
 			"browserMajor": "10"
-		},
-		"Opera12.0": {
-			"browserFamily": "Opera",
-			"browserMajor": "12",
-			"browserMinor": "0*"
 		},
 		"Safari5Win": {
 			"browserFamily": "Safari",
@@ -32,10 +34,14 @@
 			"browserMinor": "1",
 			"osFamily": "Windows XP"
 		},
-		"Safari6Mac": {
+		"Safari6": {
 			"browserFamily": "Safari",
-			"browserMajor": "6",
-			"osFamily": "Mac OS X"
+			"browserMajor": "6"
+		},
+		"Opera12.0": {
+			"browserFamily": "Opera",
+			"browserMajor": "12",
+			"browserMinor": "0*"
 		},
 		"Android2.3": {
 			"osFamily": "Android",
@@ -56,16 +62,13 @@
 	"browserSets": {
 		"example": [
 			"Chrome23",
+			"Firefox18",
 			"IE10",
 			"Opera12.0",
-			"Safari5Win",
-			"Safari6Mac",
+			"Safari6",
 			"Android2.3",
 			"iOS5.1",
 			"iOS6/iPad"
 		]
-	},
-	"storage": {
-		"cacheDir": "$1/cache"
 	}
 }

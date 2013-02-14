@@ -54,7 +54,7 @@ class DBInstallScript extends MaintenanceScript {
 				$doDrop = $this->cliInput();
 				if ( $doDrop !== 'Y' ) {
 					$this->getContext()->dbLock( false );
-					$this->out( 'Installation aborted. Removed database.lock' );
+					$this->out( "Installation aborted.\nRemoved database.lock" );
 					return;
 				}
 			}
