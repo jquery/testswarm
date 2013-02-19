@@ -130,7 +130,7 @@
 						$sql_query .= $char;
 						break;
 					case 'u':
-						$sql_query .= "'" . intval( $args[$args_i] ) . "'";
+						$sql_query .= "" . intval( $args[$args_i] );
 						break;
 					case 's':
 						$sql_query .= "'" . mysql_real_escape_string( $args[$args_i] ) . "'";
