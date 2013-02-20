@@ -130,7 +130,7 @@ table.swarm-results tbody td.swarm-status-new {
 }
 table.swarm-results tbody td.swarm-status-new,
 table.swarm-results tbody td.swarm-status-new a {
-	color: #666);
+	color: #666;
 }
 
 table.swarm-results tbody td.swarm-status-progress {
@@ -161,7 +161,7 @@ table.swarm-results tbody td.swarm-status-error,
 table.swarm-results tbody td.swarm-status-error a,
 table.swarm-results tbody td.swarm-status-failed,
 table.swarm-results tbody td.swarm-status-failed a {
-	color: #874545);
+	color: #874545;
 }
 
 table.swarm-results tbody td.swarm-status-notscheduled {
