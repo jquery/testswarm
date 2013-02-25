@@ -156,7 +156,7 @@ abstract class Page {
 			$path = $className;
 		}
 		$item = $this->getContext()->getRequest()->getVal( 'item' );
-		if ( $item ) {
+		if ( $item !== null ) {
 			$path .= "/$item";
 		}
 		return $path;
