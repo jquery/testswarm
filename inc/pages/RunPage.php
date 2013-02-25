@@ -14,21 +14,20 @@ class RunPage extends Page {
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
-		$uaData = $browserInfo->getUaData();
+		$this->setTitle( 'Test runner' );
 
 		$runToken = null;
+
 		if ( $conf->client->requireRunToken ) {
 			$runToken = $request->getVal( "run_token" );
 			if ( !$runToken ) {
-				throw new SwarmException( "This swarm has restricted access to join the swarm." );
+				return '<div class="alert alert-error">This swarm has restricted access to join the swarm.</div>';
 			}
 		}
 
-		$this->setTitle( "Test runner" );
 		$this->bodyScripts[] = swarmpath( "js/run.js?" . time() );
 
 		$client = Client::newFromContext( $this->getContext(), $runToken );
-		$displayInfo = $uaData->displayInfo;
 
 		$html = '<script>'
 			. 'SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';'
@@ -38,19 +37,10 @@ class RunPage extends Page {
 		$html .=
 			'<div class="row">'
 				. '<div class="span2">'
-					. '<div class="well well-swarm-icon">'
-					. html_tag( 'div', array(
-						'class' => $displayInfo['class'],
-						'title' => $displayInfo['title'],
-					) )
-					. '<br>'
-					. html_tag_open( 'span', array(
-						'class' => 'badge swarm-browsername',
-					) ) . $displayInfo['labelHtml'] . '</span>'
-					. '</div>'
+					. $browserInfo->getIconHtml()
 				. '</div>'
 				. '<div class="span7">'
-					. '<h2>' . htmlspecialchars( $client->getUserRow()->name ) . '</h2>'
+					. '<h2>' . htmlspecialchars( $client->getClientRow()->name ) . '</h2>'
 					. '<p><strong>Status:</strong> <span id="msg"></span></p>'
 				. '</div>'
 			. '</div>'

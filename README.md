@@ -75,7 +75,7 @@ may work as well.
    <br/>Make sure your install is located at `/var/www/testswarm`
    (otherwise update the file to match the correct location).<br/>
    Now you need to link the `sites-available` config to the `sites-enabled` config:<br/>
-   (replace the "swarm.example.org"  with your own file name):<br/>
+   (replace the "swarm.example.org" with your own file name):<br/>
    `ln -s /etc/nginx/sites-available/swarm.example.org.conf /etc/nginx/sites-enabled/swarm.example.org.conf`<br/>
    Now make sure that php-fpm is running: `/etc/init.d/php-fpm status`<br/>
    if is not running start it: `/etc/init.d/php-fpm start`

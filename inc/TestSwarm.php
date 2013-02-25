@@ -4,12 +4,12 @@
  * Each of these objects is created only once for the context.
  * The creation happends on-demand and is put in a private cache.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof, 2012-2013
  * @since 1.0.0
  * @package TestSwarm
  */
 class TestSwarmContext {
-	protected $browserInfo, $conf, $db, $request, $versionInfo;
+	protected $browserInfo, $conf, $db, $request, $auth, $versionInfo;
 
 	/**
 	 * The context is self-initializing. The only thing it needs to be passed is
@@ -89,6 +89,55 @@ class TestSwarmContext {
 			$this->request = WebRequest::newFromContext( $this );
 		}
 		return $this->request;
+	}
+
+	/**
+	 * Get the authentication object.
+	 * This logic used to be in init.php and accessed in other files directly
+	 * from the session. However since initialisation of the session can sometimes
+	 * only be determined after the context is created (see api.php), we need to
+	 * defer it to here where we lazy-init the object. Another reason is security
+	 * (see github.com/jquery/testswarm/issues/181), we need to invalidate the
+	 * session if we detect it is no longer up to date with the corresponding
+	 * account in the database (which we can only access after init).
+	 * @return object|false
+	 */
+	public function getAuth() {
+		if ( $this->auth === null ) {
+			$request = $this->getRequest();
+
+			$auth = $request->getSessionData( 'auth' );
+			if ( !$auth ) {
+				return $this->flushAuth();
+			}
+
+			// Invalidate session if it is malformed (different structure)
+			if ( !isset( $auth->project ) || !is_object( $auth->project ) ) {
+				return $this->flushAuth();
+			}
+
+			// Invalidate session if it is outdated (password changed, project deleted, ..)
+			$projectRow = $this->getDB()->getRow(str_queryf(
+				'SELECT
+					auth_token,
+					updated
+				FROM projects
+				WHERE id = %s',
+				$auth->project->id
+			));
+			if ( $auth->project->auth_token !== $projectRow->auth_token || $auth->project->updated !== $projectRow->updated ) {
+				return $this->flushAuth();
+			}
+			// Valid!
+			$this->auth = $auth;
+		}
+		return $this->auth;
+	}
+
+	public function flushAuth() {
+		$this->getRequest()->setSessionData( 'auth', null );
+		$this->auth = false;
+		return $this->auth;
 	}
 
 	public function createDerivedRequestContext( Array $query = array(), $method = 'GET' ) {

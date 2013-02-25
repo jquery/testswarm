@@ -141,7 +141,7 @@
 						$sql_query .= "('" . implode( "', '", $escapedList ) . "')";
 						break;
 				}
-				if ($char != 'x') {
+				if ( $char != 'x' ) {
 					$args_i++;
 				}
 			} else {
@@ -157,7 +157,7 @@
 		 * PHP has natsort() but no natksort().
 		 *
 		 * @source http://stackoverflow.com/a/1186347/319266
-		 * @seealso php.net/uksort, php.net/natsort, php.net/strnatcmp
+		 * @see php.net/uksort, php.net/natsort, php.net/strnatcmp
 		 */
 		 function natksort( &$array ) {
 			uksort( $array, 'strnatcmp' );
@@ -168,7 +168,7 @@
 		 * PHP has natcasesort() but no natcaseksort().
 		 *
 		 * @source http://stackoverflow.com/a/1186347/319266
-		 * @seealso php.net/uksort, php.net/natcasesort, php.net/strnatcasecmp
+		 * @see php.net/uksort, php.net/natcasesort, php.net/strnatcasecmp
 		 */
 		 function natcaseksort( &$array ) {
 			uksort( $array, 'strnatcasecmp' );

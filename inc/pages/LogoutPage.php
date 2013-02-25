@@ -25,49 +25,36 @@ class LogoutPage extends Page {
 		$data = $this->getAction()->getData();
 		$error = $this->getAction()->getError();
 
-		if ( !$error && $data['status'] == 'logged-out' ) {
+		if ( !$error ) {
 			$this->setTitle( 'Logged out!' );
 			$html .= html_tag( 'div', array( 'class' => 'alert alert-success' ),
-				'Thanks for running TestSwarm. You are now signed out.'
+				'You are now logged out.'
 			);
-			// Don't show form in case of success.
+			// Return early, we don't need to show the <form> in case of success.
 			return $html;
 		}
 
-		if ( $request->wasPosted() && $error ) {
-			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
-		}
-
-
-		$html .= '<form action="' . swarmpath( 'logout' ) . '" method="post" class="form-horizontal">'
+		// If we weren't logged in in the first place, there is no error.
+		// If there is an error now it means we're on a POST request to Logout
+		// and the tokens were invalid. Likely a case of a malice or stale state (someone having
+		// a tab open for a month with absolute no other activity and the token no longer being
+		// valid when they finally click "Logout").
+		// Show the user the error and allow them user to manually confirm the log out.
+		$auth = $this->getContext()->getAuth();
+		$html .=
+			html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] )
+			. '<form action="' . swarmpath( 'logout' ) . '" method="post" class="form-horizontal">'
 			. '<fieldset>'
 			. '<legend>Log out</legend>'
 			. '<div class="form-actions">'
 			. '<p>Please submit the following protected form to proceed to log out.</p>'
-				. '<input type="submit" value="Logout" class="btn btn-primary">'
-				. self::getLogoutFormFieldsHtml( $this->getContext() )
+			. '<input type="submit" value="Logout" class="btn btn-primary">'
+			. '<input type="hidden" name="authID" value="' . htmlspecialchars( $auth->project->id ) . '">'
+			. '<input type="hidden" name="authToken" value="' . htmlspecialchars( $auth->sessionToken ) . '">'
 			. '</div>'
 			. '</fieldset>'
 			. '</form>';
 
 		return $html;
-	}
-
-	public static function getLogoutFormFieldsHtml( TestSwarmContext $context ) {
-		$db = $context->getDB();
-		$request = $context->getRequest();
-
-		$userName = $request->getSessionData( 'username' );
-		$userAuthToken = $db->getOne(str_queryf(
-			'SELECT auth
-			FROM users
-			WHERE name = %s',
-			$userName
-		));
-
-		return
-			'<input type="hidden" name="authUsername" value="' . htmlspecialchars( $userName ) . '">'
-			. '<input type="hidden" name="authToken" value="' . htmlspecialchars( $userAuthToken ) . '">';
-
 	}
 }

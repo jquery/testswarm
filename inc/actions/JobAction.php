@@ -7,6 +7,7 @@
  * @package TestSwarm
  */
 class JobAction extends Action {
+	protected $item, $runs, $userAgents;
 
 	/**
 	 * @actionParam int item: Job ID.
@@ -15,14 +16,14 @@ class JobAction extends Action {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$jobID = $request->getInt( 'item' );
-		if ( !$jobID ) {
+		$this->item = $request->getInt( 'item' );
+		if ( !$this->item ) {
 			$this->setError( 'missing-parameters' );
 			return;
 		}
 
 		// Get job information
-		$jobInfo = self::getJobInfoFromId( $db, $jobID );
+		$jobInfo = $this->getInfo();
 
 		if ( !$jobInfo ) {
 			$this->setError( 'invalid-input', 'Job not found' );
@@ -39,61 +40,84 @@ class JobAction extends Action {
 				runs
 			WHERE job_id = %u
 			ORDER BY id;',
-			$jobID
+			$this->item
 		));
 
-		$data = self::getDataFromRunRows( $this->getContext(), $runRows );
+		$processed = self::getDataFromRunRows( $this->getContext(), $runRows );
+		$this->runs = $processed['runs'];
+		$this->userAgents = $processed['userAgents'];
+
+		$uaSummaries = $this->getUaSummaries();
 
 		// Start of response data
-		$respData = array(
-			'jobInfo' => $jobInfo,
-			'runs' => $data['runs'],
-			// Mapping of useragent id and information about them
+		$this->setData( array(
+			'info' => $jobInfo,
+			'runs' => $this->runs,
+			// Mapping of useragent id and information about them.
 			// Will contain all distinct user agents that one or more
-			// runs of this job is scheduled to run for
-			'userAgents' => $data['userAgents'],
-		);
+			// runs of this job is scheduled to run for.
+			'userAgents' => $this->userAgents,
+			'uaSummaries' => $uaSummaries,
+			'summary' => $this->getSummary( $uaSummaries ),
+		) );
+	}
 
+	protected function getUaSummaries() {
+		$uaStatuses = array();
+		foreach ( $this->runs as $run ) {
+			foreach ( $run['uaRuns'] as $uaID => $uaRun ) {
+				$uaStatuses[$uaID][] = $uaRun['runStatus'];
+			}
+		}
 
-		// Save data
-		$this->setData( $respData );
+		$uaSummaries = array();
+		foreach ( $uaStatuses as $uaID => $statuses ) {
+			$uaSummaries[$uaID] = self::getUaSummaryFromStatuses( $statuses );
+		}
+
+		return $uaSummaries;
+	}
+
+	protected function getSummary( $uaSummaries ) {
+		return self::getUaSummaryFromStatuses( array_values( $uaSummaries ) );
 	}
 
 	/**
-	 * @param Database $db
-	 * @param int $jobID
 	 * @return array|bool
 	 */
-	public static function getJobInfoFromId( Database $db, $jobID ) {
+	protected function getInfo() {
+		$db = $this->getContext()->getDB();
 		$jobRow = $db->getRow(str_queryf(
 			'SELECT
-				jobs.id as job_id,
-				jobs.name as job_name,
-				jobs.created as job_created,
-				users.name as user_name
+				id,
+				name,
+				project_id,
+				created
 			FROM
-				jobs, users
-			WHERE jobs.id = %u
-			AND   users.id = jobs.user_id;',
-			$jobID
+				jobs
+			WHERE id = %u',
+			$this->item
 		));
 
 		if ( !$jobRow ) {
 			return false;
 		}
+		$jobID = intval( $jobRow->id );
 
-		return array(
+		$ret = array(
 			'id' => $jobID,
-			'name' => $jobRow->job_name,
-			'ownerName' => $jobRow->user_name,
-			'creationTimestamp' => $jobRow->job_created
+			'nameHtml' => $jobRow->name,
+			'nameText' => strip_tags( $jobRow->name ),
+			'projectID' => $jobRow->project_id,
+			'viewUrl' => swarmpath( "job/$jobID", 'fullurl' )
 		);
+		self::addTimestampsTo( $ret, $jobRow->created, 'created' );
+		return $ret;
 	}
 
 	/**
-	 * @param TestSwarmContext $context
-	 * @param array $runRows: one or more rows from the `runs` table.
-	 * @return array with properties 'runs' and 'userAgents'
+	 * Iterate over all run rows and aggregate the runs and user agents.
+	 * @return Array List of runs and userAgents.
 	 */
 	public static function getDataFromRunRows( TestSwarmContext $context, $runRows ) {
 		$db = $context->getDB();
@@ -211,6 +235,42 @@ class JobAction extends Action {
 		);
 	}
 
+	public static function getUaSummaryFromStatuses( Array $statuses ) {
+		$strengths = array_flip(array(
+			'passed',
+			'new',
+			'progress',
+			'timedout',
+			'failed',
+			'error', // highest priority
+		));
+
+		$isNew = true;
+		$strongest = null;
+		$hasIncomplete = false;
+
+		foreach ( $statuses as $status ) {
+			if ( $status !== 'new' && $isNew ) {
+				$isNew = false;
+			}
+			if ( $status === 'new' || $status === 'progress' ) {
+				if ( !$hasIncomplete ) {
+					$hasIncomplete = true;
+				}
+			}
+			if ( !$strongest || $strengths[$status] > $strengths[$strongest] ) {
+				$strongest = $status;
+			}
+		}
+
+		return $isNew
+			? 'new'
+			: ( $hasIncomplete
+				? 'progress'
+				: $strongest
+			);
+	}
+
 	/**
 	 * @param $row object: Database row from runresults.
 	 * @return string: One of 'progress', 'timedout', 'passed', 'failed' or 'error'.
@@ -232,7 +292,7 @@ class JobAction extends Action {
 			return 'timedout';
 		}
 		// If status is 4 (ResultAction::$STATE_LOST) it means a CleanupAction
-		// was aborted between to queries. This is no longer possible, but old
+		// was aborted between two queries. This is no longer possible, but old
 		// data may still be corrupted. Run fixRunresultCorruption.php to fix
 		// these entries.
 		throw new SwarmException( 'Corrupt run result #' . $row->id );

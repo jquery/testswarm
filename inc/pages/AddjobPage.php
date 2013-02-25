@@ -36,7 +36,7 @@ class AddjobPage extends Page {
 					. '">Job ' . $data["id"] . '</a> has been created!</strong><br>'
 					. $data["runTotal"] . ' runs have been scheduled to be ran in ' . $data["uaTotal"]
 					. ' different browsers.<br><br>'
-					. '<a class="btn btn-primary btn-small" href="' . htmlspecialchars( swarmpath( "job/{$data["id"]}" ) )
+					. '<a class="btn btn-primary" href="' . htmlspecialchars( swarmpath( "job/{$data["id"]}" ) )
 					. '">continue to job page &raquo;</a>'
 					. '</div>';
 			}
@@ -50,17 +50,14 @@ class AddjobPage extends Page {
 	protected function getAddjobFormHtml() {
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
+		$auth = $this->getContext()->getAuth();
 
 		$browserIndex = BrowserInfo::getBrowserIndex();
 
 		$addjobPageUrlEsc = htmlspecialchars( swarmpath( 'addjob' ) );
 
-		if ( $request->getSessionData( 'auth' ) == 'yes' ) {
-			$userName = $request->getSessionData( 'username' );
-			$userNameEsc = htmlspecialchars( $userName );
-		} else {
-			$userNameEsc = '';
-		}
+		$authIDEsc = htmlspecialchars( $request->getVal( 'authID', $auth ? $auth->project->id : '' ) );
+		$authTokenEsc = htmlspecialchars( $request->getVal( 'authToken', $auth ? $auth->sessionToken : '' ) );
 
 		$formHtml = <<<HTML
 <form action="$addjobPageUrlEsc" method="post" class="form-horizontal">
@@ -69,15 +66,15 @@ class AddjobPage extends Page {
 		<legend>Authentication</legend>
 
 		<div class="control-group">
-			<label class="control-label" for="form-authUsername">User name:</label>
+			<label class="control-label" for="form-authID">Project ID:</label>
 			<div class="controls">
-				<input type="text" name="authUsername" required value="$userNameEsc" id="form-authUsername">
+				<input type="text" name="authID" required value="$authIDEsc" id="form-authID">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-authToken">Auth token:</label>
 			<div class="controls">
-				<input type="text" name="authToken" required id="form-authToken" class="input-xlarge">
+				<input type="text" name="authToken" required value="$authTokenEsc" id="form-authToken" class="input-xlarge">
 			</div>
 		</div>
 	</fieldset>

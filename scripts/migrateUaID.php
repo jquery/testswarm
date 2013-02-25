@@ -31,8 +31,8 @@ class MigrateUaIDScript extends MaintenanceScript {
 		$findUnknown = $this->getOption( 'find-unknown' );
 		$replaceUnknown = $this->getOption( 'replace-unknown' );
 		if ( $findUnknown || $replaceUnknown ) {
-			$found1 = $this->findUnknown( 'clients',  $batchSize, $replaceUnknown );
-			$found2 = $this->findUnknown( 'run_useragent',  $batchSize, $replaceUnknown );
+			$found1 = $this->findUnknown( 'clients', $batchSize, $replaceUnknown );
+			$found2 = $this->findUnknown( 'run_useragent', $batchSize, $replaceUnknown );
 			if ( !$replaceUnknown ) {
 				$found = array_values( array_unique( array_merge( $found1, $found2 ) ) );
 				natsort( $found );
@@ -91,7 +91,7 @@ class MigrateUaIDScript extends MaintenanceScript {
 				"UPDATE $table
 				SET useragent_id = %s
 				WHERE id BETWEEN $blockStart AND $blockEnd
-				AND  useragent_id = %s;
+				AND   useragent_id = %s;
 				",
 				$toId,
 				$fromId

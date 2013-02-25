@@ -72,8 +72,8 @@ jQuery(function ( $ ) {
 					run_id: $el.data( 'runId' ),
 					client_id: $el.data( 'clientId' ),
 					useragent_id: $el.data( 'useragentId' ),
-					authUsername: SWARM.user.name,
-					authToken: SWARM.user.authToken
+					authID: SWARM.auth.project.id,
+					authToken: SWARM.auth.sessionToken
 				},
 				dataType: 'json',
 				success: function ( data ) {
@@ -88,7 +88,7 @@ jQuery(function ( $ ) {
 
 	$( 'table.swarm-results' ).prev().before( $indicator );
 
-	if ( SWARM.user ) {
+	if ( SWARM.auth ) {
 
 		// This needs to bound as a delegate, because the table auto-refreshes.
 		$targetTable.on( 'click', '.swarm-reset-run-single', function () {
@@ -118,15 +118,15 @@ jQuery(function ( $ ) {
 					action: 'wipejob',
 					job_id: SWARM.jobInfo.id,
 					type: 'delete',
-					authUsername: SWARM.user.name,
-					authToken: SWARM.user.authToken
+					authID: SWARM.auth.project.id,
+					authToken: SWARM.auth.sessionToken
 				},
 				dataType: 'json',
 				success: function ( data ) {
 					if ( data.wipejob && data.wipejob.result === 'ok' ) {
 						// Right now the only user authorized to delete a job is the creator,
 						// the below code makes that assumption.
-						window.location.href = SWARM.conf.web.contextpath + 'user/' + SWARM.user.name;
+						window.location.href = SWARM.conf.web.contextpath + 'project/' + SWARM.auth.project.id;
 						return;
 					}
 					actionComplete();
@@ -153,8 +153,8 @@ jQuery(function ( $ ) {
 					action: 'wipejob',
 					job_id: SWARM.jobInfo.id,
 					type: 'reset',
-					authUsername: SWARM.user.name,
-					authToken: SWARM.user.authToken
+					authID: SWARM.auth.project.id,
+					authToken: SWARM.auth.sessionTokens
 				},
 				dataType: 'json',
 				success: function ( data ) {

@@ -3,7 +3,7 @@
  * "Login" page.
  *
  * @author John Resig, 2008-2011
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof, 2012-2013
  * @since 0.1.0
  * @package TestSwarm
  */
@@ -16,8 +16,8 @@ class LoginPage extends Page {
 		$error = $action->getError();
 		if ( !$error ) {
 			$data = $action->getData();
-			if ( $data["status"] === "logged-in" ) {
-				$this->redirect( swarmpath( "user/" . $data["username"] ) );
+			if ( $data ) {
+				$this->redirect( swarmpath( 'project/' . $data['id'] ) );
 			}
 		}
 
@@ -42,18 +42,16 @@ class LoginPage extends Page {
 
 		$html .=
 		'<div class="well">'
-			. '<p>Login using your TestSwarm username and password.'
-			. ' If you don\'t have one you may <a href="' . swarmpath( "signup" )
-			. '">Signup Here</a>.</p>'
+			. '<p>Login for projects. Projects can only be created by swarm operators.</p>'
 			. '<div class="control-group">'
-				. '<label class="control-label" for="form-username">Username</label>'
+				. '<label class="control-label" for="form-projectID">Project ID</label>'
 				. '<div class="controls">'
-					. '<input type="text" name="username" required id="form-username" value="' . htmlspecialchars( $request->getVal( "username" ) ) . '">'
+					. '<input type="text" name="projectID" required id="form-projectID" value="' . htmlspecialchars( $request->getVal( "projectID" ) ) . '">'
 				. '</div>'
 			. '</div><div class="control-group">'
-				. '<label class="control-label" for="form-password">Password</label>'
+				. '<label class="control-label" for="form-projectPassword">Project password</label>'
 				. '<div class="controls">'
-					. '<input type="password" name="password" required id="form-password">'
+					. '<input type="password" name="projectPassword" required id="form-projectPassword">'
 				. '</div>'
 			. '</div>'
 		. '</div><div class="form-actions">'

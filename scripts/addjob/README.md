@@ -69,10 +69,10 @@ Note that any QUnit specific details here may out of date. Pay attention to the 
 
 ### Authentication
 
-Username with a user that will be the owner of this new job.
+Project that will be the owner of this new job.
 
-* `authUsername`: Matching entry from `users.name` field in the database 
-* `authToken`: Matching entry from `users.auth` field in the database
+* `authID`: Matching entry from `projects.id` field in the database
+* `authToken`: Matching entry from `projects.auth_token` field in the database
 
 ### Job information
 

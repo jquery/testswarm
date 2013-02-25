@@ -33,9 +33,10 @@ class ResultAction extends Action {
 		$conf = $context->getConf();
 		$request = $context->getRequest();
 
-		$resultsID = $request->getInt( 'item' );
+		$item = $request->getInt( 'item' );
 		$row = $db->getRow(str_queryf(
 			'SELECT
+				id,
 				run_id,
 				client_id,
 				status,
@@ -43,7 +44,7 @@ class ResultAction extends Action {
 				created
 			FROM runresults
 			WHERE id = %u;',
-			$resultsID
+			$item
 		));
 
 		if ( !$row ) {
@@ -58,7 +59,7 @@ class ResultAction extends Action {
 		// under a simple url.
 		// If the job is no longer in existance, properties
 		// 'otherRuns' and 'job' will be set to null.
-		$runRows = $db->getRows(str_queryf(
+		$runRow = $db->getRow(str_queryf(
 			'SELECT
 				id,
 				url,
@@ -69,13 +70,13 @@ class ResultAction extends Action {
 			$row->run_id
 		));
 
-		if ( !$runRows || !count( $runRows ) ) {
+		if ( !$runRow ) {
 			$data['otherRuns'] = null;
 			$data['job'] = null;
 		} else {
-			$data['otherRuns'] = JobAction::getDataFromRunRows( $context, $runRows );
+			$data['otherRuns'] = JobAction::getDataFromRunRows( $context, array( $runRow ) );
 
-			$jobID = intval( $runRows[0]->job_id );
+			$jobID = intval( $runRow->job_id );
 
 			$data['job'] = array(
 				'id' => $jobID,
@@ -86,48 +87,39 @@ class ResultAction extends Action {
 		$clientRow = $db->getRow(str_queryf(
 			'SELECT
 				id,
-				user_id,
+				name,
 				useragent_id,
 				useragent
 			FROM clients
 			WHERE id = %u;',
 			$row->client_id
 		));
-		$userRow = $db->getRow(str_queryf(
-			'SELECT
-				id,
-				name
-			FROM users
-			WHERE id = %u;',
-			$clientRow->user_id
-		));
+
+		$data['info'] = array(
+			'id' => intval( $row->id ),
+			'runID' => intval( $row->run_id ),
+			'clientID' => intval( $row->client_id ),
+			'status' => self::getStatus( $row->status ),
+		);
 
 		$data['client'] = array(
 			'id' => $clientRow->id,
+			'name' => $clientRow->name,
 			'uaID' => $clientRow->useragent_id,
-			'userAgent' => $clientRow->useragent,
-			'userID' => $userRow->id,
-			'userName' => $userRow->name,
-			'userUrl' => swarmpath( 'user/' . $userRow->name ),
-		);
-
-		$data['resultInfo'] = array(
-			'id' => $resultsID,
-			'runID' => $row->run_id,
-			'clientID' => $row->client_id,
-			'status' => self::getStatus( $row->status ),
+			'uaRaw' => $clientRow->useragent,
+			'viewUrl' => swarmpath( 'client/' . $clientRow->id ),
 		);
 
 		// If still busy or if the client was lost, then the last update time is irrelevant
 		// Alternatively this could test if $row->updated == $row->created, which would effectively
 		// do the same.
 		if ( $row->status == self::$STATE_BUSY || $row->status == self::$STATE_LOST ) {
-			$data['resultInfo']['runTime'] = null;
+			$data['info']['runTime'] = null;
 		} else {
-			$data['resultInfo']['runTime'] = gmstrtotime( $row->updated ) - gmstrtotime( $row->created );
-			self::addTimestampsTo( $data['resultInfo'], $row->updated, 'saved' );
+			$data['info']['runTime'] = gmstrtotime( $row->updated ) - gmstrtotime( $row->created );
+			self::addTimestampsTo( $data['info'], $row->updated, 'saved' );
 		}
-		self::addTimestampsTo( $data['resultInfo'], $row->created, 'started' );
+		self::addTimestampsTo( $data['info'], $row->created, 'started' );
 
 		$this->setData( $data );
 	}

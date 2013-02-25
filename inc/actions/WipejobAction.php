@@ -13,9 +13,7 @@ class WipejobAction extends Action {
 	 * @actionMethod POST: Required.
 	 * @actionParam int job_id
 	 * @actionParam string type: one of 'delete', 'reset'.
-	 * @actionParam string authUsername
-	 * @actionParam string authToken
-	 * @actionAuth: Yes.
+	 * @actionAuth: Required.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
@@ -34,24 +32,21 @@ class WipejobAction extends Action {
 			return;
 		}
 
-		$jobOwner = $db->getOne(str_queryf(
+		$projectID = $db->getOne(str_queryf(
 			'SELECT
-				users.name as user_name
-			FROM jobs, users
-			WHERE jobs.id = %u
-			AND   users.id = jobs.user_id
-			LIMIT 1;',
+				project_id
+			FROM jobs
+			WHERE id = %u;',
 			$jobID
 		));
 
-		if ( !$jobOwner ) {
+		if ( !$projectID ) {
 			$this->setError( 'invalid-input', 'Job not found' );
 			return;
 		}
 
 		// Check authentication
-		$userId = $this->doRequireAuth( $jobOwner );
-		if ( !$userId ) {
+		if ( !$this->doRequireAuth( $projectID ) ) {
 			return;
 		}
 
@@ -90,7 +85,7 @@ class WipejobAction extends Action {
 		// This should be outside the if for $runRows, because jobs
 		// can sometimes be created without any runs (by accidently).
 		// Those should be deletable as well, thus this has to be outside the loop.
-		// Also, no  need to do this in a loop, just delete them all in one query.
+		// Also, no need to do this in a loop, just delete them all in one query.
 		if ( $wipeType === 'delete' ) {
 			$db->query(str_queryf(
 				'DELETE

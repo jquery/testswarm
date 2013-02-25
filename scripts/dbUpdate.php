@@ -108,6 +108,7 @@ class DBUpdateScript extends MaintenanceScript {
 		 * 1.0.0
 		 * useragents and run_client table removed, many column changes, new runresults table.
 		 */
+
 		// If the previous version was before 1.0.0 we won't offer an update, because most
 		// changes in 1.0.0 can't be simulated without human intervention. The changes are not
 		// backwards compatible. Instead do a few quick checks to verify this is in fact a
@@ -148,7 +149,7 @@ class DBUpdateScript extends MaintenanceScript {
 
 			// Drop all known TestSwarm tables in the database
 			// (except users, handled separately)
-			foreach( array(
+			foreach ( array(
 				'runresults', // New in 1.0.0
 				'run_client', // Removed in 1.0.0
 				'clients',

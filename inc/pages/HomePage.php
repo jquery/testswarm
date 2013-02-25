@@ -22,9 +22,10 @@ class HomePage extends Page {
 	}
 
 	protected function initContent() {
-		$conf = $this->getContext()->getConf();
-		$request = $this->getContext()->getRequest();
-		$browserInfo = $this->getContext()->getBrowserInfo();
+		$context = $this->getContext();
+		$conf = $context->getConf();
+		$request = $context->getRequest();
+		$browserInfo = $context->getBrowserInfo();
 
 		$siteNameHtml = htmlspecialchars( $conf->web->title );
 
@@ -44,21 +45,16 @@ class HomePage extends Page {
 		$html .= '<div class="span5"><div class="well">';
 		if ( !$conf->client->requireRunToken ) {
 			if ( $browserInfo->isInSwarmUaIndex() ) {
-					$html .= '<p><strong>Join ' . $siteNameHtml . '!</strong><br>'
-					. ' You have a browser that we need to test against, join the swarm to help us out!</p>';
-				if ( !$request->getSessionData( 'username' ) ) {
-					$html .= '<form action="' . swarmpath( '' ) . '" method="get" class="form-horizontal">'
-						. '<input type="hidden" name="action" value="run">'
-						. '<div class="input-append">'
-						. '<label for="form-item">Username:</label>'
-						. '<input type="text" name="item" id="form-item" placeholder="Enter username..">'
-						. '<input type="submit" value="Join the swarm" class="btn btn-primary">'
-						. '</div>'
-						. '</form>';
-				} else {
-					$html .= '<p><a href="' . swarmpath( "run/{$request->getSessionData( 'username' )}" )
-					. '" class="btn btn-primary btn-large">Join the swarm</a></p>';
-				}
+					$auth = $context->getAuth();
+					$suggestedClientName = $auth ? $auth->project->id : '';
+					$html .= '<p>Your browser is in our index, run some tests!</p>'
+					. '<form action="' . swarmpath( '' ) . '" method="get" class="form-horizontal swarm-form-join">'
+					. '<input type="hidden" name="action" value="run">'
+					. '<div class="input-append">'
+					. '<input type="text" name="item" placeholder="Enter name.." value="' . htmlspecialchars( $suggestedClientName ) . '" required pattern="' . htmlspecialchars( Client::getNameValidationRegex() ) . '">'
+					. '<input type="submit" value="Join the swarm" class="btn btn-primary">'
+					. '</div>'
+					. '</form>';
 			} else {
 				$uaData = $browserInfo->getUaData();
 				unset( $uaData->displayInfo );
@@ -69,7 +65,7 @@ class HomePage extends Page {
 					. ' <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>,'
 					. ' including the following 2 codes:'
 					. '<br><strong><a href="https://github.com/tobie/ua-parser">ua-parser</a>:</strong> <code>'
-					. htmlspecialchars( print_r(  $uaData, true ) )
+					. htmlspecialchars( print_r( $uaData, true ) )
 					. '</code><br><strong><a href="https://en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
 					. htmlspecialchars( $browserInfo->getRawUA() )
 					. '</code></p>';

@@ -10,17 +10,18 @@
 class SwarmstateAction extends Action {
 
 	/**
-	 * @requestParam browserSet string: Show useragents from a specific
+	 * @actionParam browserSet string: Show useragents from a specific
 	 * browserset only.
-	 * @requestParam onlyactive bool: If true, only user agents that
+	 * @actionParam onlyactive bool: If true, only user agents that
 	 * have online clients and/or pending runs are included.
 	 * If both "browserSet" and "onlyactive" are used, the overlaping
 	 * subset will be output.
 	 */
 	public function doAction() {
-		$conf = $this->getContext()->getConf();
-		$db = $this->getContext()->getDB();
-		$request = $this->getContext()->getRequest();
+		$context = $this->getContext();
+		$conf = $context->getConf();
+		$db = $context->getDB();
+		$request = $context->getRequest();
 
 		$showOnlyactive = $request->getBool( 'onlyactive' );
 
@@ -50,9 +51,9 @@ class SwarmstateAction extends Action {
 					COUNT(id)
 				FROM clients
 				WHERE useragent_id = %s
-				AND   updated > %s',
+				AND   updated >= %s',
 				$uaID,
-				swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) )
+				swarmdb_dateformat( Client::getMaxAge( $context ) )
 			));
 			$clients = intval( $clients );
 

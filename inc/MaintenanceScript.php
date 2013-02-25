@@ -32,7 +32,7 @@ abstract class MaintenanceScript {
 	 */
 	protected function registerFlag( $key, $type, $description ) {
 		static $types = array( 'boolean', 'value' );
-		if ( !is_string( $key ) || strlen ( $key ) !== 1 || !in_array( $type, $types ) ) {
+		if ( !is_string( $key ) || strlen( $key ) !== 1 || !in_array( $type, $types ) ) {
 			$this->error( 'Illegal flag registration' );
 		}
 		$this->flags[$key] = array(
@@ -51,7 +51,7 @@ abstract class MaintenanceScript {
 	 */
 	protected function registerOption( $name, $type, $description, $required = false ) {
 		static $types = array( 'boolean', 'value' );
-		if ( !is_string( $name ) || strlen ( $name ) < 2 || !in_array( $type, $types ) ) {
+		if ( !is_string( $name ) || strlen( $name ) < 2 || !in_array( $type, $types ) ) {
 			$this->error( 'Illegal option registration' );
 		}
 		$this->options[$name] = array(
@@ -99,7 +99,7 @@ abstract class MaintenanceScript {
 		if ( !$this->getOption( 'help' ) ) {
 			foreach ( $requiredKeys as $requiredKey ) {
 				if ( !isset( $parsed[$requiredKey] ) || !$parsed[$requiredKey] ) {
-					$this->error( 'Option "' . $requiredKey  . '" is required.' );
+					$this->error( 'Option "' . $requiredKey . '" is required.' );
 				}
 			}
 		}
@@ -234,23 +234,14 @@ $description
 	}
 
 	/**
-	 * @param string $message: [optional] text before the input.
+	 * @param string $message: [optional] Output text before the input cursor.
+	 * @return string
 	 */
 	protected function cliInput( $prefix = '> ' ) {
-		static $isatty = null;
 		if ( $this->getOption( 'quiet' ) ) {
 			return '';
 		}
-		if ( $isatty === null ) {
-			// Both `echo "foo" | php script.php` and `php script.php > foo.txt`
-			// are being prevented.
-			$isatty = posix_isatty( STDIN ) && posix_isatty( STDOUT );
-
-			// No need to re-run this check each time, we abort within the if-null check
-			if ( !$isatty ) {
-				$this->error( 'This script requires an interactive terminal for output and input. Use --quiet to skip input requests.' );
-			}
-		}
+		$this->checkAtty();
 
 		if ( function_exists( 'readline' ) ) {
 			// Use readline if available, it's much nicer to work with for the user
@@ -261,6 +252,77 @@ $description
 			$this->outRaw( $prefix );
 			return rtrim( fgets( STDIN ), "\n" );
 		}
+	}
+
+	/**
+	 * Retreive a secret value from the cli.
+	 * Based on http://www.dasprids.de/blog/2008/08/22/getting-a-password-hidden-from-stdin-with-php-cli.
+	 *
+	 * @param string $message: [optional] text before the input cursor.
+	 * @param string $type: [optional] hidden or stars.
+	 * @return string
+	 */
+	protected function cliInputSecret( $prefix = '> ', $type = 'stars' ) {
+		if ( $this->getOption( 'quiet' ) ) {
+			return '';
+		}
+		$this->checkAtty();
+
+		// Can't use readline, it always echoes to the screen.
+		$this->outRaw( $prefix );
+
+		$sttyStyle = shell_exec( 'stty -g' );
+
+		if ( $type !== 'stars' ) {
+			shell_exec( 'stty -echo' );
+			$input = rtrim( fgets( STDIN ), "\n" );
+			$this->outRaw( "\n" );
+		} else {
+			shell_exec( 'stty -icanon -echo min 1 time 0' );
+			$input = '';
+			while ( true ) {
+				$char = fgetc( STDIN );
+
+				// Ready
+				if ( $char === "\n" ) {
+					$this->outRaw( "\n" );
+					break;
+				// Backspace
+				} else if ( ord( $char) === 127 ) {
+					if ( strlen( $input) > 0 ) {
+						// Replace last character with blank and return to previous position
+						// (back, space, back).
+						fwrite( STDOUT, "\x08 \x08" );
+						$input = substr( $input, 0, -1 );
+					}
+				// More input
+				} else {
+					fwrite( STDOUT, '*' );
+					$input .= $char;
+				}
+			}
+		}
+
+		// Restore stty style
+		shell_exec( 'stty ' . escapeshellarg( $sttyStyle ) );
+
+		return $input;
+	}
+
+	/** @return bool */
+	final protected function checkAtty() {
+		static $isatty = null;
+		if ( $isatty === null ) {
+			// Both `echo "foo" | php script.php` and `php script.php > foo.txt`
+			// are being prevented.
+			$isatty = posix_isatty( STDIN ) && posix_isatty( STDOUT );
+
+			// No need to re-run this check each time, we abort within the if-null check
+			if ( !$isatty ) {
+				$this->error( 'This script requires an interactive terminal for output and input. Use --quiet to skip input requests.' );
+			}
+		}
+		return $isatty;
 	}
 
 	protected function out( $text ) {

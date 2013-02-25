@@ -77,7 +77,7 @@ class GetrunAction extends Action {
 				$runID
 			));
 
-			if ( $row->run_url && $row->job_name && $row->run_name ) {
+			if ( $row && $row->run_url && $row->job_name && $row->run_name ) {
 				// Create stub runresults entry
 				$storeToken = sha1( mt_rand() );
 				$isInserted = $db->query(str_queryf(

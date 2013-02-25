@@ -15,7 +15,6 @@ class Client {
 	protected $context;
 
 	protected $clientRow;
-	protected $userRow;
 
 	/**
 	 * @param $clientId int
@@ -62,18 +61,7 @@ class Client {
 			$clientRow->id
 		));
 
-		$userRow = $db->getRow(str_queryf(
-			'SELECT
-				*
-			FROM
-				users
-			WHERE id = %u
-			LIMIT 1;',
-			$clientRow->user_id
-		));
-
 		$this->clientRow = $clientRow;
-		$this->userRow = $userRow;
 	}
 
 	protected function loadNew() {
@@ -87,39 +75,23 @@ class Client {
 			throw new SwarmException( 'Your browser is not needed by this swarm.' );
 		}
 
-		// Running a client doesn't require being logged in
-		$username = $request->getSessionData( 'username', $request->getVal( 'item' ) );
-		if ( !$username ) {
-			throw new SwarmException( 'Username required.' );
+		$clientName = $request->getVal( 'item', 'anonymous' );
+		if ( !$clientName ) {
+			// The UI javascript injects a default value and if the field is missing
+			// the above WebRequest#getVal fallback catches it. But if the field
+			// was submitted with an empty string, then just ignore it and go to anonymous as well.
+			// We don't want to hold back potential swarm joiners.
+			$clientName = 'anonymous';
 		}
-
-		// Figure out what the user's ID number is
-		$userRow = $db->getRow(str_queryf(
-			'SELECT * FROM users WHERE name = %s LIMIT 1;',
-			$username
-		));
-
-		// If the user doesn't have one, create a new user row for this name
-		if ( !$userRow || !$userRow->id ) {
-			$db->query(str_queryf(
-				// This omits some of the required columns but seems to work regardless.
-				// See also github.com/jquery/testswarm/issues/148 which will fix this.
-				'INSERT INTO users (name, updated, created) VALUES(%s, %s, %s);',
-				$username,
-				swarmdb_dateformat( SWARM_NOW ),
-				swarmdb_dateformat( SWARM_NOW )
-			));
-			$userRow = $db->getRow(str_queryf(
-				'SELECT * FROM users WHERE id = %u LIMIT 1;',
-				$db->getInsertId()
-			));
+		if ( !self::isValidName( $clientName ) ) {
+			throw new SwarmException( 'Invalid client name. Names should be no longer than 128 characters.' );
 		}
 
 		// Insert in a new record for the client and get its ID
 		$db->query(str_queryf(
-			'INSERT INTO clients (user_id, useragent_id, useragent, ip, updated, created)
-			VALUES(%u, %s, %s, %s, %s, %s);',
-			$userRow->id,
+			'INSERT INTO clients (name, useragent_id, useragent, ip, updated, created)
+			VALUES(%s, %s, %s, %s, %s, %s);',
+			$clientName,
 			$browserInfo->getSwarmUaID(),
 			$browserInfo->getRawUA(),
 			$request->getIP(),
@@ -131,15 +103,10 @@ class Client {
 			'SELECT * FROM clients WHERE id = %u LIMIT 1;',
 			$db->getInsertId()
 		));
-		$this->userRow = $userRow;
 	}
 
 	public function getClientRow() {
 		return $this->clientRow;
-	}
-
-	public function getUserRow() {
-		return $this->userRow;
 	}
 
 	/**
@@ -162,6 +129,18 @@ class Client {
 		return $client;
 	}
 
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function isValidName( $name ) {
+		return !!preg_match( '/' . self::getNameValidationRegex() . '/', $name );
+	}
+
+	public static function getNameValidationRegex() {
+		return '^.{1,128}$';
+	}
+
 	public static function validateRunToken( TestSwarmContext $context, $runToken ) {
 		$conf = $context->getConf();
 		if ( !$conf->client->requireRunToken ) {
@@ -176,6 +155,11 @@ class Client {
 			return true;
 		}
 		throw new SwarmException( 'This TestSwarm requires a run token. Either none was entered or it is invalid.' );
+	}
+
+	public static function getMaxAge( TestSwarmContext $context ) {
+		$conf = $context->getConf();
+		return time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin );
 	}
 
 	/** Don't allow direct instantiations of this class, use newFromContext instead. */

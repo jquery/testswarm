@@ -1,38 +1,34 @@
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
--- Insertions handled by the SignupAction class.
+-- Table structure for table `projects`
+-- Insertions handled by the manageProject.php script.
 --
 
-CREATE TABLE `users` (
-  `id` int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `projects` (
+  `id` varchar(255) binary NOT NULL PRIMARY KEY,
 
-  -- User name used for display and login prodecure.
-  `name` varchar(255) binary NOT NULL default '',
+  -- Human readable display title for the front-end.
+  `display_title` varchar(255) binary NOT NULL,
 
-  -- Password hash salt (SHA1).
-  `seed` binary(40) NOT NULL default '',
+  -- URL pointing to a page with more information about this project
+  -- (Optional field, can be empty).
+  `site_url` blob NOT NULL default '',
 
-  -- Password hash (SHA1).
-  `password` binary(40) NOT NULL default '',
+  -- Salted hash of password (see LoginAction::comparePasswords).
+  `password` tinyblob NOT NULL,
 
-  -- Authentication token to use in situations where sending passwords
-  -- is not an option. Used for the "addjob" API.
-  `auth` binary(40) NOT NULL default '',
+  -- SHA1 hash of authentication token.
+  -- Refresh handled by the refreshProjectToken.php script.
+  `auth_token` tinyblob NOT NULL,
 
-  -- User account details last modified (YYYYMMDDHHMMSS timestamp)
-  -- Right now this is only set during creation, no update statement
-  -- exists yet in TestSwarm, but for consistency with other tables
-  -- it has been created for future use.
+  -- Project update timestamp (YYYYMMDDHHMMSS timestamp).
   `updated` binary(14) NOT NULL,
 
-  -- User account originally created (YYYYMMDDHHMMSS timestamp).
+  -- Project creation timestamp (YYYYMMDDHHMMSS timestamp).
   `created` binary(14) NOT NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE UNIQUE INDEX idx_users_name ON users (name);
 
 -- --------------------------------------------------------
 
@@ -44,11 +40,11 @@ CREATE UNIQUE INDEX idx_users_name ON users (name);
 CREATE TABLE `clients` (
   `id` int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-  -- Key to users.id field.
-  `user_id` int unsigned NOT NULL,
+  -- Freeform client name.
+  `name` varchar(255) binary NOT NULL,
 
   -- Key to config.userAgents property.
-  `useragent_id` varchar(255) NOT NULL default '',
+  `useragent_id` varchar(255) NOT NULL,
 
   -- Raw User-Agent string.
   `useragent` tinytext NOT NULL,
@@ -67,15 +63,11 @@ CREATE TABLE `clients` (
 -- Usage: HomePage, SwarmstateAction.
 CREATE INDEX idx_clients_useragent_updated ON clients (useragent_id, updated);
 
--- Usage: UserAction, ScoresAction, BrowserInfo and Client.
-CREATE INDEX idx_clients_user_useragent_updated ON clients (user_id, useragent_id, updated);
+-- Usage: ClientAction, ScoresAction, BrowserInfo and Client.
+CREATE INDEX idx_clients_name_ua_created ON clients (name, useragent_id, created);
 
 -- Usage: CleanupAction.
 CREATE INDEX idx_clients_updated ON clients (updated);
-
--- Foreign key constrains
-ALTER TABLE clients
-	ADD CONSTRAINT fk_clients_user_id FOREIGN KEY (user_id) REFERENCES users (id);
 
 -- --------------------------------------------------------
 
@@ -87,23 +79,19 @@ ALTER TABLE clients
 CREATE TABLE `jobs` (
   `id` int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-  -- Key to users.id field.
-  `user_id` int unsigned NOT NULL,
-
-  -- Job name (can contain HTML)
+  -- Job name (can contain HTML).
   `name` varchar(255) binary NOT NULL default '',
+
+  -- Key to projects.id field.
+  `project_id` varchar(255) binary NOT NULL,
 
   -- YYYYMMDDHHMMSS timestamp.
   `created` binary(14) NOT NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Used: UserAction.
-CREATE INDEX idx_jobs_user ON jobs (user_id, created);
-
--- Foreign key constrains
-ALTER TABLE jobs
-	ADD CONSTRAINT fk_jobs_user_id FOREIGN KEY (user_id) REFERENCES users (id);
+-- Usage: ProjectAction.
+CREATE INDEX idx_jobs_project_created ON jobs (project_id, created);
 
 -- --------------------------------------------------------
 
@@ -131,9 +119,6 @@ CREATE TABLE `runs` (
 
 -- Usage: JobAction.
 CREATE INDEX idx_runs_jobid ON runs (job_id);
-
-ALTER TABLE runs
-	ADD CONSTRAINT fk_runs_job_id FOREIGN KEY (job_id) REFERENCES jobs (id);
 
 -- --------------------------------------------------------
 
@@ -188,9 +173,6 @@ CREATE INDEX idx_run_useragent_useragent_status_run ON run_useragent (useragent_
 
 -- Usage: CleanupAction.
 CREATE INDEX ids_runs_results ON run_useragent (results_id);
-
-ALTER TABLE run_useragent
-	ADD CONSTRAINT fk_run_useragent_run_id FOREIGN KEY (run_id) REFERENCES runs (id);
 
 -- --------------------------------------------------------
 
@@ -249,6 +231,3 @@ CREATE INDEX idx_runresults_status_client ON runresults (status, client_id);
 
 -- Usage: ScoresAction.
 CREATE INDEX idx_runresults_client_total ON runresults (client_id, total);
-
-ALTER TABLE runresults
-	ADD CONSTRAINT fk_runresults_client_id FOREIGN KEY (client_id) REFERENCES clients (id);

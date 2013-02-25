@@ -119,7 +119,7 @@ class SaverunAction extends Action {
 		// same run, and the "good" one started last and finishes first. When the
 		// "bad" client finishes and updates this run as not passing, it would
 		// mismatch the results the user would find in the linked report from runresults.
-		// Be sure to use it only as "WHERE" not in "SET", as that  could cause
+		// Be sure to use it only as "WHERE" not in "SET", as that could cause
 		// an equally bad effect (unlink a good run).
 		if ( $isPassed ) {
 			$db->query(str_queryf(

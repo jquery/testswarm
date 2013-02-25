@@ -27,19 +27,30 @@ class ProjectsPage extends Page {
 			. '<table class="table table-striped">'
 			. '<thead><tr>'
 				. '<th>Project name</th>'
-				. '<th class="span2">Jobs</th>'
-				. '<th class="span2">Most recent job</th>'
-				. '<th class="span4">Creation date</th>'
+				. '<th class="span4">Latest job</th>'
 			. '</tr></thead>'
 			. '<tbody>';
 
 		foreach ( $projects as $project ) {
+			$job = $project['job'];
 			$html .= '<tr>'
-				. '<td><a href="' . htmlspecialchars( swarmpath( "user/{$project['name']}" ) ) . '">' . htmlspecialchars( $project['name'] ) . '</a></td>'
-				. '<td class="num">' . htmlspecialchars( number_format( $project['jobCount'] ) ) . '</td>'
-				. '<td><a href="' . htmlspecialchars( swarmpath( "job/{$project['jobLatest']}" ) ) . '">Job #' . htmlspecialchars( $project['jobLatest'] ) . '</a></td>'
-				. '<td class="num">' . self::getPrettyDateHtml( $project, 'created' ) . '</td>'
-				. '</tr>';
+				. '<td><a href="'
+				. htmlspecialchars( swarmpath( "project/{$project['id']}" ) ) . '">'
+				. htmlspecialchars( $project['displayTitle'] ) . '</a></td>';
+			if ( !$job ) {
+				$html .= '<td>N/A</td>';
+			} else {
+				$html .= '<td class="swarm-status-cell swarm-jobstatus-cell"><div class="swarm-status swarm-status-' . $job['summary'] . '">'
+					. JobPage::getStatusIconHtml( $job['summary'] )
+					. html_tag( 'a', array(
+						'href' => $job['info']['viewUrl'],
+						'title' => $job['info']['nameText'],
+						), 'Job #' . $job['info']['id']
+					)
+					. '</div></td>';
+			}
+
+			$html .= '</tr>';
 		}
 		$html .= '</tbody></table>';
 

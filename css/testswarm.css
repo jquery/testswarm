@@ -100,72 +100,123 @@ h2 + .row {
  * and error:  hsl(0,   44%, 89%) / hsl(0,   32%, 40%)
  */
 
-table.swarm-results {
+.swarm-pagination {
+	overflow: hidden;
+}
+
+.swarm-pagination-prev {
+	cursor: pointer;
+	float: left;
+}
+.swarm-pagination-next {
+	cursor: pointer;
+	float: right;
+}
+
+.swarm-pagination-disabled {
+	cursor: default;
+	color: #888;
+}
+
+.swarm-results,
+.table th {
 	white-space: nowrap;
 }
 
-table.swarm-results thead th,
-table.swarm-results tbody td.swarm-status {
-	vertical-align: top;
-	text-align: center;
-	background: #fff;
+/**
+ * Some of Bootstrap's table styling
+ * have a lot of weight on their selector,
+ * such as:
+ *     .table-striped tbody tr:nth-child(odd) td { background-color: #f9f9f9; }
+ * Putting .swarm-status on that (with the right background color) would require
+ * a lot of specificity. So, instead, we allow the status to be in a child <div>
+ * or the table cell. In that case though, we need to transfer the inner padding
+ * from the bootstrap class (.table) cell to ours.
+ */
+.table .swarm-status-cell {
+	padding: 0;
 }
 
-table.swarm-results tbody td.swarm-status {
+.swarm-jobstatus-cell .swarm-status [class^="icon-"] {
+	float: right;
+}
+
+.swarm-status {
+	padding: 8px;
+	line-height: 20px;
+}
+
+.swarm-results thead th,
+.swarm-status {
+	vertical-align: top;
+	background: #fff;
 	font-weight: bold;
 }
 
-table.swarm-results tbody td.swarm-status [class*=" icon-"] {
+.swarm-results thead th,
+.table .swarm-status, /* override Bootstrap .table text-align */
+.swarm-status {
+	text-align: center;
+}
+
+.swarm-status [class*=" icon-"] {
 	opacity: .3;
 	margin-left: 7px;
 }
 
-table.swarm-results tbody td.swarm-status:hover [class*=" icon-"] {
+.swarm-status:hover [class*=" icon-"] {
 	opacity: 1;
 	cursor: pointer;
 }
 
-table.swarm-results tbody td.swarm-status-new {
+.swarm-status-new {
 	background: #E8E8E8;
 }
-table.swarm-results tbody td.swarm-status-new,
-table.swarm-results tbody td.swarm-status-new a {
+.swarm-status-new,
+.swarm-status-new a {
 	color: #666;
 }
 
-table.swarm-results tbody td.swarm-status-progress {
+.swarm-status-progress {
 	background: #EFEBD7;
 }
 
-table.swarm-results tbody td.swarm-status-progress,
-table.swarm-results tbody td.swarm-status-progress a {
+.swarm-status-progress,
+.swarm-status-progress a {
 	color: #877B45;
 }
 
-table.swarm-results tbody td.swarm-status-passed {
+.swarm-status-passed {
 	background: #DBEFD7;
 }
-table.swarm-results tbody td.swarm-status-passed,
-table.swarm-results tbody td.swarm-status-passed a {
+.swarm-status-passed,
+.swarm-status-passed a {
 	color: #508745;
 }
 
-table.swarm-results tbody td.swarm-status-timedout,
-table.swarm-results tbody td.swarm-status-error,
-table.swarm-results tbody td.swarm-status-failed {
+.swarm-status-timedout,
+.swarm-status-error,
+.swarm-status-failed {
 	background: #EFD7D7;
 }
-table.swarm-results tbody td.swarm-status-timedout,
-table.swarm-results tbody td.swarm-status-timedout a,
-table.swarm-results tbody td.swarm-status-error,
-table.swarm-results tbody td.swarm-status-error a,
-table.swarm-results tbody td.swarm-status-failed,
-table.swarm-results tbody td.swarm-status-failed a {
+.swarm-status-timedout,
+.swarm-status-timedout a,
+.swarm-status-error,
+.swarm-status-error a,
+.swarm-status-failed,
+.swarm-status-failed a {
 	color: #874545;
 }
 
-table.swarm-results tbody td.swarm-status-notscheduled {
+.swarm-status-notscheduled {
 	background: #fff;
+}
+
+.swarm-result-date {
+	font-weight: normal;
+	font-size: smaller;
+	float: right;
+	color: #888;
 }
 
 .swarm-status-progressicon {
@@ -207,6 +258,70 @@ table.swarm-results tbody td.swarm-status-notscheduled {
 .swarm-page-footer {
 	text-align: center;
 	margin-bottom: 18px;
+}
+
+.swarm-arrow-up {
+	display: inline-block;
+	content: "";
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 4px solid #000;
+}
+
+.swarm-arrow-down {
+	display: inline-block;
+	content: "";
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 4px solid #000;
+}
+
+.swarm-arrow-muted {
+	position: relative;
+	display: inline-block;
+	content: "";
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 4px solid #999;
+}
+
+.swarm-arrow-muted::after {
+	position: absolute;
+	top: 5px;
+	left: -4px;
+	display: inline-block;
+	content: "";
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 4px solid #999;
+}
+
+.swarm-toggle > .swarm-arrow-up,
+.swarm-toggle > .swarm-arrow-down,
+.swarm-toggle > .swarm-arrow-muted {
+	margin: 8px 2px 2px 2px;
+}
+
+.js .swarm-toggle {
+	cursor: pointer;
+}
+
+.no-js .swarm-arrow-up,
+.no-js .swarm-arrow-down,
+.no-js .swarm-arrow-muted {
+	display: none;
 }
 
 /**

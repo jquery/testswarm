@@ -9,82 +9,86 @@
 class ProjectsAction extends Action {
 
 	/**
-	 * @requestParam sort string: [optional] What to sort the results by.
-	 * Must be one of "name", "id", "creation" or "jobcount". Defaults to "name".
-	 * @requestParam sort_order string: [optional]
-	 * Must be one of "asc" (ascending" or "desc" (decending). Defaults to "asc".
+	 * @actionParam sort string: [optional] What to sort the results by.
+	 * Must be one of "title", "id" or "creation". Defaults to "title".
+	 * @actionParam sort_dir string: [optional]
+	 * Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
 		$request = $this->getContext()->getRequest();
 
-		$filterSort = $request->getVal( 'sort', 'name' );
-		$filterSortOrder = $request->getVal( 'sort_order', 'asc' );
+		$sortField = $request->getVal( 'sort', 'title' );
+		$sortDir = $request->getVal( 'sort_dir', 'asc' );
 
-		if ( !in_array( $filterSort, array( 'name', 'id', 'creation', 'jobcount' ) ) ) {
-			$this->setError( 'invalid-input', "Unknown sort `$filterSort`." );
+		if ( !in_array( $sortField, array( 'title', 'id', 'creation' ) ) ) {
+			$this->setError( 'invalid-input', "Unknown sort `$sortField`." );
 			return;
 		}
 
-		if ( !in_array( $filterSortOrder, array( 'asc', 'desc' ) ) ) {
-			$this->setError( 'invalid-input', "Unknown sort order `$filterSortOrder`." );
+		if ( !in_array( $sortDir, array( 'asc', 'desc' ) ) ) {
+			$this->setError( 'invalid-input', "Unknown sort direction `$sortDir`." );
 			return;
 		}
 
-		$filterSortOrderQuery = '';
-		switch ( $filterSortOrder ) {
+		$sortDirQuery = '';
+		switch ( $sortDir ) {
 			case 'asc':
-				$filterSortOrderQuery = 'ASC';
+				$sortDirQuery = 'ASC';
 				break;
 			case 'desc':
-				$filterSortOrderQuery = 'DESC';
+				$sortDirQuery = 'DESC';
 				break;
 		}
 
-		$filterSortQuery = '';
-		switch ( $filterSort ) {
-			case 'name':
-				$filterSortQuery = "ORDER BY users.name $filterSortOrderQuery";
+		$sortFieldQuery = '';
+		switch ( $sortField ) {
+			case 'title':
+				$sortFieldQuery = "ORDER BY display_title $sortDirQuery";
 				break;
 			case 'id':
-				$filterSortQuery = "ORDER BY users.id $filterSortOrderQuery";
+				$sortFieldQuery = "ORDER BY id $sortDirQuery";
 				break;
 			case 'creation':
-				$filterSortQuery = "ORDER BY users.created $filterSortOrderQuery";
-				break;
-			case 'jobcount':
-				$filterSortQuery = "ORDER BY job_count $filterSortOrderQuery";
+				$sortFieldQuery = "ORDER BY created $sortDirQuery";
 				break;
 		}
 
 		$projects = array();
 		$projectRows = $db->getRows(
 			"SELECT
-				DISTINCT(jobs.user_id) as user_id,
-				users.name as user_name,
-				users.created as user_created,
-				COUNT(jobs.id) as job_count,
-				MAX(jobs.id) as job_latest
-			FROM jobs, users
-			WHERE users.id = jobs.user_id
-			GROUP BY jobs.user_id
-			$filterSortQuery;"
+				id,
+				display_title,
+				created
+			FROM projects
+			$sortFieldQuery;"
 		);
 
 		if ( $projectRows ) {
 			foreach ( $projectRows as $projectRow ) {
-				$project = array(
-					'id' => intval( $projectRow->user_id ),
-					'name' => $projectRow->user_name,
-					'jobCount' => intval( $projectRow->job_count ),
-					'jobLatest' => intval( $projectRow->job_latest ),
-				);
-				$job_latest_created = $db->getOne(str_queryf(
-					'SELECT created FROM jobs WHERE id=%u;',
-					$projectRow->job_latest
+				// Get information about the latest job (if any)
+				$jobRow = $db->getRow(str_queryf(
+					'SELECT id FROM jobs WHERE project_id = %s ORDER BY id DESC LIMIT 1;',
+					$projectRow->id
 				));
-				self::addTimestampsTo( $project, $projectRow->user_created, 'created' );
-				self::addTimestampsTo( $project, $job_latest_created, 'jobLatestCreated' );
+				if ( !$jobRow ) {
+					$job = false;
+				} else {
+					$jobAction = JobAction::newFromContext( $this->getContext()->createDerivedRequestContext(
+						array(
+							'item' => $jobRow->id
+						)
+					) );
+					$jobAction->doAction();
+					$job = $jobAction->getData();
+				}
+
+				$project = array(
+					'id' => $projectRow->id,
+					'displayTitle' => $projectRow->display_title,
+					'job' => $job
+				);
+				self::addTimestampsTo( $project, $projectRow->created, 'created' );
 				$projects[] = $project;
 			}
 		}

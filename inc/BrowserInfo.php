@@ -99,6 +99,14 @@ class BrowserInfo {
 		return $uaData;
 	}
 
+	/**
+	 * Callback for `uasort()`.
+	 *
+	 * @param Array|stdClass $a UA data, as returned by #getUaData and #makeGenericUaData.
+	 * @param Array|stdClass $b UA data.
+	 * @return int Like other PHP comparison functions,
+	 *  returns -1 if A is less than B, +1 if A is greater than B, 0 if they are equal.
+	 */
 	public static function sortUaData( $a, $b ) {
 		$a = is_array( $a ) ? (object)$a : $a;
 		$b = is_array( $b ) ? (object)$b : $b;
@@ -228,6 +236,41 @@ class BrowserInfo {
 	/** @return object */
 	public function getUaData() {
 		return $this->uaData;
+	}
+
+	/** @return string: HTML */
+	public function getIconHtml() {
+		return self::buildIconHtml( $this->getUaData()->displayInfo );
+	}
+
+	/** @return string: HTML */
+	public static function buildIconHtml( Array $displayInfo, Array $options = null ) {
+		$classes = '';
+		$afterHtml = '';
+		if ( isset( $options['size'] ) && $options['size'] === 'small' ) {
+			$classes .= ' swarm-icon-small';
+		}
+		$labelHtml = isset( $options['label'] ) ? $options['label'] : $displayInfo['labelHtml'];
+		if ( $labelHtml ) {
+			$afterHtml .= '<br>'
+				. html_tag_open( 'span', array(
+					'class' => 'badge swarm-browsername',
+				) ) . $labelHtml . '</span>';
+		}
+		if ( isset( $options['wrap'] ) && !$options['wrap'] ) {
+			return html_tag( 'div', array(
+				'class' => $displayInfo['class'] . $classes,
+				'title' => $displayInfo['title'],
+			) );
+		}
+		return ''
+			. html_tag_open( 'div', array( 'class' => 'well well-swarm-icon' ) )
+			. html_tag( 'div', array(
+				'class' => $displayInfo['class'] . $classes,
+				'title' => $displayInfo['title'],
+			) )
+			. $afterHtml
+			. '</div>';
 	}
 
 	/**

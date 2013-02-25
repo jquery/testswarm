@@ -20,6 +20,7 @@ class JobPage extends Page {
 
 	protected function initContent() {
 		$request = $this->getContext()->getRequest();
+		$auth = $this->getContext()->getAuth();
 
 		$this->setTitle( "Job status" );
 		$this->setRobots( "noindex,nofollow" );
@@ -33,23 +34,23 @@ class JobPage extends Page {
 			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
 		}
 
-		if ( !isset( $data["jobInfo"] ) ) {
+		if ( !isset( $data["info"] ) ) {
 			return $html;
 		}
 
-		$this->setSubTitle( '#' . $data["jobInfo"]["id"] );
+		$this->setSubTitle( '#' . $data["info"]["id"] );
 
-		$isAuth = $request->getSessionData( "auth" ) === "yes" && $data["jobInfo"]["ownerName"] == $request->getSessionData( "username" );
+		$isOwner = $auth && $auth->project->id === $data["info"]["projectID"];
 
 		$html .=
-			'<h2>' . $data["jobInfo"]["name"] .'</h2>'
+			'<h2>' . $data["info"]["nameHtml"] .'</h2>'
 			. '<p><em>Submitted by '
-			. html_tag( "a", array( "href" => swarmpath( "user/{$data["jobInfo"]["ownerName"]}" ) ), $data["jobInfo"]["ownerName"] )
-			. ' on ' . htmlspecialchars( date( "Y-m-d H:i:s", gmstrtotime( $data["jobInfo"]["creationTimestamp"] ) ) )
-			. ' (UTC)' . '</em>.</p>';
+			. html_tag( "a", array( "href" => swarmpath( "project/{$data["info"]["projectID"]}" ) ), $data["info"]["projectID"] )
+			. ' '. self::getPrettyDateHtml( $data["info"], 'created' )
+			. '</em>.</p>';
 
-		if ( $isAuth ) {
-			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["jobInfo"] ) . ';</script>';
+		if ( $isOwner ) {
+			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["info"] ) . ';</script>';
 			$action_bar = '<div class="form-actions swarm-item-actions">'
 				. ' <button class="swarm-reset-runs-failed btn btn-info">Reset failed runs</button>'
 				. ' <button class="swarm-reset-runs btn btn-info">Reset all runs</button>'
@@ -64,7 +65,7 @@ class JobPage extends Page {
 		$html .= '<table class="table table-bordered swarm-results"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )
 			. '</thead><tbody>'
-			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'], $isAuth )
+			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'], $isOwner )
 			. '</tbody></table>';
 
 		$html .= $action_bar;
@@ -72,6 +73,9 @@ class JobPage extends Page {
 		return $html;
 	}
 
+	/**
+	 * Create a table header for user agents.
+	 */
 	public static function getUaHtmlHeader( $userAgents ) {
 		$html = '<tr><th>&nbsp;</th>';
 		foreach ( $userAgents as $userAgent ) {
@@ -93,8 +97,11 @@ class JobPage extends Page {
 	}
 
 	/**
-	 * @param Array $runs
-	 * @param Array $userAgents
+	 * Create table rows for a table of ua run results.
+	 * This is used on the JobPage.
+	 *
+	 * @param Array $runs List of runs, from JobAction.
+	 * @param Array $userAgents List of uaData objects.
 	 * @param bool $showResetRun: Whether to show the reset buttons for individual runs.
 	 *  This does not check authororisation or load related javascript for the buttons.
 	 */
@@ -130,7 +137,7 @@ class JobPage extends Page {
 							$runResultsTagOpen
 							. ( $uaRun['runResultsLabel']
 								? $uaRun['runResultsLabel']
-								: UserPage::getStatusIconHtml( $uaRun['runStatus'] )
+								: self::getStatusIconHtml( $uaRun['runStatus'] )
 							). '</a>'
 							. $runResultsTagOpen
 							. html_tag( 'i', array(
@@ -146,7 +153,7 @@ class JobPage extends Page {
 								: ''
 							);
 					} else {
-						$html .= UserPage::getStatusIconHtml( $uaRun['runStatus'] );
+						$html .= self::getStatusIconHtml( $uaRun['runStatus'] );
 					}
 					$html .= '</td>';
 				} else {
@@ -158,4 +165,94 @@ class JobPage extends Page {
 
 		return $html;
 	}
+
+	public static function getStatusIconHtml( $status ) {
+		static $icons = array(
+			"new" => '<i class="icon-time" title="Scheduled, awaiting run."></i>',
+			"progress" => '<i class="icon-repeat swarm-status-progressicon" title="In progress.."></i>',
+			"passed" => '<i class="icon-ok" title="Passed!"></i>',
+			"failed" => '<i class="icon-remove" title="Completed with failures"></i>',
+			"timedout" => '<i class="icon-flag" title="Maximum execution time exceeded"></i>',
+			"error" => '<i class="icon-warning-sign" title="Aborted by an error"></i>',
+		);
+		return isset( $icons[$status] ) ? $icons[$status] : '';
+	}
+
+	/**
+	 * Not used anywhere yet. The colors, icons and tooltips should be
+	 * easy to understand. If not, this table is ready for use.
+	 * @example:
+	 *     '<div class="row"><div class="span6">' . getStatusLegend() . '</div></div>'
+	 */
+	public static function getStatusLegend() {
+		return
+			'<table class="table table-condensed table-bordered swarm-results">'
+			. '<tbody>'
+			. '<tr><td class="swarm-status swarm-status-new">'
+				. self::getStatusIconHtml( "new" )
+				. '</td><td>Scheduled</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-progress">'
+				. self::getStatusIconHtml( "progress" )
+				. '</td><td>In progress..</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-passed">'
+				. self::getStatusIconHtml( "passed" )
+				. '</td><td>Passed!</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-failed">'
+				. self::getStatusIconHtml( "failed" )
+				. '</td><td>Completed with failures</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-timedout">'
+				. self::getStatusIconHtml( "timedout" )
+				. '</td><td>Maximum execution time exceeded</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-error">'
+				. self::getStatusIconHtml( "error" )
+				. '</td><td>Aborted by an error</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-notscheduled">'
+				. ''
+				. '</td><td>This browser was not part of the browserset for this job.</td>'
+			. '</tr>'
+			. '</tbody></table>';
+	}
+
+	/**
+	 * Create a single row summarising the ua runs of a job. See also #getUaRunsHtmlRows.
+	 * This is used on the ProjectPage.
+	 * @param Array $job
+	 * @param Array $userAgents List of uaData objects.
+	 */
+	public static function getJobHtmlRow( $job, $userAgents ) {
+		$html = '<tr><th>'
+			. '<a href="' . htmlspecialchars( $job['info']['viewUrl'] ) . '">' . htmlspecialchars( $job['info']['nameText'] ) . '</a>'
+			. ' ' . self::getPrettyDateHtml( $job['info'], 'created', array( 'class' => 'swarm-result-date' ) )
+			. "</th>\n";
+
+		foreach ( $userAgents as $uaID => $uaData ) {
+			$html .= self::getJobStatusHtmlCell( isset( $job['summaries'][$uaID] ) ? $job['summaries'][$uaID] : false );
+		}
+
+		$html .= '</tr>';
+		return $html;
+
+	}
+
+	/**
+	 * Create a singe cell summarising the ua runs of a job. See also #getJobHtmlRow.
+	 * This is used on the ProjectsPage.
+	 * @param string|bool $status Status, or false to create a "skip" cell with
+	 *  "notscheduled" status.
+	 */
+	public static function getJobStatusHtmlCell( $status = false ) {
+		return $status
+				? ( '<td class="swarm-status-cell"><div class="swarm-status swarm-status-' . $status . '">'
+					. self::getStatusIconHtml( $status )
+					. '</div></td>'
+				)
+				: '<td class="swarm-status swarm-status-notscheduled"></td>';
+	}
+
 }

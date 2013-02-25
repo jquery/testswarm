@@ -12,18 +12,17 @@ class CleanupAction extends Action {
 	 * @actionNote This action takes no parameters.
 	 */
 	public function doAction() {
-		$browserInfo = $this->getContext()->getBrowserInfo();
-		$db = $this->getContext()->getDB();
-		$conf = $this->getContext()->getConf();
-		$request = $this->getContext()->getRequest();
+		$context = $this->getContext();
+		$browserInfo = $context->getBrowserInfo();
+		$db = $context->getDB();
+		$conf = $context->getConf();
+		$request = $context->getRequest();
 
 		$resetTimedoutRuns = 0;
 
 		// Get clients that are considered disconnected (not responding to the latest pings).
 		// Then mark the runresults of its active runs as timed-out, and reset those runs so
 		// they become available again for different clients in GetrunAction.
-
-		$clientMaxAge = swarmdb_dateformat( time() - ( $conf->client->pingTime + $conf->client->pingTimeMargin ) );
 
 		$rows = $db->getRows(str_queryf(
 			"SELECT
@@ -33,7 +32,7 @@ class CleanupAction extends Action {
 			INNER JOIN clients ON runresults.client_id = clients.id
 			WHERE runresults.status = 1
 			AND   clients.updated < %s;",
-			$clientMaxAge
+			swarmdb_dateformat( Client::getMaxAge( $context ) )
 		));
 
 		if ($rows) {
