@@ -191,7 +191,7 @@ class BrowserInfo {
 				$classes[] = $prefix . 'os-' . $osFamily . '-' . intval( $uaData->osMajor );
 			}
 		}
-		if ( $uaData->deviceFamily ) {
+		if ( $uaData->deviceFamily && $uaData->deviceFamily !== 'Other' ) {
 			$classes[] = $prefix . 'device';
 			$deviceFamily = strtolower( str_replace( ' ', '_', $uaData->deviceFamily ) );
 			$classes[] = $prefix . 'device-' . $deviceFamily;
@@ -209,7 +209,7 @@ class BrowserInfo {
 		if ( $uaData->osFamily ) {
 			$title[] = rtrim("$uaData->osFamily $uaData->osMajor.$uaData->osMinor.$uaData->osPatch", '. *');
 		}
-		if ( $uaData->deviceFamily ) {
+		if ( $uaData->deviceFamily && $uaData->deviceFamily !== 'Other' ) {
 			$title[] = rtrim("$uaData->deviceFamily $uaData->deviceMajor.$uaData->deviceMinor", '. *');
 		}
 		return array(
