@@ -48,7 +48,6 @@ class AddjobPage extends Page {
 	}
 
 	protected function getAddjobFormHtml() {
-		$db = $this->getContext()->getDB();
 		$conf = $this->getContext()->getConf();
 		$request = $this->getContext()->getRequest();
 
@@ -59,14 +58,8 @@ class AddjobPage extends Page {
 		if ( $request->getSessionData( 'auth' ) == 'yes' ) {
 			$userName = $request->getSessionData( 'username' );
 			$userNameEsc = htmlspecialchars( $userName );
-			$userAuthTokenEsc = htmlspecialchars( $db->getOne(str_queryf(
-				'SELECT auth
-				FROM users
-				WHERE name = %s',
-				$userName
-			)) );
 		} else {
-			$userNameEsc = $userAuthTokenEsc = '';
+			$userNameEsc = '';
 		}
 
 		$formHtml = <<<HTML
@@ -84,7 +77,7 @@ class AddjobPage extends Page {
 		<div class="control-group">
 			<label class="control-label" for="form-authToken">Auth token:</label>
 			<div class="controls">
-				<input type="text" name="authToken" required value="$userAuthTokenEsc" id="form-authToken" class="input-xlarge">
+				<input type="text" name="authToken" required id="form-authToken" class="input-xlarge">
 			</div>
 		</div>
 	</fieldset>
