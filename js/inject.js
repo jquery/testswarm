@@ -223,13 +223,13 @@
 				return typeof QUnit !== 'undefined';
 			},
 			install: function () {
-				QUnit.done = function ( results ) {
+				QUnit.done(function ( results ) {
 					submit({
 						fail: results.failed,
 						error: 0,
 						total: results.total
 					});
-				};
+				});
 
 				QUnit.log = window.TestSwarm.heartbeat;
 				window.TestSwarm.heartbeat();
