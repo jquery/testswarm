@@ -60,7 +60,7 @@ may work as well.
 
 1. *For Apache:*<br/>
    Copy `config/sample-.htaccess` to `.htaccess`.<br/>
-   To run TestSwarm from a non-root directory, set `web.contextpath` to the
+   To run TestSwarm from a non-root directory, set `web.contextpath` in `localSettings.json` to the
    correct path from the web root and update RewriteBase in `.htaccess`.
    Verify that `.htaccess` is working properly by opening a page other than the HomePage (e.g.
    `/testswarm/projects`) in your browser.<br/>Required Apache configuration:<br/>
