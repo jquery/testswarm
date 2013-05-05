@@ -47,7 +47,7 @@ CREATE TABLE `clients` (
   -- Key to users.id field.
   `user_id` int unsigned NOT NULL,
 
-  -- Key to useragents.ini section.
+  -- Key to config.userAgents property.
   `useragent_id` varchar(255) NOT NULL default '',
 
   -- Raw User-Agent string.
@@ -149,7 +149,7 @@ CREATE TABLE `run_useragent` (
   -- Key to runs.id field.
   `run_id` int unsigned NOT NULL default 0,
 
-  -- Key to useragents.ini section.
+  -- Key to config.userAgents property.
   `useragent_id` varchar(255) NOT NULL default '',
 
   -- Addjob runMax
