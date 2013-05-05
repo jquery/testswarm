@@ -70,7 +70,7 @@ class HomePage extends Page {
 					. ' including the following 2 codes:'
 					. '<br><strong><a href="https://github.com/tobie/ua-parser">ua-parser</a>:</strong> <code>'
 					. htmlspecialchars( print_r(  $uaData, true ) )
-					. '</code><br><strong><a href="//en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
+					. '</code><br><strong><a href="https://en.wikipedia.org/wiki/User_agent" title="Read about User agent on Wikipedia!">User-Agent</a> string:</strong> <code>'
 					. htmlspecialchars( $browserInfo->getRawUA() )
 					. '</code></p>';
 			}

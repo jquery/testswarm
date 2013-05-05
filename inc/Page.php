@@ -339,11 +339,11 @@ if ( $request->getSessionData( 'username' ) && $request->getSessionData( 'auth' 
 
 		<hr>
 		<footer class="swarm-page-footer">
-			<p>Powered by <a href="//github.com/jquery/testswarm">TestSwarm</a>:
-			<a href="//github.com/jquery/testswarm">Source Code</a>
-			| <a href="//github.com/jquery/testswarm/issues">Issue Tracker</a>
-			| <a href="//github.com/jquery/testswarm/wiki">About</a>
-			| <a href="//twitter.com/testswarm">Twitter</a>
+			<p>Powered by <a href="https://github.com/jquery/testswarm">TestSwarm</a>:
+			<a href="https://github.com/jquery/testswarm">Source Code</a>
+			| <a href="https://github.com/jquery/testswarm/issues">Issue Tracker</a>
+			| <a href="https://github.com/jquery/testswarm/wiki">About</a>
+			| <a href="https://twitter.com/testswarm">Twitter</a>
 			</p>
 		</footer>
 	</div>
