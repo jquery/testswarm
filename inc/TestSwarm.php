@@ -221,7 +221,7 @@ class TestSwarmContext {
 			if ( preg_match( '/ref: (.*)/', $gitHeadFileCnt, $matches ) ) {
 				$gitHead = trim( $matches[1] );
 			} else {
-				$gitHead = trim( $gitHead );
+				$gitHead = trim( $gitHeadFileCnt );
 			}
 
 			// Get current branch
@@ -241,6 +241,7 @@ class TestSwarmContext {
 				// If such refs file doesn't exist, HEAD is detached,
 				// in which case ./.git/HEAD contains the SHA1 directly.
 				$gitSHA1 = $gitHead;
+				$gitBranch = '(no branch)';
 			}
 
 			$devInfo = array(
