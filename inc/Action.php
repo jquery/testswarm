@@ -51,7 +51,7 @@ abstract class Action {
 	 * @param $errorCode string
 	 * @param $errorMsg string [optional
 	 * - Array with code and message:
-	 * @param $param $error array: property "code" and optionally "info".
+	 * @param $param $error array: property "code" and "info".
 	 */
 	final protected function setError( $errorCode, $errorMsg = null ) {
 		if ( is_array( $errorCode ) && isset( $errorCode['code'] ) ) {
