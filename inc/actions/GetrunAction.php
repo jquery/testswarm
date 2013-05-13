@@ -10,8 +10,8 @@ class GetrunAction extends Action {
 
 	/**
 	 * @actionMethod POST: Required.
-	 * @actionParam run_token string
-	 * @actionParam client_id int
+	 * @actionParam string run_token
+	 * @actionParam int client_id
 	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();

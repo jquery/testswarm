@@ -133,7 +133,7 @@ if ( !class_exists( 'UAParser' ) ) {
 /**@}*/
 
 /**
- * Load settings
+ * Load and validate settings
  * @{
  */
 // Generic utilities that we still need globally unconditionally
@@ -204,6 +204,23 @@ if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->s
 $refresh_control = 4; // 2012-06-11
 $swarmConfig->client->refresh_control += $refresh_control;
 
+unset( $server, $refresh_control );
+
+/**@}*/
+
+
+/**
+ * Custom PHP settings
+ * @{
+ */
+if ( $swarmConfig->debug->phpErrorReporting ) {
+	error_reporting( -1 );
+	ini_set( 'display_errors', 1 );
+}
+
+// Increase the session timeout to two weeks (3600 * 24 * 14)
+ini_set( 'session.gc_maxlifetime', '1209600' );
+
 /**@}*/
 
 
@@ -212,20 +229,5 @@ $swarmConfig->client->refresh_control += $refresh_control;
  * @{
  */
 $swarmContext = new TestSwarmContext( $swarmConfig );
-
-/**@}*/
-
-
-/**
- * Custom settings
- * @{
- */
-if ( $swarmContext->getConf()->debug->phpErrorReporting ) {
-	error_reporting( -1 );
-	ini_set( 'display_errors', 1 );
-}
-
-// Increase the session timeout to two weeks (3600 * 24 * 14)
-ini_set( 'session.gc_maxlifetime', '1209600' );
 
 /**@}*/

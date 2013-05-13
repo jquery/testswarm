@@ -9,10 +9,10 @@
 class ProjectsAction extends Action {
 
 	/**
-	 * @actionParam sort string: [optional] What to sort the results by.
-	 * Must be one of "title", "id" or "creation". Defaults to "title".
-	 * @actionParam sort_dir string: [optional]
-	 * Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
+	 * @actionParam string sort: [optional] What to sort the results by.
+	 *  Must be one of "title", "id" or "creation". Defaults to "title".
+	 * @actionParam string sort_dir: [optional]
+	 *  Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();

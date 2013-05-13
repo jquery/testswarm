@@ -12,12 +12,12 @@
 class ClientsAction extends Action {
 
 	/**
-	 * @actionParam sort string: [optional] What to sort the results by.
-	 * Must be one of "name" or "updated". Defaults to "name".
-	 * @actionParam sort_dir string: [optional]
-	 * Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
-	 * @actionParam include string: [optional] What filter to apply.
-	 * Must be one of "all", "active" or "inactive". Defaults to "active".
+	 * @actionParam string sort: [optional] What to sort the results by.
+	 *  Must be one of "name" or "updated". Defaults to "name".
+	 * @actionParam string sort_dir: [optional]
+	 *  Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
+	 * @actionParam string include: [optional] What filter to apply.
+	 *  Must be one of "all", "active" or "inactive". Defaults to "active".
 	 * @actionParam string item: Fetch only information from clients by this name.
 	 */
 	public function doAction() {

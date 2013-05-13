@@ -210,7 +210,8 @@
 	 * For usage in the TestSwarm database.
 	 * @since 1.0.0
 	 *
-	 * @param $timestamp int Unix timestamp, if 0 is given, "now" will be assumed.
+	 * @param $timestamp int Unix timestamp, if 0 is given, the current time will be used.
+	 *  Use SWARM_NOW to pass 0.
 	 */
 	function swarmdb_dateformat( $timestamp = 0 ) {
 		$timestamp = $timestamp === 0 ? time() : $timestamp;
