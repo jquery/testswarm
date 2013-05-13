@@ -372,6 +372,10 @@ class DBUpdateScript extends MaintenanceScript {
 					$this->out( '    SKIPPED: User name not a valid project id. Must match: ' . LoginAction::getNameValidationRegex() );
 					continue;
 				}
+				if ( !$db->query(str_queryf( 'SELECT 1 FROM jobs WHERE user_id=%u', $userRow->id )) ) {
+					$this->out( '    SKIPPED: Account has 0 jobs' );
+					continue;
+				}
 				$isInserted = $db->query(str_queryf(
 					'INSERT INTO projects
 					(id, display_title, site_url, password, auth_token, updated, created)
