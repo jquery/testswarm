@@ -12,7 +12,6 @@ abstract class MaintenanceScript {
 	private $flags = array();
 	private $options = array();
 	private $generalArgKeys = array();
-	private $requiredKeys = array();
 	private $parsed = array();
 
 	abstract protected function init();
@@ -47,9 +46,8 @@ abstract class MaintenanceScript {
 	 * @param string $name: at least 2 characters
 	 * @param string $type: one of "boolean", "value"
 	 * @param string $description
-	 * @param bool $required
 	 */
-	protected function registerOption( $name, $type, $description, $required = false ) {
+	protected function registerOption( $name, $type, $description ) {
 		static $types = array( 'boolean', 'value' );
 		if ( !is_string( $name ) || strlen( $name ) < 2 || !in_array( $type, $types ) ) {
 			$this->error( 'Illegal option registration' );
@@ -57,7 +55,6 @@ abstract class MaintenanceScript {
 		$this->options[$name] = array(
 			'type' => $type,
 			'description' => $description,
-			'required' => (bool) $required
 		);
 	}
 
@@ -66,7 +63,6 @@ abstract class MaintenanceScript {
 		// but we use our own format instead (see also php.net/getopt).
 		$getoptShort = '';
 		$getoptLong = array();
-		$requiredKeys = array();
 		foreach ( $this->flags as $flagKey => $flagInfo ) {
 			switch ( $flagInfo['type'] ) {
 			case 'value':
@@ -78,9 +74,6 @@ abstract class MaintenanceScript {
 			}
 		}
 		foreach ( $this->options as $optionName => $optionInfo ) {
-			if ( $optionInfo['required'] ) {
-				$requiredKeys[] = $optionName;
-			}
 			switch ( $optionInfo['type'] ) {
 			case 'value':
 				$getoptLong[] = $optionName . '::';
@@ -95,14 +88,6 @@ abstract class MaintenanceScript {
 			$this->error( 'Parsing command line arguments failed.' );
 		}
 		$this->parsed = $parsed;
-
-		if ( !$this->getOption( 'help' ) ) {
-			foreach ( $requiredKeys as $requiredKey ) {
-				if ( !isset( $parsed[$requiredKey] ) || !$parsed[$requiredKey] ) {
-					$this->error( 'Option "' . $requiredKey . '" is required.' );
-				}
-			}
-		}
 	}
 
 	protected function getFlag( $key ) {
