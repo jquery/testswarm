@@ -1,6 +1,7 @@
 # Created while installing/using TestSwarm
 .htaccess
 cache/*
+config/.testswarm_eval_history
 config/localSettings.json
 config/localSettings.php
 favicon.ico
