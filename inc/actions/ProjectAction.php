@@ -200,4 +200,71 @@ class ProjectAction extends Action {
 			'next' => $next,
 		);
 	}
+
+	/**
+	 * @param string $id
+	 * @param array $options
+	 * @return array Exposes the new auth token
+	 */
+	public function create( $id, Array $options = null ) {
+		$db = $this->getContext()->getDB();
+
+		$password = isset( $options['password'] ) ? $options['password'] : null;
+		$displayTitle = isset( $options['displayTitle'] ) ? $options['displayTitle'] : null;
+		$siteUrl = isset( $options['siteUrl'] ) ? $options['siteUrl'] : '';
+
+		if ( !$id || !$displayTitle || !$password ) {
+			$this->setError( 'missing-parameters' );
+			return;
+		}
+
+		// Check if a project by this id doesn't exist already
+		$row = $db->getOne( str_queryf( 'SELECT id FROM projects WHERE id = %s;', $id ) );
+		if ( $row ) {
+			$this->setError( 'invalid-input', 'Unable to create project, a project by that name exists already.' );
+			return;
+		}
+
+		// Validate project id
+		if ( !LoginAction::isValidName( $id ) ) {
+			$this->setError( 'invalid-input', 'Project ids may only contain lowercase a-z, 0-9 and dashes and must start with a letter.' );
+			return;
+		}
+
+		// maxlength (otherwise MySQL will crop it)
+		if ( strlen( $id ) > 255 ) {
+			$this->setError( 'Project ID has to be no longer than 255 characters.' );
+			return;
+		}
+		if ( strlen( $displayTitle ) > 255 ) {
+			$this->setError( 'Display title has to be no longer than 255 characters.' );
+			return;
+		}
+
+		// Create the project
+		$authToken = LoginAction::generateRandomHash( 40 );
+		$authTokenHash = sha1( $authToken );
+
+		$isInserted = $db->query(str_queryf(
+			'INSERT INTO projects
+			(id, display_title, site_url, password, auth_token, updated, created)
+			VALUES(%s, %s, %s, %s, %s, %s, %s);',
+			$id,
+			$displayTitle,
+			$siteUrl,
+			LoginAction::generatePasswordHash( $password ),
+			$authTokenHash,
+			swarmdb_dateformat( SWARM_NOW ),
+			swarmdb_dateformat( SWARM_NOW )
+		));
+
+		if ( !$isInserted ) {
+			$this->setError( 'internal-error', 'Insertion of row into database failed.' );
+			return;
+		}
+
+		return array(
+			'authToken' => $authToken,
+		);
+	}
 }

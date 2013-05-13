@@ -34,7 +34,7 @@ class ManageProjectScript extends MaintenanceScript {
 	}
 
 	protected function create() {
-		$db = $this->getContext()->getDB();
+		$action = ProjectAction::newFromContext( $this->getContext() );
 
 		$id = $this->getOption( 'id' );
 		$displayTitle = $this->getOption( 'display-title' );
@@ -43,12 +43,6 @@ class ManageProjectScript extends MaintenanceScript {
 
 		if ( !$id || !$displayTitle ) {
 			$this->error( '--id and --display-title are required.' );
-		}
-
-		// Check if a project by this id doesn't exist already
-		$row = $db->getOne(str_queryf( 'SELECT id FROM projects WHERE id = %s;', $id ));
-		if ( $row ) {
-			$this->error( 'Unable to create project, a project by that name exists already.' );
 		}
 
 		if ( !$password ) {
@@ -69,50 +63,22 @@ class ManageProjectScript extends MaintenanceScript {
 			$password = $input;
 		}
 
-		// Site url is optional
-		if ( !$siteUrl ) {
-			$siteUrl = '';
-		}
+		$data = $action->create( $id, array(
+			'password' => $password,
+			'displayTitle' => $displayTitle,
+			'siteUrl' => $siteUrl,
+		) ) ;
+		$error = $action->getError();
 
-		// Validate project id
-		if ( !LoginAction::isValidName( $id ) ) {
-			$this->error( 'Project ids may only contain lowercase a-z, 0-9 and dashes and must start with a letter.' );
-		}
-
-		// maxlength (otherwise MySQL will crop it)
-		if ( strlen( $id ) > 255 ) {
-			$this->error( 'Project ID has to be no longer than 255 characters.' );
-		}
-		if ( strlen( $displayTitle ) > 255 ) {
-			$this->error( 'Display title has to be no longer than 255 characters.' );
-		}
-
-		// Create the project
-		$authToken = LoginAction::generateRandomHash( 40 );
-		$authTokenHash = sha1( $authToken );
-
-		$isInserted = $db->query(str_queryf(
-			'INSERT INTO projects
-			(id, display_title, site_url, password, auth_token, updated, created)
-			VALUES(%s, %s, %s, %s, %s, %s, %s);',
-			$id,
-			$displayTitle,
-			$siteUrl,
-			LoginAction::generatePasswordHash( $password ),
-			$authTokenHash,
-			swarmdb_dateformat( SWARM_NOW ),
-			swarmdb_dateformat( SWARM_NOW )
-		));
-
-		if ( !$isInserted ) {
-			$this->error( 'Insertion of row into database failed.' );
+		if ( $error ) {
+			$this->error( $error['info'] );
 		}
 
 		$this->out(
 			'Project ' . $displayTitle . ' has been succesfully created!' . PHP_EOL
 			. 'The following auth token has been generated for this project:' . PHP_EOL
 			. PHP_EOL
-			. "\t" . $authToken . PHP_EOL
+			. "\t" . $data['authToken'] . PHP_EOL
 			. PHP_EOL
 			. 'You will need it to perform actions that require authentication.' . PHP_EOL
 			. 'If you ever loose it, you can generate a new token with the refreshProjectToken.php script.'
