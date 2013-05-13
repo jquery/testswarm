@@ -141,15 +141,33 @@ class LoginAction extends Action {
 	}
 
 	/**
+	 * Generate a ':M:' type blob with user table info from
+	 * an older database.
+	 * @param array $userRow Row from old `users` table
+	 * @return string Raw value for `projects.password` column
+	 */
+	public static function generatePasswordHashForUserrow( $userRow ) {
+		return ':M:' . $userRow->seed . ':' . $userRow->password;
+	}
+
+	/**
 	 * @param string $hash Password hash (from database).
-	 * @param string $password Plaintext password for comparison.
+	 * @param string $input Plaintext password for comparison.
 	 * @return bool
 	 */
-	public static function comparePasswords( $hash, $password ) {
+	public static function comparePasswords( $hash, $input ) {
 		$type = substr( $hash, 0, 3 );
+
+		// New algorythm since 1.0.0
 		if ( $type === ':A:' ) {
 			list( $salt, $realHash ) = explode( ':', substr( $hash, 3 ), 2 );
-			return sha1( $salt . '|' . sha1( $password ) ) === $realHash;
+			return sha1( $salt . '|' . sha1( $input ) ) === $realHash;
+
+		// Migrated from old 'users' table (see #generatePasswordHashForUserrow and dbUpdate.php)
+		} elseif ( $type === ':M:' ) {
+			list( $salt, $realHash ) = explode( ':', substr( $hash, 3 ), 2 );
+			// The old users table stores sha1 of seed + plain password
+			return sha1( $salt . $input ) === $realHash;
 		} else {
 			return false;
 		}

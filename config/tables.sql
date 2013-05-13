@@ -63,11 +63,11 @@ CREATE TABLE `clients` (
 -- Usage: HomePage, SwarmstateAction.
 CREATE INDEX idx_clients_useragent_updated ON clients (useragent_id, updated);
 
--- Usage: ClientAction, ScoresAction, BrowserInfo and Client.
-CREATE INDEX idx_clients_name_ua_created ON clients (name, useragent_id, created);
-
 -- Usage: CleanupAction.
 CREATE INDEX idx_clients_updated ON clients (updated);
+
+-- Usage: ClientAction, ScoresAction, BrowserInfo and Client.
+CREATE INDEX idx_clients_name_ua_created ON clients (name, useragent_id, created);
 
 -- --------------------------------------------------------
 

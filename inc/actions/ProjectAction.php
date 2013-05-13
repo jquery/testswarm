@@ -232,10 +232,6 @@ class ProjectAction extends Action {
 		}
 
 		// maxlength (otherwise MySQL will crop it)
-		if ( strlen( $id ) > 255 ) {
-			$this->setError( 'Project ID has to be no longer than 255 characters.' );
-			return;
-		}
 		if ( strlen( $displayTitle ) > 255 ) {
 			$this->setError( 'Display title has to be no longer than 255 characters.' );
 			return;
