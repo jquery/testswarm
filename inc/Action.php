@@ -93,7 +93,7 @@ abstract class Action {
 		$authToken = $request->getVal( 'authToken' );
 
 		if ( !$authID || !$authToken ) {
-			$this->setError( 'missing-parameters' );
+			$this->setError( 'missing-parameters', 'One or more required authentication parameters were not submitted.' );
 			return false;
 		}
 
