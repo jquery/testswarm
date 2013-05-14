@@ -213,9 +213,10 @@ h2 + .row {
 }
 
 .swarm-result-date {
+	float: right;
+	padding: 0 0 0 1em;
 	font-weight: normal;
 	font-size: smaller;
-	float: right;
 	color: #888;
 }
 
