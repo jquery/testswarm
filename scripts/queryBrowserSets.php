@@ -1,6 +1,6 @@
 <?php
 /**
- * browserSetsQuery.php
+ * Query browser sets.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0
@@ -9,7 +9,7 @@
 define( 'SWARM_ENTRY', 'SCRIPT' );
 require_once __DIR__ . '/../inc/init.php';
 
-class BrowserSetsQueryScript extends MaintenanceScript {
+class QueryBrowserSetsScript extends MaintenanceScript {
 
 	protected function init() {
 		$this->setDescription(
@@ -39,5 +39,5 @@ class BrowserSetsQueryScript extends MaintenanceScript {
 	}
 }
 
-$script = BrowserSetsQueryScript::newFromContext( $swarmContext );
+$script = QueryBrowserSetsScript::newFromContext( $swarmContext );
 $script->run();

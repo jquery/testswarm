@@ -1,6 +1,6 @@
 <?php
 /**
- * dbInstall.php
+ * Install database.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

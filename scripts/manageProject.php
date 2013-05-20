@@ -1,6 +1,6 @@
 <?php
 /**
- * manageProject.php
+ * Manage project.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

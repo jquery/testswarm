@@ -1,6 +1,6 @@
 <?php
 /**
- * dbUpdate.php
+ * Update database.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

@@ -1,6 +1,6 @@
 <?php
 /**
- * runToken.php
+ * Migrate user agent IDs.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

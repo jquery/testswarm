@@ -1,6 +1,6 @@
 <?php
 /**
- * repl.php
+ * TestSwarm REPL.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

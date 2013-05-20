@@ -31,7 +31,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * The default `cooldownSleep` setting has changed from 15 seconds to 0 seconds.
 * The default `nonewrunsSleep` setting has changed from 30 seconds to 10 seconds.
 * The database schema has been re-constructed from the ground up. The schema is
-  non-upgradable and will have to be re-created. Use the dbUpdate.php or dbInstall.php script
+  non-upgradable and will have to be re-created. Use the update.php or install.php script
   to quickly re-create your database. All data will be lost when upgrading from < 1.0.0!
 
 ### New features

@@ -1,6 +1,6 @@
 <?php
 /**
- * clearJobsAndClients.php
+ * Clear jobs and clients.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0

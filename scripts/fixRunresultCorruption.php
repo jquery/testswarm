@@ -29,7 +29,7 @@ class FixRunresultCorruptionScript extends MaintenanceScript {
 				if ( $runRow ) {
 					$corrupt++;
 					$this->outRaw( "Result #{$resultRow->id}" );
-					// See also CleanupAction::doAction					
+					// See also CleanupAction::doAction
 					$executed = $db->query(str_queryf(
 						"UPDATE run_useragent
 						SET
@@ -45,10 +45,10 @@ class FixRunresultCorruptionScript extends MaintenanceScript {
 					}
 					$this->out( "..." );
 				}
-				
+
 			}
 		}
-		
+
 		$this->out( "Found {$corrupt} instances of corrupted data." );
 	}
 }

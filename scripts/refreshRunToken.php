@@ -1,6 +1,6 @@
 <?php
 /**
- * runToken.php
+ * Refresh run token.
  *
  * @author Timo Tijhof, 2012
  * @since 1.0.0
