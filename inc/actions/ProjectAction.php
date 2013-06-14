@@ -227,7 +227,7 @@ class ProjectAction extends Action {
 
 		// Validate project id
 		if ( !LoginAction::isValidName( $id ) ) {
-			$this->setError( 'invalid-input', 'Project ids may only contain lowercase a-z, 0-9 and dashes and must start with a letter.' );
+			$this->setError( 'invalid-input', 'Project ids must be in format: "' . LoginAction::getNameValidationRegex() . '".' );
 			return;
 		}
 

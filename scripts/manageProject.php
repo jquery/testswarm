@@ -16,7 +16,7 @@ class ManageProjectScript extends MaintenanceScript {
 			'Create a new TestSwarm project. Returns the auth token (can be re-created with refreshProjectToken.php).'
 		);
 		$this->registerOption( 'create', 'boolean', 'Pass this to the create if it doesn\'t exist.' );
-		$this->registerOption( 'id', 'value', 'ID of project (must be in format: [a-z][-a-z0-9], max: 255 chars).' );
+		$this->registerOption( 'id', 'value', 'ID of project (must be in format: "' . LoginAction::getNameValidationRegex() . '").' );
 		$this->registerOption( 'display-title', 'value', 'Display title (free form text, max: 255 chars)' );
 		$this->registerOption( 'password', 'value', 'Password for this project (omit to enter in interactive mode)' );
 		$this->registerOption( 'site-url', 'value', 'URL for this project (optional)' );
