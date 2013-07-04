@@ -13,7 +13,7 @@ CREATE TABLE `projects` (
 
   -- URL pointing to a page with more information about this project
   -- (Optional field, can be empty).
-  `site_url` blob NOT NULL default '',
+  `site_url` blob,
 
   -- Salted hash of password (see LoginAction::comparePasswords).
   `password` tinyblob NOT NULL,
