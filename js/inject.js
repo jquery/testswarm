@@ -217,61 +217,41 @@
 
 	testFrameworks = {
 		// Jasmine
-		"Jasmine": {
-			detect: function() {
-				return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
+		'Jasmine': {
+			detect: function () {
+				return typeof jasmine !== 'undefined' && typeof describe !== 'undefined' && typeof it !== 'undefined';
 			},
-			install: function() {
-				console.log('installing Jasmine framework support');
-
+			install: function () {
 				var jasmineTestSwarmResults = null;
 
 				var testSwarmReporter = {
-					reportRunnerStarting: function (runner)
-					{
-						console.log('Jasmine reportRunnerStarting...');
+					reportRunnerStarting: function (runner) {
 						// reset counters
-						jasmineTestSwarmResults = {
-							fail: 0,
-							error: 0,
-							total: 0
-						};
+						jasmineTestSwarmResults = { fail: 0, error: 0, total: 0 };
 					},
-					reportRunnerResults: function (runner)
-					{
+					reportRunnerResults: function (runner) {
 						// testing finished
-						console.log('Jasmine reportRunnerResults');
-						console.log(jasmineTestSwarmResults);
 						submit(jasmineTestSwarmResults);
 					},
-					reportSuiteStarting: function (suite)
-					{
-						console.log('Jasmine reportSuiteStarting: ' + suite.description);
+					reportSuiteStarting: function (suite) {
 						// not in use
 					},
-					reportSuiteResults: function (suite)
-					{
-						console.log('Jasmine reportSuiteResults: ' + suite.description + ' DONE');
+					reportSuiteResults: function (suite) {
 						// not in use
 					},
-					reportSpecStarting: function (spec)
-					{
-						console.log('Jasmine reportSpecStarting: ' + spec.description);
+					reportSpecStarting: function (spec) {
 						jasmineTestSwarmResults.total++;
 						window.TestSwarm.heartbeat();   // we are still alive, trigger heartbeat so test execution won't time out
 					},
-					reportSpecResults: function (spec)
-					{
+					reportSpecResults: function (spec) {
 						if(spec.results().failedCount>0) {
-							console.log('Jasmine reportSpecResults: ' + spec.description + ' FAIL');
 							jasmineTestSwarmResults.fail++;
-						} else {
-							console.log('Jasmine reportSpecResults: ' + spec.description + ' OK');
 						}
 					},
-					log: function (str)
-					{
-						console.log('Jasmine says: ' + str);
+					log: function (str) {
+						if(window.console && window.console.log) {
+							console.log('Jasmine says: ' + str);
+						}
 					}
 				};
 
@@ -283,8 +263,6 @@
 
 				var jasmineEnv = jasmine.getEnv();
 				jasmineEnv.addReporter(testSwarmReporter);
-
-				console.log('Jasmine injected!');
 			}
 		},
 
