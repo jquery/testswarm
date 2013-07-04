@@ -216,6 +216,78 @@
 	};
 
 	testFrameworks = {
+		// Jasmine
+		"Jasmine": {
+			detect: function() {
+				return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
+			},
+			install: function() {
+				console.log('installing Jasmine framework support');
+
+				var jasmineTestSwarmResults = null;
+
+				var testSwarmReporter = {
+					reportRunnerStarting: function (runner)
+					{
+						console.log('Jasmine reportRunnerStarting...');
+						// reset counters
+						jasmineTestSwarmResults = {
+							fail: 0,
+							error: 0,
+							total: 0
+						};
+					},
+					reportRunnerResults: function (runner)
+					{
+						// testing finished
+						console.log('Jasmine reportRunnerResults');
+						console.log(jasmineTestSwarmResults);
+						submit(jasmineTestSwarmResults);
+					},
+					reportSuiteStarting: function (suite)
+					{
+						console.log('Jasmine reportSuiteStarting: ' + suite.description);
+						// not in use
+					},
+					reportSuiteResults: function (suite)
+					{
+						console.log('Jasmine reportSuiteResults: ' + suite.description + ' DONE');
+						// not in use
+					},
+					reportSpecStarting: function (spec)
+					{
+						console.log('Jasmine reportSpecStarting: ' + spec.description);
+						jasmineTestSwarmResults.total++;
+						window.TestSwarm.heartbeat();   // we are still alive, trigger heartbeat so test execution won't time out
+					},
+					reportSpecResults: function (spec)
+					{
+						if(spec.results().failedCount>0) {
+							console.log('Jasmine reportSpecResults: ' + spec.description + ' FAIL');
+							jasmineTestSwarmResults.fail++;
+						} else {
+							console.log('Jasmine reportSpecResults: ' + spec.description + ' OK');
+						}
+					},
+					log: function (str)
+					{
+						console.log('Jasmine says: ' + str);
+					}
+				};
+
+				window.TestSwarm.serialize = function () {
+					// take only the #wrapper and #html as a test result
+					remove('content');
+					return trimSerialize();
+				};
+
+				var jasmineEnv = jasmine.getEnv();
+				jasmineEnv.addReporter(testSwarmReporter);
+
+				console.log('Jasmine injected!');
+			}
+		},
+
 		// QUnit (by jQuery)
 		// http://docs.jquery.com/QUnit
 		'QUnit': {
