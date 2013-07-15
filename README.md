@@ -101,6 +101,8 @@ may work as well.
    cleaning duties such as making timed-out runs available again.<br/>
    `* * * * * curl -s http://swarm.example.org/api.php?action=cleanup > /dev/null`
 
+1. [Create a project](./scripts/README.md#create-projects) and [submit jobs](./scripts/addjob/README.md).
+
 
 Get involved
 ---------------------
