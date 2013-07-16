@@ -7,7 +7,8 @@ Deny from all
 </Files>
 
 # Force X-Frame-Options to a bad value to overcome in-place reverse proxy configurations
-# Header set X-Frame-Options GOFORIT
+# we set a bad value (it should be "allow-from") so that browsers will ignore it
+# Header set X-Frame-Options "Allow from"
 
 RewriteEngine On
 RewriteBase /testswarm
