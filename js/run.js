@@ -270,7 +270,7 @@
 		window.attachEvent( 'onmessage', handleMessage );
 	}
 
-	$( document).ready( function () {
+	$( function () {
 		getTests();
 		confUpdate();
 	});
