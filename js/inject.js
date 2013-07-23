@@ -216,6 +216,56 @@
 	};
 
 	testFrameworks = {
+		// Jasmine
+		'Jasmine': {
+			detect: function () {
+				return typeof jasmine !== 'undefined' && typeof describe !== 'undefined' && typeof it !== 'undefined';
+			},
+			install: function () {
+				var jasmineTestSwarmResults = null;
+
+				var testSwarmReporter = {
+					reportRunnerStarting: function (runner) {
+						// reset counters
+						jasmineTestSwarmResults = { fail: 0, error: 0, total: 0 };
+					},
+					reportRunnerResults: function (runner) {
+						// testing finished
+						submit(jasmineTestSwarmResults);
+					},
+					reportSuiteStarting: function (suite) {
+						// not in use
+					},
+					reportSuiteResults: function (suite) {
+						// not in use
+					},
+					reportSpecStarting: function (spec) {
+						jasmineTestSwarmResults.total++;
+						window.TestSwarm.heartbeat();   // we are still alive, trigger heartbeat so test execution won't time out
+					},
+					reportSpecResults: function (spec) {
+						if(spec.results().failedCount>0) {
+							jasmineTestSwarmResults.fail++;
+						}
+					},
+					log: function (str) {
+						if(window.console && window.console.log) {
+							console.log('Jasmine says: ' + str);
+						}
+					}
+				};
+
+				window.TestSwarm.serialize = function () {
+					// take only the #wrapper and #html as a test result
+					remove('content');
+					return trimSerialize();
+				};
+
+				var jasmineEnv = jasmine.getEnv();
+				jasmineEnv.addReporter(testSwarmReporter);
+			}
+		},
+
 		// QUnit (by jQuery)
 		// http://docs.jquery.com/QUnit
 		'QUnit': {
