@@ -174,6 +174,7 @@ class JobPage extends Page {
 			"failed" => '<i class="icon-remove" title="Completed with failures"></i>',
 			"timedout" => '<i class="icon-flag" title="Maximum execution time exceeded"></i>',
 			"error" => '<i class="icon-warning-sign" title="Aborted by an error"></i>',
+			"lost" => '<i class="icon-question-sign" title="Client lost connection with the swarm"></i>',
 		);
 		return isset( $icons[$status] ) ? $icons[$status] : '';
 	}
@@ -211,6 +212,10 @@ class JobPage extends Page {
 			. '<tr><td class="swarm-status swarm-status-error">'
 				. self::getStatusIconHtml( "error" )
 				. '</td><td>Aborted by an error</td>'
+			. '</tr>'
+			. '<tr><td class="swarm-status swarm-status-lost">'
+				. self::getStatusIconHtml( "lost" )
+				. '</td><td>Client lost connection with the swarm</td>'
 			. '</tr>'
 			. '<tr><td class="swarm-status swarm-status-notscheduled">'
 				. ''
