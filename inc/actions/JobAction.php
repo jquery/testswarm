@@ -240,6 +240,7 @@ class JobAction extends Action {
 			'passed',
 			'new',
 			'progress',
+			'lost',
 			'timedout',
 			'failed',
 			'error', // highest priority
@@ -273,14 +274,14 @@ class JobAction extends Action {
 
 	/**
 	 * @param $row object: Database row from runresults.
-	 * @return string: One of 'progress', 'timedout', 'passed', 'failed' or 'error'.
+	 * @return string: One of 'progress', 'passed', 'failed', 'timedout', 'error', or 'lost'
 	 */
 	public static function getRunresultsStatus( $row ) {
 		$status = (int)$row->status;
-		if ( $status === 1 ) {
+		if ( $status === ResultAction::$STATE_BUSY ) {
 			return 'progress';
 		}
-		if ( $status === 2 ) {
+		if ( $status === ResultAction::$STATE_FINISHED ) {
 			// A total of 0 tests ran is also considered an error
 			if ( $row->error > 0 || intval( $row->total ) === 0 ) {
 				return 'error';
@@ -288,8 +289,11 @@ class JobAction extends Action {
 			// Passed or failed
 			return $row->fail > 0 ? 'failed' : 'passed';
 		}
-		if ( $status === 3 ) {
+		if ( $status === ResultAction::$STATE_ABORTED ) {
 			return 'timedout';
+		}
+		if ( $status === ResultAction::$STATE_LOST ) {
+			return 'lost';
 		}
 		// If status is 4 (ResultAction::$STATE_LOST) it means a CleanupAction
 		// was aborted between two queries. This is no longer possible, but old
