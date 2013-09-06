@@ -232,9 +232,9 @@ class JobPage extends Page {
 	 */
 	public static function getJobHtmlRow( $job, $userAgents ) {
 		$html = '<tr><th>'
-			. self::getPrettyDateHtml( $job['info'], 'created', array( 'class' => 'swarm-result-date' ) )
-			. ' '
 			. '<a href="' . htmlspecialchars( $job['info']['viewUrl'] ) . '">' . htmlspecialchars( $job['info']['nameText'] ) . '</a>'
+			. ' '
+			. self::getPrettyDateHtml( $job['info'], 'created', array( 'class' => 'swarm-result-date' ) )
 			. "</th>\n";
 
 		foreach ( $userAgents as $uaID => $uaData ) {

@@ -143,7 +143,7 @@ h2 + .row {
 
 .swarm-status {
 	padding: 8px;
-	line-height: 20px;
+	line-height: 21px;
 }
 
 .swarm-results thead th,
@@ -215,8 +215,7 @@ h2 + .row {
 }
 
 .swarm-result-date {
-	float: right;
-	padding: 0 0 0 1em;
+	padding: 0 0 0 0.7em;
 	font-weight: normal;
 	font-size: smaller;
 	color: #888;
