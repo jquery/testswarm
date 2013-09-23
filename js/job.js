@@ -154,7 +154,7 @@ jQuery(function ( $ ) {
 					job_id: SWARM.jobInfo.id,
 					type: 'reset',
 					authID: SWARM.auth.project.id,
-					authToken: SWARM.auth.sessionTokens
+					authToken: SWARM.auth.sessionToken
 				},
 				dataType: 'json',
 				success: function ( data ) {
