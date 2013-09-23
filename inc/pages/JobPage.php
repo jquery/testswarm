@@ -56,7 +56,7 @@ class JobPage extends Page {
 				. ' <button class="swarm-reset-runs btn btn-info">Reset all runs</button>'
 				. ' <button class="swarm-delete-job btn btn-danger">Delete job</button>'
 				. '</div>'
-				. '<div class="alert alert-error" id="swarm-wipejob-error" style="display: none;"></div>';
+				. '<div class="swarm-wipejob-error alert alert-error" style="display: none;"></div>';
 		} else {
 			$action_bar = '';
 		}
