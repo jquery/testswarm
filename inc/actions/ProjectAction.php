@@ -59,10 +59,10 @@ class ProjectAction extends Action {
 
 		$conds = '';
 		if ( $offset ) {
-			if ( $dir !== 'back' ) {
-				$conds = 'AND id < ' . intval( $offset );
-			} else {
+			if ( $dir === 'back' ) {
 				$conds = 'AND id > ' . intval( $offset );
+			} else {
+				$conds = 'AND id < ' . intval( $offset );
 			}
 		}
 
@@ -82,10 +82,6 @@ class ProjectAction extends Action {
 			$limit + 1
 		));
 
-		if ( $dir === 'back' ) {
-			array_reverse( $jobRows );
-		}
-
 		$jobs = array();
 
 		// List of all user agents used in recent jobs
@@ -94,11 +90,15 @@ class ProjectAction extends Action {
 		$userAgents = array();
 
 		if ( !$jobRows ) {
-			$pagination = array(
-			);
+			$pagination = array();
+
 		} else {
 
 			$pagination = $this->getPaginationData( $dir, $offset, $limit, $jobRows, $projectID );
+
+			if ( $dir === 'back' ) {
+				$jobRows = array_reverse( $jobRows );
+			}
 
 			foreach ( $jobRows as $jobRow ) {
 				$jobID = intval( $jobRow->id );
@@ -168,13 +168,13 @@ class ProjectAction extends Action {
 		if ( $dir === 'back' ) {
 			$isFirst = $numRows <= $limit;
 			$isLast = !$offset;
-			$firstID = $firstRowID;
-			$lastID = $lastRowID;
+			$firstID = $lastRowID;
+			$lastID = $firstRowID;
 		} else {
 			$isFirst = !$offset;
 			$isLast = $numRows <= $limit;
-			$firstID = $lastRowID;
-			$lastID = $firstRowID;
+			$firstID = $firstRowID;
+			$lastID = $lastRowID;
 		}
 
 		if ( $isFirst ) {
