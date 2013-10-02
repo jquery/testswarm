@@ -8,7 +8,7 @@
  */
 class ProjectAction extends Action {
 
-	private $defaultLimit = 25;
+	private $defaultLimit = 10;
 
 	/**
 	 * @actionParam string item: Project ID.
