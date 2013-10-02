@@ -46,7 +46,7 @@ class JobPage extends Page {
 		$html .=
 			'<h2>' . $data["info"]["nameHtml"] .'</h2>'
 			. '<p><em>Submitted by '
-			. html_tag( 'a', array( 'href' => $project['viewUrl'] ), $project['id'] )
+			. html_tag( 'a', array( 'href' => $project['viewUrl'] ), $project['display_title'] )
 			. ' '. self::getPrettyDateHtml( $data["info"], 'created' )
 			. '</em>.</p>';
 
