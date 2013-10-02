@@ -104,11 +104,23 @@ class JobAction extends Action {
 		}
 		$jobID = intval( $jobRow->id );
 
+		$projectRow = $db->getRow(str_queryf(
+			'SELECT
+				display_title
+			FROM projects
+			WHERE id = %s;',
+			$jobRow->project_id
+		));
+
 		$ret = array(
 			'id' => $jobID,
 			'nameHtml' => $jobRow->name,
 			'nameText' => strip_tags( $jobRow->name ),
-			'projectID' => $jobRow->project_id,
+			'project' => array(
+				'id' => $jobRow->project_id,
+				'display_title' => $projectRow->display_title,
+				'viewUrl' => swarmpath( "project/{$jobRow->project_id}" ),
+			),
 			'viewUrl' => swarmpath( "job/$jobID", 'fullurl' )
 		);
 		self::addTimestampsTo( $ret, $jobRow->created, 'created' );

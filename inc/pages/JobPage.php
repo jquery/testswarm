@@ -40,12 +40,13 @@ class JobPage extends Page {
 
 		$this->setSubTitle( '#' . $data["info"]["id"] );
 
-		$isOwner = $auth && $auth->project->id === $data["info"]["projectID"];
+		$project = $data['info']['project'];
+		$isOwner = $auth && $auth->project->id === $project['id'];
 
 		$html .=
 			'<h2>' . $data["info"]["nameHtml"] .'</h2>'
 			. '<p><em>Submitted by '
-			. html_tag( "a", array( "href" => swarmpath( "project/{$data["info"]["projectID"]}" ) ), $data["info"]["projectID"] )
+			. html_tag( 'a', array( 'href' => $project['viewUrl'] ), $project['id'] )
 			. ' '. self::getPrettyDateHtml( $data["info"], 'created' )
 			. '</em>.</p>';
 

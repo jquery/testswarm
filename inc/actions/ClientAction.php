@@ -117,6 +117,7 @@ class ClientAction extends Action {
 							'name' => $runRow->name
 						);
 						$result['project'] = array(
+							'id' => $jobRow->project_id,
 							'display_title' => $projectRow->display_title,
 							'viewUrl' => swarmpath( "project/{$jobRow->project_id}" ),
 						);
