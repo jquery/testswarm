@@ -4,6 +4,8 @@ from TestSwarms' perspective.
 
 For more information about the fields, view the AddjobPage in your browser.
 
+Please create a project before submitting jobs.
+
 ## Test suite runs
 
 Before you can submit a job you has to have an actual test suite. Presumably you already have this but there are a few requirements that you need to check and implement as needed. Currently TestSwarm supports the following unit test frameworks:
