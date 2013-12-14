@@ -100,7 +100,7 @@ class MigrateUaIDScript extends MaintenanceScript {
 			$blockStart += $batchSize;
 			$blockEnd += $batchSize;
 
-			// Optimise for continueing a batch, don't wait if this chunk didn't
+			// Optimise for continuing a batch, don't wait if this chunk didn't
 			// affect any rows. This way we fast-forward to the next affectable chunk.
 			if ( $db->getAffectedRows() ) {
 				$count += $db->getAffectedRows();
@@ -140,7 +140,7 @@ class MigrateUaIDScript extends MaintenanceScript {
 			$blockStart += $batchSize;
 			$blockEnd += $batchSize;
 
-			// Optimise for continueing a batch, don't wait if this chunk didn't
+			// Optimise for continuing a batch, don't wait if this chunk didn't
 			// affect any rows. This way we fast-forward to the next affectable chunk.
 			if ( $rows ) {
 				foreach ( $rows as $row ) {
