@@ -173,7 +173,7 @@
 	onErrorFnPrev = window.onerror;
 
 	// Cover uncaught exceptions
-	// Returning true will surpress the default browser handler,
+	// Returning true will suppress the default browser handler,
 	// returning false will let it run.
 	window.onerror = function ( error, filePath, linerNr ) {
 		var ret = false, report;
@@ -182,7 +182,7 @@
 		}
 
 		// Treat return value as window.onerror itself does,
-		// Only do our handling if not surpressed.
+		// Only do our handling if not suppressed.
 		if ( ret !== true ) {
 			report = document.createElement( 'div' );
 			report.innerHTML = '<hr/><b>[TestSwarm] window.onerror:</b><br/>';
