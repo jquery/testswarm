@@ -212,7 +212,7 @@ class DBUpdateScript extends MaintenanceScript {
 					}
 					try {
 						$signupAction = SignupAction::newFromContext( $this->getContext() );
-						// Password stored in the old datbase is a hash of the old seed (of type 'double'
+						// Password stored in the old database is a hash of the old seed (of type 'double'
 						// and the actual password. We can't create this user with the same password because
 						// sha1 is not supposed to be decodable.
 						// I tried overriding the created row after the creation with the old seed and password,
