@@ -48,7 +48,7 @@ jQuery(function ( $ ) {
 				}
 			})
 			.complete( function () {
-				// Wether done or failed: Clean up and schedule next update
+				// Whether done or failed: Clean up and schedule next update
 				actionComplete();
 				refreshTableTimout = setTimeout( refreshTable, updateInterval );
 			});
