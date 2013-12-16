@@ -132,8 +132,7 @@ Documentation
 Copyright and license
 ---------------------
 
-See
-[MIT-LICENSE](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE).
+See [MIT-LICENSE.txt](https://raw.github.com/jquery/testswarm/master/MIT-LICENSE.txt).
 
 
 History
