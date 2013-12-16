@@ -90,7 +90,7 @@ jQuery(function ( $ ) {
 
 	if ( SWARM.auth ) {
 
-		// This needs to bound as a delegate, because the table auto-refreshes.
+		// This needs to be bound as a delegate, because the table auto-refreshes.
 		$targetTable.on( 'click', '.swarm-reset-run-single', function () {
 			resetRun( $( this ).closest( 'td' ) );
 		});
