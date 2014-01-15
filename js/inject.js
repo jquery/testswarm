@@ -19,7 +19,8 @@
 		search = window.location.search,
 		index = search.indexOf( "swarmURL=" ),
 		submitTimeout = 5,
-		beatRate = 20;
+		beatRate = 20,
+		setTimeout = window.setTimeout;
 
 	try {
 		doPost = !!window.parent.postMessage;
