@@ -1,7 +1,9 @@
-language: node_js
-node_js:
-  - "0.10"
+language: php
+php:
+  - "5.4"
+  - "5.3"
 before_script:
   - npm install -g jshint
 script:
+  - find . -name '*.php' -not -path '*/inc/libs/*' -print0 | xargs -0 -L 1 -P 8 php -l
   - jshint .
