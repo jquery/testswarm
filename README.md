@@ -126,7 +126,7 @@ Documentation
 
 * [TestSwarm wiki](https://github.com/jquery/testswarm/wiki)
 * [Submit jobs README](https://github.com/jquery/testswarm/blob/master/scripts/addjob/README.md)
-* _[more wiki pages](https://github.com/jquery/testswarm/wiki/_pages)_
+* [more wiki pages](https://github.com/jquery/testswarm/wiki/_pages)
 
 
 Copyright and license
