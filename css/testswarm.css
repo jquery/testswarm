@@ -82,6 +82,12 @@ h2 + .row {
 	display: inline-block;
 }
 
+.swarm-results-browsername {
+	font-size: 75%;
+	font-weight: normal;
+	color: #888;
+}
+
 /**
  * Results table.
  * The swarm-status colors are now all derived from the following greens:
@@ -436,9 +442,10 @@ h2 + .row {
 }
 
 .swarm-icon-small {
-	max-width: 48px;
-	max-height: 48px;
+	max-width: 36px;
+	max-height: 36px;
 }
+
 .swarm-icon-small.swarm-os::after {
 	border-width: 3px;
 }
