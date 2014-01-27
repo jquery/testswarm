@@ -157,6 +157,13 @@ h2 + .row {
 
 
 /**
+ * Job page.
+ */
+.swarm-results-unbound-auth .swarm-reset-run-single {
+	display: none;
+}
+
+/**
  * Some of Bootstrap's table styling
  * have a lot of weight on their selector,
  * such as:
