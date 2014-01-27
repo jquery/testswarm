@@ -20,7 +20,8 @@
 		index = search.indexOf( "swarmURL=" ),
 		submitTimeout = 5,
 		beatRate = 20,
-		setTimeout = window.setTimeout;
+		setTimeout = window.setTimeout,
+		clearTimeout = window.clearTimeout;
 
 	try {
 		doPost = !!window.parent.postMessage;
