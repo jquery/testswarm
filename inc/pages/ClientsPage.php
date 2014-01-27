@@ -149,9 +149,12 @@ class ClientsPage extends Page {
 		foreach ( $data['clients'] as $client ) {
 			$displayInfo = $client['uaData']['displayInfo'];
 			$html .=
-				'<div class="span4" style="position: relative;"><div class="well clearfix">'
-				. '<div style="position: absolute; left: -20px; top: -25px;">' . BrowserInfo::buildIconHtml( $displayInfo, array( 'wrap' => false ) ) . '</div>'
-				. '<div style="margin-left: 40px"><table class="table table-condensed"><thead>'
+				'<div class="span4 swarm-client"><div class="well">'
+				. '<div class="swarm-client-icon">' . BrowserInfo::buildIconHtml( $displayInfo, array( 'wrap' => false ) ) . '</div>'
+				. '<div class="swarm-client-info">'
+				. '<p class="swarm-client-title">' . htmlspecialchars( $displayInfo['title'] ) . '</p>'
+				. '<table class="table table-condensed">'
+				. '<tbody>'
 				. '<tr><th>Last ping</th><td>' . self::getPrettyDateHtml( $client, 'pinged' ) . '</td></tr>'
 				. '<tr><th>Run</th>' . (
 					!$client['lastResult']
@@ -165,8 +168,10 @@ class ClientsPage extends Page {
 						)
 				) . '</tr>'
 				. '<tr><th>Connected</th><td>' . self::getPrettyDateHtml( $client, 'connected' ) . '</td></tr>'
-				. '</thead></table></div>'
-				. '<a href="' . htmlspecialchars( $client['viewUrl'] ) . '" class="pull-right">Details &raquo;</a>'
+				. '</tbody>'
+				. '</table>'
+				. '</div>'
+				. '<div class="clearfix"><a href="' . htmlspecialchars( $client['viewUrl'] ) . '" class="pull-right">Details &raquo;</a></div>'
 				. '</div></div>';
 		}
 		return $html . '</div>';

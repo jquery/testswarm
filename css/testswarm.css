@@ -130,6 +130,33 @@ h2 + .row {
 }
 
 /**
+ * Clients page.
+ */
+
+.swarm-client {
+	position: relative;
+}
+
+.swarm-client-icon {
+	position: absolute;
+	left: -20px;
+	top: -25px;
+}
+
+.swarm-client-title {
+	text-align: center;
+}
+
+.swarm-client-info {
+	margin-left: 40px
+}
+
+.swarm-client .table {
+	margin-bottom: 0;
+}
+
+
+/**
  * Some of Bootstrap's table styling
  * have a lot of weight on their selector,
  * such as:
