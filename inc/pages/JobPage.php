@@ -63,7 +63,7 @@ class JobPage extends Page {
 		}
 
 		$html .= $action_bar;
-		$html .= '<table class="table table-bordered swarm-results"><thead>'
+		$html .= '<table class="table table-bordered swarm-results swarm-results-unbound-auth"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )
 			. '</thead><tbody>'
 			. self::getUaRunsHtmlRows( $data['runs'], $data['userAgents'], $isOwner )
@@ -88,7 +88,7 @@ class JobPage extends Page {
 				) )
 				. '<br>'
 				. html_tag_open( 'span', array(
-					'class' => 'label swarm-browsername',
+					'class' => 'swarm-results-browsername swarm-browsername',
 				) ) . $displayInfo['labelHtml'] . '</span>'
 				. '</th>';
 		}

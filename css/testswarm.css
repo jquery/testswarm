@@ -82,6 +82,12 @@ h2 + .row {
 	display: inline-block;
 }
 
+.swarm-results-browsername {
+	font-size: 75%;
+	font-weight: normal;
+	color: #888;
+}
+
 /**
  * Results table.
  * The swarm-status colors are now all derived from the following greens:
@@ -121,6 +127,40 @@ h2 + .row {
 .swarm-results,
 .table th {
 	white-space: nowrap;
+}
+
+/**
+ * Clients page.
+ */
+
+.swarm-client {
+	position: relative;
+}
+
+.swarm-client-icon {
+	position: absolute;
+	left: -20px;
+	top: -25px;
+}
+
+.swarm-client-title {
+	text-align: center;
+}
+
+.swarm-client-info {
+	margin-left: 40px
+}
+
+.swarm-client .table {
+	margin-bottom: 0;
+}
+
+
+/**
+ * Job page.
+ */
+.swarm-results-unbound-auth .swarm-reset-run-single {
+	display: none;
 }
 
 /**
@@ -436,9 +476,10 @@ h2 + .row {
 }
 
 .swarm-icon-small {
-	max-width: 48px;
-	max-height: 48px;
+	max-width: 36px;
+	max-height: 36px;
 }
+
 .swarm-icon-small.swarm-os::after {
 	border-width: 3px;
 }

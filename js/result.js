@@ -9,9 +9,10 @@ jQuery(function( $ ) {
 
 	// Even-out scrollbars
 	$( ".swarm-result-frame" ).on( "load", function() {
-		var frame = this, frameDoc = frame.contentWindow.document;
+		var frame = this,
+			frameDoc = frame.contentWindow.document;
 		setTimeout( function() {
-			frame.height = frameDoc.height;
+			frame.height = $(frameDoc).height();
 		}, 50);
 	});
 

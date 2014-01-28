@@ -49,7 +49,7 @@ jQuery(function( $ ) {
 				}
 			})
 			.complete( function() {
-				// Wether done or failed: Clean up and schedule next update
+				// Whether done or failed: Clean up and schedule next update
 				actionComplete();
 				refreshTableTimout = setTimeout( refreshTable, updateInterval );
 			});
@@ -87,14 +87,16 @@ jQuery(function( $ ) {
 		}
 	}
 
-	$( "table.swarm-results" ).prev().before( $indicator );
+	$targetTable.prev().before( $indicator );
 
 	if ( SWARM.auth ) {
 
-		// This needs to bound as a delegate, because the table auto-refreshes.
-		$targetTable.on( "click", ".swarm-reset-run-single", function() {
-			resetRun( $( this ).closest( "td" ) );
-		});
+		// This needs to be bound as a delegate, because the table auto-refreshes.
+		$targetTable
+			.on( "click", ".swarm-reset-run-single", function() {
+				resetRun( $( this ).closest( "td" ) );
+			})
+			.removeClass( "swarm-results-unbound-auth" );
 
 		$( ".swarm-reset-runs-failed" ).on( "click", function() {
 			var $els = $( "td[data-run-status='failed'], td[data-run-status='error'], td[data-run-status='timedout']" );
