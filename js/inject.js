@@ -11,7 +11,7 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-/*global QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha */
+/*global QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha, jasmine */
 (function( undefined ) {
 	var url, curHeartbeat, testFrameworks, onErrorFnPrev,
 		DEBUG = false,
@@ -218,29 +218,23 @@
 
 	testFrameworks = {
 		// Jasmine
-		'Jasmine': {
+		"Jasmine": {
 			detect: function () {
-				return typeof jasmine !== 'undefined' && typeof describe !== 'undefined' && typeof it !== 'undefined';
+				return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
 			},
 			install: function () {
 				var jasmineTestSwarmResults = null;
 
 				var testSwarmReporter = {
-					reportRunnerStarting: function (runner) {
+					reportRunnerStarting: function () {
 						// reset counters
 						jasmineTestSwarmResults = { fail: 0, error: 0, total: 0 };
 					},
-					reportRunnerResults: function (runner) {
+					reportRunnerResults: function () {
 						// testing finished
 						submit(jasmineTestSwarmResults);
 					},
-					reportSuiteStarting: function (suite) {
-						// not in use
-					},
-					reportSuiteResults: function (suite) {
-						// not in use
-					},
-					reportSpecStarting: function (spec) {
+					reportSpecStarting: function () {
 						jasmineTestSwarmResults.total++;
 						window.TestSwarm.heartbeat();   // we are still alive, trigger heartbeat so test execution won't time out
 					},
@@ -251,14 +245,14 @@
 					},
 					log: function (str) {
 						if(window.console && window.console.log) {
-							console.log('Jasmine says: ' + str);
+							window.console.log("Jasmine says: " + str);
 						}
 					}
 				};
 
 				window.TestSwarm.serialize = function () {
 					// take only the #wrapper and #html as a test result
-					remove('content');
+					remove("content");
 					return trimSerialize();
 				};
 
