@@ -108,7 +108,7 @@ $swarmAutoLoadClasses = array(
 	'RunPage' => 'inc/pages/RunPage.php',
 	'SaverunPage' => 'inc/pages/SaverunPage.php',
 	# Libs
-	'UAParser' => 'inc/libs/ua-parser/php/uaparser.php',
+	'UAParser' => 'external/ua-parser/php/uaparser.php',
 );
 
 function swarmAutoLoader( $className ) {
@@ -127,7 +127,7 @@ function swarmAutoLoader( $className ) {
 spl_autoload_register( 'swarmAutoLoader' );
 
 if ( !class_exists( 'UAParser' ) ) {
-	swarmInitError( 'Submodule "inc/libs/ua-parser" missing.' );
+	swarmInitError( 'Submodule "external/ua-parser" missing.' );
 }
 
 /**@}*/
