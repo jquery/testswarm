@@ -92,7 +92,7 @@ may work as well.
    `php scripts/install.php`
 
 1. Fetch the latest user-agent information:
-   `php inc/libs/ua-parser/php/uaparser-cli.php -g`<br/>
+   `php external/ua-parser/php/uaparser-cli.php -g`<br/>
    Note that ua-parser is based on patterns, so you don't need to re-run this
    after every browser release to be able to detect this, however it is recommmended
    to periodically run this to stay up to date (once a month should be enough).

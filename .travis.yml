@@ -5,5 +5,5 @@ php:
 before_script:
   - npm install -g jshint
 script:
-  - find . -name '*.php' -not -path '*/inc/libs/*' -print0 | xargs -0 -L 1 -P 8 php -l
+  - find . -name '*.php' -not -path '*/external/*' -print0 | xargs -0 -L 1 -P 8 php -l
   - jshint .
