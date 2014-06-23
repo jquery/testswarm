@@ -4,7 +4,7 @@
  * @author John Resig (ejohn.org), 2008-2011
  * @license Licensed under the MIT and GPL licenses.
  *
- * Modified version for TestSwarm (2012).
+ * Modified version for TestSwarm (2012, 2014).
  */
 
 /**
@@ -29,10 +29,10 @@ function prettyDate( time ) {
 	}
 
 	return day_diff === 0 && (
-		diff < 3 && "just now" ||
-		diff < 60 && Math.floor( diff ) + " seconds ago" ||
+		diff < 10 && "just now" ||
+		diff < 50 && Math.floor( diff ) + " seconds ago" ||
 			diff < 120 && "1 minute ago" ||
-				diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+				diff < 3000 && Math.floor( diff / 60 ) + " minutes ago" ||
 					diff < 7200 && "1 hour ago" ||
 						diff < 86400 && Math.floor( diff / 3600 ) + " hours ago"
 	) ||
