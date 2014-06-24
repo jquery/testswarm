@@ -382,7 +382,7 @@ if ( $auth ) {
 		. ' - '
 		. $this->getContext()->getConf()->web->title
 	); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/bootstrap.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/css/bootstrap.css' ); ?>">
 	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
 </head>
 <body>

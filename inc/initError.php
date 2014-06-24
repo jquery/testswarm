@@ -44,7 +44,7 @@ function swarmInitError( $message, $type = null ) {
 <head>
 	<meta charset="UTF-8">
 	<title>TestSwarm</title>
-	<link rel="stylesheet" href="' . htmlspecialchars( $basePath . 'external/bootstrap/bootstrap.css' ) . '">
+	<link rel="stylesheet" href="' . htmlspecialchars( $basePath . 'external/bootstrap/css/bootstrap.css' ) . '">
 	<link rel="stylesheet" href="' . htmlspecialchars( $basePath . 'css/testswarm.css' ) . '">
 </head>
 <body>
