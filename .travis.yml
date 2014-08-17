@@ -7,3 +7,5 @@ before_script:
 script:
   - find . -name '*.php' -not -path '*/external/*' -print0 | xargs -0 -L 1 -P 8 php -l
   - jshint .
+git:
+  depth: 10
