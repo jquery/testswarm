@@ -16,7 +16,7 @@
 	var url, curHeartbeat, testFrameworks, onErrorFnPrev,
 		DEBUG = false,
 		doPost = false,
-		search = window.location.search,
+		search = location.search,
 		index = search.indexOf( "swarmURL=" ),
 		submitTimeout = 5,
 		beatRate = 20,
@@ -69,8 +69,8 @@
 			remove( scripts[0] );
 		}
 
-		root = window.location.href.replace( /(https?:\/\/.*?)\/.*/, "$1" );
-		cur = window.location.href.replace( /[^\/]*$/, "" );
+		root = location.href.replace( /(https?:\/\/.*?)\/.*/, "$1" );
+		cur = location.href.replace( /[^\/]*$/, "" );
 
 		links = doc.getElementsByTagName( "link" );
 		for ( i = 0; i < links.length; i += 1 ) {

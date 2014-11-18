@@ -8,7 +8,7 @@
  */
 jQuery(function( $ ) {
 	var query = {},
-		search = window.location.search;
+		search = location.search;
 
 	// Skip leading "?""
 	if ( search.length > 1 ) {
@@ -73,6 +73,6 @@ jQuery(function( $ ) {
 				query[key] = toggleQuery[key];
 			}
 		}
-		window.location.search = "?" + $.param( query );
+		location.search = "?" + $.param( query );
 	});
 });
