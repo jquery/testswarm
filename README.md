@@ -7,6 +7,18 @@ JavaScript.
 The main instance monitoring jQuery core and related projects runs at
 [swarm.jquery.org](http://swarm.jquery.org/).
 
+Project Status
+--------------
+
+TestSwarm is still in use in projects of the jQuery Foundation, but it isn't under active development anymore. Although critical issues may be patched in the future, most open issues will remain unaddressed.
+
+Within the jQuery Foundation, we're experimenting with alternative projects, to eventually shut down our own instance of TestSwarm:
+
+- [Karma](http://karma-runner.github.io/)
+- [browserstack-runner](https://github.com/browserstack/browserstack-runner/)
+- [Intern](http://theintern.io/)
+
+We recommend reviewing those and other alternatives.
 
 Quick start
 ----------
