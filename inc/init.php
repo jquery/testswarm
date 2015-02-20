@@ -216,6 +216,8 @@ unset( $server, $refresh_control );
 if ( $swarmConfig->debug->phpErrorReporting ) {
 	error_reporting( -1 );
 	ini_set( 'display_errors', 1 );
+} else {
+	error_reporting( 0 );
 }
 
 // Increase the session timeout to two weeks (3600 * 24 * 14)
