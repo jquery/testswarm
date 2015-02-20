@@ -26,7 +26,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * <https://github.com/jquery/testswarm/issues?sort=updated&direction=asc&state=closed&milestone=1>
 
 ### Configuration changes
-* PHP version requirement raised to 5.3.2+.
+* PHP version requirement raised to 5.4.0.
 * Settings are now loaded from `/config/localSettings.json` (instead of `/testswarm.ini`).
 * The default `cooldownSleep` setting has changed from 15 seconds to 0 seconds.
 * The default `nonewrunsSleep` setting has changed from 30 seconds to 10 seconds.

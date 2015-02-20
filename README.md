@@ -57,7 +57,7 @@ At the moment TestSwarm supports the following, but other configurations
 may work as well.
 
 * Apache 2.0+, NGINX 1.2+
-* PHP 5.3.2+ (or PHP-FPM for NGINX)
+* PHP 5.4+ (or PHP-FPM for NGINX)
 * MySQL 4.0+
 * cURL (for the cleanup action; see step 8)
 

@@ -33,8 +33,8 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 require_once( dirname( __FILE__ ) . '/initError.php' );
 
 // Minimum PHP version
-if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.3.2' ) < 0 ) {
-	swarmInitError( 'TestSwarm requires at least PHP 5.3.2' );
+if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.4.0' ) < 0 ) {
+	swarmInitError( 'TestSwarm requires at least PHP 5.4.0' );
 }
 
 $swarmInstallDir = dirname( __DIR__ );
