@@ -142,13 +142,13 @@ class JobPage extends Page {
 							). '</a>'
 							. $runResultsTagOpen
 							. html_tag( 'i', array(
-								'class' => 'swarm-show-results icon-list-alt pull-right',
+								'class' => 'swarm-show-results icon-list-alt',
 								'title' => $runResultsTooltip,
 							) )
 							. '</a>'
 							. ( $showResetRun ?
 								html_tag( 'i', array(
-									'class' => 'swarm-reset-run-single icon-remove-circle pull-right',
+									'class' => 'swarm-reset-run-single icon-remove-circle',
 									'title' => "Re-schedule run for $title",
 								) )
 								: ''

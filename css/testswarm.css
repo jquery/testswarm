@@ -177,6 +177,7 @@ h2 + .row {
 	padding: 0;
 }
 
+/* Projects page. */
 .swarm-jobstatus-cell .swarm-status [class^="icon-"] {
 	float: right;
 }
@@ -184,6 +185,21 @@ h2 + .row {
 .swarm-status {
 	padding: 8px;
 	line-height: 21px;
+}
+
+/* Align show-results button to the right inside a table cell using
+  absolute position, instead of float. Because float causes it to wrap
+  when the table gets right. */
+.swarm-results .swarm-status {
+	position: relative;
+	/* Account for swarm-show-results icon (14px) */
+	padding: 8px 22px 8px 8px;
+}
+
+.swarm-show-results {
+	position: absolute;
+	right: 8px;
+	top: 8px;
 }
 
 .swarm-results thead th,
