@@ -51,7 +51,7 @@ class JobPage extends Page {
 			. '</em>.</p>';
 
 		if ( $isOwner ) {
-			$html .= '<script>SWARM.jobInfo = ' . json_encode( $data["info"] ) . ';</script>';
+			$html .= '<script>SWARM.jobInfo = ' . json_encode2( $data["info"] ) . ';</script>';
 			$action_bar = '<div class="form-actions swarm-item-actions">'
 				. ' <button class="swarm-reset-runs-failed btn btn-info">Reset failed runs</button>'
 				. ' <button class="swarm-reset-runs btn btn-info">Reset all runs</button>'

@@ -134,8 +134,8 @@ abstract class Action {
 	 * @param $data mixed
 	 */
 	final protected function setData( $data ) {
-		// Convert all objects to arrays with json_decode(json_encode
-		$this->data = json_decode( json_encode( $data ), true );
+		// Recursively convert objects to arrays using json_decode/json_encode
+		$this->data = json_decode( json_encode2( $data ), true );
 	}
 
 	final public function getData() {

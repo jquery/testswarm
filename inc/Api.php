@@ -51,7 +51,7 @@ class Api {
 		switch ( $this->format ) {
 			case 'json':
 				header( 'Content-Type: application/json; charset=utf-8' );
-				echo json_encode( $this->response );
+				echo json_encode2( $this->response );
 				break;
 
 			// http://stackoverflow.com/a/8811412/319266
@@ -61,7 +61,7 @@ class Api {
 				echo
 					preg_replace( "/[^][.\\'\\\"_A-Za-z0-9]/", '', $callback )
 					. '('
-					. json_encode( $this->response )
+					. json_encode2( $this->response )
 					. ')';
 				break;
 

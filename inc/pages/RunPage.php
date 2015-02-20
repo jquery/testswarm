@@ -30,8 +30,8 @@ class RunPage extends Page {
 		$client = Client::newFromContext( $this->getContext(), $runToken );
 
 		$html = '<script>'
-			. 'SWARM.client_id = ' . json_encode( $client->getClientRow()->id ) . ';'
-			. 'SWARM.run_token = ' . json_encode( $runToken ) . ';'
+			. 'SWARM.client_id = ' . json_encode2( $client->getClientRow()->id ) . ';'
+			. 'SWARM.run_token = ' . json_encode2( $runToken ) . ';'
 			. '</script>';
 
 		$html .=

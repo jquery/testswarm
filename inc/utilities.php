@@ -81,6 +81,17 @@ function html_tag( $tagName, Array $attribs = array(), $content = '' ) {
 }
 
 /**
+ * JSON encoder wrapper making use of PHP 5.4's normalisation options.
+ *
+ * @since 1.0.0
+ * @param mixed $value
+ * @return string
+ */
+function json_encode2( $val ) {
+	return json_encode( $val, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+}
+
+/**
  * Utility function to overwrite object keys and support multiple levels.
  * array_merge() overwrites keys, but isn't recursive.
  * array_merge_recursive() is recursive but doesn't overwrite deeper levels,

@@ -249,10 +249,10 @@ abstract class Page {
 	SWARM = <?php
 	$infoAction = InfoAction::newFromContext( $context );
 	$infoAction->doAction();
-	echo json_encode( $infoAction->getData() );
+	echo json_encode2( $infoAction->getData() );
 ?>;
 	SWARM.auth = <?php
-	echo json_encode( $auth );
+	echo json_encode2( $auth );
 ?>;
 	</script>
 <?php

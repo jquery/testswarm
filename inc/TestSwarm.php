@@ -186,7 +186,7 @@ class TestSwarmContext {
 
 		// Calculate it and populate the class cache and file cache
 		$this->versionInfo = $this->calculateVersionInfo();
-		$isWritten = file_put_contents( $versionCacheFile, json_encode( $this->versionInfo ) );
+		$isWritten = file_put_contents( $versionCacheFile, json_encode2( $this->versionInfo ) );
 		if ( $isWritten === false ) {
 			throw new SwarmException( 'Writing to cache directory failed.' );
 		}
