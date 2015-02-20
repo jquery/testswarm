@@ -13,7 +13,7 @@
  * - initialize swarm configuration and load local settings
  * - cache dir existance and writability
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof, 2012-2015
  * @since 1.0.0
  * @package TestSwarm
  */
@@ -202,7 +202,7 @@ if ( !is_dir( $swarmConfig->storage->cacheDir ) || !is_writable( $swarmConfig->s
 // this one is for internal changes, e.g. to be increased when for example
 // ./js/run.js changes significantly.
 $refresh_control = 4; // 2012-06-11
-$swarmConfig->client->refresh_control += $refresh_control;
+$swarmConfig->client->refreshControl += $refresh_control;
 
 unset( $server, $refresh_control );
 
