@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ua-parser/uap-php": "3.4.2"
+    }
+}

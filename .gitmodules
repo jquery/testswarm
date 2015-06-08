@@ -1,3 +1,0 @@
-[submodule "external/ua-parser"]
-	path = external/ua-parser
-	url = https://github.com/tobie/ua-parser.git

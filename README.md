@@ -63,7 +63,7 @@ may work as well.
 
 ### Steps
 
-1. Set up a MySQL database and create a user with read and write access.
+1. Create an empty MySQL database and create a user with read and write access to it.
 
 1. Copy `config/sample-localSettings.php` to `config/localSettings.php`<br/>
    Copy `config/sample-localSettings.json` to `config/localSettings.json`.<br/>
@@ -100,14 +100,11 @@ may work as well.
    default `cache` directory (protected with .htaccess).<br/>Chmod it:
    `chmod 777 cache`.
 
+1. Install dependencies
+   `composer install`
+
 1. Install the TestSwarm database by running:
    `php scripts/install.php`
-
-1. Fetch the latest user-agent information:
-   `php external/ua-parser/php/uaparser-cli.php -g`<br/>
-   Note that ua-parser is based on patterns, so you don't need to re-run this
-   after every browser release to be able to detect this, however it is recommmended
-   to periodically run this to stay up to date (once a month should be enough).
 
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>

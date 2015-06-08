@@ -107,8 +107,6 @@ $swarmAutoLoadClasses = array(
 	'ResultPage' => 'inc/pages/ResultPage.php',
 	'RunPage' => 'inc/pages/RunPage.php',
 	'SaverunPage' => 'inc/pages/SaverunPage.php',
-	# Libs
-	'UAParser' => 'external/ua-parser/php/uaparser.php',
 );
 
 function swarmAutoLoader( $className ) {
@@ -126,9 +124,10 @@ function swarmAutoLoader( $className ) {
 
 spl_autoload_register( 'swarmAutoLoader' );
 
-if ( !class_exists( 'UAParser' ) ) {
-	swarmInitError( 'Submodule "external/ua-parser" missing.' );
+if ( !is_readable( dirname( __DIR__ ) . '/vendor/autoload.php' ) ) {
+	swarmInitError( 'Dependencies missing. Run "composer install".' );
 }
+require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
 /**@}*/
 
@@ -214,7 +213,7 @@ unset( $server, $refresh_control );
  * @{
  */
 if ( $swarmConfig->debug->phpErrorReporting ) {
-	error_reporting( -1 );
+	error_reporting( E_ALL & ~E_DEPRECATED );
 	ini_set( 'display_errors', 1 );
 } else {
 	error_reporting( 0 );
