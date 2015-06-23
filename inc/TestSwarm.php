@@ -1,10 +1,11 @@
 <?php
 /**
  * Wrapper class containing various request-specific objects.
+ *
  * Each of these objects is created only once for the context.
  * The creation happends on-demand and is put in a private cache.
  *
- * @author Timo Tijhof, 2012-2013
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

@@ -1,10 +1,11 @@
 <?php
 /**
- * Class to create or get info about a client.
- * Should NOT stored in session because one browser can have
- * multiple tabs (=multiple clients) running.
+ * Create or get info about a client.
  *
- * @author Timo Tijhof, 2012
+ * Should NOT be stored in-session because one browser can have
+ * multiple tabs open (where each is its own client).
+ *
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

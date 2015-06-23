@@ -13,7 +13,7 @@
  * - initialize swarm configuration and load local settings
  * - cache dir existance and writability
  *
- * @author Timo Tijhof, 2012-2015
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */
@@ -30,7 +30,7 @@ if ( !defined( 'SWARM_ENTRY' ) ) {
 
 // Use dirname since __DIR__ is PHP 5.3+ and we're going to use it to
 // display an error to older PHP versions.
-require_once( dirname( __FILE__ ) . '/initError.php' );
+require_once dirname( __FILE__ ) . '/initError.php' ;
 
 // Minimum PHP version
 if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.4.0' ) < 0 ) {
@@ -117,7 +117,7 @@ function swarmAutoLoader( $className ) {
 	}
 
 	$filename = $swarmAutoLoadClasses[$className];
-	require_once( "$swarmInstallDir/$filename" );
+	require_once "$swarmInstallDir/$filename";
 
 	return true;
 }

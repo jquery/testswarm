@@ -1,9 +1,11 @@
 <?php
 /**
- * "Swarmstate" action.
+ * Get summary about the current state of this swarm.
  *
- * @author Jörn Zaefferer, 2012
- * @author Timo Tijhof, 2012
+ * Active clients, pending runs, etc.
+ *
+ * @author Jörn Zaefferer
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

@@ -1,8 +1,8 @@
 <?php
 /**
- * "Ping" action.
+ * Keep the client session active.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

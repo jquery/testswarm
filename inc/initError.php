@@ -1,9 +1,5 @@
 <?php
 /**
- * This file needs to be compatibile with < PHP 5.3.
- */
-
-/**
  * @param string $message
  * @param string $type: cli, js or html.
  */

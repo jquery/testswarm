@@ -1,14 +1,12 @@
 <?php
 /**
- * Default "Home" page.
- * The dashboard of the TestSwarm install.
+ * Default dashboard for the TestSwarm front-end.
  *
- * @author John Resig, 2008-2011
- * @author Timo Tijhof, 2012
+ * @author John Resig
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class HomePage extends Page {
 
 	var $userHasKnownUA = false;

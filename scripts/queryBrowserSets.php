@@ -2,7 +2,7 @@
 /**
  * Query browser sets.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

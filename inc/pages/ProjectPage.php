@@ -1,10 +1,10 @@
 <?php
 /**
- * "Project" page.
+ * Page interface for ProjectAction.
  *
- * @author John Resig, 2008-2011
- * @author Jörn Zaefferer, 2012
- * @author Timo Tijhof, 2012-2013
+ * @author John Resig
+ * @author Jörn Zaefferer
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

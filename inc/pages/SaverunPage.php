@@ -1,8 +1,8 @@
 <?php
 /**
- * "Saverun" page.
+ * Iframe handler for older browsers that provides a callback for SaverunAction.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */

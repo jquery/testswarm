@@ -1,14 +1,13 @@
 <?php
 /**
- * "Clients" page.
+ * Page interface for ClientsAction.
  *
- * @author John Resig, 2008-2011
- * @author Jörn Zaefferer, 2012
- * @author Timo Tijhof, 2012-2013
+ * @author John Resig
+ * @author Jörn Zaefferer
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class ClientsPage extends Page {
 
 	public function execute() {

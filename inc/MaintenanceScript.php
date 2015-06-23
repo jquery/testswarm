@@ -3,7 +3,7 @@
  * This is the central file for maintenance scripts.
  * It is not the entry point however.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

@@ -1,12 +1,11 @@
 <?php
 /**
- * Error "404" handler.
+ * Error page handler for HTTP 404.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class Error404Page extends Page {
 
 	protected function initContent() {

@@ -1,10 +1,12 @@
 <?php
 /**
- * "Addjob" action.
- * Addjob ignores the current session. Instead it uses token.
+ * Submit a new test job.
  *
- * @author John Resig, 2008-2011
- * @author Timo Tijhof, 2012-2013
+ * For security reasons, this ignores the session. Authentication
+ * goes through tokens only.
+ *
+ * @author John Resig
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */

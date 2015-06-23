@@ -1,12 +1,11 @@
 <?php
 /**
- * "Wipejob" action
+ * Delete or reset all runs of a specific job.
  *
- * @author John Resig, 2008-2011
+ * @author John Resig
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class WipejobAction extends Action {
 
 	/**

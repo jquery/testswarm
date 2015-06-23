@@ -1,12 +1,11 @@
 <?php
 /**
- * "Info" page.
+ * Page interface for InfoAction.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class InfoPage extends Page {
 
 	public function execute() {

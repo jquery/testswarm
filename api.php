@@ -1,13 +1,17 @@
 <?php
 /**
  * This is the main front-end entry point for scripts.
- * All API responses start here.
- * @example ./api.php (same as: api.php?format=json&action=info)
- * @example ./api.php?action=scores
- * @example ./api.php?format=php&action=job&item=1
- * @example ./api.php?format=jsonp&action=swarmstate
  *
- * @author Timo Tijhof, 2012
+ * All API responses start here.
+ *
+ * Example:
+ *
+ *     ./api.php (same as: api.php?format=json&action=info)
+ *     ./api.php?action=scores
+ *     ./api.php?format=php&action=job&item=1
+ *     ./api.php?format=jsonp&action=swarmstate
+ *
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

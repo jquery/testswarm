@@ -1,12 +1,11 @@
 <?php
 /**
- * Api Debug handler.
+ * Debug page for API actions.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class ApiDebugPage extends Page {
 
 	protected $apiResponse;

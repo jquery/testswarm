@@ -1,8 +1,8 @@
 <?php
 /**
- * "Job" action.
+ * Get details about a specific job.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */

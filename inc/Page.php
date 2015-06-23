@@ -1,11 +1,12 @@
 <?php
 /**
- * The Page class manages the response for requests via index.php,
- * this includes:
+ * The Page class manages the response for requests via index.php.
+ *
+ * This includes:
  * - the HTML skin (doctype, head, body format)
  * - queue of javascript files and stylesheets
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

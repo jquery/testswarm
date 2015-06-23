@@ -1,12 +1,11 @@
 <?php
 /**
- * "Client" action.
+ * Get details about a specific client.
  *
- * @author Timo Tijhof, 2012-2013
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */
-
 class ClientAction extends Action {
 
 	/**

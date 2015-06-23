@@ -1,8 +1,8 @@
 <?php
 /**
- * "Getrun" action.
+ * Get details about a specific run.
  *
- * @author John Resig, 2008-2011
+ * @author John Resig
  * @since 0.1.0
  * @package TestSwarm
  */

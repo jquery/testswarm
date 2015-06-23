@@ -1,8 +1,8 @@
 <?php
 /**
- * Class to extract information from a user agent string.
+ * Extract information from a user agent string.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

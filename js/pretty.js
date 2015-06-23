@@ -1,10 +1,9 @@
 /**
  * JavaScript Pretty Date
+ * Copyright (c) 2008 John Resig (jquery.com)
+ * Licensed under the MIT license.
  *
- * @author John Resig (ejohn.org), 2008-2011
- * @license Licensed under the MIT and GPL licenses.
- *
- * Modified version for TestSwarm (2012, 2014).
+ * This is a modified version for TestSwarm.
  */
 
 /**

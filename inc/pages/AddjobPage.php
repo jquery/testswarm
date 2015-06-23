@@ -1,9 +1,9 @@
 <?php
 /**
- * "Addjob" page.
+ * Page interface for AddjobAction.
  *
- * @author John Resig, 2008-2011
- * @author Timo Tijhof, 2012
+ * @author John Resig
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */

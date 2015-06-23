@@ -1,8 +1,8 @@
 <?php
 /**
- * "Logout" page.
+ * Page interface for LogoutAction.
  *
- * @author John Resig, 2008-2011
+ * @author John Resig
  * @since 0.1.0
  * @package TestSwarm
  */

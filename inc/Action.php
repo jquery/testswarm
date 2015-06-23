@@ -1,9 +1,10 @@
 <?php
 /**
- * The Action class is base for the TestSwarm actions.
- * Used in Pages and Api.
+ * Base class for querying data and perfoming write actions in TestSwarm.
  *
- * @author Timo Tijhof, 2012
+ * Used by the API and internally for the web pages.
+ *
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

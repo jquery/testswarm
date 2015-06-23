@@ -1,8 +1,8 @@
 <?php
 /**
- * "Info" action.
+ * Get general information about this TestSwarm install.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

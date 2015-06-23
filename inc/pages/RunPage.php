@@ -1,12 +1,11 @@
 <?php
 /**
- * "Run" page.
+ * Join the swarm and run tests.
  *
- * @author John Resig, 2008-2011
+ * @author John Resig
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class RunPage extends Page {
 
 	protected function initContent() {

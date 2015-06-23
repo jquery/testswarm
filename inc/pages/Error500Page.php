@@ -1,10 +1,11 @@
 <?php
 /**
- * Error "500" handler.
+ * Error page handler for HTTP 500.
+ *
  * No database queries should be made from this class, because when
  * the database is locked it will throw an exception that leads here.
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

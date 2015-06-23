@@ -1,12 +1,12 @@
 <?php
 /**
- * Basic class to abstract database interaction.
+ * Database abstraction layer for MySQL.
  *
  * Some methods are based on:
- * - svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/Database.php?view=markup&pathrev=113601
- * - svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/DatabaseMysql.php?view=markup&pathrev=112598
+ * - http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/Database.php?view=markup&pathrev=113601
+ * - http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/DatabaseMysql.php?view=markup&pathrev=112598
  *
- * @author Timo Tijhof, 2012
+ * @author Timo Tijhof
  * @since 1.0.0
  * @package TestSwarm
  */

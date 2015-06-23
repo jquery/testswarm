@@ -1,8 +1,10 @@
 <?php
 /**
- * "Cleanup" action (previously WipeAction)
+ * Gargage collection and and timeout handling.
  *
- * @author John Resig, 2008-2011
+ * Must be regularly run from cron.
+ *
+ * @author John Resig
  * @since 0.1.0
  * @package TestSwarm
  */

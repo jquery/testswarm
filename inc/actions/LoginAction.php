@@ -1,9 +1,9 @@
 <?php
 /**
- * "Login" action.
+ * Authenticate with a project and start the session.
  *
- * @author John Resig, 2008-2011
- * @author Timo Tijhof, 2012-2013
+ * @author John Resig
+ * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
  */

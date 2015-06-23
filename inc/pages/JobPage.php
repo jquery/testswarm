@@ -1,13 +1,12 @@
 <?php
 /**
- * "Job" page.
+ * Page interface for JobAction.
  *
- * @author John Resig, 2008-2011
- * @author Jörn Zaefferer, 2012
+ * @author John Resig
+ * @author Jörn Zaefferer
  * @since 0.1.0
  * @package TestSwarm
  */
-
 class JobPage extends Page {
 
 	public function execute() {
