@@ -22,7 +22,6 @@ class Api {
 	protected static $formats = array(
 		'json',
 		'jsonp',
-		'php',
 		'debug',
 	);
 
@@ -65,13 +64,6 @@ class Api {
 					. ')';
 				break;
 
-			// https://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/api/ApiFormatPhp.php?revision=103273&view=markup
-			case 'php':
-				header( 'Content-Type: application/vnd.php.serialized; charset=utf-8' );
-				echo serialize( $this->response );
-				break;
-
-			// http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/api/ApiFormatDump.php?revision=70727&view=markup
 			case 'debug':
 				$debugPage = ApiDebugPage::newFromContext( $this->context );
 				$debugPage->setApiResponse( $this->response );
