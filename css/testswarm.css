@@ -427,6 +427,11 @@ h2 + .row {
 	background-image: url(../img/browser-ie-8.png);
 }
 
+.swarm-browser-edge,
+.swarm-browser-ie-12 {
+	background-image: url(../img/browser-edge.png);
+}
+
 .swarm-browser-opera,
 .swarm-browser-opera_mini,
 .swarm-browser-opera_mobile {
