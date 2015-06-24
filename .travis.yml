@@ -1,9 +1,15 @@
 language: php
 php:
-  - "5.4"
   - "5.6"
-before_script:
-  - npm install -g jshint
+  - "5.5"
+  - "5.4"
+install:
+  - composer install
 script:
-  - find . -name '*.php' -not -path '*/external/*' -print0 | xargs -0 -L 1 -P 8 php -l
-  - jshint .
+  - composer test
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#jquery-dev"
+    template:
+      - "%{repository}#%{build_number} (%{branch} - %{commit} %{author}): %{message} - %{build_url}"

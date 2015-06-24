@@ -1,5 +1,15 @@
 {
-    "require": {
+	"require": {
+		"php": ">=5.4.0",
         "ua-parser/uap-php": "3.4.2"
-    }
+	},
+	"require-dev": {
+		"jakub-onderka/php-parallel-lint": "0.9"
+	},
+	"scripts": {
+		"test": [
+			"parallel-lint . --exclude external --exclude vendor --exclude node_modules",
+			"npm install && npm test"
+		]
+	}
 }
