@@ -446,6 +446,10 @@ h2 + .row {
 	background-image: url(../img/browser-webkit.png);
 }
 
+.swarm-browser-yandex_browser {
+	background-image: url(../img/browser-yandex.png);
+}
+
 .swarm-device-ipad {
 	background-image: url(../img/device-ipad.png);
 }
