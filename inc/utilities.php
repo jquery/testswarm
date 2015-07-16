@@ -231,18 +231,21 @@ function swarmdb_dateformat( $timestamp = 0 ) {
 	return gmdate( 'YmdHis', $timestamp );
 }
 
-/*
+/**
  * Central function to get paths to files and directories
  * @since 0.1.0
  *
  * @param $rel string: Relative path from the testswarm root, without leading slash
- * @param $options array|string: A string or an array of string. Options: 'fullurl'.
- * Any urls outputted through the API should use the 'fullpath' option, or otherwise make
- * sure that the url is including protocol and hostname.
+ * @param $options array|string: A string or an array of string.
+ *  Any urls outputted through the API should use the 'fullpath' option, or otherwise make
+ *  sure that the url is including protocol and hostname.
+ *  Options:
+ *  - 'fullurl': Output a full url including hostname.
+ *  - 'hash': Include a query string with a file hash.
  * @return string Relative path from the domain root to the specified file or directory
  */
 function swarmpath( $rel, $options = array() ) {
-	global $swarmContext;
+	global $swarmContext, $swarmInstallDir;
 
 	// Only normalize the contextpath once
 	static $path;
@@ -273,6 +276,11 @@ function swarmpath( $rel, $options = array() ) {
 		$prefix = $path;
 	}
 
+	$suffix = '';
+	if ( in_array( 'hash', $options ) && is_readable( "$swarmInstallDir/$rel" ) ) {
+		$suffix = '?v=' . substr( sha1_file( "$swarmInstallDir/$rel" ), 0, 8 );
+	}
+
 	// Just in case, strip the leading slash
 	// from the requested path (check length, becuase may be an empty string,
 	// avoid PHP E_NOTICE for undefined [0], which could JSON output to be interrupted)
@@ -280,5 +288,5 @@ function swarmpath( $rel, $options = array() ) {
 		$rel = substr($rel, 1);
 	}
 
-	return $prefix . $rel;
+	return $prefix . $rel . $suffix;
 }

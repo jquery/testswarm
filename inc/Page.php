@@ -242,9 +242,9 @@ abstract class Page {
 	$displayTitleHtml = $this->getDisplayTitleHtml();
 ?>
 	<title><?php echo htmlentities( $htmlTitle ); ?></title>
-	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/css/bootstrap.css' ); ?>">
-	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/css/bootstrap-responsive.css' ); ?>">
-	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/css/bootstrap.css', 'hash' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'external/bootstrap/css/bootstrap-responsive.css', 'hash' ); ?>">
+	<link rel="stylesheet" href="<?php echo swarmpath( 'css/testswarm.css', 'hash' ); ?>">
 	<script>
 	(function (h) { h.className = h.className.replace(/\bno-js\b/,'js')})(document.documentElement);
 	SWARM = <?php
@@ -331,10 +331,10 @@ if ( $auth ) {
 			</p>
 		</footer>
 	</div>
-	<script src="<?php echo swarmpath( 'external/jquery/jquery.js' ); ?>"></script>
-	<script src="<?php echo swarmpath( 'external/bootstrap/js/bootstrap-dropdown.js' ); ?>"></script>
-	<script src="<?php echo swarmpath( 'js/pretty.js' ); ?>"></script>
-	<script src="<?php echo swarmpath( 'js/testswarm.js' ); ?>"></script><?php
+	<script src="<?php echo swarmpath( 'external/jquery/jquery.js', 'hash' ); ?>"></script>
+	<script src="<?php echo swarmpath( 'external/bootstrap/js/bootstrap-dropdown.js', 'hash' ); ?>"></script>
+	<script src="<?php echo swarmpath( 'js/pretty.js', 'hash' ); ?>"></script>
+	<script src="<?php echo swarmpath( 'js/testswarm.js', 'hash' ); ?>"></script><?php
 
 	foreach ( $this->bodyScripts as $bodyScript ) {
 		echo "\n\t" . html_tag( 'script', array( 'src' => $bodyScript ) );
