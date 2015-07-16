@@ -23,6 +23,7 @@ class ClientsPage extends Page {
 		$request = $context->getRequest();
 
 		$this->setTitle( 'Clients' );
+		$this->setRobots( 'index,nofollow' );
 		$html = '';
 
 		$error = $this->getAction()->getError();

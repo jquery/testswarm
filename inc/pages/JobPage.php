@@ -22,7 +22,7 @@ class JobPage extends Page {
 		$auth = $this->getContext()->getAuth();
 
 		$this->setTitle( "Job status" );
-		$this->setRobots( "noindex,nofollow" );
+		$this->setRobots( 'noindex,nofollow' );
 		$this->bodyScripts[] = swarmpath( "js/job.js" );
 
 		$error = $this->getAction()->getError();

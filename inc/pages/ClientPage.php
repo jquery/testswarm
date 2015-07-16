@@ -18,6 +18,7 @@ class ClientPage extends Page {
 
 	protected function initContent() {
 		$this->setTitle( 'Client' );
+		$this->setRobots( 'noindex,nofollow' );
 
 		$error = $this->getAction()->getError();
 		$data = $this->getAction()->getData();
