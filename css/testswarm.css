@@ -396,6 +396,10 @@ h2 + .row {
 	background-size: contain;
 }
 
+.swarm-browser-android {
+	background-image: url(../img/browser-android.png);
+}
+
 .swarm-browser-chrome {
 	background-image: url(../img/browser-chrome.png);
 }
