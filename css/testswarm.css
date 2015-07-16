@@ -404,6 +404,10 @@ h2 + .row {
 	background-image: url(../img/browser-chromium.png);
 }
 
+.swarm-browser-chrome_mobile {
+	background-image: url(../img/browser-chrome_android.png);
+}
+
 .swarm-browser-firefox {
 	background-image: url(../img/browser-firefox.png);
 }
