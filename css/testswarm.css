@@ -495,7 +495,8 @@ h2 + .row {
 	background-image: url(../img/os-win7.png);
 }
 
-.swarm-os-windows_8::after {
+.swarm-os-windows_8::after,
+.swarm-os-windows_10::after {
 	background-image: url(../img/os-win8.png);
 }
 
