@@ -8,7 +8,7 @@ Be sure to obtain an authentication token first by [creating a project](../#crea
 
 ## Test suite runs
 
-Before you can submit a job you has to have an actual test suite. Presumably you already have this but there are a few requirements that you need to check and implement as needed. Currently TestSwarm supports the following unit test frameworks:
+Before you can submit a job you have to have an actual test suite. Presumably you already have this but there are a few requirements that you need to check and implement as needed. Currently TestSwarm supports the following unit test frameworks:
 
 * [QUnit](http://qunitjs.com/) (jQuery)
 * [UnitTestJS](http://github.com/tobie/unittest_js) (Prototype, Scriptaculous)
