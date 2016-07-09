@@ -155,7 +155,11 @@ $description
 		if ( $this->getOption( 'help' ) ) {
 			$this->displayHelp();
 		} else {
-			$this->execute();
+			try {
+				$this->execute();
+			} catch ( Exception $e ) {
+				$this->error( $e );
+			}
 		}
 		$this->out( '' );
 		exit;

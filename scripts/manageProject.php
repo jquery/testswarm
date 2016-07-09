@@ -13,9 +13,10 @@ class ManageProjectScript extends MaintenanceScript {
 
 	protected function init() {
 		$this->setDescription(
-			'Create a new TestSwarm project. Returns the auth token (can be re-created with refreshProjectToken.php).'
+			'Create or update a TestSwarm project.'
 		);
 		$this->registerOption( 'create', 'boolean', 'Pass this to the create if it doesn\'t exist.' );
+		$this->registerOption( 'delete', 'boolean', 'Pass this to remove a project and recursively delete all its jobs and runs.' );
 		$this->registerOption( 'id', 'value', 'ID of project (must be in format: "' . LoginAction::getNameValidationRegex() . '").' );
 		$this->registerOption( 'display-title', 'value', 'Display title (free form text, max: 255 chars)' );
 		$this->registerOption( 'password', 'value', 'Password for this project (omit to enter in interactive mode)' );
@@ -23,13 +24,12 @@ class ManageProjectScript extends MaintenanceScript {
 	}
 
 	protected function execute() {
-		$create = $this->getOption( 'create' );
-
-		if ( $create ) {
+		if ( $this->getOption( 'create' ) ) {
 			$this->create();
+		} elseif ( $this->getOption( 'delete' ) ) {
+			$this->delete();
 		} else {
 			$this->update();
-
 		}
 	}
 
@@ -88,7 +88,6 @@ class ManageProjectScript extends MaintenanceScript {
 	protected function update() {
 		$db = $this->getContext()->getDB();
 
-
 		$id = $this->getOption( 'id' );
 		$displayTitle = $this->getOption( 'display-title' );
 		$siteUrl = $this->getOption( 'site-url' );
@@ -132,6 +131,73 @@ class ManageProjectScript extends MaintenanceScript {
 		}
 
 		$this->out( 'Project has been updated.' );
+	}
+
+	public function delete() {
+		$db = $this->getContext()->getDB();
+
+		$projectID = $this->getOption( 'id' );
+		if ( !$projectID ) {
+			$this->error( '--id is required.' );
+		}
+
+		// Ensure the project exists.
+		$field = $db->getOne(str_queryf( 'SELECT id FROM projects WHERE id = %s;', $projectID ));
+		if ( !$field ) {
+			$this->error( 'Project does not exist.' );
+		}
+
+		$this->out( "Are you sure you want to remove project '$projectID' and all associated jobs and runs? (Y/N)" );
+		$answer = $this->cliInput();
+		if ( $answer !== 'Y' ) {
+			$this->error( 'Aborted.' );
+			return;
+		}
+
+		$batchSize = 100;
+		$stats = array();
+		while ( true ) {
+			$jobRows = $db->getRows(str_queryf(
+				'SELECT id
+				FROM jobs
+				WHERE project_id = %s
+				ORDER BY id
+				LIMIT %u;',
+				$projectID,
+				$batchSize
+			));
+			if ( !$jobRows ) {
+				// Done
+				break;
+			}
+			$jobIDs = array_map( function ( $row ) { return $row->id; }, $jobRows );
+			$this->out( '...deleting ' . count( $jobIDs ) . ' jobs' );
+			$action = WipejobAction::newFromContext( $this->getContext() );
+			$result = $action->doWipeJobs( 'delete', $jobIDs, $batchSize );
+			$this->mergeStats( $stats, $result );
+		}
+		foreach ( $stats as $key => $val ) {
+			$this->out( "deleted $key rows: $val");
+		}
+
+		$this->out( '' );
+		$this->out( '...deleting project credentials' );
+		$db->query(str_queryf( 'DELETE FROM projects WHERE id = %s;', $projectID ));
+
+		$this->out( 'project has been deleted.' );
+
+		$this->out( '' );
+		$this->out( 'Done!' );
+	}
+
+	protected function mergeStats( array &$target, array $add ) {
+		foreach ( $add as $key => $val ) {
+			if ( isset( $target[$key] ) ) {
+				$target[$key] += $val;
+			} else {
+				$target[$key] = $val;
+			}
+		}
 	}
 }
 

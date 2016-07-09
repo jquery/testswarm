@@ -49,21 +49,40 @@ class WipejobAction extends Action {
 			return;
 		}
 
-		$runRows = $db->getRows(str_queryf(
+		$this->doWipeJobs( $wipeType, [ $jobID ] );
+
+		$this->setData( array(
+			'jobID' => $jobID,
+			'type' => $wipeType,
+			'result' => 'ok',
+		) );
+	}
+
+	public function doWipeJobs( $wipeType, array $jobIDs, $batchSize = 100 ) {
+		$db = $this->getContext()->getDB();
+		$stats = array(
+			'jobs' => count( $jobIDs ),
+			'runs' => 0,
+			'run_useragent' => 0,
+		);
+
+		$allRunRows = $db->getRows(str_queryf(
 			'SELECT id
 			FROM runs
-			WHERE job_id = %u;',
-			$jobID
+			WHERE job_id IN %l;',
+			$jobIDs
 		));
 
-		if ( $runRows ) {
-			foreach ( $runRows as $runRow ) {
+		if ( $allRunRows ) {
+			$chunks = array_chunk( $allRunRows, $batchSize );
+			foreach ( $chunks as $runRows ) {
+				$runIDs = array_map( function ( $row ) { return $row->id; }, $runRows );
 				if ( $wipeType === 'delete' ) {
 					$db->query(str_queryf(
 						'DELETE
 						FROM run_useragent
-						WHERE run_id = %u;',
-						$runRow->id
+						WHERE run_id in %l;',
+						$runIDs
 					));
 				} elseif ( $wipeType === 'reset' ) {
 					$db->query(str_queryf(
@@ -73,15 +92,16 @@ class WipejobAction extends Action {
 							completed = 0,
 							results_id = NULL,
 							updated = %s
-						WHERE run_id = %u;',
+						WHERE run_id in %l;',
 						swarmdb_dateformat( SWARM_NOW ),
-						$runRow->id
+						$runIDs
 					));
 				}
+				$stats['run_useragent'] += $db->getAffectedRows();
 			}
 		}
 
-		// This should be outside the if for $runRows, because jobs
+		// This should be outside the if for $allRunRows, because jobs
 		// can sometimes be created without any runs (by accidently).
 		// Those should be deletable as well, thus this has to be outside the loop.
 		// Also, no need to do this in a loop, just delete them all in one query.
@@ -89,21 +109,19 @@ class WipejobAction extends Action {
 			$db->query(str_queryf(
 				'DELETE
 				FROM runs
-				WHERE job_id = %u;',
-				$jobID
+				WHERE job_id IN %l;',
+				$jobIDs
 			));
+			$stats['runs'] += $db->getAffectedRows();
 			$db->query(str_queryf(
 				'DELETE
 				FROM jobs
-				WHERE id = %u;',
-				$jobID
+				WHERE id IN %l;',
+				$jobIDs
 			));
+			$stats['jobs'] += $db->getAffectedRows();
 		}
 
-		$this->setData( array(
-			'jobID' => $jobID,
-			'type' => $wipeType,
-			'result' => 'ok',
-		) );
+		return $stats;
 	}
 }

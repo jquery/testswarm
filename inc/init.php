@@ -212,7 +212,7 @@ unset( $server, $refresh_control );
  * Custom PHP settings
  * @{
  */
-if ( $swarmConfig->debug->phpErrorReporting ) {
+if ( $swarmConfig->debug->phpErrorReporting || SWARM_ENTRY === 'SCRIPT' ) {
 	error_reporting( E_ALL & ~E_DEPRECATED );
 	ini_set( 'display_errors', 1 );
 } else {
