@@ -37,7 +37,6 @@ class ProjectPage extends Page {
 			$info[] = 'Homepage: ' . html_tag( 'a', array( 'href' => $data['info']['site_url'] ), parse_url( $data['info']['site_url'], PHP_URL_HOST ) ?: $data['info']['site_url'] );
 		}
 		$info[] = 'Created: ' . self::getPrettyDateHtml( $data['info'], 'created' );
-		$info[] = 'Last updated: ' . self::getPrettyDateHtml( $data['info'], 'updated' );
 
 		$html .= '<div class="well well-small">' . implode( ' <span class="muted">|</span> ', $info ) . '</div>';
 
