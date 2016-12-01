@@ -127,11 +127,15 @@ function object_merge( $obj1, $obj2, $options = null ) {
  * @source php.net/mysql-query#86447
  */
 function str_queryf($string) {
+	global $swarmContext;
+
 	$args = func_get_args();
 	array_shift($args);
 	$len = strlen($string);
 	$sql_query = '';
 	$args_i = 0;
+
+	$db = $swarmContext->getDB();
 
 	for ( $i = 0; $i < $len; $i++ ) {
 		if ( $string[$i] === '%' ) {
@@ -145,11 +149,11 @@ function str_queryf($string) {
 					$sql_query .= "" . intval( $args[$args_i] );
 					break;
 				case 's':
-					$sql_query .= "'" . mysql_real_escape_string( $args[$args_i] ) . "'";
+					$sql_query .= "'" . $db->strEncode( $args[$args_i] ) . "'";
 					break;
 				case 'l':
 					$rawList = is_array( $args[$args_i] ) ? $args[$args_i] : array( $args[$args_i] );
-					$escapedList = array_map( 'mysql_real_escape_string', $rawList );
+					$escapedList = array_map( array( $db, 'strEncode' ), $rawList );
 					$sql_query .= "('" . implode( "', '", $escapedList ) . "')";
 					break;
 			}

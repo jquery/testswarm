@@ -3,8 +3,9 @@
  * Database abstraction layer for MySQL.
  *
  * Some methods are based on:
- * - http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/Database.php?view=markup&pathrev=113601
- * - http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/db/DatabaseMysql.php?view=markup&pathrev=112598
+ * - https://github.com/wikimedia/mediawiki/blob/1.27.0/includes/db/Database.php
+ * - https://github.com/wikimedia/mediawiki/blob/1.27.0/includes/db/DatabaseMysqlBase.php
+ * - https://github.com/wikimedia/mediawiki/blob/1.27.0/includes/db/DatabaseMysqli.php
  *
  * @author Timo Tijhof
  * @since 1.0.0
@@ -27,10 +28,9 @@ class Database {
 	 * Creates a Database object, opens the connection and returns the instance.
 	 *
 	 * @param context TestSwarmContext
-	 * @param $connType int: [optional]
 	 */
 
-	public static function newFromContext( TestSwarmContext $context, $connType = SWARM_DBCON_DEFAULT ) {
+	public static function newFromContext( TestSwarmContext $context ) {
 		$dbConf = $context->getConf()->database;
 		$db = new self();
 
@@ -40,7 +40,7 @@ class Database {
 		$db->password = $dbConf->password;
 		$db->dbname = $dbConf->database;
 
-		$db->open( $connType );
+		$db->open();
 
 		return $db;
 	}
@@ -54,49 +54,21 @@ class Database {
 		return $this->dbname;
 	}
 
-	/**
-	 * @param $connType int: SWARM_DBCON_DEFAULT or SWARM_DBCON_PERSISTENT.
-	 */
-	public function open( $connType = SWARM_DBCON_DEFAULT ) {
+	public function open() {
 		$this->close();
 
-		switch ( $connType ) {
-		case SWARM_DBCON_DEFAULT:
-			$this->conn = mysql_connect( $this->host, $this->username, $this->password, /*force_new=*/true );
-			break;
-		case SWARM_DBCON_PERSISTENT:
-			$this->conn = mysql_pconnect( $this->host, $this->username, $this->password );
-			break;
-		default:
-			throw new SwarmException( 'Invalid connection type.' );
-		}
-
+		$this->conn = mysqli_connect( $this->host, $this->username, $this->password, $this->dbname );
 		if ( !$this->conn ) {
 			throw new SwarmException( "Connection to {$this->host} failed.\nMySQL Error " . $this->lastErrNo() . ': ' . $this->lastErrMsg() );
 		}
-
-		if ( $this->dbname ) {
-			$isOK = mysql_select_db( $this->dbname, $this->conn );
-			if ( !$isOK ) {
-				throw new SwarmException( "Selecting database `{$this->dbname}` on {$this->host} failed." );
+		if ( method_exists( $this->conn, 'set_charset' ) ) {
+			if ( !$this->conn->set_charset( 'binary' ) ) {
+				throw new SwarmException( 'Error setting character set on MySQL connection' );
 			}
-		} else {
-			$isOK = (bool)$this->conn;
 		}
 
-		$this->isOpen = $isOK;
+		$this->isOpen = true;
 		return $this;
-	}
-
-	/** @return bool */
-	public function ping() {
-		$ping = mysql_ping( $this->conn );
-		if ( $ping ) {
-			return true;
-		}
-
-		$this->open();
-		return true;
 	}
 
 	/** @return bool */
@@ -113,14 +85,14 @@ class Database {
 
 	/** @return bool */
 	protected function closeConn() {
-		return mysql_close( $this->conn );
+		return mysqli_close( $this->conn );
 	}
 
 	/** @return mixed|false */
 	public function getOne( $sql ) {
 		$res = $this->doQuery( $sql );
 		if ( $res && $this->getNumRows( $res ) ) {
-			$row = mysql_fetch_array( $res );
+			$row = mysqli_fetch_array( $res );
 			return $row ? reset( $row ) : false;
 		}
 		return false;
@@ -163,7 +135,7 @@ class Database {
 	/**
 	 * @param $table string
 	 * @param $fieldName string
-	 * @return bool|object: see also php.net/mysql_fetch_field
+	 * @return bool|object: see also http://php.net/mysqli-result.fetch-field-direct
 	 */
 	public function fieldInfo( $table, $fieldName ) {
 		$table = $this->addIdentifierQuotes( $table );
@@ -176,9 +148,9 @@ class Database {
 			return false;
 		}
 
-		$n = mysql_num_fields( $response );
+		$n = intval( $response->field_count );
 		for ( $i = 0; $i < $n; $i += 1 ) {
-			$fieldInfoObj = mysql_fetch_field( $response, $i );
+			$fieldInfoObj = $response->fetch_field_direct( $i );
 			if ( $fieldInfoObj->name === $fieldName ) {
 				return $fieldInfoObj;
 			}
@@ -247,38 +219,29 @@ class Database {
 
 	/** @return int */
 	public function getNumRows( $res ) {
-		$n = mysql_num_rows( $res );
-		if ( !$this->ignoreErrors && $this->lastErrNo() ) {
-			throw new SwarmException( 'Error in getNumRows: ' . $this->lastErrMsg() );
-		}
-		return intval( $n );
+		return intval( $res->num_rows );
 	}
 
 	/** @return int */
 	public function getInsertId() {
-		return intval( mysql_insert_id( $this->conn ) );
+		return intval( $this->conn->insert_id );
 	}
 
 	/** @return int */
 	public function getAffectedRows() {
-		return intval( mysql_affected_rows( $this->conn ) );
+		return intval( $this->conn->affected_rows );
 	}
 
 	public function lastErrNo() {
-		return $this->conn ? mysql_errno( $this->conn ) : mysql_errno();
+		return $this->conn ? mysqli_errno( $this->conn ) : mysqli_connect_errno();
 	}
 
 	public function lastErrMsg() {
-		return $this->conn ? mysql_error( $this->conn ) : mysql_error();
+		return $this->conn ? mysqli_error( $this->conn ) : mysqli_connect_error();
 	}
 
 	public function strEncode( $str ) {
-		$encoded = mysql_real_escape_string( $str, $this->conn );
-		if ( $encoded === false ) {
-			$this->ping();
-			$encoded = mysql_real_escape_string( $str, $this->conn );
-		}
-		return $encoded;
+		return $this->conn->real_escape_string( $str );
 	}
 
 	public function addIdentifierQuotes( $s ) {
@@ -294,7 +257,7 @@ class Database {
 	 */
 	protected function doQuery( $sql ) {
 		$microtimeStart = microtime( /*get_as_float=*/true );
-		$queryResponse = mysql_query( $sql, $this->conn );
+		$queryResponse = $this->conn->query( $sql );
 
 		if ( !$this->ignoreErrors && ( $queryResponse === false || $this->lastErrNo() ) ) {
 			throw new SwarmException( 'Error in doQuery: ' . $this->lastErrMsg() );
@@ -306,7 +269,7 @@ class Database {
 	}
 
 	protected function fetchObject( $res ) {
-		$obj = mysql_fetch_object( $res );
+		$obj = $res->fetch_object();
 		if ( !$this->ignoreErrors && $this->lastErrNo() ) {
 			throw new SwarmException( 'Error in fetchObject: ' . $this->lastErrMsg() );
 		}
@@ -314,13 +277,8 @@ class Database {
 	}
 
 	public function freeResult( $res ) {
-		if ( is_resource( $res ) ) {
-			$ok = mysql_free_result( $res );
-			if ( $ok ) {
-				return true;
-			}
-		}
-		throw new SwarmException( 'Unable to free MySQL result' );
+		$res->free_result( $res );
+		return true;
 	}
 
 	public function ignoreErrors( $setting ) {
@@ -363,7 +321,7 @@ class Database {
 	}
 
 	protected function checkEnvironment() {
-		if ( !function_exists( 'mysql_connect' ) ) {
+		if ( !function_exists( 'mysqli_connect' ) ) {
 			throw new SwarmException( 'MySQL functions missing.' );
 		}
 	}

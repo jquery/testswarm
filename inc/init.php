@@ -51,8 +51,8 @@ $swarmInstallDir = dirname( __DIR__ );
 define( 'SWARM_NOW', 0 );
 
 // Database::open, connection types
-define( 'SWARM_DBCON_DEFAULT', 10 );
-define( 'SWARM_DBCON_PERSISTENT', 11 );
+define( 'SWARM_DBCON_DEFAULT', 10 ); // obsolete
+define( 'SWARM_DBCON_PERSISTENT', 11 ); // deprecated
 
 /**@}*/
 
