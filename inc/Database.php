@@ -277,7 +277,7 @@ class Database {
 	}
 
 	public function freeResult( $res ) {
-		$res->free_result( $res );
+		$res->free_result();
 		return true;
 	}
 
