@@ -75,7 +75,7 @@ class ManageProjectScript extends MaintenanceScript {
 		}
 
 		$this->out(
-			'Project ' . $displayTitle . ' has been succesfully created!' . PHP_EOL
+			'Project ' . $displayTitle . ' has been successfully created!' . PHP_EOL
 			. 'The following auth token has been generated for this project:' . PHP_EOL
 			. PHP_EOL
 			. "\t" . $data['authToken'] . PHP_EOL
