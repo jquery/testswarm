@@ -61,9 +61,10 @@ class WipejobAction extends Action {
 	public function doWipeJobs( $wipeType, array $jobIDs, $batchSize = 100 ) {
 		$db = $this->getContext()->getDB();
 		$stats = array(
-			'jobs' => count( $jobIDs ),
+			'jobs' => 0,
 			'runs' => 0,
 			'run_useragent' => 0,
+			'runresults' => 0,
 		);
 
 		$allRunRows = $db->getRows(str_queryf(
@@ -98,11 +99,21 @@ class WipejobAction extends Action {
 					));
 				}
 				$stats['run_useragent'] += $db->getAffectedRows();
+
+				if ( $wipeType === 'delete' ) {
+					$db->query(str_queryf(
+						'DELETE
+						FROM runresults
+						WHERE run_id in %l;',
+						$runIDs
+					));
+					$stats['runresults'] += $db->getAffectedRows();
+				}
 			}
 		}
 
 		// This should be outside the if for $allRunRows, because jobs
-		// can sometimes be created without any runs (by accidently).
+		// can sometimes be created without any runs (by accident).
 		// Those should be deletable as well, thus this has to be outside the loop.
 		// Also, no need to do this in a loop, just delete them all in one query.
 		if ( $wipeType === 'delete' ) {

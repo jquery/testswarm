@@ -15,7 +15,7 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 		$this->setDescription(
 			'Deletes all database entries for `jobs` and `clients`.'
 			. ' Including related rows in other tables, such as `runs`, `run_useragent`'
-			. ' and `runresults.'
+			. ' and `runresults`.'
 		);
 		$this->registerOption( 'quick', 'boolean', 'Skip the countdown warning that allowed aborting the script without damage.' );
 	}
@@ -24,7 +24,7 @@ class ClearJobsAndClientsScript extends MaintenanceScript {
 		$db = $this->getContext()->getDB();
 
 		if ( !$this->getOption( 'quick' ) ) {
-			$this->timeWarningForScriptWill( 'permanently delete all jobs' );
+			$this->timeWarningForScriptWill( 'permanently delete all jobs and clients' );
 		}
 
 		$clearTables = array( 'runresults', 'run_useragent', 'runs', 'clients', 'jobs' );

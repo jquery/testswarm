@@ -219,7 +219,7 @@ $description
 	 * @param string $action: Correct grammar "This script will $action!"
 	 */
 	protected function timeWarningForScriptWill( $action, $seconds = 10 ) {
-		$this->wait( 10, "WARNING: This script will $action! You can abort now with Control-C. Starting in " );
+		$this->wait( 10, "WARNING: This script will $action!\nYou can abort now with Control-C. Starting in " );
 	}
 
 	/**
