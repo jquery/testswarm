@@ -232,7 +232,7 @@
 					});
 				});
 
-				QUnit.log = window.TestSwarm.heartbeat;
+				QUnit.log(window.TestSwarm.heartbeat);
 				window.TestSwarm.heartbeat();
 
 				window.TestSwarm.serialize = function() {
