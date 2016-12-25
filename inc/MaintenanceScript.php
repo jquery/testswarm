@@ -244,7 +244,7 @@ $description
 	}
 
 	/**
-	 * Retreive a secret value from the cli.
+	 * Retrieve a secret value from the cli.
 	 * Based on http://www.dasprids.de/blog/2008/08/22/getting-a-password-hidden-from-stdin-with-php-cli.
 	 *
 	 * @param string $message: [optional] text before the input cursor.
