@@ -61,6 +61,25 @@ class JobPage extends Page {
 			$action_bar = '';
 		}
 
+		$html .= '<ul class="pager">';
+		if ( $data['pagination']['prev'] ) {
+			$html .= '<li class="previous">' . html_tag_open( 'a', array(
+				'href' => $data['pagination']['prev']['viewUrl'],
+				'title' => $data['pagination']['prev']['nameText'],
+			) ) . '&larr;&nbsp;Previous</a></li>';
+		} else {
+			$html .= '<li class="previous disabled" title="No previous job"><a href="#">&larr;&nbsp;Previous</a></span>';
+		}
+		if ( $data['pagination']['next'] ) {
+			$html .= '<li class="next">' . html_tag_open( 'a', array(
+				'href' => $data['pagination']['next']['viewUrl'],
+				'title' => $data['pagination']['next']['nameText'],
+				) ) . 'Next&nbsp;&rarr;</a></li>';
+		} else {
+			$html .= '<li class="next disabled" title="No next job"><a href="#">Next&nbsp;&rarr;</a></span>';
+		}
+		$html .= '</ul>';
+
 		$html .= $action_bar;
 		$html .= '<table class="table table-bordered swarm-results swarm-results-unbound-auth"><thead>'
 			. self::getUaHtmlHeader( $data['userAgents'] )

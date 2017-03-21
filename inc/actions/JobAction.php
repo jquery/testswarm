@@ -59,6 +59,7 @@ class JobAction extends Action {
 			'userAgents' => $this->userAgents,
 			'uaSummaries' => $uaSummaries,
 			'summary' => $this->getSummary( $uaSummaries ),
+			'pagination' => $this->getPaginationData( $jobInfo ),
 		) );
 	}
 
@@ -125,6 +126,61 @@ class JobAction extends Action {
 		);
 		self::addTimestampsTo( $ret, $jobRow->created, 'created' );
 		return $ret;
+	}
+
+
+	/**
+	 * @param array $jobInfo from getInfo(), containing 'id' and 'project'
+	 * @return array Rows with 'id', 'name', 'dir'
+	 */
+	protected function getPaginationData( array $jobInfo ) {
+		$prev = $next = null;
+		$pagingRows = $this->getPrevAndNext( $jobInfo );
+		if ( $pagingRows ) {
+			foreach ( $pagingRows as $row ) {
+				if ( $row->dir === 'prev' ) {
+					$prev = array(
+						'nameText' => strip_tags( $row->name ),
+						'viewUrl' => swarmpath( 'job/' . $row->id )
+					);
+				} else {
+					$next = array(
+						'nameText' => strip_tags( $row->name ),
+						'viewUrl' => swarmpath( 'job/' . $row->id )
+					);
+				}
+			}
+		}
+		return array(
+			'prev' => $prev,
+			'next' => $next,
+		);
+	}
+
+	/**
+	 * @param array $jobInfo from getInfo(), containing 'id' and 'project'
+	 * @return array Rows with 'id', 'name', 'dir'
+	 */
+	private function getPrevAndNext( array $jobInfo ) {
+		$db = $this->getContext()->getDB();
+		return $db->getRows(str_queryf(
+			// Get previous and next job within this project (if any)
+			'SELECT * FROM (SELECT id, name, "prev" as dir
+			FROM jobs
+			WHERE id < %u
+			AND project_id = %u
+			ORDER BY id DESC LIMIT 1) prev
+			UNION ALL
+			SELECT * FROM (SELECT id, name, "next" as dir
+			FROM jobs
+			WHERE id > %u
+			AND project_id = %u
+			ORDER BY id ASC LIMIT 1) next',
+			$jobInfo['id'],
+			$jobInfo['project']['id'],
+			$jobInfo['id'],
+			$jobInfo['project']['id']
+		));
 	}
 
 	/**
