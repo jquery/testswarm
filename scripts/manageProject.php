@@ -91,6 +91,7 @@ class ManageProjectScript extends MaintenanceScript {
 		$id = $this->getOption( 'id' );
 		$displayTitle = $this->getOption( 'display-title' );
 		$siteUrl = $this->getOption( 'site-url' );
+		$password = $this->getOption( 'password' );
 
 		if ( !$id ) {
 			$this->error( '--id is required.' );
@@ -102,7 +103,7 @@ class ManageProjectScript extends MaintenanceScript {
 			$this->error( 'Project does not exist. Set --create to create a project.' );
 		}
 
-		if ( !$displayTitle && !$siteUrl ) {
+		if ( !$displayTitle && !$siteUrl && !$password ) {
 			$this->error( 'Unable to perform update. No values provided.' );
 		}
 
@@ -122,6 +123,18 @@ class ManageProjectScript extends MaintenanceScript {
 			$isUpdated = $db->query(str_queryf(
 				'UPDATE projects SET site_url = %s, updated = %s WHERE id = %s;',
 				$siteUrl,
+				swarmdb_dateformat( SWARM_NOW ),
+				$id
+			));
+			if ( !$isUpdated ) {
+				$this->error( 'Failed to update database.' );
+			}
+		}
+
+		if ( $password ) {
+			$isUpdated = $db->query(str_queryf(
+				'UPDATE projects SET password = %s, updated = %s WHERE id = %s;',
+				LoginAction::generatePasswordHash( $password ),
 				swarmdb_dateformat( SWARM_NOW ),
 				$id
 			));
