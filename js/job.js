@@ -87,7 +87,7 @@ jQuery(function( $ ) {
 		}
 	}
 
-	$targetTable.prev().before( $indicator );
+	$targetTable.before( $indicator );
 
 	if ( SWARM.auth ) {
 
