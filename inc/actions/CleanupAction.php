@@ -59,7 +59,7 @@ class CleanupAction extends Action {
 						"UPDATE runresults
 						SET status = %s
 						WHERE id = %u;",
-						ResultAction::$STATE_LOST,
+						ResultAction::STATE_LOST,
 						$row->id
 					));
 				}

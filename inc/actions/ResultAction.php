@@ -8,21 +8,20 @@
  */
 class ResultAction extends Action {
 	// Currently being run in a client
-	public static $STATE_BUSY = 1;
+	const STATE_BUSY = 1;
 
-	// Run by the client is finished, results
-	// have been submitted.
-	public static $STATE_FINISHED = 2;
+	// Run by the client is finished, results have been submitted.
+	const STATE_FINISHED = 2;
 
 	// Run by the client was aborted by the client.
 	// Either the test (inject.js) lost pulse internally
 	// and submitted a partial result, or the test runner (run.js)
 	// aborted the test after conf.client.runTimeout.
-	public static $STATE_ABORTED = 3;
+	const STATE_ABORTED = 3;
 
 	// Client did not submit results, and from CleanAction it
 	// was determined that the client died (no longer sends pings).
-	public static $STATE_LOST = 4;
+	const STATE_LOST = 4;
 
 	/**
 	 * @actionParam int item: Runresults ID.
@@ -118,7 +117,7 @@ class ResultAction extends Action {
 		// If still busy or if the client was lost, then the last update time is irrelevant
 		// Alternatively this could test if $row->updated == $row->created, which would effectively
 		// do the same.
-		if ( $row->status == self::$STATE_BUSY || $row->status == self::$STATE_LOST ) {
+		if ( $row->status == self::STATE_BUSY || $row->status == self::STATE_LOST ) {
 			$data['info']['runTime'] = null;
 		} else {
 			$data['info']['runTime'] = gmstrtotime( $row->updated ) - gmstrtotime( $row->created );
@@ -131,10 +130,10 @@ class ResultAction extends Action {
 
 	public static function getStatus( $statusId ) {
 		$mapping = array();
-		$mapping[self::$STATE_BUSY] = 'Busy';
-		$mapping[self::$STATE_FINISHED] = 'Finished';
-		$mapping[self::$STATE_ABORTED] = 'Aborted';
-		$mapping[self::$STATE_LOST] = 'Client lost';
+		$mapping[self::STATE_BUSY] = 'Busy';
+		$mapping[self::STATE_FINISHED] = 'Finished';
+		$mapping[self::STATE_ABORTED] = 'Aborted';
+		$mapping[self::STATE_LOST] = 'Client lost';
 
 		return isset( $mapping[$statusId] )
 			? $mapping[$statusId]

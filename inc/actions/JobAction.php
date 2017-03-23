@@ -256,7 +256,7 @@ class JobAction extends Action {
 							// Add link to runresults
 							'runResultsUrl' => swarmpath( 'result/' . $runUaRow->results_id ),
 							'runResultsLabel' =>
-								$runresultsRow->status != ResultAction::$STATE_FINISHED
+								$runresultsRow->status != ResultAction::STATE_FINISHED
 								// If not finished, we don't have any numeric label to show
 								// (test could be in progress, or maybe it was aborted/lost)
 								? ''
@@ -346,10 +346,10 @@ class JobAction extends Action {
 	 */
 	public static function getRunresultsStatus( $row ) {
 		$status = (int)$row->status;
-		if ( $status === ResultAction::$STATE_BUSY ) {
+		if ( $status === ResultAction::STATE_BUSY ) {
 			return 'progress';
 		}
-		if ( $status === ResultAction::$STATE_FINISHED ) {
+		if ( $status === ResultAction::STATE_FINISHED ) {
 			// A total of 0 tests ran is also considered an error
 			if ( $row->error > 0 || intval( $row->total ) === 0 ) {
 				return 'error';
@@ -357,13 +357,13 @@ class JobAction extends Action {
 			// Passed or failed
 			return $row->fail > 0 ? 'failed' : 'passed';
 		}
-		if ( $status === ResultAction::$STATE_ABORTED ) {
+		if ( $status === ResultAction::STATE_ABORTED ) {
 			return 'timedout';
 		}
-		if ( $status === ResultAction::$STATE_LOST ) {
+		if ( $status === ResultAction::STATE_LOST ) {
 			return 'lost';
 		}
-		// If status is 4 (ResultAction::$STATE_LOST) it means a CleanupAction
+		// If status is 4 (ResultAction::STATE_LOST) it means a CleanupAction
 		// was aborted between two queries. This is no longer possible, but old
 		// data may still be corrupted. Run fixRunresultCorruption.php to fix
 		// these entries.
