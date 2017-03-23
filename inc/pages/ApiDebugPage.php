@@ -44,7 +44,7 @@ class ApiDebugPage extends Page {
 
 			$html .= "<h4>Response</h4>";
 			$html .= '<pre>';
-			$html .= htmlspecialchars( json_encode( $this->apiResponse, JSON_PRETTY_PRINT ) );
+			$html .= htmlspecialchars( json_encode2( $this->apiResponse, JSON_PRETTY_PRINT ) );
 			$html .= '</pre>';
 		} else {
 			$html .= "<h4>Request <small><code>wasPosted: " . (
@@ -63,12 +63,7 @@ class ApiDebugPage extends Page {
 
 			$html .= "<h4>Response</h4>";
 			$html .= "<pre>";
-
-			ob_start();
-			var_dump( $this->apiResponse );
-			$html .= htmlspecialchars( ob_get_contents() );
-			ob_end_clean();
-
+			$html .= htmlspecialchars( json_encode2( $this->apiResponse, JSON_PRETTY_PRINT ) );
 			$html .= "</pre>";
 		}
 

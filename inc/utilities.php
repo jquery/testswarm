@@ -85,10 +85,11 @@ function html_tag( $tagName, Array $attribs = array(), $content = '' ) {
  *
  * @since 1.0.0
  * @param mixed $value
+ * @param int $flags Additional flags
  * @return string
  */
-function json_encode2( $val ) {
-	return json_encode( $val, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+function json_encode2( $val, $flags = 0 ) {
+	return json_encode( $val, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | $flags );
 }
 
 /**
