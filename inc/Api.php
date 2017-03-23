@@ -12,7 +12,10 @@ class Api {
 	 */
 	protected $context;
 
-	protected $format = 'format';
+	protected $action;
+
+	protected $format = 'json';
+
 	protected $response = array(
 		'error' => array(
 			'internal-error' => 'No response data given.',
@@ -34,12 +37,19 @@ class Api {
 		return in_array( $format, self::$greyFormats );
 	}
 
+	public static function getFormats() {
+		return self::$formats;
+	}
+
+	public function setAction( $action ) {
+		$this->action = $action;
+	}
+
 	public function setFormat( $format ) {
-		if ( in_array( $format, self::$formats ) ) {
-			$this->format = $format;
-		} else {
+		if ( !in_array( $format, self::$formats ) ) {
 			throw new SwarmException( "Unsupported API format `$format`." );
 		}
+		$this->format = $format;
 	}
 
 	public function setResponse( Array $response ) {
@@ -66,6 +76,7 @@ class Api {
 
 			case 'debug':
 				$debugPage = ApiDebugPage::newFromContext( $this->context );
+				$debugPage->setActionName( $this->action );
 				$debugPage->setApiResponse( $this->response );
 				$debugPage->output();
 				break;

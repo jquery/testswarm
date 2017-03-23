@@ -9,7 +9,7 @@
  */
 class WiperunAction extends Action {
 
-	/*
+	/**
 	 * @actionMethod POST: Required.
 	 * @actionParam int run_id
 	 * @actionParam int client_id

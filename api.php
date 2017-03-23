@@ -21,15 +21,17 @@ define( 'SWARM_ENTRY', 'API' );
 header( 'X-Robots-Tag: noindex,nofollow', true );
 
 require_once __DIR__ . '/inc/init.php';
+$action = $swarmContext->getRequest()->getVal( 'action' );
 
-$action = $swarmContext->getRequest()->getVal( 'action', 'info' );
-if ( !$action ) {
-	// getVal will only fallback to "info" if "action" isn't set,
-	// if it is falsy, also use infno (we don't want to instantiate Action
-	// directly if it is an empty string
-	$action = 'info';
+// getVal will only fallback to "help" if "action" is not set.
+// Also fallback if it was set to an empty string.
+if ( $action ) {
+	$defaultFormat = 'json';
+} else {
+	$action = 'apihelp';
+	$defaultFormat = 'debug';
 }
-$format = $swarmContext->getRequest()->getVal( 'format', 'json' );
+$format = $swarmContext->getRequest()->getVal( 'format', $defaultFormat );
 $className = ucfirst( $action ) . 'Action';
 $className = class_exists( $className ) ? $className : null;
 
@@ -51,6 +53,7 @@ if ( $className ) {
 		}
 
 		$api = Api::newFromContext( $swarmContext );
+		$api->setAction( $action );
 		$api->setFormat( $format );
 	} catch ( Exception $e ) {
 		$response = array(

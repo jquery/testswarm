@@ -34,6 +34,11 @@ class ResultAction extends Action {
 		$request = $context->getRequest();
 
 		$item = $request->getInt( 'item' );
+		if ( !$item ) {
+			$this->setError( 'missing-parameters' );
+			return;
+		}
+
 		$row = $db->getRow(str_queryf(
 			'SELECT
 				id,
