@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jquery/testswarm.svg?branch=master)](https://travis-ci.org/jquery/testswarm)
+
 TestSwarm - Distributed Continuous Integration for JavaScript
 =================
 
