@@ -124,10 +124,12 @@ class DBUpdateScript extends MaintenanceScript {
 			$this->unknownDatabaseState( 'clients.useragent_id not found' );
 			return;
 		}
+		$mysql_type_varchar = 253;
 		if ( !$has_run_client
 			&& !$has_users_request
-			&& !$clients_useragent_id->numeric
-			&& $clients_useragent_id->type === 'string'
+			// https://dev.mysql.com/doc/internals/en/myisam-column-attributes.html
+			// https://secure.php.net/mysqli_fetch_field_direct#85771
+			&& $clients_useragent_id->type === $mysql_type_varchar
 		) {
 			$this->out( '... run_client table already dropped' );
 			$this->out( '... users.request already dropped' );
