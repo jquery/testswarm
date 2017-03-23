@@ -49,6 +49,9 @@ if ( $className ) {
 		if ( $actionObj->getData() ) {
 			$response[$action] = $actionObj->getData();
 		}
+
+		$api = Api::newFromContext( $swarmContext );
+		$api->setFormat( $format );
 	} catch ( Exception $e ) {
 		$response = array(
 			'error' => array(
@@ -66,8 +69,6 @@ if ( $className ) {
 	);
 }
 
-$api = Api::newFromContext( $swarmContext );
-$api->setFormat( $format );
 $api->setResponse( $response );
 $api->output();
 
