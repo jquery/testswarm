@@ -168,13 +168,13 @@ class JobAction extends Action {
 			'SELECT * FROM (SELECT id, name, "prev" as dir
 			FROM jobs
 			WHERE id < %u
-			AND project_id = %u
+			AND project_id = %s
 			ORDER BY id DESC LIMIT 1) prev
 			UNION ALL
 			SELECT * FROM (SELECT id, name, "next" as dir
 			FROM jobs
 			WHERE id > %u
-			AND project_id = %u
+			AND project_id = %s
 			ORDER BY id ASC LIMIT 1) next',
 			$jobInfo['id'],
 			$jobInfo['project']['id'],
