@@ -31,7 +31,10 @@ class Error500Page extends Page {
 		if ( $e instanceof SwarmBrowserException ) {
 			$html .= '<div class="row">'
 				. '<div class="span2">' . $e->getBrowserInfo()->getIconHtml() . '</div>'
-				. '<div class="span10">' . $error . '</div>'
+				. '<div class="span10">'
+					. $error
+					. '<div class="alert alert-info">' . $e->getBrowserInfo()->getRawUA() . '</div>'
+				. '</div>'
 				. '</div>';
 		} else {
 			$html .= $error;
