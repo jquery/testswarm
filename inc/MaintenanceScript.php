@@ -293,7 +293,7 @@ $description
 		}
 
 		// Restore stty style
-		shell_exec( 'stty ' . escapeshellarg( $sttyStyle ) );
+		shell_exec( 'stty ' . $sttyStyle );
 
 		return $input;
 	}
