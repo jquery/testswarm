@@ -24,6 +24,33 @@ class SwarmException extends Exception {
 }
 
 /**
+ * TestSwarm BrowserInfo exception
+ *
+ * Will render browser information as provided by ua-parser to the user
+ * in addition to the regular error page rendering. This should help
+ * debug the most common issue of a misconfigured user agent description.
+ *
+ * @since 1.0.0
+ */
+class SwarmBrowserException extends Exception {
+	/** @var BrowserInfo */
+	protected $browserInfo;
+
+	/**
+	 * @param browserInfo $browserInfo
+	 * @param string $error Error message
+	 */
+	public function __construct( BrowserInfo $browserInfo, $error ) {
+		$this->browserInfo = $browserInfo;
+		parent::__construct( $error );
+	}
+
+	public function getBrowserInfo() {
+		return $this->browserInfo;
+	}
+}
+
+/**
  * Utility function for formatting HTML.
  * @since 1.0.0
  *

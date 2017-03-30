@@ -73,7 +73,7 @@ class Client {
 
 		// If the useragent isn't known, abort with an error message
 		if ( !$browserInfo->isInSwarmUaIndex() ) {
-			throw new SwarmException( 'Your browser is not needed by this swarm.' );
+			throw new SwarmBrowserException( $browserInfo, 'Browser not needed by this swarm.' );
 		}
 
 		$clientName = $request->getVal( 'item', 'anonymous' );

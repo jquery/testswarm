@@ -22,17 +22,27 @@ class Error500Page extends Page {
 		$this->setRobots( "noindex,nofollow" );
 
 		$e = $this->exceptionObj;
+		$html = '';
 
-		$html = '<div class="alert alert-error">An internal error occurred.'
+		$error = '<div class="alert alert-error">An internal error occurred.'
 				. ' The following error message was caught:<br><br><strong>'
 				. nl2br( htmlspecialchars( $e->getMessage() ) ) . '</strong></div>';
+
+		if ( $e instanceof SwarmBrowserException ) {
+			$html .= '<div class="row">'
+				. '<div class="span2">' . $e->getBrowserInfo()->getIconHtml() . '</div>'
+				. '<div class="span10">' . $error . '</div>'
+				. '</div>';
+		} else {
+			$html .= $error;
+		}
 
 		if ( $this->getContext()->getConf()->debug->showExceptionDetails ) {
 			$html .=
 				'<p>Caught in <code>.'
 				. htmlspecialchars( substr( $e->getFile(), strlen( $swarmInstallDir ) ) )
 				. '</code> on line <code>' . htmlspecialchars( $e->getLine() )
-				. '</code>.</p><p>Backtrace:</p><pre>' . nl2br( htmlspecialchars( $e->getTraceAsString() ) )
+				. '</code>.</p><p>Backtrace:</p><pre>' . htmlspecialchars( $e->getTraceAsString() )
 				. '</pre>';
 		} else {
 			$html .=
