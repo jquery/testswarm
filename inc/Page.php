@@ -166,7 +166,11 @@ abstract class Page {
 	protected function getPageLink( $path, $label ) {
 		return
 			html_tag_open( 'li', array(
-				'class' => strpos( $this->getSelfPath(), $path ) === 0 ? 'active' : null,
+				// Apply "active" if path equals selfpath (/foo == /foo)
+				// or is contained within (/foo/123 == /foo), but not when
+				// it only starts with the same (/foobar != /foo).
+				'class' => ( $this->getSelfPath() === $path ||
+				( strpos( $this->getSelfPath(), "$path/" ) === 0 ) ) ? 'active' : null,
 			) )
 			.  html_tag( 'a', array(
 				'href' => swarmpath( $path === 'home' ? '' : $path )
