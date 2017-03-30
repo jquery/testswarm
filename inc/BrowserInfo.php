@@ -305,6 +305,18 @@ class BrowserInfo {
 				// position of the wildcard in uaData's value.
 				$myUaData[$key] = substr( $myUaData[$key], 0, strlen( $uaData[$key] ) );
 			}
+			// Android <= 4.3 uses "Android" browser. Android 4.4+ uses "Chrome Mobile".
+			// Except some emulators and tablets, which omit "Mobile" from the User-Agent
+			// string, which confuses ua-parser. Adjust our search criteria to also accept
+			// "Chrome" on "Android" when looking for "Chrome Mobile".
+			// https://github.com/jquery/testswarm/issues/306
+			if ( $key === 'browserFamily' &&
+				$value === 'Chrome Mobile' &&
+				$myUaData['osFamily'] === 'Android' &&
+				$myUaData['browserFamily'] === 'Chrome'
+			) {
+				$uaData[$key] = 'Chrome';
+			}
 		}
 		$diff = array_diff_assoc( $uaData, $myUaData );
 		$precision = count( $uaData ) - count( array_values( $diff ) );
