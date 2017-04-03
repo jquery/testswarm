@@ -306,9 +306,9 @@ class BrowserInfo {
 				$myUaData[$key] = substr( $myUaData[$key], 0, strlen( $uaData[$key] ) );
 			}
 			// Android <= 4.3 uses "Android" browser. Android 4.4+ uses "Chrome Mobile".
-			// Except some emulators and tablets, which omit "Mobile" from the User-Agent
-			// string, which confuses ua-parser. Adjust our search criteria to also accept
-			// "Chrome" on "Android" when looking for "Chrome Mobile".
+			// Except on tablets, which omit "Mobile" from the User-Agent string, which confuses
+			// ua-parser into parsing it as plain "Chrome". Adjust our search criteria to also
+			// accept "Chrome" on "Android" when the requirement was "Chrome Mobile".
 			// https://github.com/jquery/testswarm/issues/306
 			if ( $key === 'browserFamily' &&
 				$value === 'Chrome Mobile' &&
