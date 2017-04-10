@@ -443,7 +443,65 @@
 				};
 			}
 		},
+ 		//Jasmine code taken from https://github.com/jquery/testswarm/issues/167#issuecomment-6357432
+                "jasmine": {
+                        detect: function() {
+                                return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
+                        },
+                        install: function() {
 
+                                var jasmineTestSwarmResults = null;
+				
+				// For jasmine 1.x.x
+                                var testSwarmReporter = {
+                                        reportRunnerStarting: function (runner) {
+                                                // reset counters
+                                                jasmineTestSwarmResults = {
+                                                        fail: 0,
+                                                        error: 0,
+                                                        total: 0
+                                                };
+                                        },
+                                        reportRunnerResults: function (runner)
+                                        {
+                                                // testing finished
+                                                submit(jasmineTestSwarmResults);
+                                        },
+                                        reportSpecStarting: function (spec)
+                                        {
+                                                jasmineTestSwarmResults.total++;
+                                                // we are still alive, trigger heartbeat so test execution won't time out
+                                                window.TestSwarm.heartbeat();
+                                        },
+                                        reportSpecResults: function (spec)
+                                        {
+                                                if(spec.results().failedCount>0) {
+                                                        jasmineTestSwarmResults.fail++;
+                                                }
+                                        }
+                                };
+				
+				// For jasmine 2.x.x
+                                testSwarmReporter.jasmineStarted = testSwarmReporter.reportRunnerStarting;
+                                testSwarmReporter.jasmineDone = testSwarmReporter.reportRunnerResults;
+                                testSwarmReporter.specStarted = testSwarmReporter.reportSpecStarting;
+                                
+                                testSwarmReporter.specDone = function (spec) {
+                                        if (spec.status !== 'passed') {
+                                                jasmineTestSwarmResults.fail++;
+                                        }
+                                };
+                                
+                                 window.TestSwarm.serialize = function () {
+                                        // take only the #wrapper and #html as a test result
+                                        remove('content');
+                                        return trimSerialize();
+                                };
+
+                                var jasmineEnv = jasmine.getEnv();
+                                jasmineEnv.addReporter(testSwarmReporter);
+                        }
+                },
 		// Mocha
 		// http://visionmedia.github.com/mocha/
 		"Mocha": {
