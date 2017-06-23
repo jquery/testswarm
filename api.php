@@ -39,6 +39,8 @@ if ( !Api::isGreyFormat( $format ) ) {
 	session_start();
 }
 
+$api = Api::newFromContext( $swarmContext );
+
 if ( $className ) {
 	try {
 		$actionObj = $className::newFromContext( $swarmContext );
@@ -52,7 +54,6 @@ if ( $className ) {
 			$response[$action] = $actionObj->getData();
 		}
 
-		$api = Api::newFromContext( $swarmContext );
 		$api->setAction( $action );
 		$api->setFormat( $format );
 	} catch ( Exception $e ) {
