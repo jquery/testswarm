@@ -32,8 +32,9 @@ class CleanupAction extends Action {
 			FROM
 				runresults
 			INNER JOIN clients ON runresults.client_id = clients.id
-			WHERE runresults.status = 1
+			WHERE runresults.status = %u
 			AND   clients.updated < %s;",
+			ResultAction::STATE_BUSY,
 			swarmdb_dateformat( Client::getMaxAge( $context ) )
 		));
 

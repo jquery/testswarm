@@ -57,10 +57,10 @@ class SaverunAction extends Action {
 		$total = $request->getInt( 'total', 0 );
 		$fail = $request->getInt( 'fail', 0 );
 		$error = $request->getInt( 'error', 0 );
-		$status = $request->getInt( 'status', 2 );
+		$status = $request->getInt( 'status', ResultAction::STATE_FINISHED );
 		$reportHtml = $request->getVal( 'report_html', '' );
 
-		if ( !in_array( $status, array( 2, 3 ) ) ) {
+		if ( $status != ResultAction::STATE_FINISHED && $status != ResultAction::STATE_ABORTED ) {
 			$this->setError( 'invalid-input', 'Illegal status to be set from the client side in action=saverun.' );
 			return;
 		}
