@@ -16,7 +16,7 @@ class ClientsAction extends Action {
 	 * @actionParam string sort_dir: [optional]
 	 *  Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
 	 * @actionParam string include: [optional] What filter to apply.
-	 *  Must be one of "all", "active" or "inactive". Defaults to "active".
+	 *  Must be one of "all" or "active". Defaults to "active".
 	 * @actionParam string item: Fetch only information from clients by this name.
 	 */
 	public function doAction() {
