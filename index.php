@@ -19,6 +19,16 @@ session_start();
 
 $pageObj = $swarmContext->getRequest()->getPageInstance();
 
+if ( $swarmContext->getRequest()->getHeader( 'X-Swarm-Partial' ) ) {
+	header( 'X-Swarm-Partial: 1' );
+	if ( $pageObj instanceof Page ) {
+		$pageObj->outputPartial();
+	} else {
+		Page::httpStatusHeader( 404 );
+	}
+	exit;
+}
+
 if ( $pageObj instanceof Page ) {
 	try {
 		$pageObj->output();

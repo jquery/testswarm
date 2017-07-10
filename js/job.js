@@ -39,11 +39,17 @@ jQuery(function( $ ) {
 	function refreshTable() {
 		indicateAction( "updating" );
 
-		$.get( location.href )
+		jQuery.ajax({
+			type: "GET",
+			url: location.href,
+			headers: {
+				"X-Swarm-Partial": "1"
+			}
+		})
 			.done( function( html ) {
 				var tableHtml;
 
-				tableHtml = $( html ).find( "table.swarm-results" ).html();
+				tableHtml = $( $.parseHTML( html ) ).filter( "table.swarm-results" ).html();
 				if ( tableHtml !== $targetTable.html() ) {
 					$targetTable.html( tableHtml );
 				}

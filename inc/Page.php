@@ -407,6 +407,20 @@ if ( $auth ) {
 	}
 
 	/**
+	 * Alternate response handler for X-Swarm-Partial requests.
+	 *
+	 * @see https://github.com/jquery/testswarm/issues/215
+	 */
+	final public function outputPartial() {
+		try {
+			$this->execute();
+			echo $this->getContent();
+		} catch ( Exception $e ) {
+			self::httpStatusHeader( 500 );
+		}
+	}
+
+	/**
 	 * Useful utility function to send a redirect as reponse and close the request.
 	 * @param $target string: Url
 	 * @param $code int: 30x

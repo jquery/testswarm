@@ -15,6 +15,7 @@ class WebRequest {
 	private $context;
 
 	protected $raw;
+	private $headers;
 	private $ip;
 
 	/**
@@ -172,6 +173,34 @@ class WebRequest {
 
 		$this->ip = $ip;
 		return $ip;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function initHeaders() {
+		$headers = array();
+		foreach ( $_SERVER as $name => $value ) {
+			if ( substr( $name, 0, 5 ) === 'HTTP_' ) {
+				$name = str_replace( '_', '-', substr( $name, 5 ) );
+				$headers[$name] = $value;
+			} elseif ( $name === 'CONTENT_LENGTH' ) {
+				$headers['CONTENT-LENGTH'] = $value;
+			}
+		}
+		return $headers;
+	}
+
+	/**
+	 * @param string $name
+	 * @return string|null
+	 */
+	public function getHeader( $name ) {
+		$name = strtoupper( $name );
+		if ( $this->headers === null ) {
+			$this->headers = $this->initHeaders();
+		}
+		return isset( $this->headers[$name] ) ? $this->headers[$name] : null;
 	}
 
 	/** @return Page|null */
