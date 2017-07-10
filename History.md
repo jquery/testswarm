@@ -1,3 +1,40 @@
+## 1.1.0-alpha
+
+***NOT A RELEASE YET***
+
+Complete list of issues solved in the 1.1.0 milestone:
+
+* <https://github.com/jquery/testswarm/milestone/2?closed=1>
+
+### Added
+
+* api: Add human-friendly help page with overview of available actions. ([ed523a6](https://github.com/jquery/testswarm/commit/ed523a6494663056154ea871a4533cebd296d6ce))
+  Example at <http://swarm.jquery.org/api.php>.
+* Page: Implement partial responses via a new `X-Swarm-Partial` header. ([a569c99](https://github.com/jquery/testswarm/commit/a569c99a19665682fb94781073c1d12798b14d48))
+* JobPage: Add pagination for previous/next job in same project. ([#65](https://github.com/jquery/testswarm/issues/65))
+* scripts: New `purge.php` script – purge old test results from the database. ([2785458](https://github.com/jquery/testswarm/commit/2785458af4c86b9a8010c60b52bf714c4d1a5dd5))
+* scripts: New `abortPendingRuns.php` script - help reset pending runs and re-runs that
+  belong to expired jobs (e.g. no longer available on the build server). ([08e2ea6](https://github.com/jquery/testswarm/commit/08e2ea618bb03c053d5c56ce4cd899f40aa5283c))
+* scripts: Add `--delete` option to `manageProject.php` script. ([31191f8](https://github.com/jquery/testswarm/commit/31191f87fbfaba2c839afc455aa4c4b01d53d122))
+* scripts: Add `--password` option to `manageProject.php` script. ([557663f](https://github.com/jquery/testswarm/commit/557663f3b2463310bac4b8b764a735dd62bf0834))
+
+### Improved
+
+* Database: Convert to `php-mysqli` lib, from deprecated `php-mysql`. ([d4b79ed](https://github.com/jquery/testswarm/commit/d4b79edcecd1decdebf1dcdad8b3247e2d55834c), [32f37de](https://github.com/jquery/testswarm/commit/32f37de8a8d9e4bc3f2417cf0fcc3e45547edb9c))
+* JobPage: Make result updates more efficient. ([#215](https://github.com/jquery/testswarm/issues/215))
+* RunPage: Show browser info and raw user-agent as part of "Browser not needed" error. ([29a895a](https://github.com/jquery/testswarm/commit/29a895adc77cde68e4eb5e24ed9b7be0fc5269dc), [438da1a](https://github.com/jquery/testswarm/commit/438da1a8885bd3826c4ca26543da6881acaf13f4))
+* Update jQuery from 1.7.2 to 1.12.4. ([43a2374](https://github.com/jquery/testswarm/commit/43a2374bacca976bb3915d89d5ab3b8da0a4ff2b))
+
+### Fixed
+
+* BrowserInfo: The Android icon looks weird. ([#306](https://github.com/jquery/testswarm/issues/306))
+* Inject: Fix QUnit 2.0 support. ([#313](https://github.com/jquery/testswarm/issues/313))
+* JobPage: Fix alignment of loading indicator. ([3f716ca](https://github.com/jquery/testswarm/commit/3f716caf01ec83e9a2194f1bd0f6b5d4d7e66674))
+* api: Catch invalid format error. ([18f067a](https://github.com/jquery/testswarm/commit/18f067a02e69b8f9935f443437fe15d5027eaaef))
+* scripts: Fix stty "invalid argument" warning when entering secrets. ([67fcb7d](https://github.com/jquery/testswarm/commit/67fcb7dcc07128c268f6272fb60ea6ad6b061370))
+* Page: Fix multiple active pages bug when one project's name is a subset of another.
+  ([2fb1458](https://github.com/jquery/testswarm/commit/2fb1458fed8e37078bfb830929225f7e905d84be))
+
 ## 1.0.0 / 2015-10-18
 
 This major release features a complete rewrite of the frontend and backend code base, and
