@@ -51,3 +51,8 @@ if ( typeof jQuery !== "undefined" ) {
 		});
 	};
 }
+
+/*global module */
+if ( typeof module !== "undefined" && module.exports ) {
+	module.exports.prettyDate = prettyDate;
+}
