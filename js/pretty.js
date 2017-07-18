@@ -37,6 +37,7 @@ function prettyDate( time ) {
 	) ||
 		day_diff === 1 && "Yesterday" ||
 		day_diff < 7 && day_diff + " days ago" ||
+		day_diff < 8 && "1 week ago" ||
 		day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
 }
 
