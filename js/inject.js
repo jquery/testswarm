@@ -500,6 +500,48 @@
 					return trimSerialize();
 				};
 			}
+		},
+
+		//Jasmine
+		//http://pivotal.github.com/jasmine/
+		jasmine: {
+			detect: function() {
+				return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
+			},
+			install: function() {
+				var jasmineTestSwarmResults = null;
+
+				var testSwarmReporter = {
+					reportRunnerStarting: function (runner) {
+						jasmineTestSwarmResults = {
+							fail: 0,
+							error: 0,
+							total: runner.specs().length
+						};
+					},
+					reportRunnerResults: function (runner) {
+						submit(jasmineTestSwarmResults);
+					},
+					reportSpecStarting: function (spec) {
+						window.TestSwarm.heartbeat();
+					},
+					reportSpecResults: function (spec) {
+						var failedCount = spec.results().failedCount;
+						if(failedCount > 0) {
+							jasmineTestSwarmResults.fail += failedCount;
+						}
+					}
+				};
+
+				window.TestSwarm.serialize = function () {
+					remove('content');
+					return trimSerialize();
+				};
+
+				var jasmineEnv = window.jasmine.getEnv();
+				jasmineEnv.addReporter(testSwarmReporter);
+
+			}
 		}
 	};
 
