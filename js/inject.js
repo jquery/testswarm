@@ -11,7 +11,7 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-/*global QUnit, Test, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha */
+/*global QUnit, Test, jasmine, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha */
 (function( undefined ) {
 	var url, curHeartbeat, testFrameworks, onErrorFnPrev,
 		DEBUG = false,
@@ -246,6 +246,39 @@
 
 					return trimSerialize();
 				};
+			}
+		},
+
+		// Jasmine v2.x
+		// https://jasmine.github.io/
+		"Jasmine": {
+			detect: function() {
+				return typeof jasmine !== "undefined" && typeof describe !== "undefined" && typeof it !== "undefined";
+			},
+			install: function() {
+				var jasmineEnv = jasmine.getEnv(),
+					result = {
+						fail: 0,
+						error: 0,
+						total: 0
+					};
+
+				jasmineEnv.addReporter({
+					jasmineStarted: function( info ) {
+						result.total = info.totalSpecsDefined;
+
+						window.TestSwarm.heartbeat();
+					},
+					suiteStarted: window.TestSwarm.heartbeat,
+					specStarted: window.TestSwarm.heartbeat,
+					specDone: window.TestSwarm.heartbeat,
+					suiteDone: window.TestSwarm.heartbeat,
+					jasmineDone: function( info ) {
+						result.fail = info.failedExpectations.length;
+
+						submit(result);
+					}
+				});
 			}
 		},
 
