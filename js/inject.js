@@ -208,7 +208,9 @@
 			}
 
 			curHeartbeat = setTimeout(function() {
-				submit({ fail: -1, total: -1 });
+				submit({
+					status: 3, // ResultAction::STATE_ABORTED
+				});
 			}, beatRate * 1000);
 		},
 		serialize: function() {
