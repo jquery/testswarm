@@ -209,7 +209,8 @@
 
 			curHeartbeat = setTimeout(function() {
 				submit({
-					status: 3, // ResultAction::STATE_ABORTED
+					// ResultAction::STATE_ABORTED
+					status: 3
 				});
 			}, beatRate * 1000);
 		},
