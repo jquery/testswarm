@@ -36,6 +36,7 @@ Complete list of issues solved in the 1.1.0 milestone:
 * Page: Fix multiple active pages bug when one project's name is a subset of another.
   ([2fb1458](https://github.com/jquery/testswarm/commit/2fb1458fed8e37078bfb830929225f7e905d84be))
 * prettyDate: Use singular instead of plural for "1 week".
+  ([a2bd083](https://github.com/jquery/testswarm/commit/a2bd083684d2dcd7ac222e9047c324bc6cf0ac3d))
 
 ## 1.0.0 / 2015-10-18
 
