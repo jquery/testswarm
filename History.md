@@ -11,6 +11,7 @@ Complete list of issues solved in the 1.1.0 milestone:
 * api: Add human-friendly help page with overview of available actions. ([ed523a6](https://github.com/jquery/testswarm/commit/ed523a6494663056154ea871a4533cebd296d6ce))
   Example at <http://swarm.jquery.org/api.php>.
 * Page: Implement partial responses via a new `X-Swarm-Partial` header. ([a569c99](https://github.com/jquery/testswarm/commit/a569c99a19665682fb94781073c1d12798b14d48))
+* Inject: Add support for Jasmine. ([#167](https://github.com/jquery/testswarm/issues/167))
 * JobPage: Add pagination for previous/next job in same project. ([#65](https://github.com/jquery/testswarm/issues/65))
 * scripts: New `purge.php` script – purge old test results from the database. ([2785458](https://github.com/jquery/testswarm/commit/2785458af4c86b9a8010c60b52bf714c4d1a5dd5))
 * scripts: New `abortPendingRuns.php` script - help reset pending runs and re-runs that
@@ -34,6 +35,7 @@ Complete list of issues solved in the 1.1.0 milestone:
 * scripts: Fix stty "invalid argument" warning when entering secrets. ([67fcb7d](https://github.com/jquery/testswarm/commit/67fcb7dcc07128c268f6272fb60ea6ad6b061370))
 * Page: Fix multiple active pages bug when one project's name is a subset of another.
   ([2fb1458](https://github.com/jquery/testswarm/commit/2fb1458fed8e37078bfb830929225f7e905d84be))
+* prettyDate: Use singular instead of plural for "1 week".
 
 ## 1.0.0 / 2015-10-18
 
