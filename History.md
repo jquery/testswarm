@@ -60,7 +60,7 @@ it into the projects database after installing TestSwarm 1.0.
 
 Complete list of issues solved in the 1.0.0 milestone:
 
-* <https://github.com/jquery/testswarm/issues?sort=updated&direction=asc&state=closed&milestone=1>
+* <https://github.com/jquery/testswarm/milestone/1?closed=1>
 
 ### Configuration changes
 * PHP version requirement raised to 5.4.0.
