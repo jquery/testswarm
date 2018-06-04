@@ -1,6 +1,4 @@
-## 1.1.0-alpha
-
-***NOT A RELEASE YET***
+## 1.1.0 / 2018-06-04
 
 Complete list of issues solved in the 1.1.0 milestone:
 
