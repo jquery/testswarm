@@ -405,7 +405,8 @@ h2 + .row {
 	background-image: url(../img/browser-android.png);
 }
 
-.swarm-browser-chrome {
+.swarm-browser-chrome,
+.swarm-browser-chrome_mobile {
 	background-image: url(../img/browser-chrome.png);
 }
 
@@ -413,16 +414,9 @@ h2 + .row {
 	background-image: url(../img/browser-chromium.png);
 }
 
-.swarm-browser-chrome_mobile {
-	background-image: url(../img/browser-chrome_android.png);
-}
-
-.swarm-browser-firefox {
-	background-image: url(../img/browser-firefox.png);
-}
-
+.swarm-browser-firefox,
 .swarm-browser-firefox_mobile {
-	background-image: url(../img/browser-firefox_mobile.png);
+	background-image: url(../img/browser-firefox.png);
 }
 
 /* IE9+ */
@@ -456,7 +450,7 @@ h2 + .row {
 }
 
 .swarm-browser-webkit_nightly {
-	background-image: url(../img/browser-webkit.png);
+	background-image: url(../img/browser-webkit_nightly.png);
 }
 
 .swarm-browser-yandex_browser {
