@@ -4,7 +4,7 @@
         "ua-parser/uap-php": "3.4.7"
 	},
 	"require-dev": {
-		"jakub-onderka/php-parallel-lint": "0.9"
+		"jakub-onderka/php-parallel-lint": "1.0.0"
 	},
 	"scripts": {
 		"test": [

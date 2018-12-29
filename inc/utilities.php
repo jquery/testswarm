@@ -200,7 +200,7 @@ if ( !function_exists( 'natksort' ) ) {
 	/**
 	 * PHP has natsort() but no natksort().
 	 *
-	 * @source http://stackoverflow.com/a/1186347/319266
+	 * @source https://stackoverflow.com/a/1186347/319266
 	 * @see php.net/uksort, php.net/natsort, php.net/strnatcmp
 	 */
 	 function natksort( &$array ) {
@@ -212,7 +212,7 @@ if ( !function_exists( 'natcaseksort' ) ) {
 	/**
 	 * PHP has natcasesort() but no natcaseksort().
 	 *
-	 * @source http://stackoverflow.com/a/1186347/319266
+	 * @source https://stackoverflow.com/a/1186347/319266
 	 * @see php.net/uksort, php.net/natcasesort, php.net/strnatcasecmp
 	 */
 	 function natcaseksort( &$array ) {

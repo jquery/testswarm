@@ -135,7 +135,7 @@ class Database {
 	/**
 	 * @param $table string
 	 * @param $fieldName string
-	 * @return bool|object: see also http://php.net/mysqli-result.fetch-field-direct
+	 * @return bool|object: see also https://php.net/mysqli-result.fetch-field-direct
 	 */
 	public function fieldInfo( $table, $fieldName ) {
 		$table = $this->addIdentifierQuotes( $table );

@@ -16,9 +16,9 @@ TestSwarm is still in use in projects of the jQuery Foundation, but it isn't und
 
 Within the jQuery Foundation, we're experimenting with alternative projects, to eventually shut down our own instance of TestSwarm:
 
-- [Karma](http://karma-runner.github.io/)
+- [Karma](https://karma-runner.github.io/)
+- [Intern](https://theintern.io/)
 - [browserstack-runner](https://github.com/browserstack/browserstack-runner/)
-- [Intern](http://theintern.io/)
 
 We recommend reviewing those and other alternatives.
 
@@ -39,7 +39,7 @@ Releases will be numbered in the following format:
 
 The `-alpha` suffix is used to indicate unreleased versions in development.
 
-For more information on SemVer, please visit http://semver.org/.
+For more information on SemVer, please visit <https://semver.org/>.
 
 
 Bug tracker
@@ -121,15 +121,7 @@ Get involved
 You're welcome to use the GitHub [issue tracker](https://github.com/jquery/testswarm/issues)
  to start discussions.
 
-Or post to the [QUnit and Testing forum](https://forum.jquery.com/qunit-and-testing).
-
-Most of us are also on IRC in the
-[#jquery-dev](http://webchat.freenode.net/?channels=jquery-dev) channel at
-irc.freenode.net
-
-Planning for TestSwarm and other projects related to testing of javascript
-applications based around jQuery happens on the [jQuery Testing Team
-wiki](http://jquerytesting.pbworks.com)
+Some of us are also on Gitter at [jquery/dev](https://gitter.im/jquery/dev).
 
 
 Documentation
@@ -137,20 +129,18 @@ Documentation
 
 * [TestSwarm wiki](https://github.com/jquery/testswarm/wiki)
 * [Submit jobs README](https://github.com/jquery/testswarm/blob/master/scripts/addjob/README.md)
-* [more wiki pages](https://github.com/jquery/testswarm/wiki/_pages)
 
 
 Copyright and license
 ---------------------
 
-See [LICENSE.txt](https://raw.github.com/jquery/testswarm/master/LICENSE.txt).
+See [LICENSE.txt](https://github.com/jquery/testswarm/blob/master/LICENSE.txt).
 
 
 History
 ---------------------
 
-TestSwarm was originally created by [John Resig](http://ejohn.org/) as a
+TestSwarm was originally created by [John Resig](https://johnresig.com/) as a
 basic tool to support unit testing of the [jQuery JavaScript
-library](http://jquery.com). It was later moved to become an official
-[Mozilla Labs](http://labs.mozilla.com/) and has since moved again to become
-a [jQuery](http://jquery.org/) project.
+library](https://jquery.com). It later become a [Mozilla Labs](http://labs.mozilla.com/) project,
+and has since moved again to become a [jQuery Foundation](https://jquery.org/) project.

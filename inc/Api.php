@@ -63,7 +63,7 @@ class Api {
 				echo json_encode2( $this->response );
 				break;
 
-			// http://stackoverflow.com/a/8811412/319266
+			// https://stackoverflow.com/a/8811412/319266
 			case 'jsonp':
 				header( 'Content-Type: text/javascript; charset=utf-8' );
 				$callback = $this->context->getRequest()->getVal( 'callback', '' );

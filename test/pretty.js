@@ -1,4 +1,4 @@
-/*jshint node:true, es3: false */
+/*jshint node:true, esversion: 5 */
 var assert = require( "assert" ),
 	tk = require( "timekeeper" ),
 	prettyDate = require( "../js/pretty" ).prettyDate;

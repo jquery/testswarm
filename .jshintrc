@@ -1,11 +1,18 @@
 {
-    "boss": true,
+    "bitwise": true,
+    "browser": true,
     "curly": true,
     "eqeqeq": true,
-    "eqnull": true,
-    "expr": true,
+    "esversion": 3,
     "immed": true,
+    "latedef": false,
+    "newcap": true,
     "noarg": true,
+    "noempty": true,
+    "predef": [
+        "SWARM",
+        "jQuery"
+    ],
     "onevar": true,
     "quotmark": "double",
     "smarttabs": true,
@@ -13,15 +20,7 @@
     "undef": true,
     "unused": true,
 
-    "bitwise": true,
-    "browser": true,
-    "es3": true,
-    "latedef": true,
-    "newcap": true,
-    "noempty": true,
-
-    "predef": [
-        "SWARM",
-        "jQuery"
-    ]
+    "boss": true,
+    "eqnull": true,
+    "expr": true
 }

@@ -221,7 +221,7 @@
 
 	testFrameworks = {
 		// QUnit (by jQuery)
-		// http://docs.jquery.com/QUnit
+		// https://qunitjs.com
 		"QUnit": {
 			detect: function() {
 				return typeof QUnit !== "undefined";
@@ -481,7 +481,7 @@
 		},
 
 		// Mocha
-		// http://visionmedia.github.com/mocha/
+		// https://mochajs.org/
 		"Mocha": {
 			detect: function() {
 				return typeof Mocha !== "undefined" && typeof mocha !== "undefined";
