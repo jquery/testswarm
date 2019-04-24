@@ -8,6 +8,7 @@
  */
 namespace UAParser\Util;
 
+use Composer\CaBundle\CaBundle;
 use UAParser\Exception\FetcherException;
 
 class Fetcher
@@ -27,7 +28,7 @@ class Fetcher
                     'ssl' => array(
                         'verify_peer'            => true,
                         'verify_depth'           => 10,
-                        'cafile'                 => __DIR__ . '/../../resources/ca-bundle.crt',
+                        'cafile'                 => CaBundle::getSystemCaRootBundlePath(),
                         static::getPeerNameKey() => 'www.github.com',
                         'disable_compression'    => true,
                     )

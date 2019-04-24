@@ -1,7 +1,7 @@
 {
 	"require": {
 		"php": ">=5.4.0",
-        "ua-parser/uap-php": "3.4.7"
+        "ua-parser/uap-php": "3.9.2"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0"

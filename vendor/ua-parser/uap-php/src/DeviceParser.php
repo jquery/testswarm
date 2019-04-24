@@ -23,13 +23,13 @@ class DeviceParser extends AbstractParser
     {
         $device = new Device();
 
-        list($regex, $matches) = $this->tryMatch($this->regexes['device_parsers'], $userAgent);
+        list($regex, $matches) = self::tryMatch($this->regexes['device_parsers'], $userAgent);
 
         if ($matches) {
-            $device->family = $this->multiReplace($regex, 'device_replacement', $matches[1], $matches);            
-            $device->brand  = $this->multiReplace($regex, 'brand_replacement' , null, $matches);
-            $deviceModelDefault = $matches[1] != 'Other' ? $matches[1] : null;
-            $device->model  = $this->multiReplace($regex, 'model_replacement' , $deviceModelDefault, $matches);
+            $device->family = self::multiReplace($regex, 'device_replacement', $matches[1], $matches);
+            $device->brand  = self::multiReplace($regex, 'brand_replacement', null, $matches);
+            $deviceModelDefault = $matches[1] !== 'Other' ? $matches[1] : null;
+            $device->model  = self::multiReplace($regex, 'model_replacement', $deviceModelDefault, $matches);
         }
 
         return $device;

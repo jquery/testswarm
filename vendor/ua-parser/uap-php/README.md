@@ -1,6 +1,9 @@
 # ua-parser PHP Library #
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ua-parser/uap-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/ua-parser/uap-php.svg?branch=master)](https://travis-ci.org/ua-parser/uap-php) [![Dependency Status](https://www.versioneye.com/user/projects/54b2a6f48014baeded000219/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54b2a6f48014baeded000219) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ua-parser/uap-php.svg)](http://isitmaintained.com/project/ua-parser/uap-php "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/ua-parser/uap-php.svg)](http://isitmaintained.com/project/ua-parser/uap-php "Percentage of issues still open")
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ua-parser/uap-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/ua-parser/uap-php.svg?branch=master)](https://travis-ci.org/ua-parser/uap-php) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ua-parser/uap-php.svg)](http://isitmaintained.com/project/ua-parser/uap-php "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/ua-parser/uap-php.svg)](http://isitmaintained.com/project/ua-parser/uap-php "Percentage of issues still open")
+[![Latest Stable Version](https://poser.pugx.org/ua-parser/uap-php/v/stable)](https://packagist.org/packages/ua-parser/uap-php)
+[![Total Downloads](https://poser.pugx.org/ua-parser/uap-php/downloads)](https://packagist.org/packages/ua-parser/uap-php)
+[![License](https://poser.pugx.org/ua-parser/uap-php/license)](https://packagist.org/packages/ua-parser/uap-php)
 
 This is the PHP library for the [uap-core](https://github.com/ua-parser/uap-core) project.
 

@@ -33,13 +33,13 @@ class UserAgentParser extends AbstractParser
 
         } else {
 
-            list($regex, $matches) = $this->tryMatch($this->regexes['user_agent_parsers'], $userAgent);
+            list($regex, $matches) = self::tryMatch($this->regexes['user_agent_parsers'], $userAgent);
 
             if ($matches) {
-                $ua->family = $this->replaceString($regex, 'family_replacement', $matches[1]);
-                $ua->major = $this->replaceString($regex, 'v1_replacement', $matches[2]);
-                $ua->minor = $this->replaceString($regex, 'v2_replacement', $matches[3]);
-                $ua->patch = $this->replaceString($regex, 'v3_replacement', $matches[4]);
+                $ua->family = self::multiReplace($regex, 'family_replacement', $matches[1], $matches);
+                $ua->major = self::multiReplace($regex, 'v1_replacement', $matches[2], $matches);
+                $ua->minor = self::multiReplace($regex, 'v2_replacement', $matches[3], $matches);
+                $ua->patch = self::multiReplace($regex, 'v3_replacement', $matches[4], $matches);
             }
         }
 
