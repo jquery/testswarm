@@ -1,0 +1,4 @@
+[submodule "uap-core"]
+	path = uap-core
+	url = https://github.com/ua-parser/uap-core.git
+	branch = master

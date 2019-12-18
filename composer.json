@@ -12,6 +12,10 @@
 			"npm install && npm test"
 		]
 	},
+	"replace": {
+		"symfony/polyfill-ctype": "1.99",
+		"symfony/polyfill-mbstring": "1.99"
+	},
 	"config": {
 		"platform": {
 			"php": "5.4"

@@ -1,5 +1,5 @@
 language: php
-# In order to use PHP 5.4/5.5, use Ubuntu 14 (Trusty) instead of the newer Ubuntu 16 (Xenial) 
+# In order to use PHP 5.4/5.5, use Ubuntu 14 (Trusty) instead of the newer Ubuntu 16 (Xenial)
 # https://docs.travis-ci.com/user/languages/php/#php-54x---55x-support-is-available-on-precise-and-trusty-only
 dist: trusty
 php:

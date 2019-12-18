@@ -103,7 +103,7 @@ may work as well.
    `chmod 777 cache`.
 
 1. Install dependencies
-   `composer install`
+   `composer install --no-dev`
 
 1. Install the TestSwarm database by running:
    `php scripts/install.php`
