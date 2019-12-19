@@ -493,17 +493,17 @@ h2 + .row {
 }
 
 .swarm-os-windows::after,
-.swarm-os-windows_xp::after {
+.swarm-os-windows-xp::after {
 	background-image: url(../img/os-winxp.png);
 }
 
-.swarm-os-windows_vista::after,
-.swarm-os-windows_7::after {
+.swarm-os-windows-vista::after,
+.swarm-os-windows-7::after {
 	background-image: url(../img/os-win7.png);
 }
 
-.swarm-os-windows_8::after,
-.swarm-os-windows_10::after {
+.swarm-os-windows-8::after,
+.swarm-os-windows-10::after {
 	background-image: url(../img/os-win8.png);
 }
 
