@@ -2,8 +2,6 @@
 <?php
 namespace UAParser\Command;
 
-use Symfony\Component\Console\Application;
-
 $packageAutoloader = __DIR__ . '/../vendor/autoload.php';
 $standaloneAutoloader = __DIR__ . '/../../../autoload.php';
 if (file_exists($packageAutoloader)) {
@@ -14,6 +12,14 @@ if (file_exists($packageAutoloader)) {
 
 $resourceDirectory = realpath(__DIR__ . '/../resources');
 $defaultYamlFile = realpath(__DIR__ . '/../resources/regexes.yaml');
+
+// Ensure symfony packages installed
+if (!class_exists(\Symfony\Component\Console\Application::class)) {
+    echo 'You must include the symfony packages, see composer.json "suggest" section' . PHP_EOL;
+    exit(1);
+}
+
+use \Symfony\Component\Console\Application;
 
 $application = new Application('ua-parser');
 $application->add(new ConvertCommand($resourceDirectory, $defaultYamlFile));

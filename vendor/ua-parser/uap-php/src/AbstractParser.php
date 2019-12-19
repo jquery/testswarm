@@ -76,7 +76,7 @@ abstract class AbstractParser
      * @param string $userAgent
      * @return array
      */
-    protected function tryMatch(array $regexes, $userAgent)
+    protected static function tryMatch(array $regexes, $userAgent)
     {
         foreach ($regexes as $regex) {
             $flag = isset($regex['regex_flag']) ? $regex['regex_flag'] : '';
@@ -100,42 +100,32 @@ abstract class AbstractParser
     /**
      * @param array $regex
      * @param string $key
-     * @param string $string
-     * @return string
-     */
-    protected function replaceString(array $regex, $key, $string)
-    {
-        if (!isset($regex[$key])) {
-            return $string;
-        }
-
-        return str_replace('$1', $string, $regex[$key]);
-    }
-
-    /**
-     * @param array $regex
-     * @param string $key
      * @param string $default
      * @param array $matches
-     * @return string
+     * @return string|null
      */
-    protected function multiReplace(array $regex, $key, $default, array $matches)
+    protected static function multiReplace(array $regex, $key, $default, array $matches)
     {
         if (!isset($regex[$key])) {
-            return $default;
+            return self::emptyStringToNull($default);
         }
-        
+
         $replacement = preg_replace_callback(
-            "|\\$(?<key>\d)|",
-            function ($m) use ($matches){
-                return isset($matches[$m['key']]) ? $matches[$m['key']] : "";
+            '|\$(?P<key>\d)|',
+            function ($m) use ($matches) {
+                return isset($matches[$m['key']]) ? $matches[$m['key']] : '';
             },
             $regex[$key]
         );
-        
-        $replacement = trim($replacement);
 
-        return $replacement == '' ? null : $replacement;
+        return self::emptyStringToNull($replacement);
+    }
+
+    private static function emptyStringToNull($string)
+    {
+        $string = trim($string);
+
+        return $string === '' ? null : $string;
     }
 
     /**
