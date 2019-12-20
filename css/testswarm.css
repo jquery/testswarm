@@ -434,8 +434,20 @@ h2 + .row {
 	background-image: url(../img/browser-ie-8.png);
 }
 
+/* Chromium-based Edge (v79+) */
 .swarm-browser-edge {
 	background-image: url(../img/browser-edge.png);
+}
+
+/* Edge 12-18 are legacy, EdgeHTML-based & have a different logo */
+.swarm-browser-edge-12,
+.swarm-browser-edge-13,
+.swarm-browser-edge-14,
+.swarm-browser-edge-15,
+.swarm-browser-edge-16,
+.swarm-browser-edge-17,
+.swarm-browser-edge-18 {
+	background-image: url(../img/browser-edge-legacy.png);
 }
 
 .swarm-browser-opera,
