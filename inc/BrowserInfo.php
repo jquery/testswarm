@@ -281,8 +281,8 @@ class BrowserInfo {
 	 * some people want to treat it like 11.6.2 because BrowserStack
 	 * has 11.60 and 11.62 mixed up under the id "11.6". So we can
 	 * use "browserMinor: 6*" in the userAgents configuration,
-	 * which will tolerate anything. Use carfully though,
-	 * theotically this means it will match X.6, X.60 and X.600,
+	 * which will tolerate anything. Use carefully though,
+	 * theoretically this means it will match X.6, X.60 and X.600,
 	 * X.6foo, X.61-alpha etc.
 	 * NB: Wildcards are only allowed at the end of values. And because
 	 * it doesn't make sense to have more than one in that case, it
