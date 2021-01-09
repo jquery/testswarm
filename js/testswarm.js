@@ -6,6 +6,8 @@
  * @since 0.1.0
  * @package TestSwarm
  */
+/* eslint-env browser */
+/* global jQuery, SWARM */
 jQuery(function( $ ) {
 	var query = {},
 		search = location.search;
@@ -13,7 +15,7 @@ jQuery(function( $ ) {
 	// Skip leading "?""
 	if ( search.length > 1 ) {
 		$.each( search.slice( 1 ).split( "&" ), function( i, parts ) {
-			parts = parts.replace( /^([^=]+)=(.*)$/, function( p0, p1, p2 ) {
+			parts.replace( /^([^=]+)=(.*)$/, function( p0, p1, p2 ) {
 				query[ decodeURIComponent( p1 ) ] = decodeURIComponent( p2 );
 			});
 		});

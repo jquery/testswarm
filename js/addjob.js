@@ -5,6 +5,7 @@
  * @since 1.0.0
  * @package TestSwarm
  */
+/* global jQuery */
 jQuery(function( $ ) {
 	var $addRunBtn,
 		$runsContainer = $( "#runs-container" ),

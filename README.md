@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jquery/testswarm.svg?branch=master)](https://travis-ci.org/jquery/testswarm)
+[![Build Status](https://travis-ci.com/jquery/testswarm.svg?branch=master)](https://travis-ci.com/jquery/testswarm) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 TestSwarm - Distributed Continuous Integration for JavaScript
 =================
@@ -128,13 +128,13 @@ Documentation
 ---------------------
 
 * [TestSwarm wiki](https://github.com/jquery/testswarm/wiki)
-* [Submit jobs README](https://github.com/jquery/testswarm/blob/master/scripts/addjob/README.md)
+* [Submit jobs README](./scripts/addjob/README.md)
 
 
 Copyright and license
 ---------------------
 
-See [LICENSE.txt](https://github.com/jquery/testswarm/blob/master/LICENSE.txt).
+See [LICENSE.txt](./LICENSE.txt).
 
 
 History

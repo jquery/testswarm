@@ -5,6 +5,8 @@
  * @since 1.0
  * @package TestSwarm
  */
+/* eslint-env browser */
+/* global jQuery */
 jQuery(function( $ ) {
 
 	// Even-out scrollbars

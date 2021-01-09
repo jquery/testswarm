@@ -8,8 +8,7 @@
 	},
 	"scripts": {
 		"test": [
-			"parallel-lint . --exclude external --exclude vendor --exclude node_modules",
-			"npm install && npm test"
+			"parallel-lint . --exclude external --exclude vendor --exclude node_modules"
 		]
 	},
 	"replace": {

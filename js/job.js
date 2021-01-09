@@ -6,6 +6,8 @@
  * @since 0.1.0
  * @package TestSwarm
  */
+/* eslint-env browser */
+/* global jQuery, SWARM */
 jQuery(function( $ ) {
 	var updateInterval = SWARM.conf.web.ajaxUpdateInterval * 1000,
 		$wipejobErr = $( ".swarm-wipejob-error" ),

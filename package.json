@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "test": "node test/pretty.js && jshint ."
+    "test": "qunit test/ && eslint ."
   },
   "devDependencies": {
-    "jshint": "2.9.7",
-    "timekeeper": "1.0.0"
+    "eslint": "^7.17.0",
+    "timekeeper": "1.0.0",
+    "qunit": "^2.13.0"
   }
 }

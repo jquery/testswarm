@@ -11,8 +11,9 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-/*global QUnit, Test, jasmine, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha */
-(function( undefined ) {
+/* eslint-env browser */
+/* global jQuery, QUnit, Test, jasmine, JSSpec, JsUnitTestManager, SeleniumTestResult, LOG, doh, Screw, mocha */
+(function() {
 	var url, curHeartbeat, testFrameworks, onErrorFnPrev,
 		DEBUG = false,
 		doPost = false,
@@ -25,7 +26,9 @@
 
 	try {
 		doPost = !!window.parent.postMessage;
-	} catch ( e ) {}
+	} catch ( e ) {
+		// Ignore
+	}
 
 	if ( index !== -1 ) {
 		url = decodeURIComponent( search.slice( index + 9 ) );
@@ -70,7 +73,7 @@
 		}
 
 		root = location.href.replace( /(https?:\/\/.*?)\/.*/, "$1" );
-		cur = location.href.replace( /[^\/]*$/, "" );
+		cur = location.href.replace( /[^/]*$/, "" );
 
 		links = doc.getElementsByTagName( "link" );
 		for ( i = 0; i < links.length; i += 1 ) {

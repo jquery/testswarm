@@ -3,17 +3,15 @@ language: php
 # https://docs.travis-ci.com/user/languages/php/#php-54x---55x-support-is-available-on-precise-and-trusty-only
 dist: trusty
 php:
-  - "7.1"
+  - "7.2"
   - "5.6"
-  - "5.5"
+  # swarm-01 uses PHP 5.4
   - "5.4"
 install:
   - composer install
+  # use Node.js 10 LTS
+  - nvm install 10
+  - node --version && npm install
 script:
   - composer test
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#jquery-dev"
-    template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} %{author}): %{message} - %{build_url}"
+  - npm test

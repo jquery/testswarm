@@ -6,7 +6,9 @@
  * @since 0.1.0
  * @package TestSwarm
  */
-(function( $, SWARM, undefined ) {
+/* eslint-env browser */
+/* global jQuery, SWARM */
+(function( $ ) {
 	var currRunId, currRunUrl, testTimeout, pauseTimer, cmds, errorOut;
 
 	function msg( htmlMsg ) {
@@ -275,4 +277,4 @@
 		confUpdate();
 	});
 
-}( jQuery, SWARM ) );
+}( jQuery ) );

@@ -5,6 +5,7 @@
  *
  * This is a modified version for TestSwarm.
  */
+/* global jQuery */
 
 /**
  * Take a timestamp and turn it into a relative time representation
