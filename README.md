@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/jquery/testswarm.svg?branch=master)](https://travis-ci.com/jquery/testswarm) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
+[![Build Status](https://travis-ci.com/jquery/testswarm.svg?branch=main)](https://travis-ci.com/jquery/testswarm) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 TestSwarm - Distributed Continuous Integration for JavaScript
 =================
