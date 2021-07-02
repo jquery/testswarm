@@ -104,7 +104,7 @@
 		$( "iframe" ).remove();
 	}
 
-	function testTimedout( runInfo ) {
+	function testAborted( runInfo, reportHtml ) {
 		cancelTest();
 		retrySend(
 			{
@@ -113,7 +113,7 @@
 				error: 0,
 				total: 0,
 				status: 3, // ResultAction::STATE_ABORTED
-				report_html: "Test Timed Out.",
+				report_html: reportHtml || "Test Timed Out.",
 				run_id: currRunId,
 				client_id: SWARM.client_id,
 				run_token: SWARM.run_token,
@@ -121,7 +121,7 @@
 				results_store_token: runInfo.resultsStoreToken
 			},
 			function() {
-				testTimedout( runInfo );
+				testAborted( runInfo, reportHtml );
 			},
 			function( data ) {
 				if ( data.saverun === "ok" ) {
@@ -137,7 +137,7 @@
 	 * @param data Object: Reponse from api.php?action=getrun
 	 */
 	function runTests( data ) {
-		var norun_msg, timeLeft, runInfo, iframe;
+		var norun_msg, timeLeft, runInfo, iframe, xhr;
 
 		if ( !$.isPlainObject( data ) || data.error ) {
 			// Handle session timeout, where server sends back "Username required."
@@ -184,8 +184,32 @@
 
 				// Timeout after a period of time
 				testTimeout = setTimeout( function() {
-					testTimedout( runInfo );
+					testAborted( runInfo );
 				}, SWARM.conf.client.runTimeout * 1000 );
+
+				// There is sometimes a backlog of old re-runs that have already been garbage
+				// collected on the build server and thus respond with 404 Not Found.
+				// These can take a very long time to process as through <iframe>, even on the
+				// same origin, there is no reliable way to determine whether the src url
+				// returned 404 Not Found, and the only other exit path we have is the timeout
+				// (which is generally 5-10 minutes).
+				// Try to short-circuit this by sending an XHR, and aborting the test immediately
+				// if we find a network error or HTTP error status.
+				if ( typeof XMLHttpRequest !== "undefined" ) {
+					xhr = new XMLHttpRequest();
+					xhr.open( "GET", currRunUrl );
+					xhr.onerror = function() {
+						if ( testTimeout ) {
+							testAborted( runInfo, "TestSwarm Error: Failed to load the run URL (XHR Network Error)." );
+						}
+					};
+					xhr.onload = function() {
+						if ( testTimeout && xhr.status >= 400 && xhr.status <= 599 ) {
+							testAborted( runInfo, "TestSwarm Error: The run URL responsed with an error (HTTP " + xhr.status + ")." );
+						}
+					};
+					xhr.send();
+				}
 
 				return;
 			}
