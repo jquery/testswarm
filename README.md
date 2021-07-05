@@ -16,6 +16,7 @@ TestSwarm is still in use in projects of the jQuery Foundation, but it isn't und
 
 Within the jQuery Foundation, we're experimenting with alternative projects, to eventually shut down our own instance of TestSwarm:
 
+- [airtap](https://github.com/airtap/airtap)
 - [Karma](https://karma-runner.github.io/)
 - [Intern](https://theintern.io/)
 - [browserstack-runner](https://github.com/browserstack/browserstack-runner/)
