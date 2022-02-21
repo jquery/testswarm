@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/jquery/testswarm.svg?branch=main)](https://travis-ci.com/jquery/testswarm) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
+[![Build Status](https://github.com/jquery/testswarm/actions/workflows/CI.yaml/badge.svg?event=push)](https://github.com/jquery/testswarm/actions/workflows/CI.yaml)
+[![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 TestSwarm - Distributed Continuous Integration for JavaScript
 =================
@@ -7,10 +8,9 @@ TestSwarm provides distributed continuous integration testing for
 JavaScript.
 
 The main instance monitoring jQuery core and related projects runs at
-[swarm.jquery.org](http://swarm.jquery.org/).
+[swarm.jquery.org](https://swarm.jquery.org/).
 
-Project Status
---------------
+## Project Status
 
 TestSwarm is still in use in projects of the jQuery Foundation, but it isn't under active development anymore. Although critical issues may be patched in the future, most open issues will remain unaddressed.
 
@@ -23,14 +23,11 @@ Within the jQuery Foundation, we're experimenting with alternative projects, to 
 
 We recommend reviewing those and other alternatives.
 
-Quick start
-----------
+## Quick start
 
 Clone the repo, `git clone --recursive git://github.com/jquery/testswarm.git`.
 
-
-Versioning
-----------
+## Versioning
 
 TestSwarm uses the Semantic Versioning guidelines as much as possible.
 
@@ -42,16 +39,12 @@ The `-alpha` suffix is used to indicate unreleased versions in development.
 
 For more information on SemVer, please visit <https://semver.org/>.
 
-
-Bug tracker
------------
+## Bug tracker
 
 Found a bug? Please report it using our [issue
 tracker](https://github.com/jquery/testswarm/issues)!
 
-
-Installation
------------
+## Installation
 
 ### Environmental compatibility
 
@@ -111,37 +104,29 @@ may work as well.
 
 1. Create an entry in your crontab for action=cleanup. This performs various
    cleaning duties such as making timed-out runs available again.<br/>
-   `* * * * * curl -s http://swarm.example.org/api.php?action=cleanup > /dev/null`
+   `* * * * * curl -s https://swarm.example.org/api.php?action=cleanup > /dev/null`
 
 1. [Create a project](./scripts/README.md#create-projects) and [submit jobs](./scripts/addjob/README.md).
 
-
-Get involved
----------------------
+## Get involved
 
 You're welcome to use the GitHub [issue tracker](https://github.com/jquery/testswarm/issues)
  to start discussions.
 
 Some of us are also on Gitter at [jquery/dev](https://gitter.im/jquery/dev).
 
-
-Documentation
----------------------
+## Documentation
 
 * [TestSwarm wiki](https://github.com/jquery/testswarm/wiki)
 * [Submit jobs README](./scripts/addjob/README.md)
 
-
-Copyright and license
----------------------
+## Copyright and license
 
 See [LICENSE.txt](./LICENSE.txt).
 
-
-History
----------------------
+## History
 
 TestSwarm was originally created by [John Resig](https://johnresig.com/) as a
 basic tool to support unit testing of the [jQuery JavaScript
-library](https://jquery.com). It later become a [Mozilla Labs](http://labs.mozilla.com/) project,
+library](https://jquery.com). It later become a [Mozilla Labs](https://labs.mozilla.com/) project,
 and has since moved again to become a [jQuery Foundation](https://jquery.org/) project.

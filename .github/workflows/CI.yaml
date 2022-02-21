@@ -1,0 +1,70 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  php54:
+    name: PHP 5.4
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP 5.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "5.4"
+      - run: composer install
+      - run: composer test
+
+  php56:
+    name: PHP 5.6
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP 5.6
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "5.6"
+      - run: composer install
+      - run: composer test
+
+  php:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Has php7.1-8.0 pre-installed
+          # https://github.com/actions/virtual-environments/blob/ubuntu18/20210318.0/images/linux/Ubuntu1804-README.md#php
+          - os: ubuntu-18.04
+            php: "7.2"
+          - os: ubuntu-18.04
+            php: "7.3"
+          # Has php7.4-8.0 pre-installed
+          # https://github.com/actions/virtual-environments/blob/ubuntu20/20210318.0/images/linux/Ubuntu2004-README.md#php
+          - os: ubuntu-20.04
+            php: "7.4"
+          - os: ubuntu-20.04
+            php: "8.0"
+    # Use "PHP 0.0" as job name instead of "php (ubuntu-, 0.0)"
+    name: PHP ${{ matrix.php }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use PHP ${{ matrix.php }}
+        run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
+
+      - run: composer install
+
+      - run: composer test
+
+  npm:
+    # Uses Node.js 14 by default
+    # https://github.com/actions/virtual-environments/blob/ubuntu20/20210318.0/images/linux/Ubuntu2004-README.md#nodejs
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm test
