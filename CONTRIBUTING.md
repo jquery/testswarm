@@ -1,5 +1,10 @@
-Welcome! Thanks for your interest in contributing to TestSwarm. You're **almost** in the right place. More information on how to contribute to this and all other jQuery Foundation projects is over at [contribute.jquery.org](https://contribute.jquery.org). You'll definitely want to take a look at the articles on contributing [code](https://contribute.jquery.org/code).
+# Contributing
 
-You may also want to take a look at our [commit & pull request guide](https://contribute.jquery.org/commits-and-pull-requests/) and [style guides](https://contribute.jquery.org/style-guide/) for instructions on how to maintain your fork and submit your code. Before we can merge any pull request, we'll also need you to sign our [contributor license agreement](https://contribute.jquery.org/cla).
+You can chat with us on [Gitter: jquery/dev](https://gitter.im/jquery/dev) or on [Libera Chat IRC](https://libera.chat/) in `#jquery` ([webchat](https://web.libera.chat/#jquery)).
 
-You can find us on [IRC](https://irc.jquery.org), specifically in #jquery-dev should you have any questions. If you've never contributed to open source before, we've put together [a short guide with tips, tricks, and ideas on getting started](https://contribute.jquery.org/open-source/).
+## Update vendor
+
+* For compatibility with PHP 5.4, use Composer 2.2 LTS and not a later version.
+  Run `composer self-update && composer self-update --2.2`
+* Run `composer install --no-dev`
+* Run `git add vendor/`

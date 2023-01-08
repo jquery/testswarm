@@ -11,8 +11,6 @@
  */
 class Error500Page extends Page {
 
-	protected $exceptionObj;
-
 	protected function initContent() {
 		global $swarmInstallDir;
 
@@ -44,7 +42,7 @@ class Error500Page extends Page {
 			$html .=
 				'<p>Caught in <code>.'
 				. htmlspecialchars( substr( $e->getFile(), strlen( $swarmInstallDir ) ) )
-				. '</code> on line <code>' . htmlspecialchars( $e->getLine() )
+				. '</code> on line <code>' . htmlspecialchars( (string)$e->getLine() )
 				. '</code>.</p><p>Backtrace:</p><pre>' . htmlspecialchars( $e->getTraceAsString() )
 				. '</pre>';
 		} else {

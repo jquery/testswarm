@@ -10,7 +10,7 @@
 class SaverunAction extends Action {
 
 	/**
-	 * @actionMethod POST: Required.
+	 * @actionMethod POST Required.
 	 * @actionParam int client_id
 	 * @actionParam string run_token
 	 * @actionParam int run_id
@@ -19,8 +19,8 @@ class SaverunAction extends Action {
 	 * @actionParam int total
 	 * @actionParam int fail
 	 * @actionParam int error
-	 * @actionParam int status: `runresults.status`
-	 * @actionParam string report_html: HTML snapshot of the test results page.
+	 * @actionParam int status `runresults.status`
+	 * @actionParam string report_html HTML snapshot of the test results page.
 	 */
 	public function doAction() {
 		$browserInfo = $this->getContext()->getBrowserInfo();

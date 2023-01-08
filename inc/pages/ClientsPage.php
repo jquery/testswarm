@@ -52,8 +52,7 @@ class ClientsPage extends Page {
 			$nav .= '</div>';
 			$nav .= '<div class="btn-group pull-right">xx';
 			// TODO: active | all | inactive
-			$nav .= '</div>';
-			$nav .= '</div>';
+			$nav .= '</div></div>';
 		}
 
 		$html .= $nav;
@@ -76,8 +75,8 @@ class ClientsPage extends Page {
 	}
 
 	/**
-	 * @param Array $data Overview data from ClientsAction
-	 * @return string: HTML
+	 * @param array $data Overview data from ClientsAction
+	 * @return string HTML
 	 */
 	protected function showOverview( $data ) {
 		$context = $this->getContext();
@@ -141,8 +140,8 @@ class ClientsPage extends Page {
 	}
 
 	/**
-	 * @param Array $data Details data from ClientsAction
-	 * @return string: HTML
+	 * @param array $data Details data from ClientsAction
+	 * @return string HTML
 	 */
 	protected function showDetails( $data ) {
 		$html = '<div class="row">';

@@ -19,17 +19,17 @@ class BrowserInfo {
 	protected $rawUserAgent = '';
 
 	/**
-	 * @var stdClass: Object returned by UA::parse.
+	 * @var stdClass Object returned by UA::parse.
 	 */
 	protected $uaData;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|false
 	 */
 	protected $swarmUaItem;
 
 	/**
-	 * @var stdClass: Cache for getBrowserIndex()
+	 * @var stdClass Cache for getBrowserIndex()
 	 */
 	protected static $browserIndex;
 
@@ -102,8 +102,8 @@ class BrowserInfo {
 	/**
 	 * Callback for `uasort()`.
 	 *
-	 * @param Array|stdClass $a UA data, as returned by #getUaData and #makeGenericUaData.
-	 * @param Array|stdClass $b UA data.
+	 * @param array|stdClass $a UA data, as returned by #getUaData and #makeGenericUaData.
+	 * @param array|stdClass $b UA data.
 	 * @return int Like other PHP comparison functions,
 	 *  returns -1 if A is less than B, +1 if A is greater than B, 0 if they are equal.
 	 */
@@ -175,7 +175,7 @@ class BrowserInfo {
 
 	/**
 	 * @param array|object $uaData
-	 * @param string $prefix: Prefix for CSS classes.
+	 * @param string $prefix Prefix for CSS classes.
 	 * @return array
 	 */
 	protected static function getDisplayInfo( $uaData, $prefix = 'swarm-' ) {
@@ -238,12 +238,12 @@ class BrowserInfo {
 		return $this->uaData;
 	}
 
-	/** @return string: HTML */
+	/** @return string HTML */
 	public function getIconHtml() {
 		return self::buildIconHtml( $this->getUaData()->displayInfo );
 	}
 
-	/** @return string: HTML */
+	/** @return string HTML */
 	public static function buildIconHtml( Array $displayInfo, Array $options = null ) {
 		$classes = '';
 		$afterHtml = '';
@@ -274,8 +274,8 @@ class BrowserInfo {
 	}
 
 	/**
-	 * Process the wildcard syntax allowed at the end
-	 * of uaData property values.
+	 * Process the wildcard syntax allowed at the end of uaData property values.
+	 *
 	 * This was originally created to handle the different
 	 * pseudo-patch releases from Opera. Opera 11.62 for instance
 	 * some people want to treat it like 11.6.2 because BrowserStack
@@ -284,15 +284,17 @@ class BrowserInfo {
 	 * which will tolerate anything. Use carefully though,
 	 * theoretically this means it will match X.6, X.60 and X.600,
 	 * X.6foo, X.61-alpha etc.
+	 *
 	 * NB: Wildcards are only allowed at the end of values. And because
 	 * it doesn't make sense to have more than one in that case, it
 	 * only looks for one.
+	 *
 	 * NB: Pass the objects as copied arrays to this function, they will
 	 * be mutated otherwise.
 	 *
-	 * @param Array $uaData: browserSet configuration item
-	 * @param Array $myUaData: parsed ua-browser object
-	 * @return number|bool: If they match, how precise it is (higher is better),
+	 * @param Array $uaData browserSet configuration item
+	 * @param Array $myUaData parsed ua-browser object
+	 * @return int|bool If they match, how precise it is (higher is better),
 	 * or boolean false.
 	 */
 	private function compareUaData( Array $uaData, Array $myUaData ) {
@@ -329,7 +331,7 @@ class BrowserInfo {
 	/**
 	 * Find the uaID in browserIndex that best matches the current
 	 * user-agent and return the uaData from the browser index.
-	 * @return object: Object from browserindex (with additional 'id' property).
+	 * @return object|false Object from browserindex (with additional 'id' property).
 	 */
 	public function getSwarmUaItem() {
 

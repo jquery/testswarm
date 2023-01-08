@@ -119,9 +119,9 @@ class JobPage extends Page {
 	 * Create table rows for a table of ua run results.
 	 * This is used on the JobPage.
 	 *
-	 * @param Array $runs List of runs, from JobAction.
-	 * @param Array $userAgents List of uaData objects.
-	 * @param bool $showResetRun: Whether to show the reset buttons for individual runs.
+	 * @param array $runs List of runs, from JobAction.
+	 * @param array $userAgents List of uaData objects.
+	 * @param bool $showResetRun Whether to show the reset buttons for individual runs.
 	 *  This does not check authororisation or load related javascript for the buttons.
 	 */
 	public static function getUaRunsHtmlRows( $runs, $userAgents, $showResetRun = false ) {

@@ -1,7 +1,8 @@
 <?php
 /**
  * @param string $message
- * @param string $type: cli, js or html.
+ * @param string $type One of cli, js or html.
+ * @return never
  */
 function swarmInitError( $message, $type = null ) {
 	if ( $type === null ) {

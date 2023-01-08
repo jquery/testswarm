@@ -27,9 +27,8 @@ class Database {
 	/**
 	 * Creates a Database object, opens the connection and returns the instance.
 	 *
-	 * @param context TestSwarmContext
+	 * @param TestSwarmContext $context
 	 */
-
 	public static function newFromContext( TestSwarmContext $context ) {
 		$dbConf = $context->getConf()->database;
 		$db = new self();
@@ -49,7 +48,7 @@ class Database {
 		return $this->context;
 	}
 
-	/** @return string: current DB name */
+	/** @return string current DB name */
 	public function getDBname() {
 		return $this->dbname;
 	}
@@ -98,7 +97,7 @@ class Database {
 		return false;
 	}
 
-	/** @return obj|false */
+	/** @return stdClass|false */
 	public function getRow( $sql ) {
 		$res = $this->doQuery( $sql );
 		if ( $res && $this->getNumRows( $res ) ) {
@@ -107,7 +106,7 @@ class Database {
 		return false;
 	}
 
-	/** @return array of objects|false */
+	/** @return stdClass[]|false */
 	public function getRows( $sql ) {
 		$res = $this->doQuery( $sql );
 		if ( $res && $this->getNumRows( $res ) ) {
@@ -133,9 +132,9 @@ class Database {
 	}
 
 	/**
-	 * @param $table string
-	 * @param $fieldName string
-	 * @return bool|object: see also https://php.net/mysqli-result.fetch-field-direct
+	 * @param string $table
+	 * @param string $fieldName
+	 * @return bool|object See also https://php.net/mysqli-result.fetch-field-direct
 	 */
 	public function fieldInfo( $table, $fieldName ) {
 		$table = $this->addIdentifierQuotes( $table );
@@ -161,9 +160,9 @@ class Database {
 	/**
 	 * Determines whether a field exists in a table.
 	 *
-	 * @param $table string
-	 * @param $fieldName string
-	 * @return bool: whether $table has $field.
+	 * @param string $table
+	 * @param string $fieldName
+	 * @return bool Whether $table has $field.
 	 */
 	public function fieldExists( $table, $fieldName ) {
 		$info = $this->fieldInfo( $table, $fieldName );
@@ -172,7 +171,7 @@ class Database {
 
 	/**
 	 * Roughly parse a .sql file and execute it in small batches
-	 * @param $fullSource string: Full source of .sql file
+	 * @param string $fullSource Full source of .sql file
 	 * There should be no more than 1 statement (ending in ;) on a single line.
 	 * @return bool
 	 */
@@ -211,7 +210,7 @@ class Database {
 	 * Queries other than SELECT, such as DELETE, UPDATE and INSERT.
 	 * SELECT queries should use getOne, getRow or getRows.
 	 *
-	 * @return resource|false
+	 * @return mysqli_result|false
 	 */
 	public function query( $sql ) {
 		return $this->doQuery( $sql );
@@ -253,7 +252,7 @@ class Database {
 	 * to do queries, not the wrapper function query(). The logger will log
 	 * the caller of the caller of this function. So there should be one function
 	 * in between this and outside this class.
-	 * @return MySQL resource|false
+	 * @return mysqli_result|false
 	 */
 	protected function doQuery( $sql ) {
 		$microtimeStart = microtime( /*get_as_float=*/true );
@@ -307,7 +306,7 @@ class Database {
 				'sql' => $sql,
 				'caller' => $backtrace,
 				// Only SELECT queries return a resource that getNumRows can use
-				'numRows' => is_resource( $queryResponse ) ? $this->getNumRows( $queryResponse ) : null,
+				'numRows' => $queryResponse ? $this->getNumRows( $queryResponse ) : null,
 				'insertId' => $this->getInsertId(),
 				'affectedRows' => $this->getAffectedRows(),
 				'queryTime' => $microtimeEnd - $microtimeStart,

@@ -19,13 +19,12 @@ class WebRequest {
 	private $ip;
 
 	/**
-	 * @param $context TestSwarmContext
-	 * @return WebRequest
+	 * @param TestSwarmContext $context
+	 * @return self
 	 */
 	public static function newFromContext( TestSwarmContext $context ) {
 		$req = new self();
 		$req->context = $context;
-		$req->checkMagicQuotes();
 
 		// POST overrides GET data
 		// We don't use $_REQUEST here to avoid interference from cookies...
@@ -110,45 +109,6 @@ class WebRequest {
 	}
 
 	/**
-	 * Strip slashes from global arrays if magic_quotes_gpc is on.
-	 * WARNING: Must only be done once! Running a second time may damage the values.
-	 */
-	private function checkMagicQuotes() {
-		$fixQuotes = function_exists( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc();
-		if ( $fixQuotes ) {
-			$this->fix_magic_quotes( $_COOKIE );
-			$this->fix_magic_quotes( $_ENV );
-			$this->fix_magic_quotes( $_GET );
-			$this->fix_magic_quotes( $_POST );
-			$this->fix_magic_quotes( $_REQUEST );
-			$this->fix_magic_quotes( $_SERVER );
-		}
-	}
-
-	/**
-	 * Recursively strip slashes from the given array (for undoing magic_quotes_gpc).
-	 * @see php.net/get-magic-quotes-gpc#49612
-	 *
-	 * @param $arr array
-	 * @param $topLevel bool
-	 * @return array Original unchanged array
-	 */
-	private function &fix_magic_quotes( &$arr, $topLevel = true ) {
-		$clean = array();
-		foreach ( $arr as $key => $val ) {
-			if ( is_array( $val ) ) {
-				$cleanKey = $topLevel ? stripslashes( $key ) : $key;
-				$clean[$cleanKey] = $this->fix_magic_quotes( $arr[$key], false );
-			} else {
-				$cleanKey = stripslashes( $key );
-				$clean[$cleanKey] = stripslashes( $val );
-			}
-		}
-		$arr = $clean;
-		return $arr;
-	}
-
-	/**
 	 * @source http://roshanbh.com.np/2007/12/getting-real-ip-address-in-php.html
 	 * @return string IP
 	 */
@@ -223,6 +183,10 @@ class WebRequest {
 class DerivativeWebRequest extends WebRequest {
 	protected $derivPosted = false;
 
+	/**
+	 * @param TestSwarmContext $context
+	 * @return self
+	 */
 	public static function newFromContext( TestSwarmContext $context ) {
 		$req = new self();
 		return $req;

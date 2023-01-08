@@ -12,9 +12,9 @@
 class SwarmstateAction extends Action {
 
 	/**
-	 * @actionParam string browserSet: Show useragents from a specific
+	 * @actionParam string browserSet Show useragents from a specific
 	 *  browserset only.
-	 * @actionParam bool onlyactive: If true, only user agents that
+	 * @actionParam bool onlyactive If true, only user agents that
 	 *  have online clients and/or pending runs are included.
 	 *  If both "browserSet" and "onlyactive" are used, the overlaping
 	 *  subset will be output.

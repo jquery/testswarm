@@ -11,7 +11,7 @@ class ProjectAction extends Action {
 	private $defaultLimit = 10;
 
 	/**
-	 * @actionParam string item: Project ID.
+	 * @actionParam string item Project ID.
 	 */
 	public function doAction() {
 		$conf = $this->getContext()->getConf();
@@ -204,10 +204,10 @@ class ProjectAction extends Action {
 
 	/**
 	 * @param string $id
-	 * @param array $options
-	 * @return array Exposes the new auth token
+	 * @param array|null $options
+	 * @return array|null Exposes the new auth token, or null if error
 	 */
-	public function create( $id, Array $options = null ) {
+	public function create( $id, array $options = null ) {
 		$db = $this->getContext()->getDB();
 
 		$password = isset( $options['password'] ) ? $options['password'] : null;

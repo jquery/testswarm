@@ -8,7 +8,7 @@
  */
 class Api {
 	/**
-	 * @var $context TestSwarmContext
+	 * @var TestSwarmContext $context
 	 */
 	protected $context;
 

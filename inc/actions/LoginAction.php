@@ -10,7 +10,7 @@
 class LoginAction extends Action {
 
 	/**
-	 * @actionMethod POST: Required.
+	 * @actionMethod POST Required.
 	 * @actionParam string projectID
 	 * @actionParam string projectPassword
 	 */
@@ -115,7 +115,7 @@ class LoginAction extends Action {
 			// Various random sources
 			$rand =
 				serialize( $_SERVER )
-				. rand() . uniqid( mt_rand(), true )
+				. rand() . uniqid( (string)mt_rand(), true )
 				. ( function_exists( 'getmypid' ) ? getmypid() : '' )
 				. ( function_exists( 'memory_get_usage' ) ? memory_get_usage( true ) : '' )
 				. realpath( __FILE__ )
@@ -129,7 +129,7 @@ class LoginAction extends Action {
 
 	/**
 	 * @param string $password Plaintext password.
-	 * @param string $salt [optional] A salt will be generated, optionally
+	 * @param string|false $salt [optional] A salt will be generated, optionally
 	 *  pass this to re-use a salt.
 	 * @return string
 	 */
@@ -143,7 +143,7 @@ class LoginAction extends Action {
 	/**
 	 * Generate a ':M:' type blob with user table info from
 	 * an older database.
-	 * @param array $userRow Row from old `users` table
+	 * @param stdClass $userRow Row from old `users` table
 	 * @return string Raw value for `projects.password` column
 	 */
 	public static function generatePasswordHashForUserrow( $userRow ) {

@@ -9,7 +9,7 @@
 class ClientAction extends Action {
 
 	/**
-	 * @actionParam string item: Client id.
+	 * @actionParam string item Client ID.
 	 */
 	public function doAction() {
 		$context = $this->getContext();

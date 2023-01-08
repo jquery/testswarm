@@ -9,9 +9,9 @@
 class ProjectsAction extends Action {
 
 	/**
-	 * @actionParam string sort: [optional] What to sort the results by.
+	 * @actionParam string sort [optional] What to sort the results by.
 	 *  Must be one of "title", "id" or "creation". Defaults to "title".
-	 * @actionParam string sort_dir: [optional]
+	 * @actionParam string sort_dir [optional]
 	 *  Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
 	 */
 	public function doAction() {

@@ -11,13 +11,13 @@
 class ClientsAction extends Action {
 
 	/**
-	 * @actionParam string sort: [optional] What to sort the results by.
+	 * @actionParam string sort [optional] What to sort the results by.
 	 *  Must be one of "name" or "updated". Defaults to "name".
-	 * @actionParam string sort_dir: [optional]
+	 * @actionParam string sort_dir [optional]
 	 *  Must be one of "asc" (ascending) or "desc" (decending). Defaults to "asc".
-	 * @actionParam string include: [optional] What filter to apply.
+	 * @actionParam string include [optional] What filter to apply.
 	 *  Must be one of "all" or "active". Defaults to "active".
-	 * @actionParam string item: Fetch only information from clients by this name.
+	 * @actionParam string item Fetch only information from clients by this name.
 	 */
 	public function doAction() {
 		$context = $this->getContext();

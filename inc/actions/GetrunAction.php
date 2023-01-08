@@ -79,7 +79,7 @@ class GetrunAction extends Action {
 
 			if ( $row && $row->run_url && $row->job_name && $row->run_name ) {
 				// Create stub runresults entry
-				$storeToken = sha1( mt_rand() );
+				$storeToken = sha1( (string)mt_rand() );
 				$isInserted = $db->query(str_queryf(
 					'INSERT INTO runresults
 					(run_id, client_id, status, store_token, updated, created)
@@ -93,7 +93,7 @@ class GetrunAction extends Action {
 				$runresultsId = $db->getInsertId();
 				if ( !$isInserted || !$runresultsId ) {
 					$this->setError( 'internal-error', 'Creation of runresults database entry failed.' );
-					return false;
+					return;
 				}
 
 				// Mark as in-progress (status=1), and link runresults entry

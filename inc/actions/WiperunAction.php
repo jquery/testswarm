@@ -10,11 +10,11 @@
 class WiperunAction extends Action {
 
 	/**
-	 * @actionMethod POST: Required.
+	 * @actionMethod POST Required.
 	 * @actionParam int run_id
 	 * @actionParam int client_id
 	 * @actionParam int useragent_id
-	 * @actionAuth: Required.
+	 * @actionAuth Required.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();

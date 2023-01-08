@@ -148,14 +148,17 @@ if ( !is_readable( $defaultSettingsJSON ) || !is_readable( $localSettingsPHP ) )
 }
 
 $defaultSettings = json_decode( file_get_contents( $defaultSettingsJSON ) );
-$localSettings = require $localSettingsPHP;
 if ( !$defaultSettings ) {
 	swarmInitError( 'Unable to parse defaultSettings.json' );
 }
+'@phan-var stdClass $defaultSettings';
+
+$localSettings = require $localSettingsPHP;
 if ( !is_object( $localSettings ) ) {
 	error_log( 'TestSwarm Warning: Invalid return value for local settings. Type: ' . gettype( $localSettings ) . '.' );
 	$localSettings = array();
 }
+'@phan-var stdClass|array $localSettings';
 
 $swarmConfig = object_merge( $defaultSettings, $localSettings );
 
@@ -215,7 +218,7 @@ unset( $server, $refresh_control );
  */
 if ( $swarmConfig->debug->phpErrorReporting || SWARM_ENTRY === 'SCRIPT' ) {
 	error_reporting( E_ALL & ~E_DEPRECATED );
-	ini_set( 'display_errors', 1 );
+	ini_set( 'display_errors', '1' );
 } else {
 	error_reporting( 0 );
 }

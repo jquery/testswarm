@@ -16,7 +16,7 @@ class TestSwarmContext {
 	 * The context is self-initializing. The only thing it needs to be passed is
 	 * an object with all setting keys from testswarm-defaults.json. Logic for
 	 * loading defaults and overriding with local settings is in inc/init.php
-	 * @param $config
+	 * @param stdClass $config
 	 */
 	public function __construct( stdClass $config ) {
 		$this->conf = $config;
@@ -49,7 +49,7 @@ class TestSwarmContext {
 			if ( $lock ) {
 				throw new SwarmException(
 					'Database is temporarily locked for maintenance (since: '
-					. strftime( '%c', $lock ) . ')'
+					. gmdate( 'r', $lock ) . ')'
 				);
 			}
 			$this->db = Database::newFromContext( $this );
@@ -59,7 +59,7 @@ class TestSwarmContext {
 
 	/**
 	 * Get and set the lock status.
-	 * @param $change bool: [optional] Change the lock state.
+	 * @param bool $change [optional] Change the lock state.
 	 * @return bool|int Boolean false or a timestamp of when the lock was set.
 	 */
 	public function dbLock( $change = null ) {
@@ -155,8 +155,8 @@ class TestSwarmContext {
 	/**
 	 * Get the current TestSwarm version (cached for 5 minutes).
 	 *
-	 * @param $options string|array: 'bypass-cache'
-	 * @return array (see also calculateVersionInfo)
+	 * @param string|array $options 'bypass-cache'
+	 * @return array See also calculateVersionInfo
 	 */
 	public function getVersionInfo( $options = array() ) {
 		$options = (array)$options;

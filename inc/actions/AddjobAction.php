@@ -13,13 +13,13 @@
 class AddjobAction extends Action {
 
 	/**
-	 * @actionMethod POST: Required.
-	 * @actionParam string jobName: May contain HTML.
+	 * @actionMethod POST Required.
+	 * @actionParam string jobName May contain HTML.
 	 * @actionParam int runMax
 	 * @actionParam array runNames
 	 * @actionParam array runUrls
 	 * @actionParam array browserSets
-	 * @actionAuth: Required.
+	 * @actionAuth Required.
 	 */
 	public function doAction() {
 		$conf = $this->getContext()->getConf();

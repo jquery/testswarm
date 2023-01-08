@@ -18,7 +18,7 @@ class Client {
 	protected $clientRow;
 
 	/**
-	 * @param $clientId int
+	 * @param int $clientID
 	 */
 	protected function loadFromID( $clientID ) {
 		$db = $this->context->getDB();
@@ -111,9 +111,9 @@ class Client {
 	}
 
 	/**
-	 * @param $context TestSwarmContext
-	 * @param $runToken string
-	 * @param $clientID int: [optional] Instead of creating a new client entry,
+	 * @param TestSwarmContext $context
+	 * @param null|string $runToken
+	 * @param int $clientID [optional] Instead of creating a new client entry,
 	 * create an instance for an existing client entry.
 	 */
 	public static function newFromContext( TestSwarmContext $context, $runToken, $clientID = null ) {
@@ -152,7 +152,7 @@ class Client {
 			throw new SwarmException( 'Configuration requires a runToken but none has been configured.' );
 		}
 		$runTokenHash = trim( file_get_contents( $cacheFile ) );
-		if ( $runTokenHash === sha1( $runToken ) ) {
+		if ( $runToken !== null && $runTokenHash === sha1( $runToken ) ) {
 			return true;
 		}
 		throw new SwarmException( 'This TestSwarm requires a run token. Either none was entered or it is invalid.' );

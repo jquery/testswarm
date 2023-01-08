@@ -11,7 +11,7 @@ class PingAction extends Action {
 	/**
 	 * Update client 'alive' and refresh client config.
 	 *
-	 * @actionMethod POST: Required.
+	 * @actionMethod POST Required.
 	 * @actionParam string run_token
 	 * @actionParam int client_id
 	 */

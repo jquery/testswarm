@@ -12,30 +12,33 @@
  */
 
 abstract class Page {
+
+	protected $exceptionObj = null;
+
 	/**
-	 * @var $context TestSwarmContext: Needs to be protected instead of private
+	 * @var TestSwarmContext $context Needs to be protected instead of private
 	 * in order for extending Page classes to access the context.
 	 */
 	protected $context;
 
 	/**
-	 * @var $action Action|null: An Action object
+	 * @var Action|null $action An Action object
 	 */
 	protected $action;
 
-	/** @var $metaTags array: Attribute-arrays for html_tag() */
+	/** @var array $metaTags Attribute-arrays for html_tag() */
 	protected $metaTags = array(
 		array( 'charset' => 'UTF-8' ),
 		array( 'http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge' ),
 	);
 
-	/** @var $headScripts array: URLs for <script src> */
+	/** @var array $headScripts URLs for <script src> */
 	protected $headScripts = array();
 
-	/** @var $bodyScripts array: URLs for <script src> */
+	/** @var array $bodyScripts URLs for <script src> */
 	protected $bodyScripts = array();
 
-	/** @var $styleSheets array: URLs for <link rel=stylesheet href> */
+	/** @var array $styleSheets URLs for <link rel=stylesheet href> */
 	protected $styleSheets = array();
 
 	protected $title;
@@ -65,14 +68,14 @@ abstract class Page {
 	/**
 	 * Set the page title (to be used in the prefix of <title> and in the
 	 * main <h1> of the HTML skin in Page::output().
-	 * @param $title string: Page title (should not be escaped in any way)
+	 * @param string $title Page title (should not be escaped in any way)
 	 */
 	public function setTitle( $title ) {
 		$this->title = $title;
 	}
 
 	/**
-	 * @return string: The page name
+	 * @return string The page name
 	 */
 	public function getTitle() {
 		return $this->title;
@@ -80,7 +83,7 @@ abstract class Page {
 
 	/**
 	 * Override the page title for the <h1> of the HTML skin in Page::output().
-	 * @param $title string: Page title (should not be escaped in any way)
+	 * @param string $title Page title (should not be escaped in any way)
 	 */
 	public function setDisplayTitle( $title ) {
 		$this->rawDisplayTitle = htmlspecialchars( $title );
@@ -90,7 +93,7 @@ abstract class Page {
 	}
 
 	/**
-	 * @return string: The page name
+	 * @return string The page name
 	 */
 	public function getDisplayTitleHtml() {
 		if ( $this->rawDisplayTitle ) {
@@ -122,13 +125,15 @@ abstract class Page {
 	 * (i.e. a page that redirects after a POST submission), then it
 	 * should perform it's redirect in the execute(), and leave this method
 	 * unimplemented and not call it from execute().
+	 *
+	 * @return string HTML
 	 */
 	protected function initContent() {
 		return '<!-- ' . htmlspecialchars( __CLASS__ ) . ' has no content -->';
 	}
 
 	/**
-	 * @return string|null: The raw HTML content of the page,
+	 * @return string|null The raw HTML content of the page,
 	 * or null if it has none.
 	 */
 	public function getContent() {
@@ -218,7 +223,7 @@ abstract class Page {
 
 		$projects = array();
 
-		if ( !isset( $this->exceptionObj ) ) {
+		if ( $this->exceptionObj !== null ) {
 			try {
 				$projectsAction = ProjectsAction::newFromContext( $context );
 				$projectsAction->doAction();
@@ -422,8 +427,8 @@ if ( $auth ) {
 
 	/**
 	 * Useful utility function to send a redirect as reponse and close the request.
-	 * @param $target string: Url
-	 * @param $code int: 30x
+	 * @param string $target URL
+	 * @param int $code 30x
 	 */
 	protected function redirect( $target = '', $code = 302 ) {
 		session_write_close();
@@ -438,7 +443,7 @@ if ( $auth ) {
 	 * @see Action::addTimestampsTo
 	 * @param array $data
 	 * @param string $propNamePrefix
-	 * @return string: HTML
+	 * @return string HTML
 	 */
 	protected static function getPrettyDateHtml( $data, $propNamePrefix, $attr = array() ) {
 		return html_tag( 'span', array(
@@ -490,8 +495,7 @@ if ( $auth ) {
 	}
 
 	final public static function newFromContext( TestSwarmContext $context ) {
-		// self refers to the origin class (abstract Page)
-		// static refers to the current class (FoobarPage)
+		// @phan-suppress-next-line PhanTypeInstantiateAbstractStatic
 		$page = new static();
 		$page->context = $context;
 

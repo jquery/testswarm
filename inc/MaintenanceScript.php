@@ -25,8 +25,8 @@ abstract class MaintenanceScript {
 	/**
 	 * Register a flag, usage any of these 4:
 	 * - php script.php -a -b value -c "value" -d="value"
-	 * @param string $key: one single character.
-	 * @param string $type: one of "boolean", "value"
+	 * @param string $key A single character.
+	 * @param string $type One of "boolean", "value"
 	 * @param string $description
 	 */
 	protected function registerFlag( $key, $type, $description ) {
@@ -43,8 +43,8 @@ abstract class MaintenanceScript {
 	/**
 	 * Register an option, usage any of these 4:
 	 * - php script.php --foo --bar=value --quux="value"
-	 * @param string $name: at least 2 characters
-	 * @param string $type: one of "boolean", "value"
+	 * @param string $name At least 2 characters
+	 * @param string $type One of "boolean", "value"
 	 * @param string $description
 	 */
 	protected function registerOption( $name, $type, $description ) {
@@ -193,13 +193,13 @@ $description
 			. ($helpGeneral ? "General parameters:$helpGeneral" : '');
 	}
 
-	/** @param $seconds int */
+	/** @param int $seconds */
 	protected function wait( $seconds, $message = '' ) {
 		print $message;
 		$backspace = chr(8);
 		for ( $i = $seconds; $i >= 0; $i-- ) {
 			if ( $i != $seconds ) {
-				$prevNrLen = strlen( $i + 1 );
+				$prevNrLen = strlen( strval( $i + 1 ) );
 				// We have to both print backspaces, spaces and then backspaces again. On
 				// MacOSX, backspaces only move the cursor, it doesn't hide the characters.
 				// So we overwrite with spaces and then back up (10|->9| instead of 10|->9|0)
@@ -216,14 +216,14 @@ $description
 	}
 
 	/**
-	 * @param string $action: Correct grammar "This script will $action!"
+	 * @param string $action Correct grammar "This script will $action!"
 	 */
 	protected function timeWarningForScriptWill( $action, $seconds = 10 ) {
 		$this->wait( 10, "WARNING: This script will $action!\nYou can abort now with Control-C. Starting in " );
 	}
 
 	/**
-	 * @param string $message: [optional] Output text before the input cursor.
+	 * @param string $prefix [optional] Output text before the input cursor.
 	 * @return string
 	 */
 	protected function cliInput( $prefix = '> ' ) {
@@ -247,8 +247,8 @@ $description
 	 * Retrieve a secret value from the cli.
 	 * Based on http://www.dasprids.de/blog/2008/08/22/getting-a-password-hidden-from-stdin-with-php-cli.
 	 *
-	 * @param string $message: [optional] text before the input cursor.
-	 * @param string $type: [optional] hidden or stars.
+	 * @param string $prefix [optional] Text before the input cursor.
+	 * @param string $type [optional] Hidden or stars.
 	 * @return string
 	 */
 	protected function cliInputSecret( $prefix = '> ', $type = 'stars' ) {
@@ -324,6 +324,10 @@ $description
 		}
 	}
 
+	/**
+	 * @param string|Exception $msg
+	 * @return never
+	 */
 	protected function error( $msg ) {
 		$msg = "Error: $msg\n";
 		fwrite( STDERR, $msg );
@@ -331,6 +335,7 @@ $description
 	}
 
 	public static function newFromContext( TestSwarmContext $context ) {
+		// @phan-suppress-next-line PhanTypeInstantiateAbstractStatic
 		$script = new static();
 		$script->context = $context;
 		return $script;

@@ -9,10 +9,10 @@
 class WipejobAction extends Action {
 
 	/**
-	 * @actionMethod POST: Required.
+	 * @actionMethod POST Required.
 	 * @actionParam int job_id
-	 * @actionParam string type: one of 'delete', 'reset'.
-	 * @actionAuth: Required.
+	 * @actionParam string type One of 'delete', 'reset'.
+	 * @actionAuth Required.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();

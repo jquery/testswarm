@@ -43,16 +43,16 @@ abstract class Action {
 	 * WebRequest::getVal( 'item' ); Form-based actions should use
 	 * WebRequest::wasPosted() to check whether it is indeed POSTed, and may
 	 * want to redirect after that (PRG <https://en.wikipedia.org/wiki/Post/Redirect/Get>).
+	 *
+	 * @return void
 	 */
 	abstract public function doAction();
 
 	/**
 	 * Can be called in 2 ways:
 	 * - Code and message:
-	 * @param $errorCode string
-	 * @param $errorMsg string [optional
-	 * - Array with code and message:
-	 * @param $param $error array: property "code" and "info".
+	 * @param string|array{code:int,info?:string|null} $errorCode
+	 * @param string $errorMsg [optional]
 	 */
 	final protected function setError( $errorCode, $errorMsg = null ) {
 		if ( is_array( $errorCode ) && isset( $errorCode['code'] ) ) {
@@ -76,9 +76,9 @@ abstract class Action {
 	 * By design this method does not succeed if there is a valid session but
 	 * not tokens. The user session for the GUI must not be used here (to prevent CSRF).
 	 *
-	 * @param string $project: [optional] If given, authentication is only
+	 * @param string $project [optional] If given, authentication is only
 	 *  considered valid if the the user has authenticated for this project.
-	 * @return false|string: project ID.
+	 * @return false|string project ID.
 	 */
 	final protected function doRequireAuth( $project = null ) {
 		$db = $this->getContext()->getDB();
@@ -132,13 +132,16 @@ abstract class Action {
 	}
 
 	/**
-	 * @param $data mixed
+	 * @param mixed $data
 	 */
 	final protected function setData( $data ) {
 		// Recursively convert objects to arrays using json_decode/json_encode
 		$this->data = json_decode( json_encode2( $data ), true );
 	}
 
+	/**
+	 * @return mixed
+	 */
 	final public function getData() {
 		return $this->data;
 	}
@@ -150,10 +153,10 @@ abstract class Action {
 	 * - ISO (naturally in UTC aka Zulu)
 	 * - Localized format according to the swarm configuration.
 	 *
-	 * @param &$target array: The array the keys should be added to, is passed by
+	 * @param array &$target The array the keys should be added to, is passed by
 	 * reference, so it will be modified!
-	 * @param $tsRawUTC string:
-	 * @param $prefix string: [optional] If given, this string will be prefixed to
+	 * @param string $tsRawUTC
+	 * @param string $prefix [optional] If given, this string will be prefixed to
 	 * the added keys, and the rest of the name ucfirst'ed resulting in:
 	 * "rawUTC" or "prefixRawUTC" respectively.
 	 */
@@ -174,6 +177,7 @@ abstract class Action {
 	}
 
 	final public static function newFromContext( TestSwarmContext $context ) {
+		// @phan-suppress-next-line PhanTypeInstantiateAbstractStatic
 		$action = new static();
 		$action->context = $context;
 		return $action;

@@ -5,12 +5,14 @@
  * @author Timo Tijhof
  * @since 0.1.0
  * @package TestSwarm
+ *
+ * @method array{info:mixed,uaSummaries:array,userAgents:array} getData()
  */
 class JobAction extends Action {
 	protected $item, $runs, $userAgents;
 
 	/**
-	 * @actionParam int item: Job ID.
+	 * @actionParam int item Job ID.
 	 */
 	public function doAction() {
 		$db = $this->getContext()->getDB();
@@ -44,8 +46,12 @@ class JobAction extends Action {
 		));
 
 		$processed = self::getDataFromRunRows( $this->getContext(), $runRows );
-		$this->runs = $processed['runs'];
-		$this->userAgents = $processed['userAgents'];
+		if ( !$processed ) {
+			$this->setError( 'data-corrupt' );
+		} else {
+			$this->runs = $processed['runs'];
+			$this->userAgents = $processed['userAgents'];
+		}
 
 		$uaSummaries = $this->getUaSummaries();
 
@@ -185,7 +191,7 @@ class JobAction extends Action {
 
 	/**
 	 * Iterate over all run rows and aggregate the runs and user agents.
-	 * @return Array List of runs and userAgents.
+	 * @return array|null List of runs and userAgents.
 	 */
 	public static function getDataFromRunRows( TestSwarmContext $context, $runRows ) {
 		$db = $context->getDB();
@@ -240,8 +246,7 @@ class JobAction extends Action {
 						));
 
 						if ( !$runresultsRow ) {
-							$this->setError( 'data-corrupt' );
-							return;
+							return null;
 						}
 
 						$runUaRuns[$runUaRow->useragent_id] = array(
@@ -341,8 +346,8 @@ class JobAction extends Action {
 	}
 
 	/**
-	 * @param $row object: Database row from runresults.
-	 * @return string: One of 'progress', 'passed', 'failed', 'timedout', 'error', or 'lost'
+	 * @param object $row Database row from runresults.
+	 * @return string One of 'progress', 'passed', 'failed', 'timedout', 'error', or 'lost'
 	 */
 	public static function getRunresultsStatus( $row ) {
 		$status = (int)$row->status;

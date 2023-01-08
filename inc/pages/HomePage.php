@@ -84,7 +84,7 @@ class HomePage extends Page {
 	}
 
 
-	/** @return bool: Whether the current user was found in the swarm */
+	/** @return string HTML */
 	public function getBrowsersOnlineHtml() {
 		$conf = $this->getContext()->getConf();
 		$db = $this->getContext()->getDB();

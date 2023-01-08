@@ -68,11 +68,12 @@ class ManageProjectScript extends MaintenanceScript {
 			'displayTitle' => $displayTitle,
 			'siteUrl' => $siteUrl,
 		) ) ;
+		/** @var array|null $data */
 		$error = $action->getError();
-
 		if ( $error ) {
 			$this->error( $error['info'] );
 		}
+		/** @var array $data */
 
 		$this->out(
 			'Project ' . $displayTitle . ' has been successfully created!' . PHP_EOL

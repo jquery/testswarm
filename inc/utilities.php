@@ -54,11 +54,10 @@ class SwarmBrowserException extends Exception {
  * Utility function for formatting HTML.
  * @since 1.0.0
  *
- * @param $tagName string: The HTML tag name.
- * @param $attribs array: Key/value pairs to be escaped (keys with null/false values are skipped).
- * @param $content string|null: [optional] Text content, to be escaped.
+ * @param string $tagName The HTML tag name.
+ * @param array $attribs Key/value pairs to be escaped (keys with null/false values are skipped).
  */
-function html_tag_open( $tagName, Array $attribs = array() ) {
+function html_tag_open( $tagName, array $attribs = array() ) {
 	$html = "<$tagName";
 	foreach ( $attribs as $key => $value ) {
 		if ( $value === null || $value === false ) {
@@ -75,8 +74,12 @@ function html_tag_open( $tagName, Array $attribs = array() ) {
 	$html .= '>';
 	return $html;
 }
-
-function html_tag( $tagName, Array $attribs = array(), $content = '' ) {
+/**
+ * @param string $tagName
+ * @param array $attribs
+ * @param string|null $content [optional] Text content, to be escaped.
+ */
+function html_tag( $tagName, array $attribs = array(), $content = '' ) {
 	static $voidElements = array(
 		'area',
 		'base',
@@ -111,7 +114,7 @@ function html_tag( $tagName, Array $attribs = array(), $content = '' ) {
  * JSON encoder wrapper making use of PHP 5.4's normalisation options.
  *
  * @since 1.0.0
- * @param mixed $value
+ * @param mixed $val
  * @param int $flags Additional flags
  * @return string
  */
@@ -126,9 +129,9 @@ function json_encode2( $val, $flags = 0 ) {
  * and merges by creating arrays, instead of overwriting them.
  *
  * @since 1.0.0
- * @param $obj1 object: Starting point
- * @param $obj2 object: Values from this object are added
- * @param $options array: one or more of 'add', 'overwrite'.
+ * @param object $obj1 Starting point
+ * @param object $obj2 Values from this object are added
+ * @param array $options One or more of 'add', 'overwrite'.
  * Defaults to array( 'add', 'overwrite' ); If neither option is given, the function
  * will effectively be a no-op.
  */
@@ -233,8 +236,8 @@ if ( !function_exists( 'natcaseksort' ) ) {
  * @since 1.0.0
  * @source php.net/strtotime#107773
  *
- * @param $time string
- * @param $now int
+ * @param string $time
+ * @param int $now
  * @return int Timestamp
  */
 function gmstrtotime( $time, $now = null ) {
@@ -255,7 +258,7 @@ function gmstrtotime( $time, $now = null ) {
  * For usage in the TestSwarm database.
  * @since 1.0.0
  *
- * @param $timestamp int Unix timestamp, if 0 is given, the current time will be used.
+ * @param int $timestamp Unix timestamp, if 0 is given, the current time will be used.
  *  Use SWARM_NOW to pass 0.
  */
 function swarmdb_dateformat( $timestamp = 0 ) {
@@ -267,8 +270,8 @@ function swarmdb_dateformat( $timestamp = 0 ) {
  * Central function to get paths to files and directories
  * @since 0.1.0
  *
- * @param $rel string: Relative path from the testswarm root, without leading slash
- * @param $options array|string: A string or an array of string.
+ * @param string $rel Relative path from the testswarm root, without leading slash
+ * @param array|string $options A string or an array of string.
  *  Any urls outputted through the API should use the 'fullpath' option, or otherwise make
  *  sure that the url is including protocol and hostname.
  *  Options:

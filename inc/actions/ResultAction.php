@@ -24,7 +24,7 @@ class ResultAction extends Action {
 	const STATE_LOST = 4;
 
 	/**
-	 * @actionParam int item: Runresults ID.
+	 * @actionParam int item Runresults ID.
 	 */
 	public function doAction() {
 		$context = $this->getContext();
