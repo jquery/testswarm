@@ -8,11 +8,7 @@
 This is the PHP library for the [uap-core](https://github.com/ua-parser/uap-core) project.
 
 ## Installation ##
-Add `ua-parser/uap-php` to the require section of your `composer.json` file and run `composer update`.  
-
-## Demo ##
-
-You can [test the PHP library](http://uaparser.dmolsen.com/) with your browser.
+Add `ua-parser/uap-php` to the require section of your `composer.json` file and run `composer update`.
 
 ## Usage ##
 
@@ -71,7 +67,7 @@ Provides simple usage information:
 
 ### Update the regexes.php File
 
-Fetches an updated YAML file for `ua-parser` and overwrites the current JSON file. You can use the following as part of a cron job that runs nightly.
+Fetches an updated YAML file for `ua-parser` and overwrites the current regexes.php file. You can use the following as part of a cron job that runs nightly.
 
     php bin/uaparser ua-parser:update [--no-backup]
 

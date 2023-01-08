@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e70d0e9169ac182648ed7bbbca7275cc",
+    "content-hash": "861ca125ea92bfd605fa58c56500f983",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -84,16 +84,16 @@
         },
         {
             "name": "ua-parser/uap-php",
-            "version": "v3.9.2",
+            "version": "v3.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ua-parser/uap-php.git",
-                "reference": "eb9c78aeb3984e5834c4f3845e7263dbe4277935"
+                "reference": "a1d4e652eb67be705410433b0a6617d301553cd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/eb9c78aeb3984e5834c4f3845e7263dbe4277935",
-                "reference": "eb9c78aeb3984e5834c4f3845e7263dbe4277935",
+                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/a1d4e652eb67be705410433b0a6617d301553cd6",
+                "reference": "a1d4e652eb67be705410433b0a6617d301553cd6",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 "issues": "https://github.com/ua-parser/uap-php/issues",
                 "source": "https://github.com/ua-parser/uap-php/tree/master"
             },
-            "time": "2019-11-06T11:37:45+00:00"
+            "time": "2020-01-10T10:34:59+00:00"
         }
     ],
     "packages-dev": [
@@ -1428,5 +1428,5 @@
     "platform-overrides": {
         "php": "7.2"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

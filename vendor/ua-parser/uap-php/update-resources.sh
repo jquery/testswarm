@@ -9,8 +9,8 @@ function try_catch() {
 }
 
 try_catch git pull
-try_catch git submodule foreach git pull
-try_catch bin/uaparser ua-parser:update
+try_catch git submodule foreach git pull origin master
+try_catch bin/uaparser ua-parser:convert uap-core/regexes.yaml
 try_catch vendor/bin/phpunit --stop-on-failure
 try_catch git commit -a -m "Scheduled resource update"
 try_catch git push origin master

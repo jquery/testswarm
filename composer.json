@@ -1,7 +1,7 @@
 {
 	"require": {
 		"php": ">=5.4.0",
-        "ua-parser/uap-php": "3.9.2"
+        "ua-parser/uap-php": "3.9.3"
 	},
 	"require-dev": {
 		"phan/phan": "5.4.1",
@@ -21,7 +21,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.4"
+			"php": "7.2"
 		}
 	}
 }
