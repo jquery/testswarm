@@ -12,7 +12,7 @@ The main instance monitoring jQuery core and related projects runs at
 
 ## Project Status
 
-TestSwarm is still in use in projects of the jQuery Foundation, but it isn't under active development anymore. Although critical issues may be patched in the future, most open issues will remain unaddressed.
+TestSwarm is used in projects of the jQuery Foundation, but it isn't under active development anymore. Although critical issues may be patched in the future, most open issues will remain unaddressed.
 
 Within the jQuery Foundation, we're experimenting with alternative projects, to eventually shut down our own instance of TestSwarm:
 
@@ -27,18 +27,6 @@ We recommend reviewing those and other alternatives.
 
 Clone the repo, `git clone --recursive git://github.com/jquery/testswarm.git`.
 
-## Versioning
-
-TestSwarm uses the Semantic Versioning guidelines as much as possible.
-
-Releases will be numbered in the following format:
-
-`<major>.<minor>.<patch>`
-
-The `-alpha` suffix is used to indicate unreleased versions in development.
-
-For more information on SemVer, please visit <https://semver.org/>.
-
 ## Bug tracker
 
 Found a bug? Please report it using our [issue
@@ -46,15 +34,26 @@ tracker](https://github.com/jquery/testswarm/issues)!
 
 ## Installation
 
+### Browser compatibility
+
+* Chrome 58+ (2017)
+* Edge 15+ (2017, both legacy MSEdge and Chromium-based)
+* Firefox 45+ (2016)
+* Internet Explorer 9+
+* Opera 36+ (2016)
+* Safari 9+ (2015)
+* Android 4.3+ (2013)
+* iOS Mobile Safari 7+ (2013)
+
 ### Environmental compatibility
 
 To run TestSwarm you will need a web server, a database server and PHP.
 At the moment TestSwarm supports the following, but other configurations
 may work as well.
 
-* Apache 2.0+, NGINX 1.2+
+* Apache 2.0+, NGINX 1.10+
 * PHP 5.4+ (or PHP-FPM for NGINX)
-* MySQL 4.0+
+* MySQL 5.6+
 * cURL (for the cleanup action; see step 8)
 
 ### Steps
@@ -123,6 +122,18 @@ Some of us are also on Gitter at [jquery/dev](https://gitter.im/jquery/dev).
 ## Copyright and license
 
 See [LICENSE.txt](./LICENSE.txt).
+
+## Versioning
+
+TestSwarm uses the Semantic Versioning guidelines as much as possible.
+
+Releases will be numbered in the following format:
+
+`<major>.<minor>.<patch>`
+
+The `-alpha` suffix is used to indicate unreleased versions in development.
+
+For more information on SemVer, please visit <https://semver.org/>.
 
 ## History
 
