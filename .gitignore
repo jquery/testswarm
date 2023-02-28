@@ -4,7 +4,6 @@ cache/*
 config/.testswarm_eval_history
 config/localSettings.json
 config/localSettings.php
-favicon.ico
 robots.txt
 node_modules
 package-lock.json
