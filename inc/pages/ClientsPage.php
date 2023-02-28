@@ -28,8 +28,11 @@ class ClientsPage extends Page {
 
 		$error = $this->getAction()->getError();
 		$data = $this->getAction()->getData();
-		$item = $request->getVal( 'item' );
-		$mode = $request->getVal( 'mode', 'clients' );
+
+		$params = $data['normalParams'];
+		/* @var string|null $item */
+		$item = $params['item'];
+		$mode = isset( $params['mode'] ) ? $params['mode'] : 'clients';
 
 		if ( $error ) {
 			$html .= html_tag( 'div', array( 'class' => 'alert alert-error' ), $error['info'] );
@@ -44,9 +47,15 @@ class ClientsPage extends Page {
 			$nav .= '<div class="btn-group pull-right">';
 			if ( $mode === 'clients' ) {
 				$nav .= '<button class="btn active ">Clients <i class="icon-th-list"></i></button>'
-				. '<button class="btn swarm-toggle" data-toggle-query="' . htmlspecialchars( json_encode2( array( 'mode' => 'names' ) ) ) .'">Names <i class="icon-list-alt"></i></button>';
+				. '<a class="btn" href="' . htmlspecialchars(
+					$this->getDerivQuery( $params, array( 'mode' => 'names' ) )
+				)
+				. '">Names <i class="icon-list-alt"></i></a>';
 			} else {
-				$nav .= '<button class="btn swarm-toggle" data-toggle-query="' . htmlspecialchars( json_encode2( array( 'mode' => 'clients' ) ) ) .'">Clients <i class="icon-th-list"></i></button>'
+				$nav .= '<a class="btn" href="' . htmlspecialchars(
+					$this->getDerivQuery( $params, array( 'mode' => 'clients' ) )
+				)
+				. '">Clients <i class="icon-th-list"></i></a>'
 				. '<button class="btn active">Names <i class="icon-list-alt"></i></button>';
 			}
 			$nav .= '</div>';
@@ -75,6 +84,16 @@ class ClientsPage extends Page {
 	}
 
 	/**
+	 * @param array<string,string|null> $params
+	 * @param array<string,string> $extra
+	 * @return string
+	 */
+	private function getDerivQuery( array $params, array $extra ) {
+		// This automatically excludes keys with null value
+		return '?' . http_build_query( $extra + $params );
+	}
+
+	/**
 	 * @param array $data Overview data from ClientsAction
 	 * @return string HTML
 	 */
@@ -85,8 +104,9 @@ class ClientsPage extends Page {
 		$overview = $data['overview'];
 		$clients = $data['clients'];
 
-		$sortField = $request->getVal( 'sort', 'name' );
-		$sortDir = $request->getVal( 'sort_dir', 'asc' );
+		$params = $data['normalParams'];
+		$sortField = isset( $params['sort'] ) ? $params['sort'] : 'name';
+		$sortDir = isset( $params['sort_dir'] ) ? $params['sort_dir'] : 'asc';
 
 		$navigationSort = array();
 		foreach ( array( 'name', 'updated' ) as $field ) {
@@ -107,9 +127,9 @@ class ClientsPage extends Page {
 
 		$html = '<table class="table table-striped">'
 		 . '<thead><tr>'
-		 . '<th class="swarm-toggle" data-toggle-query="' . htmlspecialchars( json_encode2( $navigationSort['name']['toggleQuery'] ) ) . '">User ' . $navigationSort['name']['arrowHtml'] . '</b></th>'
+		 . '<th class="swarm-toggle" data-href="' . htmlspecialchars( $this->getDerivQuery( $params, $navigationSort['name']['toggleQuery'] ) ) . '">User ' . $navigationSort['name']['arrowHtml'] . '</b></th>'
 		 . '<th>Clients</th>'
-		 . '<th class="span4 swarm-toggle" data-toggle-query="' . htmlspecialchars( json_encode2( $navigationSort['updated']['toggleQuery'] ) ) . '">Last ping ' . $navigationSort['updated']['arrowHtml'] . '</b></th>'
+		 . '<th class="span4 swarm-toggle" data-href="' . htmlspecialchars( $this->getDerivQuery( $params, $navigationSort['updated']['toggleQuery'] ) ) . '">Last ping ' . $navigationSort['updated']['arrowHtml'] . '</b></th>'
 		 . '</tr></thead>'
 		 . '<tbody>';
 

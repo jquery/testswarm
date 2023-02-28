@@ -9,18 +9,7 @@
 /* eslint-env browser */
 /* global jQuery, SWARM */
 jQuery(function( $ ) {
-	var query = {};
-	var search = location.search;
 	var prettyDate = window.prettyDate;
-
-	// Skip leading "?""
-	if ( search.length > 1 ) {
-		$.each( search.slice( 1 ).split( "&" ), function( i, parts ) {
-			parts.replace( /^([^=]+)=(.*)$/, function( p0, p1, p2 ) {
-				query[ decodeURIComponent( p1 ) ] = decodeURIComponent( p2 );
-			});
-		});
-	}
 
 	if ( prettyDate ) {
 		// See also Page::getPrettyDateHtml()
@@ -72,16 +61,7 @@ jQuery(function( $ ) {
 		});
 	});
 
-	$( document ).on( "click", ".swarm-toggle", function() {
-		var key,
-			toggleQuery = $( this ).data( "toggle-query" );
-		for ( key in toggleQuery ) {
-			if ( query[key] !== undefined && ( toggleQuery[key] === null || toggleQuery[key] === null ) ) {
-				delete query[key];
-			} else {
-				query[key] = toggleQuery[key];
-			}
-		}
-		location.search = "?" + $.param( query );
+	$( document ).on( "click", ".swarm-toggle[data-href]", function() {
+		location.search = $( this ).attr( "data-href" );
 	});
 });

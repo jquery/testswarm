@@ -58,10 +58,20 @@ class ClientsAction extends Action {
 			}
 		}
 
+		/* @var array<string,string|null> $normalParams */
+		$normalParams = [
+			'mode' => $request->getVal( 'mode' ),
+			'sort' => $request->getVal( 'sort' ),
+			'sort_dir' => $request->getVal( 'sort_dir' ),
+			'include' => $request->getVal( 'include' ),
+			'item' => $request->getVal( 'item' ),
+		];
+
 		$this->setData( array(
 			'name' => $item,
 			'clients' => $clients,
 			'overview' => $overview,
+			'normalParams' => $normalParams,
 		) );
 	}
 
