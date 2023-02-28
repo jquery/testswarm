@@ -9,8 +9,9 @@
 /* eslint-env browser */
 /* global jQuery, SWARM */
 jQuery(function( $ ) {
-	var query = {},
-		search = location.search;
+	var query = {};
+	var search = location.search;
+	var prettyDate = window.prettyDate;
 
 	// Skip leading "?""
 	if ( search.length > 1 ) {
@@ -21,8 +22,14 @@ jQuery(function( $ ) {
 		});
 	}
 
-	if ( $.fn.prettyDate ) {
-		$( ".pretty" ).prettyDate();
+	if ( prettyDate ) {
+		// See also Page::getPrettyDateHtml()
+		$( ".pretty" ).each(function () {
+			var formatted = prettyDate( this.title );
+			if ( formatted ) {
+				$( this ).text( formatted );
+			}
+		});
 	}
 
 	if ( SWARM.auth ) {
