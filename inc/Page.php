@@ -223,7 +223,7 @@ abstract class Page {
 
 		$projects = array();
 
-		if ( $this->exceptionObj !== null ) {
+		if ( $this->exceptionObj === null ) {
 			try {
 				$projectsAction = ProjectsAction::newFromContext( $context );
 				$projectsAction->doAction();
