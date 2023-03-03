@@ -226,8 +226,7 @@ abstract class Page {
 		if ( $this->exceptionObj === null ) {
 			try {
 				$projectsAction = ProjectsAction::newFromContext( $context );
-				$projectsAction->doAction();
-				$projects = $projectsAction->getData();
+				$projects = $projectsAction->getProjectRows();
 
 			} catch ( Exception $e ) {
 				$pageObj = Error500Page::newFromContext( $context );
@@ -297,7 +296,7 @@ abstract class Page {
 							<li class="nav-header">Projects</li>
 <?php
 foreach ( $projects as $project ) {
-	echo $this->getPageLink( "project/{$project['id']}", $project['displayTitle'] );
+	echo $this->getPageLink( "project/{$project->id}", $project->display_title );
 }
 ?>
 						</ul>

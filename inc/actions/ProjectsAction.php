@@ -31,39 +31,8 @@ class ProjectsAction extends Action {
 			return;
 		}
 
-		$sortDirQuery = '';
-		switch ( $sortDir ) {
-			case 'asc':
-				$sortDirQuery = 'ASC';
-				break;
-			case 'desc':
-				$sortDirQuery = 'DESC';
-				break;
-		}
-
-		$sortFieldQuery = '';
-		switch ( $sortField ) {
-			case 'title':
-				$sortFieldQuery = "ORDER BY display_title $sortDirQuery";
-				break;
-			case 'id':
-				$sortFieldQuery = "ORDER BY id $sortDirQuery";
-				break;
-			case 'creation':
-				$sortFieldQuery = "ORDER BY created $sortDirQuery";
-				break;
-		}
-
 		$projects = array();
-		$projectRows = $db->getRows(
-			"SELECT
-				id,
-				display_title,
-				created
-			FROM projects
-			$sortFieldQuery;"
-		);
-
+		$projectRows = $this->getProjectRows( $sortField, $sortDir );
 		if ( $projectRows ) {
 			foreach ( $projectRows as $projectRow ) {
 				// Get information about the latest job (if any)
@@ -94,5 +63,42 @@ class ProjectsAction extends Action {
 		}
 
 		$this->setData( $projects );
+	}
+
+	/**
+	 * @param string|null $sortField
+	 * @param string|null $sortDir
+	 * @return stdClass[]
+	 */
+	public function getProjectRows( $sortField = null, $sortDir = null ) {
+		$db = $this->getContext()->getDB();
+
+		switch ( $sortDir ) {
+			case 'desc':
+				$sortDirQuery = 'DESC';
+				break;
+			default:
+				$sortDirQuery = 'ASC';
+		}
+
+		switch ( $sortField ) {
+			case 'id':
+				$sortFieldQuery = "ORDER BY id $sortDirQuery";
+				break;
+			case 'creation':
+				$sortFieldQuery = "ORDER BY created $sortDirQuery";
+				break;
+			default:
+				$sortFieldQuery = "ORDER BY display_title $sortDirQuery";
+		}
+
+		return $db->getRows(
+			"SELECT
+				id,
+				display_title,
+				created
+			FROM projects
+			$sortFieldQuery;"
+		);
 	}
 }
