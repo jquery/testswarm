@@ -26,7 +26,7 @@
 		"saveReqTimeout": 10,
 		"saveRetryMax": 3,
 		"saveRetrySleep": 5,
-		"requireRunToken": false,
+		"runTokenHash": false,
 		"refreshControl": 0
 	},
 	"storage": {

@@ -34,7 +34,7 @@ class SaverunAction extends Action {
 		}
 
 		$runToken = $request->getVal( 'run_token' );
-		if ( $conf->client->requireRunToken && !$runToken ) {
+		if ( $conf->client->runTokenHash && !$runToken ) {
 			$this->setError( 'missing-parameters', 'This TestSwarm does not allow unauthorized clients to join the swarm.' );
 			return;
 		}

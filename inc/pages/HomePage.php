@@ -41,7 +41,7 @@ class HomePage extends Page {
 			. '</div>';
 
 		$html .= '<div class="span5"><div class="well">';
-		if ( !$conf->client->requireRunToken ) {
+		if ( !$conf->client->runTokenHash ) {
 			if ( $browserInfo->isInSwarmUaIndex() ) {
 					$auth = $context->getAuth();
 					$suggestedClientName = $auth ? $auth->project->id : '';

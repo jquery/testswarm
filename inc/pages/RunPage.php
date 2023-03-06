@@ -17,7 +17,7 @@ class RunPage extends Page {
 
 		$runToken = null;
 
-		if ( $conf->client->requireRunToken ) {
+		if ( $conf->client->runTokenHash ) {
 			$runToken = $request->getVal( "run_token" );
 			if ( !$runToken ) {
 				return '<div class="alert alert-error">This swarm has restricted access to join the swarm.</div>';
