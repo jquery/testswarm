@@ -144,15 +144,10 @@ class Client {
 
 	public static function validateRunToken( TestSwarmContext $context, $runToken ) {
 		$conf = $context->getConf();
-		if ( !$conf->client->requireRunToken ) {
+		if ( !$conf->client->runTokenHash ) {
 			return true;
 		}
-		$cacheFile = $conf->storage->cacheDir . '/run_token_hash.cache';
-		if ( !is_readable( $cacheFile ) ) {
-			throw new SwarmException( 'Configuration requires a runToken but none has been configured.' );
-		}
-		$runTokenHash = trim( file_get_contents( $cacheFile ) );
-		if ( $runToken !== null && $runTokenHash === sha1( $runToken ) ) {
+		if ( $runToken !== null && $conf->client->runTokenHash === sha1( $runToken ) ) {
 			return true;
 		}
 		throw new SwarmException( 'This TestSwarm requires a run token. Either none was entered or it is invalid.' );
