@@ -9,7 +9,7 @@
 		"password": false
 	},
 	"customMsg": {
-		"homeIntro_html": "Welcome to $1! More information about what TestSwarm is and how it works can be found on <a href=\"https://github.com/jquery/testswarm/wiki\">the TestSwarm wiki</a>."
+		"homeIntro_html": "Welcome to $1! More information about what TestSwarm is and how it works can be found on <a href=\"https://github.com/jquery/testswarm/#readme\">the TestSwarm docs</a>."
 	},
 	"web": {
 		"server": null,

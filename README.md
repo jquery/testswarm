@@ -1,36 +1,37 @@
-[![Build Status](https://github.com/jquery/testswarm/actions/workflows/CI.yaml/badge.svg?event=push)](https://github.com/jquery/testswarm/actions/workflows/CI.yaml)
-[![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
+[![Tested with QUnit](https://qunitjs.com/testedwith.svg)](https://qunitjs.com/)
 
-TestSwarm - Distributed Continuous Integration for JavaScript
+TestSwarm
 =================
 
-TestSwarm provides distributed continuous integration testing for
-JavaScript.
+TestSwarm provides distributed continuous integration testing for JavaScript.
 
-The main instance monitoring jQuery core and related projects runs at
-[swarm.jquery.org](https://swarm.jquery.org/).
+> **⚠️ Project status**
+> TestSwarm remains used by jQuery Foundation projects such as jQuery and jQuery UI, but is no longer under active development. Critical issues may be patched, but new issues will not be addressed.
+>
+> We recommend reviewing these alternatives: [QTap](https://github.com/qunitjs/qtap), [Karma](https://karma-runner.github.io/), [Testem](https://github.com/testem/testem), [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit), [browserstack-runner](https://github.com/browserstack/browserstack-runner/), [Airtap](https://github.com/airtap/airtap), [Intern](https://theintern.io/), [Web Test Runner](https://github.com/brandonaaron/web-test-runner-qunit).
 
-## Project Status
+## Documentation
 
-TestSwarm is used in projects of the jQuery Foundation, but it isn't under active development anymore. Although critical issues may be patched in the future, most open issues will remain unaddressed.
+* [About TestSwarm](./docs/About.md) (Philosophy, Architecture, How is it different?)
+* [API Guide](./docs/API.md)
+* [Automation Guide](./docs/Automation.md)
+* [How to: Submit jobs](./scripts/addjob/README.md)
+* [Project history](./docs/History.md) (Screenshots)
 
-Within the jQuery Foundation, we're experimenting with alternative projects, to eventually shut down our own instance of TestSwarm:
+**Further reading**:
 
-- [airtap](https://github.com/airtap/airtap)
-- [Karma](https://karma-runner.github.io/)
-- [Intern](https://theintern.io/)
-- [browserstack-runner](https://github.com/browserstack/browserstack-runner/)
-
-We recommend reviewing those and other alternatives.
+* [JavaScript Testing Does Not Scale](http://ejohn.org/blog/javascript-testing-does-not-scale/), John Resig, 2009.
+* [TestSwarm Alpha Open!](https://johnresig.com/blog/test-swarm-alpha-open/), John Resig, 2009.
+* [JSConf talk: TestSwarm](http://ejohn.org/blog/jsconf-talk-games-performance-testswarm/), John Resig, 2009.
+* [Video: TestSwarm Walkthrough](http://www.vimeo.com/6281121), John Resig, 2009.
 
 ## Quick start
 
-Clone the repo, `git clone --recursive git://github.com/jquery/testswarm.git`.
+Clone the repo
 
-## Bug tracker
-
-Found a bug? Please report it using our [issue
-tracker](https://github.com/jquery/testswarm/issues)!
+```sh
+git clone https://github.com/jquery/testswarm.git
+```
 
 ## Installation
 
@@ -63,7 +64,7 @@ may work as well.
 1. Copy `config/sample-localSettings.php` to `config/localSettings.php`<br/>
    Copy `config/sample-localSettings.json` to `config/localSettings.json`.<br/>
    Edit `localSettings.json` and replace the sample settings with your own.<br/>
-   Refer to the [Settings page](https://github.com/jquery/testswarm/wiki/Settings) for more information.
+   Refer to the [Settings page](./docs/Settings.md) for more information.
 
 1. *For Apache:*<br/>
    Copy `config/sample-.htaccess` to `.htaccess`.<br/>
@@ -114,11 +115,6 @@ You're welcome to use the GitHub [issue tracker](https://github.com/jquery/tests
 
 Some of us are also on Gitter at [jquery/dev](https://gitter.im/jquery/dev).
 
-## Documentation
-
-* [TestSwarm wiki](https://github.com/jquery/testswarm/wiki)
-* [Submit jobs README](./scripts/addjob/README.md)
-
 ## Copyright and license
 
 See [LICENSE.txt](./LICENSE.txt).
@@ -134,10 +130,3 @@ Releases will be numbered in the following format:
 The `-alpha` suffix is used to indicate unreleased versions in development.
 
 For more information on SemVer, please visit <https://semver.org/>.
-
-## History
-
-TestSwarm was originally created by [John Resig](https://johnresig.com/) as a
-basic tool to support unit testing of the [jQuery JavaScript
-library](https://jquery.com). It later become a [Mozilla Labs](https://labs.mozilla.com/) project,
-and has since moved again to become a [jQuery Foundation](https://jquery.org/) project.

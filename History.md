@@ -172,8 +172,7 @@ Complete list of issues solved in the 1.0.0 milestone:
 * Conform with jQuery JavaScript Style Guide. (#289)
 * Adopt updated browser logos from <https://github.com/alrra/browser-logos>,
   including new icons for Android, iOS, Windows 10, Edge, Yandex, and more.
-* How jQuery Foundation and Wikimedia Foundation use TestSwarm with Jenkins and BrowserStack:
-  <https://github.com/jquery/testswarm/wiki/Automated-Distributed-Continuous-Integration-for-JavaScript>
+* How jQuery Foundation and Wikimedia Foundation use TestSwarm with Jenkins and BrowserStack: [Automated Distributed Continuous Integration for JavaScript](./docs/Automation.md)
 
 ## 0.2.0 / 2012-03-07
 
